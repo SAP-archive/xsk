@@ -14,12 +14,13 @@ let response = require("http/v4/response");
 
 let mainmenu = [];
 let menuExtensions = extensions.getExtensions("ide-migration-menu");
-for (let i = 0; i < menuExtensions.length; i++) {
-    let module = menuExtensions[i];
-    let menuExtension = require(module);
+
+for (const menuExtensionModule of menuExtensions) {
+    let menuExtension = require(menuExtensionModule);
     let menu = menuExtension.getMenu();
     mainmenu.push(menu);
 }
+
 mainmenu.sort(function (p, n) {
     return parseInt(p.order) - parseInt(n.order);
 });

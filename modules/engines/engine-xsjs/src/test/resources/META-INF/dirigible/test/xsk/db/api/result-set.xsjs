@@ -45,8 +45,7 @@ try {
 assertTrue(bigIntAssertion && dateAssertion && decAssertion && doubleAssertion && intAssertion && stringAssertion && timeAssertion && timestampAssertion && closeAssertion && isClosedAssertion);
 
 function setStatementFields() {
-  var inputStream = Java.type('java.io.ByteArrayInputStream');
-  var blob = new inputStream([123]);
+  var blob = [123];
   statement.setBlob(1, blob);
 
   statement.setBigInt(2, 1000000000000000);
@@ -55,15 +54,15 @@ function setStatementFields() {
   var dateInput = new date(121, 0, 1);
   statement.setDate(3, dateInput);
 
-  var charArray = Java.type('java.io.CharArrayReader');
-  var clob = new charArray(['a', 'b', 'c']);
+  var clob = "abcd";
 
-  statement.setClob(4,clob);
+  statement.setClob(4, clob);
 
   var bigDec = Java.type('java.math.BigDecimal');
   var dec = new bigDec(10);
 
-  statement.setDecimal(5, dec)
+  statement.setDecimal(5, dec);
+  statement.setDecimal(5, 10);
 
   statement.setDouble(6, 10.11);
 

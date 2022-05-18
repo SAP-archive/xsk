@@ -23,17 +23,15 @@ migrationLaunchView.controller("HanaCredentialsViewController", [
         $scope.databases = [];
         $scope.databasesList = $scope.databases;
 
-        let descriptionList = [
-            "Please wait while we get all available databases...",
-            "Provide the SAP HANA Credentials",
-        ];
+        let descriptionList = ["Please wait while we get all available databases...", "Provide the SAP HANA Credentials"];
         $scope.descriptionText = descriptionList[0];
         let defaultErrorTitle = "Error listing databases";
-        let defaultErrorDesc =
-            "Please check if the information you provided is correct and try again.";
+        let noProcessErrorTitle = "Error starting migration process";
+        let noProcessErrorDescription = "Migration process initiation failed! Process ID is null.";
+        let defaultErrorDesc = "Please check if the information you provided is correct and try again.";
 
         function getAvailableHanaDatabases() {
-            body = {
+            let body = {
                 neo: {
                     hostName: migrationDataState.neoHostName,
                     subaccount: migrationDataState.neoSubaccount,
@@ -43,75 +41,35 @@ migrationLaunchView.controller("HanaCredentialsViewController", [
             };
 
             $http
-                .post(
-                    "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/start-process",
-                    JSON.stringify(body),
-                    { headers: { "Content-Type": "application/json" } }
-                )
-                .then(
-                    function (response) {
-                        migrationDataState.processInstanceId = body.processInstanceId =
-                            response.data.processInstanceId;
-                        const timer = setInterval(function () {
-                            $http
-                                .post(
-                                    "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/get-process",
-                                    JSON.stringify(body),
-                                    { headers: { "Content-Type": "application/json" } }
-                                )
-                                .then(
-                                    function (response) {
-                                        if (response.data && response.data.failed) {
-                                            clearInterval(timer);
-                                            $messageHub.announceAlertError(
-                                                defaultErrorTitle,
-                                                defaultErrorDesc
-                                            );
-                                            errorOccurred();
-                                        } else if (response.data.databases) {
-                                            clearInterval(timer);
-                                            $scope.areDatabasesLoaded = true;
-                                            $scope.descriptionText = descriptionList[1];
-                                            $scope.userInput();
-                                            $scope.$parent.setPreviousVisible(true);
-                                            $scope.$parent.setPreviousEnabled(true);
-                                            $scope.$parent.setNextVisible(true);
-                                            $scope.$parent.setNextEnabled(true);
-                                            $scope.$parent.setFinishVisible(false);
-
-                                            $scope.databasesDropdownText = "---Please select---";
-                                            $scope.databases = response.data.databases;
-                                            $scope.databasesList = $scope.databases;
-                                        }
-                                    },
-                                    function (response) {}
-                                );
-                        }, 1000);
-                    },
-                    function (response) {
-                        if (response.data) {
-                            if ("error" in response.data) {
-                                if ("message" in response.data.error) {
-                                    $messageHub.announceAlertError(
-                                        defaultErrorTitle,
-                                        response.data.error.message
-                                    );
-                                } else {
-                                    $messageHub.announceAlertError(
-                                        defaultErrorTitle,
-                                        defaultErrorDesc
-                                    );
-                                }
-                                console.error(`HTTP $response.status`, response.data.error);
-                            } else {
-                                $messageHub.announceAlertError(defaultErrorTitle, defaultErrorDesc);
-                            }
-                        } else {
-                            $messageHub.announceAlertError(defaultErrorTitle, defaultErrorDesc);
-                        }
+                .post("/services/v4/js/ide-migration/server/migration/api/migration-rest-api.mjs/list-databases", JSON.stringify(body), {
+                    headers: { "Content-Type": "application/json" },
+                })
+                .then(function (response) {
+                    if (response.data && response.data.failed) {
+                        $messageHub.announceAlertError(defaultErrorTitle, defaultErrorDesc);
                         errorOccurred();
+                    } else if (response.data.databases && response.data.userJwtToken) {
+                        body.databases = response.data.databases;
+                        migrationDataState.userJwtToken = response.data.userJwtToken;
+
+                        $scope.areDatabasesLoaded = true;
+                        $scope.descriptionText = descriptionList[1];
+                        $scope.userInput();
+                        $scope.$parent.setPreviousVisible(true);
+                        $scope.$parent.setPreviousEnabled(true);
+                        $scope.$parent.setNextVisible(true);
+                        $scope.$parent.setNextEnabled(true);
+                        $scope.$parent.setFinishVisible(false);
+
+                        $scope.databasesDropdownText = "---Please select---";
+                        $scope.databases = response.data.databases;
+                        $scope.databasesList = $scope.databases;
                     }
-                );
+                })
+                .catch(function (err) {
+                    $messageHub.announceAlertError(defaultErrorTitle, err.message ?? defaultErrorDesc);
+                    errorOccurred();
+                });
         }
 
         function errorOccurred() {
@@ -139,13 +97,9 @@ migrationLaunchView.controller("HanaCredentialsViewController", [
         $scope.filterDatabases = function () {
             if ($scope.databasesSearch) {
                 let filtered = [];
-                for (let i = 0; i < $scope.databases.length; i++) {
-                    if (
-                        $scope.databases[i]
-                            .toLowerCase()
-                            .includes($scope.databasesSearch.toLowerCase())
-                    ) {
-                        filtered.push($scope.databases[i]);
+                for (const database of $scope.databases) {
+                    if (database.toLowerCase().includes($scope.databasesSearch.toLowerCase())) {
+                        filtered.push(database);
                     }
                 }
                 $scope.databasesList = filtered;
@@ -157,6 +111,7 @@ migrationLaunchView.controller("HanaCredentialsViewController", [
         $scope.databaseSelected = function (database) {
             migrationDataState.schemaName = database;
             $scope.databasesDropdownText = database;
+            $scope.userInput();
         };
 
         $messageHub.on(

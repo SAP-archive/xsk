@@ -15,8 +15,7 @@ migrationLaunchView.controller("NeoCredentialsViewController", [
     "migrationDataState",
     function ($scope, $messageHub, migrationDataState) {
         $scope.migrationDataState = migrationDataState;
-        $scope.passwordHintMessage =
-            "If you have enabled 2FA for your account, append your 2FA code after the password";
+        $scope.passwordHintMessage = "If you have enabled 2FA for your account, append your 2FA code after the password";
         $scope.isVisible = true;
         $scope.passwordVisible = false;
         $scope.regionDropdownInitText = "---Please select---";
@@ -78,21 +77,14 @@ migrationLaunchView.controller("NeoCredentialsViewController", [
         $scope.regionSelected = function (regionObject) {
             migrationDataState.neoHostName = regionObject.region;
             $scope.regionDropdownText = regionObject.name;
-
-            $scope.$parent.setFinishEnabled(true);
         };
 
         $scope.filterRegions = function () {
             if ($scope.regionSearch) {
                 let filtered = [];
                 let alreadyHaveUserEnteredRegion = false;
-                for (let i = 0; i < $scope.regions.length; i++) {
-                    if (
-                        $scope.regions[i].name
-                            .toLowerCase()
-                            .includes($scope.regionSearch.toLowerCase())
-                    ) {
-                        const region = $scope.regions[i];
+                for (const region of $scope.regions) {
+                    if (region.name.toLowerCase().includes($scope.regionSearch.toLowerCase())) {
                         filtered.push(region);
 
                         if (region.region === $scope.regionSearch) {
@@ -126,7 +118,6 @@ migrationLaunchView.controller("NeoCredentialsViewController", [
                             $scope.$parent.setPreviousVisible(false);
                             $scope.$parent.setPreviousEnabled(true);
                             $scope.$parent.setNextVisible(true);
-                            $scope.$parent.setFinishVisible(false);
                         }
                     });
                 }

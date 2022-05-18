@@ -11,18 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.processors.view;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Map;
-
-import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
-import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
-import org.eclipse.dirigible.database.sql.ISqlDialect;
-import org.eclipse.dirigible.database.sql.SqlFactory;
-import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.artefacts.HDBViewSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
@@ -33,6 +21,16 @@ import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Map;
+import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
+import org.eclipse.dirigible.database.sql.ISqlDialect;
+import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The View Create Processor.
@@ -51,10 +49,13 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
    * @param viewModel  the view model
    * @throws SQLException the SQL exception
    */
-  public void execute(Connection connection, XSKDataStructureHDBViewModel viewModel)
+  public boolean execute(Connection connection, XSKDataStructureHDBViewModel viewModel)
       throws SQLException {
     logger.info("Processing Create View: " + viewModel.getName());
-    String viewNameWithSchema = XSKHDBUtils.escapeArtifactName(connection, viewModel.getName(), viewModel.getSchema());
+    
+    boolean success = false;
+    
+    String viewNameWithSchema = XSKHDBUtils.escapeArtifactName(viewModel.getName(), viewModel.getSchema());
 
     if (!SqlFactory.getNative(connection).exists(connection, viewNameWithSchema, DatabaseArtifactTypes.VIEW)) {
       String sql = null;
@@ -70,7 +71,8 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
             break;
           } else {
             String errorMessage = String.format("Views are not supported for %s !", dialect.getDatabaseName(connection));
-            XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, viewModel.getLocation(), XSKCommonsConstants.HDB_VIEW_PARSER);
+            XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, viewModel.getLocation(),
+                XSKCommonsConstants.HDB_VIEW_PARSER);
             applyArtefactState(viewModel.getName(), viewModel.getLocation(), VIEW_ARTEFACT, ArtefactState.FAILED_CREATE, errorMessage);
             throw new IllegalStateException(errorMessage);
           }
@@ -80,9 +82,11 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
         executeSql(sql, connection);
         String message = String.format("Create view %s successfully", viewModel.getName());
         applyArtefactState(viewModel.getName(), viewModel.getLocation(), VIEW_ARTEFACT, ArtefactState.SUCCESSFUL_CREATE, message);
+        success = true;
       } catch (SQLException ex) {
         String errorMessage = String.format("Create view [%s] skipped due to an error: %s", viewModel.getName(), ex.getMessage());
-        XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, viewModel.getLocation(), XSKCommonsConstants.HDB_VIEW_PARSER);
+        XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, viewModel.getLocation(),
+            XSKCommonsConstants.HDB_VIEW_PARSER);
         applyArtefactState(viewModel.getName(), viewModel.getLocation(), VIEW_ARTEFACT, ArtefactState.FAILED_CREATE, errorMessage);
       }
     } else {
@@ -98,6 +102,7 @@ public class XSKViewCreateProcessor extends AbstractXSKProcessor<XSKDataStructur
             .get(IXSKDataStructureModel.TYPE_HDB_SYNONYM), viewModel.getName(), viewModel.getSchema(), connection);
       }
     }
+    return success;
   }
 
 }

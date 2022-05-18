@@ -1,0 +1,52 @@
+<!--
+  ~ Copyright (c) 2010-2021 SAP and others.
+  ~ All rights reserved. This program and the accompanying materials
+  ~ are made available under the terms of the Eclipse Public License v2.0
+  ~ which accompanies this distribution, and is available at
+  ~ http://www.eclipse.org/legal/epl-v20.html
+  ~ Contributors:
+  ~ SAP - initial API and implementation
+  -->
+  <div class="changes-body margin-left-right-lg" ng-controller="ChangesViewController as cvc" ng-show="isVisible"
+  spellcheck="false">
+  <h1 class="section-title" ng-hide="dataLoaded">Calculating changes...</h1>
+  <p class="margin-top-bottom-nl" ng-hide="dataLoaded">Please wait while we calculate what changes need to be made
+  </p>
+  <div class="progress margin-top-bottom-lg" ng-hide="dataLoaded">
+    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+      aria-valuemax="100" style="width: 100%">
+    </div>
+  </div>
+  <div class="panel panel-default" ng-show="dataLoaded">
+    <div class="flex-panel">
+      <button class="btn btn-big btn-primary left" ng-click="previousClicked()">Previous</button>
+      <!-- <p class="left">{{ data.length }} file(s) will be changed.
+        {{data.length > 0 ? ' If you want to exclude a file from the migration, click on "Exclude".' : ""}}
+      </p> -->
+      <p class="left">{{ data.length }} file(s) will be changed.</p>
+      <div class="btn-group left" role="group" ng-show="data.length">
+        <button type="button" class="btn btn-big btn-default" ng-click="splitDiffView()"
+          ng-class="{active:isDiffViewSplit===true}">Split</button>
+        <button type="button" class="btn btn-big btn-default" ng-click="inlineDiffView()"
+          ng-class="{active:isDiffViewSplit===false}">Unified</button>
+      </div>
+      <button class="btn btn-big btn-primary" ng-click="startMigration()">Migrate</button>
+    </div>
+  </div>
+  <ul class="list-group" ng-show="dataLoaded">
+    <li class="list-group-item" ng-repeat="file in data track by $index">
+      <div class="flex-panel">
+        <button class="btn btn-default left" ng-click="file.collapsed = !file.collapsed">
+          <i class="fa" aria-hidden="true"
+            ng-class="{true:'fa-chevron-right', false:'fa-chevron-down'}[file.collapsed]"></i>
+        </button>
+        <p>{{ file.file }}</p>
+        <!-- <button class="btn btn-big" ng-class="{true:'btn-primary', false:'btn-danger'}[file.excluded]"
+          ng-click="file.excluded = !file.excluded">{{file.excluded === true ? "Include" : "Exclude"}}</button> -->
+      </div>
+      <div id="{{ file.id }}" class="diff-view" ng-hide="file.collapsed" ng-init="createDiffEditor($index)">
+        <p>Loading...</p>
+      </div>
+    </li>
+  </ul>
+</div>

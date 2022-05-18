@@ -39,7 +39,7 @@ public interface IXSKHDBTICoreService {
 
   void refreshCsvRelations(XSKTableImportArtifact tableImportArtifact);
 
-  String getPkForCSVRecord(CSVRecord csvRecord, String tableName, List<String> headerNames);
+  int getPkIndexForCSVRecord(CSVRecord csvRecord, String tableName, List<String> headerNames);
 
   String getCSVRecordHash(CSVRecord csvRecord);
 

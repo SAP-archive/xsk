@@ -1,9 +1,5 @@
-{{- if .Values.namespace.name }}
-1.
-Created namespace {{.Values.namespace.name}}
-{{- end }}
+{{- if .Release.Namespace }}
+1. Created namespace: {{ .Release.Namespace }}
 
-{{- if .Values.deployment.landscapeDomain }}
-2.
-Created landscape with domain https://{{ .Values.deployment.landscapeDomain }}.apps.xsk.io
+2. Created landscape with domain: https://{{ .Release.Name }}.apps.xsk.io
 {{- end }}

@@ -36,9 +36,14 @@ public class XSKProjectFilesModificator {
 
   private static final String CALC_VIEW_REFERENCE_MATCH_PATTERN = "\"_SYS_BIC\".\"(.*)\\/(.*)\"";
   private static final String XSLT_RESOURCE_PATH = "META-INF/modificators/xslt/analyticprivilege.xslt";
-  private static final List<String> REPLACE_SESSION_USER_FILE_EXTENSIONS = List.of("xsjs", "xsjslib", "hdbprocedure", "hdbtablefunction",
+  private static final String HDB_PROCEDURE_FILE_EXTENSION ="hdbprocedure";
+  private static final List<String> REPLACE_SESSION_USER_FILE_EXTENSIONS = List.of("xsjs", "xsjslib", HDB_PROCEDURE_FILE_EXTENSION, "hdbtablefunction",
       "analyticprivilege", "hdbanalyticprivilege");
   private static final List<String> ANALYTIC_PRIVILEGE_FILE_EXTENSIONS = List.of("analyticprivilege", "hdbanalyticprivilege");
+  private static final String ROW_DEFINITION ="(?i)\\bin row\\b";
+  private static final String ROW_DEFINITION_REPLACEMENT ="IN row1";
+  private static final String ROW_VALUE ="(?i)\\:row[^0-9a-z]";
+  private static final String ROW_VALUE_REPLACEMENT =":row1;";
 
   /**
    * Modify a list of delivery unit project files during the migration process.
@@ -50,6 +55,7 @@ public class XSKProjectFilesModificator {
       String fileExtension = getProjectFileExtension(projectFile);
       replaceSessionUser(fileExtension, projectFile);
       modifyAnalyticPrivilegeFile(fileExtension, projectFile);
+      replaceReservedWordRow(fileExtension,projectFile);
     }
   }
 
@@ -62,7 +68,7 @@ public class XSKProjectFilesModificator {
   private void replaceSessionUser(String fileExtension, IFile projectFile) {
     if (REPLACE_SESSION_USER_FILE_EXTENSIONS.contains(fileExtension)) {
       byte[] currentContent = projectFile.getContent();
-      projectFile.setContent(new String(currentContent).replace("SESSION_USER", "SESSION_CONTEXT(APPLICATIONUSER)").getBytes());
+      projectFile.setContent(new String(currentContent).replace("SESSION_USER", "SESSION_CONTEXT('APPLICATIONUSER')").getBytes());
     }
   }
 
@@ -140,5 +146,13 @@ public class XSKProjectFilesModificator {
    */
   public static String processWhereSql(String value) {
     return value.replaceAll(CALC_VIEW_REFERENCE_MATCH_PATTERN, "\"$2\"");
+  }
+
+  private void replaceReservedWordRow(String fileExtension, IFile projectFile){
+    if (fileExtension.equalsIgnoreCase(HDB_PROCEDURE_FILE_EXTENSION)){
+      byte[] currentContent = projectFile.getContent();
+      projectFile.setContent(new String(currentContent).replaceAll(ROW_DEFINITION,ROW_DEFINITION_REPLACEMENT)
+          .replaceAll(ROW_VALUE, ROW_VALUE_REPLACEMENT).getBytes());
+    }
   }
 }

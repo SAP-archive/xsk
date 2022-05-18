@@ -2,22 +2,43 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+      <dependency>
+          <groupId>org.apache.httpcomponents</groupId>
+          <artifactId>httpmime</artifactId>
+          <version>4.5.13</version>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.httpcomponents</groupId>
+          <artifactId>httpasyncclient</artifactId>
+          <version>4.1.5</version>
+          <scope>test</scope>
+      </dependency>
+  </dependencies>
 
-	<parent>
+  <parent>
 		<groupId>com.sap.xsk</groupId>
 		<artifactId>xsk-parent</artifactId>
-		<version>0.14.0-SNAPSHOT</version>
+		<version>0.17.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>XSK - Integration Tests - Parent</name>
 	<artifactId>xsk-integration-tests-parent</artifactId>
-	<version>0.14.0-SNAPSHOT</version>
+	<version>0.17.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
 		<module>engine-hdb</module>
 		<module>ui</module>
+    <module>applications</module>
   </modules>
 
 	<properties>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <artifactId>xsk-modules-ide-parent</artifactId>
     <groupId>com.sap.xsk</groupId>
-    <version>0.14.0-SNAPSHOT</version>
+    <version>0.17.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -15,6 +15,8 @@
 
 
   <properties>
+    <sonar.sources>src/main/resources/META-INF/dirigible/xsk-ide-xsjob</sonar.sources>
+
     <profile.content.phase>generate-sources</profile.content.phase>
     <content.repository.name>xsk-ide-xsjob</content.repository.name>
     <content.project.name>xsk-ide-xsjob</content.project.name>

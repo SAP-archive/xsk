@@ -12,6 +12,7 @@
 package com.sap.xsk.models.hdbcalculationview.tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import com.sap.ndb.CalculationScenario;
@@ -35,7 +36,6 @@ public class CalculationViewTest {
 
   @Test
   public void serialize() throws JAXBException {
-
     CalculationScenario calculationScenario = new CalculationScenario();
     calculationScenario.setId("com.sap.xsk.samples::XSK_SIMPLE_CALC_VIEW");
     calculationScenario.setOutputViewType("Projection");
@@ -51,7 +51,9 @@ public class CalculationViewTest {
     Marshaller m = context.createMarshaller();
     m.marshal(calculationScenario, writer);
 
-    System.out.println(writer.toString());
+    String serializedContent = writer.toString();
+	System.out.println(serializedContent);
+	assertNotNull("The serialized content should not be null", serializedContent);
 
   }
 

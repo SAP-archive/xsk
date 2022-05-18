@@ -1,0 +1,12 @@
+namespace sap.db.myapp;
+@Schema: 'MYSCHEMA' // user-defined structured data types
+
+context UserDefinedDataType {
+    type MyType {
+      field1 : Integer;
+      field2 : String(40);
+      field3 : Decimal(22,11);
+      field4 : Binary(11);
+    };
+}
+

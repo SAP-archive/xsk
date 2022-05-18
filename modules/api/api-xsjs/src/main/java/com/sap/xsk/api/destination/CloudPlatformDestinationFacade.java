@@ -12,44 +12,59 @@
 package com.sap.xsk.api.destination;
 
 import com.sap.cloud.sdk.cloudplatform.CloudPlatformAccessor;
-import com.sap.cloud.sdk.cloudplatform.connectivity.Destination;
 import com.sap.cloud.sdk.cloudplatform.connectivity.DestinationAccessor;
 import com.sap.cloud.sdk.cloudplatform.connectivity.HttpClientAccessor;
+import com.sap.cloud.sdk.cloudplatform.connectivity.HttpDestination;
+import io.vavr.control.Option;
 import org.apache.http.HttpResponse;
 import org.apache.http.MethodNotSupportedException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpOptions;
-import org.apache.http.client.methods.HttpPatch;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.util.EntityUtils;
+import org.eclipse.dirigible.api.v3.http.client.HttpClientRequestOptions;
 import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
 import org.eclipse.dirigible.commons.api.scripting.IScriptingFacade;
+import org.eclipse.dirigible.api.v3.http.HttpClientFacade;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Properties;
 
 public class CloudPlatformDestinationFacade implements IScriptingFacade {
-  public static Destination getDestination(String name) {
+
+  public static Destination getDestination(String destinationName) {
     setKymaCloudPlatformFacade();
 
-    return DestinationAccessor.getDestination(name);
+    Properties destinationProperties = new Properties();
+    com.sap.cloud.sdk.cloudplatform.connectivity.Destination fetchedDestination = DestinationAccessor.getDestination(destinationName);
+    fetchedDestination.getPropertyNames()
+        .forEach(propName -> {
+          Option<Object> property = fetchedDestination.get(propName);
+          if (!property.isEmpty()) {
+            destinationProperties.put(propName, property.get());
+          }
+        });
+
+    if (fetchedDestination.isHttp()) {
+      URI uri = URI.create((String) fetchedDestination.get("URL").get());
+
+      return new Destination(uri.getHost(), uri.getPort(), uri.getPath(), destinationProperties);
+    } else {
+      return new Destination(destinationProperties);
+    }
   }
 
-  public static String executeRequest(String requestObject, Destination destination) throws IOException, MethodNotSupportedException {
+  public static String executeRequest(String requestObject, String destinationName, String options)
+      throws IOException, MethodNotSupportedException {
     setKymaCloudPlatformFacade();
 
     DestinationRequest destinationRequest = GsonHelper.GSON.fromJson(requestObject, DestinationRequest.class);
-
-    HttpClient client = HttpClientAccessor.getHttpClient(destination.asHttp());
-    HttpRequestBase request = getRequest(destinationRequest);
-
-    request.setURI(URI.create(destination.asHttp().getUri() + destinationRequest.getQueryPath()));
+    HttpClientRequestOptions parsedOptions = HttpClientFacade.parseOptions(options);
+    HttpDestination httpDestination = DestinationAccessor.getDestination(destinationName).asHttp();
+    HttpClient client = HttpClientAccessor.getHttpClient(httpDestination);
+    String uri = URI.create(httpDestination.getUri() + destinationRequest.getPath()).toString();
+    HttpRequestBase request = getRequest(uri, destinationRequest, parsedOptions);
     setRequestHeaders(destinationRequest, request);
 
     HttpResponse response = client.execute(request);
@@ -65,33 +80,34 @@ public class CloudPlatformDestinationFacade implements IScriptingFacade {
   }
 
   private static void setKymaCloudPlatformFacade() {
-    if(CloudPlatformAccessor.getCloudPlatformFacade() instanceof CloudPlatformKymaFacade) {
+    if (CloudPlatformAccessor.getCloudPlatformFacade() instanceof CloudPlatformKymaFacade) {
       return;
     }
 
     CloudPlatformAccessor.setCloudPlatformFacade(new CloudPlatformKymaFacade());
   }
 
-  private static HttpRequestBase getRequest(DestinationRequest destinationRequest) throws MethodNotSupportedException {
+  private static HttpRequestBase getRequest(String uri, DestinationRequest destinationRequest, HttpClientRequestOptions options)
+      throws MethodNotSupportedException, IOException {
     switch (destinationRequest.getMethod()) {
       case 0:
         return new HttpOptions();
       case 1:
-        return new HttpGet();
+        return HttpClientFacade.createGetRequest(uri, options);
       case 2:
-        return new HttpHead();
+        return HttpClientFacade.createHeadRequest(uri, options);
       case 3:
-        return new HttpPost();
+        return HttpClientFacade.createPostRequest(uri, options);
       case 4:
-        return new HttpPut();
+        return HttpClientFacade.createPutRequest(uri, options);
       case 5:
-        return new HttpDelete();
+        return HttpClientFacade.createDeleteRequest(uri, options);
       case 6:
-        return new HttpTrace();
+        return HttpClientFacade.createTraceRequest(uri, options);
       case 7:
         throw new MethodNotSupportedException("Method CONNECT not supported");
       case 8:
-        return new HttpPatch();
+        return HttpClientFacade.createPatchRequest(uri, options);
       default:
         throw new MethodNotSupportedException("XSJS method integer not supported");
     }

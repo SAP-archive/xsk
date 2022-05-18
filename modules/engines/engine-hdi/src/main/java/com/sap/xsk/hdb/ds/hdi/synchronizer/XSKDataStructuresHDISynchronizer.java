@@ -13,17 +13,6 @@ package com.sap.xsk.hdb.ds.hdi.synchronizer;
 
 import static java.text.MessageFormat.format;
 
-import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
-import com.sap.xsk.hdb.ds.api.IXSKDataStructuresCoreService;
-import com.sap.xsk.hdb.ds.api.IXSKEnvironmentVariables;
-import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
-import com.sap.xsk.hdb.ds.model.hdi.XSKDataStructureHDIModel;
-import com.sap.xsk.hdb.ds.processors.hdi.XSKHDIContainerCreateProcessor;
-import com.sap.xsk.hdb.ds.processors.hdi.XSKHDIContainerDropProcessor;
-import com.sap.xsk.hdb.ds.service.XSKDataStructuresCoreService;
-import com.sap.xsk.hdb.ds.service.parser.IXSKCoreParserService;
-import com.sap.xsk.hdb.ds.service.parser.XSKCoreParserService;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,22 +26,37 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.sql.DataSource;
-import com.sap.xsk.utils.XSKCommonsConstants;
+
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
+import org.eclipse.dirigible.core.scheduler.api.IOrderedSynchronizerContribution;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
+import com.sap.xsk.hdb.ds.api.IXSKDataStructuresCoreService;
+import com.sap.xsk.hdb.ds.api.IXSKEnvironmentVariables;
+import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
+import com.sap.xsk.hdb.ds.model.hdi.XSKDataStructureHDIModel;
+import com.sap.xsk.hdb.ds.processors.hdi.XSKHDIContainerCreateProcessor;
+import com.sap.xsk.hdb.ds.processors.hdi.XSKHDIContainerDropProcessor;
+import com.sap.xsk.hdb.ds.service.XSKDataStructuresCoreService;
+import com.sap.xsk.hdb.ds.service.parser.IXSKCoreParserService;
+import com.sap.xsk.hdb.ds.service.parser.XSKCoreParserService;
+import com.sap.xsk.utils.XSKCommonsConstants;
+
 /**
  * The XSK Data Structures HDI Synchronizer.
  */
-public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer {
+public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer implements IOrderedSynchronizerContribution {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKDataStructuresHDISynchronizer.class);
 
@@ -383,5 +387,10 @@ public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer {
       this.xskhdiContainerCreateProcessor.execute(connection, hdiModel);
     });
   }
+
+	@Override
+	public int getPriority() {
+		return 270;
+	}
 
 }

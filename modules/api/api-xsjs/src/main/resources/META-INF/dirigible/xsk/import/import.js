@@ -9,7 +9,6 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-var acorn = require("acornjs/acorn");
 
 exports.import = function (namespace, name) {
   var validPackages;
@@ -45,10 +44,6 @@ var Require = (function (modulePath) {
     }
     code = SourceProvider.loadSource(path);
 
-    var exports = getExports(code);
-    code += "\n\n";
-    exports.forEach(e => code += "exports." + e + " = " + e + ";\n");
-
     moduleInfo = {
       loaded: false,
       id: path,
@@ -59,7 +54,10 @@ var Require = (function (modulePath) {
     _loadedModules[path] = moduleInfo;
     var compiledWrapper = null;
     try {
-      compiledWrapper = eval(code);
+      compiledWrapper = load({
+        name: path,
+        script: code
+      });
     } catch (e) {
       throw new Error('Error evaluating module ' + path + ' line #' + e.lineNumber + ' : ' + e.message, path, e.lineNumber);
     }
@@ -86,14 +84,6 @@ var Require = (function (modulePath) {
 });
 
 var xskRequire = Require();
-
-function getExports(code) {
-  var nodes = acorn.parse(code);
-  var functionDeclarations = nodes.body.filter(e => e.type === "FunctionDeclaration").map(e => e.id.name);
-  var variableDeclarations = nodes.body.filter(e => e.type === "VariableDeclaration").flatMap(e => e.declarations.filter(d => d.type === "VariableDeclarator").flatMap(d => d.id.name));
-  var exports = functionDeclarations.concat(variableDeclarations);
-  return exports;
-}
 
 function addToXSJSApis (api, validPackages, name, module) {
   for (var i = 0; i < validPackages.length; i++) {

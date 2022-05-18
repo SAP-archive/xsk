@@ -12,9 +12,12 @@
 package com.sap.xsk.engine;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Objects;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
 import org.eclipse.dirigible.engine.api.script.IScriptEngineExecutor;
@@ -22,6 +25,7 @@ import org.eclipse.dirigible.engine.js.api.IJavascriptModuleSourceProvider;
 import org.eclipse.dirigible.engine.js.graalvm.processor.GraalVMJavascriptEngineExecutor;
 import org.eclipse.dirigible.repository.api.IRepositoryStructure;
 import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,20 +36,37 @@ import org.slf4j.LoggerFactory;
 public class XSKJavascriptEngineExecutor extends GraalVMJavascriptEngineExecutor implements IScriptEngineExecutor {
 
   public static final String ENGINE_NAME = "HANA XS Classic JavaScript Engine";
-  private static final Logger logger = LoggerFactory.getLogger(XSKJavascriptEngineExecutor.class);
   private static final String ENGINE_JAVA_SCRIPT = "js";
   private static final String XSK_API_LOCATION = "/xsk/api.js";
   private static final Charset DEFAULT_CHARSET = Charset.defaultCharset();
   private static String XSK_API_CONTENT = null;
-  private XSKRepositoryModuleSourceProvider sourceProvider = new XSKRepositoryModuleSourceProvider(this,
+  private final XSKRepositoryModuleSourceProvider sourceProvider = new XSKRepositoryModuleSourceProvider(this,
       IRepositoryStructure.PATH_REGISTRY_PUBLIC);
 
   @Override
   protected void beforeEval(Context context) throws IOException {
     String xskApi = getXskApi();
     context.getBindings(ENGINE_JAVA_SCRIPT).putMember("XSK_API", xskApi);
-    context.getBindings(ENGINE_JAVA_SCRIPT).putMember("$", context.eval(ENGINE_JAVA_SCRIPT, "mainModule.loadScriptString(XSK_API)"));
+    Value loadScriptStringResult = context.eval(
+        Source
+            .newBuilder(ENGINE_JAVA_SCRIPT, "mainModule.loadScriptString(XSK_API)", "internal-module-load-string-code.js")
+            .build()
+    );
+    context.getBindings(ENGINE_JAVA_SCRIPT).putMember("$", loadScriptStringResult);
+    context.eval(getJSErrorFileNamePolyfillSource());
     super.beforeEval(context);
+  }
+
+  private static Source getJSErrorFileNamePolyfillSource() throws IOException {
+    String errorFileNamePolyfillName = "/ErrorFileNamePolyfill.js";
+    InputStream errorFileNamePolyfillInputStream = XSKJavascriptEngineExecutor.class
+        .getResourceAsStream("/js/polyfills" + errorFileNamePolyfillName);
+    String errorFileNamePolyfillCode = IOUtils.toString(Objects.requireNonNull(errorFileNamePolyfillInputStream), StandardCharsets.UTF_8);
+    return Source
+        .newBuilder(ENGINE_JAVA_SCRIPT, errorFileNamePolyfillCode, errorFileNamePolyfillName)
+        .internal(true)
+        .build();
+
   }
 
   @Override
@@ -55,7 +76,8 @@ public class XSKJavascriptEngineExecutor extends GraalVMJavascriptEngineExecutor
 
   private String getXskApi() throws IOException {
     if (XSK_API_CONTENT == null) {
-      XSK_API_CONTENT = IOUtils.toString(XSKJavascriptEngineExecutor.class.getResourceAsStream("/META-INF/dirigible" + XSK_API_LOCATION), DEFAULT_CHARSET);
+      XSK_API_CONTENT = IOUtils
+          .toString(XSKJavascriptEngineExecutor.class.getResourceAsStream("/META-INF/dirigible" + XSK_API_LOCATION), DEFAULT_CHARSET);
     }
     return XSK_API_CONTENT;
   }

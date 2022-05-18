@@ -13,11 +13,27 @@ package com.sap.xsk.hdb.ds.synchronizer;
 
 import static java.text.MessageFormat.format;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
+import org.eclipse.dirigible.core.scheduler.api.IOrderedSynchronizerContribution;
+import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
+import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
+import org.eclipse.dirigible.repository.api.IResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreFacade;
-import com.sap.xsk.hdb.ds.facade.XSKHDBCoreFacade;
+import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreSynchronizationFacade;
+import com.sap.xsk.hdb.ds.facade.XSKHDBCoreSynchronizationFacade;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntitiesModel;
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
@@ -29,47 +45,26 @@ import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.service.parser.IXSKCoreParserService;
 import com.sap.xsk.hdb.ds.service.parser.XSKCoreParserService;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import com.sap.xsk.utils.XSKCommonsConstants;
-import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
-import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
-import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
-import org.eclipse.dirigible.repository.api.IResource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The XSK Data Structures Synchronizer.
  */
-public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
+public class XSKDataStructuresSynchronizer extends AbstractSynchronizer implements IOrderedSynchronizerContribution {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKDataStructuresSynchronizer.class);
 
-  private static final Map<String, XSKDataStructureEntitiesModel> ENTITIES_PREDELIVERED = Collections
-      .synchronizedMap(new HashMap<>());
-  private static final Map<String, XSKDataStructureHDBTableModel> TABLES_PREDELIVERED = Collections
-      .synchronizedMap(new HashMap<>());
-  private static final Map<String, XSKDataStructureHDBViewModel> VIEWS_PREDELIVERED = Collections
-      .synchronizedMap(new HashMap<>());
-  private static final Map<String, XSKDataStructureHDBProcedureModel> PROCEDURES_PREDELIVERED = Collections
-      .synchronizedMap(new HashMap<>());
-  private static final Map<String, XSKDataStructureHDBTableFunctionModel> TABLEFUNCTIONS_PREDELIVERED = Collections
-      .synchronizedMap(new HashMap<>());
-  private static final Map<String, XSKDataStructureHDBSchemaModel> SCHEMAS_PREDELIVERED = Collections
-      .synchronizedMap(new HashMap<>());
-  private static final Map<String, XSKDataStructureHDBSynonymModel> SYNONYMS_PREDELIVERED = Collections
-      .synchronizedMap(new HashMap<>());
-  private static final Map<String, XSKDataStructureHDBTableTypeModel> TABLE_TYPES_PREDELIVERED = Collections
-      .synchronizedMap(new HashMap<>());
+  private static final Map<String, XSKDataStructureEntitiesModel> ENTITIES_PREDELIVERED = Collections.synchronizedMap(new HashMap<>());
+  private static final Map<String, XSKDataStructureHDBTableModel> TABLES_PREDELIVERED = Collections.synchronizedMap(new HashMap<>());
+  private static final Map<String, XSKDataStructureHDBViewModel> VIEWS_PREDELIVERED = Collections.synchronizedMap(new HashMap<>());
+  private static final Map<String, XSKDataStructureHDBProcedureModel> PROCEDURES_PREDELIVERED = Collections.synchronizedMap(new HashMap<>());
+  private static final Map<String, XSKDataStructureHDBTableFunctionModel> TABLEFUNCTIONS_PREDELIVERED = Collections.synchronizedMap(new HashMap<>());
+  private static final Map<String, XSKDataStructureHDBSchemaModel> SCHEMAS_PREDELIVERED = Collections.synchronizedMap(new HashMap<>());
+  private static final Map<String, XSKDataStructureHDBSynonymModel> SYNONYMS_PREDELIVERED = Collections.synchronizedMap(new HashMap<>());
+  private static final Map<String, XSKDataStructureHDBTableTypeModel> TABLE_TYPES_PREDELIVERED = Collections.synchronizedMap(new HashMap<>());
   private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
   private IXSKCoreParserService xskCoreParserService = new XSKCoreParserService();
-  private IXSKHDBCoreFacade xskHDBCoreFacade = new XSKHDBCoreFacade();
+  private IXSKHDBCoreSynchronizationFacade xskHDBCoreFacade = new XSKHDBCoreSynchronizationFacade();
 
   /**
    * Force synchronization.
@@ -256,8 +251,8 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
         clearCache();
 
         successfulSynchronization(SYNCHRONIZER_NAME,
-            format("Immutable: [Entities: {0}, Tables: {1}, Views: {2}, Procedures: {3}, Functions: {4}, Schemas: {5}, HDI: {6}], "
-                    + "Mutable: [Entities: {7}, Tables: {8}, Views: {9}, Procedures: {10}, Functions: {11}, Schemas: {12}, HDI: {13}, Syninyms: {13}]",
+            format("Immutable: [Entities: {0}, Tables: {1}, Views: {2}, Procedures: {3}, Functions: {4}, Schemas: {5}, Synonyms: {6}], Table Types: {7}],"
+                    + "Mutable: [Entities: {7}, Tables: {8}, Views: {9}, Procedures: {10}, Functions: {11}, Schemas: {12}, HDI: {13}, Synonyms: {13}]",
                 immutableEntitiesCount, immutableTablesCount, immutableViewsCount, immutableProceduresCount, immutableFunctionsCount,
                 immutableSchemasCount));
 //						mutableEntitiesCount, mutableTablesCount, mutableViewsCount, mutableProceduresCount, mutableFunctionsCount, mutableSchemasCount, mutableHDICount, immutableSynonymsCount));
@@ -424,4 +419,9 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer {
       logger.error(e.getMessage(), e);
     }
   }
+
+	@Override
+	public int getPriority() {
+		return 250;
+	}
 }

@@ -6,17 +6,41 @@ context Products {
 
     entity  Orders {
         key Id               : String(32);
-        items                : Association[*] to Item on items.OrderId = Id;
-        Category             : association to Products.Category { Id };
+        Items                : association[*] to Item on Items.OrderId = Id;
+        Category             : association to Products.Category { Id as CategoryId };
+        Prices               : association[] to Price on Prices.Id = Id;
+        Tags                 : association[0..*] to Tag on Tags.Id = Id;
+        Invoices             : association[0..1] to Invoice on Invoices.Id = Id;
+        Notes                : association[1..1] to Note on Notes.Id = Id;
     };
 
     entity Item {
-      key ItemId          : String(32);
-    	OrderId             : String(500);
+        key Item            : String(32);
+        OrderId             : String(500);
     };
 
     entity Category {
-        	key Id: 				String(32);
-        	Parent:         type of Item.OrderId;
-        };
+        key Id              : String(32);
+        Parent              : type of Item.OrderId;
+    };
+
+    entity Price {
+        key Id              : String(32);
+        Price               : Integer;
+    };
+
+    entity Tag {
+        key Id              : String(32);
+        Tag                 : String(32);
+    }
+
+    entity Invoice {
+        key Id              : String(32);
+        Invoice             : String(32);
+    }
+
+    entity Note {
+        key Id              : String(32);
+        Note                : String(32);
+    }
 };

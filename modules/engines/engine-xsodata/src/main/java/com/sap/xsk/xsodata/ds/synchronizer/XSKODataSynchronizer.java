@@ -38,6 +38,7 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
+import org.eclipse.dirigible.core.scheduler.api.IOrderedSynchronizerContribution;
 import org.eclipse.dirigible.core.scheduler.api.SchedulerException;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.engine.odata2.api.ODataException;
@@ -52,7 +53,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The XSOData Synchronizer.
  */
-public class XSKODataSynchronizer extends AbstractSynchronizer {
+public class XSKODataSynchronizer extends AbstractSynchronizer implements IOrderedSynchronizerContribution {
 
   private static final Logger logger = LoggerFactory.getLogger(XSKODataSynchronizer.class);
 
@@ -364,5 +365,10 @@ public class XSKODataSynchronizer extends AbstractSynchronizer {
   private List<ODataHandlerDefinition> generateODataHs(ODataDefinition oDataDefinition) throws SQLException {
     return xskOData2ODataHTransformer.transform(oDataDefinition);
   }
+
+	@Override
+	public int getPriority() {
+		return 550;
+	}
 
 }

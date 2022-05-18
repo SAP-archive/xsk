@@ -8,7 +8,7 @@ tableTypeProp: TABLE DOT 'tableType' EQ TABLETYPE SEMICOLON ;
 publicProp: TABLE DOT 'public' EQ BOOLEAN SEMICOLON;
 loggingTypeProp: TABLE DOT 'loggingType' EQ TABLELOGGINGTYPE SEMICOLON;
 tableColumnsProp: TABLE DOT 'columns' EQ '[' (columnsObject (',' columnsObject)*)? ']' SEMICOLON ;
-tableIndexesProp: TABLE DOT 'indexes' EQ '[' indexesObject (',' indexesObject)* ']' SEMICOLON ;
+tableIndexesProp: TABLE DOT 'indexes' EQ '[' (indexesObject (',' indexesObject)*)? ']' SEMICOLON ;
 tablePrimaryKeyProp: TABLE DOT 'primaryKey' DOT 'pkcolumns' EQ  tablePrimaryKeyColumnsProp SEMICOLON ;
 tablePrimaryKeyColumnsProp: '['  STRING(',' STRING)* ']';
 tablePrimaryKeyIndexTypeProp: TABLE DOT 'primaryKey' DOT 'indexType' EQ INDEXTYPE SEMICOLON;

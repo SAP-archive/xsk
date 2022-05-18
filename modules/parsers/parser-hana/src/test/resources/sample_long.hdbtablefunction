@@ -1,0 +1,24 @@
+FUNCTION "_SYS_BIC"."Z.VIEWS::TFD" ()
+RETURNS TABLE ("Idx" INTEGER,
+"Identifier" NVARCHAR (100),
+"Names" NVARCHAR (500),
+"Identifiers" NVARCHAR (500))
+LANGUAGE SQLSCRIPT
+SQL SECURITY DEFINER
+  AS
+
+BEGIN
+
+    din = select "Idx", "Identifier"
+    from "_SYS_BIC"."Z.DATA::data.Domain";
+    lt_ain = select "DIdx",
+    STRING_AGG("Idx",', ' ORDER BY "Identifier" asc) AS "Names",
+    STRING_AGG("Identifier",', ' ORDER BY "Identifier" asc) AS "Identifiers"
+    from "_SYS_BIC"."Z.DATA::data.ain" group by "DIdx";
+    var_out = select d.*, a."Names", "Identifiers"
+    from :din as d
+    left outer join :lt_ain as a
+    on a."DIdx" = d."Idx";
+
+return :var_out;
+END;

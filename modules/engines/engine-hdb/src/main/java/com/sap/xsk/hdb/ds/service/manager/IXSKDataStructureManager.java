@@ -26,11 +26,11 @@ public interface IXSKDataStructureManager<T extends XSKDataStructureModel> {
 
   void synchronizeRuntimeMetadata(T tableModel) throws XSKDataStructuresException;
 
-  void createDataStructure(Connection connection, T tableModel) throws SQLException;
+  boolean createDataStructure(Connection connection, T tableModel) throws SQLException;
 
-  void dropDataStructure(Connection connection, T tableModel) throws SQLException;
+  boolean dropDataStructure(Connection connection, T tableModel) throws SQLException;
 
-  void updateDataStructure(Connection connection, T tableModel)
+  boolean updateDataStructure(Connection connection, T tableModel)
       throws SQLException, OperationNotSupportedException;
 
   List<String> getDataStructureSynchronized();

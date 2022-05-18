@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: "0 22 * * *"
 
+  workflow_dispatch:
+
 jobs:
   integration-tests:
     runs-on: ubuntu-latest
@@ -23,18 +25,18 @@ jobs:
           fetch-depth: 0
 
       # Download JDK
-      - name: Download sapmachine JDK 11
+      - name: Download sapmachine JDK 17
         run: |
-          download_url="https://github.com/SAP/SapMachine/releases/download/sapmachine-11.0.11%2B8/sapmachine-jdk-11.0.11-ea.8_linux-x64_bin.tar.gz"
-          wget -O "${RUNNER_TEMP}/sapmachine-jdk-11.0.11.tar.gz" "${download_url}"
+          download_url="https://github.com/SAP/SapMachine/releases/download/sapmachine-17.0.2/sapmachine-jdk-17.0.2_linux-x64_bin.tar.gz"
+          wget -O "${RUNNER_TEMP}/sapmachine-jdk-17.tar.gz" "${download_url}"
 
       # Setup JDK
-      - name: Setup sapmachine JDK 11
+      - name: Setup sapmachine JDK 17
         uses: actions/setup-java@v2
         with:
           distribution: 'jdkfile'
-          jdkFile: ${{ runner.temp }}/sapmachine-jdk-11.0.11.tar.gz
-          java-version: '11.0.11'
+          jdkFile: ${{ runner.temp }}/sapmachine-jdk-17.tar.gz
+          java-version: '17.0.2'
           architecture: x64
 
       # Setup Google Chrome
@@ -58,9 +60,14 @@ jobs:
           warning_on_retry: false
           command: curl -m 5 --silent --fail --request GET http://127.0.0.1:8080/services/v4/healthcheck | jq --exit-status -n 'inputs | if has("status") then .status=="Ready" else false end' > /dev/null
 
+      # Build XSK
+      - name: Build XSK
+        run: mvn clean install
+
       # Run Selenium tests on XSK
       - name: Run Integration & Selenium Tests
-        run: mvn clean install -P itests -Dhana.url="${{secrets.ITESTS_HANA_URL}}" -Dhana.username="${{secrets.ITESTS_HANA_USERNAME}}" -Dhana.password="${{secrets.ITESTS_HANA_PASSWORD}}"
+        working-directory: ./integration-tests
+        run: mvn clean test -P itests -fae -Dhana.url="${{secrets.ITESTS_HANA_URL}}" -Dhana.username="${{secrets.ITESTS_HANA_USERNAME}}" -Dhana.password="${{secrets.ITESTS_HANA_PASSWORD}}"
 
         env:
           ITESTS_SELENIUM_NEO_REGION: ${{ secrets.ITESTS_SELENIUM_NEO_REGION }}

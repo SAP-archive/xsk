@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-// Generated from com/sap/xsk/parser/hdbdd/core/Cds.g4 by ANTLR 4.9.3
+// Generated from com/sap/xsk/parser/hdbdd/core/Cds.g4 by ANTLR 4.10.1
 package com.sap.xsk.parser.hdbdd.core;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -22,58 +22,74 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class CdsParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.9.3", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.10.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, NAMESPACE=17, 
-		AS=18, BUILT_IN_HANA_TYPE=19, USING=20, ON=21, NULL=22, DEFAULT=23, ASSOCIATION_MIN=24, 
-		BOOLEAN=25, ID=26, SEMICOLUMN=27, INTEGER=28, DECIMAL=29, LOCAL_TIME=30, 
-		LOCAL_DATE=31, UTC_DATE_TIME=32, UTC_TIMESTAMP=33, STRING=34, VARBINARY=35, 
-		TYPE_OF=36, WS=37, LINE_COMMENT=38, LINE_COMMENT2=39, A=40, B=41, C=42, 
-		D=43, E=44, F=45, G=46, H=47, I=48, J=49, K=50, L=51, M=52, N=53, O=54, 
-		P=55, Q=56, R=57, S=58, T=59, U=60, V=61, W=62, X=63, Y=64, Z=65;
+		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
+		T__17=18, NAMESPACE=19, AS=20, ON=21, SELECT=22, FROM=23, WHERE=24, DEFINE=25, 
+		UNION=26, DISTINCT=27, HANA=28, JOIN_TYPES=29, INNER_JOIN=30, LEFT_JOIN=31, 
+		LEFT_OUTER_JOIN=32, RIGHT_OUTER_JOIN=33, FULL_OUTER_JOIN=34, REFERNTIAL_JOIN=35, 
+		TEXT_JOIN=36, DATETIME_VALUE_FUNCTION=37, USING=38, NULL=39, CONCATENATION=40, 
+		NOT_EQUAL_TO=41, DEFAULT=42, ASSOCIATION_MIN=43, BOOLEAN=44, CONTEXT=45, 
+		ENTITY=46, VIEW=47, TYPE=48, ASSOCIATION=49, TO=50, ID=51, SEMICOLUMN=52, 
+		INTEGER=53, DECIMAL=54, LOCAL_TIME=55, LOCAL_DATE=56, UTC_DATE_TIME=57, 
+		UTC_TIMESTAMP=58, STRING=59, VARBINARY=60, TYPE_OF=61, WS=62, LINE_COMMENT1=63, 
+		LINE_COMMENT2=64, A=65, B=66, C=67, D=68, E=69, F=70, G=71, H=72, I=73, 
+		J=74, K=75, L=76, M=77, N=78, O=79, P=80, Q=81, R=82, S=83, T=84, U=85, 
+		V=86, W=87, X=88, Y=89, Z=90;
 	public static final int
 		RULE_cdsFile = 0, RULE_namespaceRule = 1, RULE_usingRule = 2, RULE_topLevelSymbol = 3, 
-		RULE_dataTypeRule = 4, RULE_fieldDeclRule = 5, RULE_typeAssignRule = 6, 
-		RULE_elementDeclRule = 7, RULE_elementDetails = 8, RULE_elementConstraints = 9, 
-		RULE_association = 10, RULE_associationTarget = 11, RULE_unmanagedForeignKey = 12, 
-		RULE_managedForeignKeys = 13, RULE_foreignKey = 14, RULE_cardinality = 15, 
-		RULE_defaultValue = 16, RULE_annotationRule = 17, RULE_annValue = 18, 
-		RULE_enumRule = 19, RULE_arrRule = 20, RULE_obj = 21, RULE_keyValue = 22, 
-		RULE_artifactRule = 23;
+		RULE_dataTypeRule = 4, RULE_contextRule = 5, RULE_structuredTypeRule = 6, 
+		RULE_entityRule = 7, RULE_viewRule = 8, RULE_fieldDeclRule = 9, RULE_typeAssignRule = 10, 
+		RULE_elementDeclRule = 11, RULE_elementDetails = 12, RULE_elementConstraints = 13, 
+		RULE_associationConstraints = 14, RULE_constraints = 15, RULE_association = 16, 
+		RULE_associationTarget = 17, RULE_unmanagedForeignKey = 18, RULE_managedForeignKeys = 19, 
+		RULE_foreignKey = 20, RULE_cardinality = 21, RULE_defaultValue = 22, RULE_annotationRule = 23, 
+		RULE_annValue = 24, RULE_enumRule = 25, RULE_arrRule = 26, RULE_obj = 27, 
+		RULE_keyValue = 28, RULE_selectRule = 29, RULE_joinRule = 30, RULE_joinFields = 31, 
+		RULE_selectedColumnsRule = 32, RULE_whereRule = 33, RULE_identifier = 34;
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"cdsFile", "namespaceRule", "usingRule", "topLevelSymbol", "dataTypeRule", 
-			"fieldDeclRule", "typeAssignRule", "elementDeclRule", "elementDetails", 
-			"elementConstraints", "association", "associationTarget", "unmanagedForeignKey", 
-			"managedForeignKeys", "foreignKey", "cardinality", "defaultValue", "annotationRule", 
-			"annValue", "enumRule", "arrRule", "obj", "keyValue", "artifactRule"
+			"contextRule", "structuredTypeRule", "entityRule", "viewRule", "fieldDeclRule", 
+			"typeAssignRule", "elementDeclRule", "elementDetails", "elementConstraints", 
+			"associationConstraints", "constraints", "association", "associationTarget", 
+			"unmanagedForeignKey", "managedForeignKeys", "foreignKey", "cardinality", 
+			"defaultValue", "annotationRule", "annValue", "enumRule", "arrRule", 
+			"obj", "keyValue", "selectRule", "joinRule", "joinFields", "selectedColumnsRule", 
+			"whereRule", "identifier"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'.'", "'::'", "':'", "'\"'", "'('", "','", "')'", "'not null'", 
-			"'='", "'{'", "'}'", "'['", "'*'", "']'", "'@'", "'#'", null, "'as'", 
-			null, null, "'on'", "'null'", null, null, null, null, "';'"
+			null, "'.'", "'::'", "':'", "'{'", "'}'", "'\"'", "'('", "','", "')'", 
+			"'not null'", "'NULL'", "'NOT NULL'", "'='", "'['", "'*'", "']'", "'@'", 
+			"'#'", null, null, null, null, null, null, null, null, null, "'hana'", 
+			null, null, null, null, null, null, null, null, null, null, "'null'", 
+			"'||'", "'<>'", null, null, null, null, null, null, null, null, null, 
+			null, "';'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, "NAMESPACE", "AS", "BUILT_IN_HANA_TYPE", 
-			"USING", "ON", "NULL", "DEFAULT", "ASSOCIATION_MIN", "BOOLEAN", "ID", 
-			"SEMICOLUMN", "INTEGER", "DECIMAL", "LOCAL_TIME", "LOCAL_DATE", "UTC_DATE_TIME", 
-			"UTC_TIMESTAMP", "STRING", "VARBINARY", "TYPE_OF", "WS", "LINE_COMMENT", 
-			"LINE_COMMENT2", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", 
-			"L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", 
-			"Z"
+			null, null, null, null, null, null, null, "NAMESPACE", "AS", "ON", "SELECT", 
+			"FROM", "WHERE", "DEFINE", "UNION", "DISTINCT", "HANA", "JOIN_TYPES", 
+			"INNER_JOIN", "LEFT_JOIN", "LEFT_OUTER_JOIN", "RIGHT_OUTER_JOIN", "FULL_OUTER_JOIN", 
+			"REFERNTIAL_JOIN", "TEXT_JOIN", "DATETIME_VALUE_FUNCTION", "USING", "NULL", 
+			"CONCATENATION", "NOT_EQUAL_TO", "DEFAULT", "ASSOCIATION_MIN", "BOOLEAN", 
+			"CONTEXT", "ENTITY", "VIEW", "TYPE", "ASSOCIATION", "TO", "ID", "SEMICOLUMN", 
+			"INTEGER", "DECIMAL", "LOCAL_TIME", "LOCAL_DATE", "UTC_DATE_TIME", "UTC_TIMESTAMP", 
+			"STRING", "VARBINARY", "TYPE_OF", "WS", "LINE_COMMENT1", "LINE_COMMENT2", 
+			"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", 
+			"O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -131,14 +147,14 @@ public class CdsParser extends Parser {
 		public NamespaceRuleContext namespaceRule() {
 			return getRuleContext(NamespaceRuleContext.class,0);
 		}
+		public TopLevelSymbolContext topLevelSymbol() {
+			return getRuleContext(TopLevelSymbolContext.class,0);
+		}
 		public List<UsingRuleContext> usingRule() {
 			return getRuleContexts(UsingRuleContext.class);
 		}
 		public UsingRuleContext usingRule(int i) {
 			return getRuleContext(UsingRuleContext.class,i);
-		}
-		public TopLevelSymbolContext topLevelSymbol() {
-			return getRuleContext(TopLevelSymbolContext.class,0);
 		}
 		public CdsFileContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -161,32 +177,24 @@ public class CdsParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(48);
+			setState(70);
 			namespaceRule();
-			setState(52);
+			setState(74);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==USING) {
 				{
 				{
-				setState(49);
+				setState(71);
 				usingRule();
 				}
 				}
-				setState(54);
+				setState(76);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(56);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==T__14 || _la==ID) {
-				{
-				setState(55);
-				topLevelSymbol();
-				}
-			}
-
+			setState(77);
+			topLevelSymbol();
 			}
 		}
 		catch (RecognitionException re) {
@@ -201,13 +209,15 @@ public class CdsParser extends Parser {
 	}
 
 	public static class NamespaceRuleContext extends ParserRuleContext {
-		public Token ID;
-		public List<Token> members = new ArrayList<Token>();
+		public IdentifierContext identifier;
+		public List<IdentifierContext> members = new ArrayList<IdentifierContext>();
 		public TerminalNode NAMESPACE() { return getToken(CdsParser.NAMESPACE, 0); }
 		public TerminalNode SEMICOLUMN() { return getToken(CdsParser.SEMICOLUMN, 0); }
-		public List<TerminalNode> ID() { return getTokens(CdsParser.ID); }
-		public TerminalNode ID(int i) {
-			return getToken(CdsParser.ID, i);
+		public List<IdentifierContext> identifier() {
+			return getRuleContexts(IdentifierContext.class);
+		}
+		public IdentifierContext identifier(int i) {
+			return getRuleContext(IdentifierContext.class,i);
 		}
 		public NamespaceRuleContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -230,29 +240,29 @@ public class CdsParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(58);
+			setState(79);
 			match(NAMESPACE);
-			setState(59);
-			((NamespaceRuleContext)_localctx).ID = match(ID);
-			((NamespaceRuleContext)_localctx).members.add(((NamespaceRuleContext)_localctx).ID);
-			setState(64);
+			setState(80);
+			((NamespaceRuleContext)_localctx).identifier = identifier();
+			((NamespaceRuleContext)_localctx).members.add(((NamespaceRuleContext)_localctx).identifier);
+			setState(85);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==T__0) {
 				{
 				{
-				setState(60);
+				setState(81);
 				match(T__0);
-				setState(61);
-				((NamespaceRuleContext)_localctx).ID = match(ID);
-				((NamespaceRuleContext)_localctx).members.add(((NamespaceRuleContext)_localctx).ID);
+				setState(82);
+				((NamespaceRuleContext)_localctx).identifier = identifier();
+				((NamespaceRuleContext)_localctx).members.add(((NamespaceRuleContext)_localctx).identifier);
 				}
 				}
-				setState(66);
+				setState(87);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(67);
+			setState(88);
 			match(SEMICOLUMN);
 			}
 		}
@@ -268,15 +278,17 @@ public class CdsParser extends Parser {
 	}
 
 	public static class UsingRuleContext extends ParserRuleContext {
-		public Token ID;
-		public List<Token> pack = new ArrayList<Token>();
-		public List<Token> members = new ArrayList<Token>();
-		public Token alias;
+		public IdentifierContext identifier;
+		public List<IdentifierContext> pack = new ArrayList<IdentifierContext>();
+		public List<IdentifierContext> members = new ArrayList<IdentifierContext>();
+		public IdentifierContext alias;
 		public TerminalNode USING() { return getToken(CdsParser.USING, 0); }
 		public TerminalNode SEMICOLUMN() { return getToken(CdsParser.SEMICOLUMN, 0); }
-		public List<TerminalNode> ID() { return getTokens(CdsParser.ID); }
-		public TerminalNode ID(int i) {
-			return getToken(CdsParser.ID, i);
+		public List<IdentifierContext> identifier() {
+			return getRuleContexts(IdentifierContext.class);
+		}
+		public IdentifierContext identifier(int i) {
+			return getRuleContext(IdentifierContext.class,i);
 		}
 		public TerminalNode AS() { return getToken(CdsParser.AS, 0); }
 		public UsingRuleContext(ParserRuleContext parent, int invokingState) {
@@ -300,63 +312,63 @@ public class CdsParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(69);
+			setState(90);
 			match(USING);
-			setState(70);
-			((UsingRuleContext)_localctx).ID = match(ID);
-			((UsingRuleContext)_localctx).pack.add(((UsingRuleContext)_localctx).ID);
-			setState(75);
+			setState(91);
+			((UsingRuleContext)_localctx).identifier = identifier();
+			((UsingRuleContext)_localctx).pack.add(((UsingRuleContext)_localctx).identifier);
+			setState(96);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==T__0) {
 				{
 				{
-				setState(71);
+				setState(92);
 				match(T__0);
-				setState(72);
-				((UsingRuleContext)_localctx).ID = match(ID);
-				((UsingRuleContext)_localctx).pack.add(((UsingRuleContext)_localctx).ID);
+				setState(93);
+				((UsingRuleContext)_localctx).identifier = identifier();
+				((UsingRuleContext)_localctx).pack.add(((UsingRuleContext)_localctx).identifier);
 				}
 				}
-				setState(77);
+				setState(98);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(78);
+			setState(99);
 			match(T__1);
-			setState(79);
-			((UsingRuleContext)_localctx).ID = match(ID);
-			((UsingRuleContext)_localctx).members.add(((UsingRuleContext)_localctx).ID);
-			setState(84);
+			setState(100);
+			((UsingRuleContext)_localctx).identifier = identifier();
+			((UsingRuleContext)_localctx).members.add(((UsingRuleContext)_localctx).identifier);
+			setState(105);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==T__0) {
 				{
 				{
-				setState(80);
+				setState(101);
 				match(T__0);
-				setState(81);
-				((UsingRuleContext)_localctx).ID = match(ID);
-				((UsingRuleContext)_localctx).members.add(((UsingRuleContext)_localctx).ID);
+				setState(102);
+				((UsingRuleContext)_localctx).identifier = identifier();
+				((UsingRuleContext)_localctx).members.add(((UsingRuleContext)_localctx).identifier);
 				}
 				}
-				setState(86);
+				setState(107);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(89);
+			setState(110);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==AS) {
 				{
-				setState(87);
+				setState(108);
 				match(AS);
-				setState(88);
-				((UsingRuleContext)_localctx).alias = match(ID);
+				setState(109);
+				((UsingRuleContext)_localctx).alias = identifier();
 				}
 			}
 
-			setState(91);
+			setState(112);
 			match(SEMICOLUMN);
 			}
 		}
@@ -372,11 +384,23 @@ public class CdsParser extends Parser {
 	}
 
 	public static class TopLevelSymbolContext extends ParserRuleContext {
-		public DataTypeRuleContext dataTypeRule() {
-			return getRuleContext(DataTypeRuleContext.class,0);
+		public List<DataTypeRuleContext> dataTypeRule() {
+			return getRuleContexts(DataTypeRuleContext.class);
 		}
-		public ArtifactRuleContext artifactRule() {
-			return getRuleContext(ArtifactRuleContext.class,0);
+		public DataTypeRuleContext dataTypeRule(int i) {
+			return getRuleContext(DataTypeRuleContext.class,i);
+		}
+		public ContextRuleContext contextRule() {
+			return getRuleContext(ContextRuleContext.class,0);
+		}
+		public StructuredTypeRuleContext structuredTypeRule() {
+			return getRuleContext(StructuredTypeRuleContext.class,0);
+		}
+		public EntityRuleContext entityRule() {
+			return getRuleContext(EntityRuleContext.class,0);
+		}
+		public ViewRuleContext viewRule() {
+			return getRuleContext(ViewRuleContext.class,0);
 		}
 		public TopLevelSymbolContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -395,22 +419,88 @@ public class CdsParser extends Parser {
 	public final TopLevelSymbolContext topLevelSymbol() throws RecognitionException {
 		TopLevelSymbolContext _localctx = new TopLevelSymbolContext(_ctx, getState());
 		enterRule(_localctx, 6, RULE_topLevelSymbol);
+		int _la;
 		try {
-			setState(95);
+			setState(132);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,10,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(93);
-				dataTypeRule();
+				setState(117);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while (_la==T__16 || _la==TYPE) {
+					{
+					{
+					setState(114);
+					dataTypeRule();
+					}
+					}
+					setState(119);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(94);
-				artifactRule();
+				setState(121);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				if (_la==T__16 || _la==CONTEXT) {
+					{
+					setState(120);
+					contextRule();
+					}
+				}
+
+				}
+				break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(124);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				if (_la==T__16 || _la==TYPE) {
+					{
+					setState(123);
+					structuredTypeRule();
+					}
+				}
+
+				}
+				break;
+			case 4:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(127);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				if (_la==T__16 || _la==ENTITY) {
+					{
+					setState(126);
+					entityRule();
+					}
+				}
+
+				}
+				break;
+			case 5:
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(130);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__16) | (1L << DEFINE) | (1L << VIEW))) != 0)) {
+					{
+					setState(129);
+					viewRule();
+					}
+				}
+
 				}
 				break;
 			}
@@ -427,15 +517,21 @@ public class CdsParser extends Parser {
 	}
 
 	public static class DataTypeRuleContext extends ParserRuleContext {
-		public Token type;
-		public Token name;
+		public Token artifactType;
+		public IdentifierContext artifactName;
 		public TypeAssignRuleContext typeAssignRule() {
 			return getRuleContext(TypeAssignRuleContext.class,0);
 		}
 		public TerminalNode SEMICOLUMN() { return getToken(CdsParser.SEMICOLUMN, 0); }
-		public List<TerminalNode> ID() { return getTokens(CdsParser.ID); }
-		public TerminalNode ID(int i) {
-			return getToken(CdsParser.ID, i);
+		public TerminalNode TYPE() { return getToken(CdsParser.TYPE, 0); }
+		public IdentifierContext identifier() {
+			return getRuleContext(IdentifierContext.class,0);
+		}
+		public List<AnnotationRuleContext> annotationRule() {
+			return getRuleContexts(AnnotationRuleContext.class);
+		}
+		public AnnotationRuleContext annotationRule(int i) {
+			return getRuleContext(AnnotationRuleContext.class,i);
 		}
 		public DataTypeRuleContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -454,19 +550,523 @@ public class CdsParser extends Parser {
 	public final DataTypeRuleContext dataTypeRule() throws RecognitionException {
 		DataTypeRuleContext _localctx = new DataTypeRuleContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_dataTypeRule);
+		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(97);
-			((DataTypeRuleContext)_localctx).type = match(ID);
-			setState(98);
-			((DataTypeRuleContext)_localctx).name = match(ID);
-			setState(99);
+			setState(137);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==T__16) {
+				{
+				{
+				setState(134);
+				annotationRule();
+				}
+				}
+				setState(139);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(140);
+			((DataTypeRuleContext)_localctx).artifactType = match(TYPE);
+			setState(141);
+			((DataTypeRuleContext)_localctx).artifactName = identifier();
+			setState(142);
 			match(T__2);
-			setState(100);
+			setState(143);
 			typeAssignRule();
-			setState(101);
+			setState(144);
 			match(SEMICOLUMN);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class ContextRuleContext extends ParserRuleContext {
+		public Token artifactType;
+		public IdentifierContext artifactName;
+		public TerminalNode CONTEXT() { return getToken(CdsParser.CONTEXT, 0); }
+		public IdentifierContext identifier() {
+			return getRuleContext(IdentifierContext.class,0);
+		}
+		public List<AnnotationRuleContext> annotationRule() {
+			return getRuleContexts(AnnotationRuleContext.class);
+		}
+		public AnnotationRuleContext annotationRule(int i) {
+			return getRuleContext(AnnotationRuleContext.class,i);
+		}
+		public List<ContextRuleContext> contextRule() {
+			return getRuleContexts(ContextRuleContext.class);
+		}
+		public ContextRuleContext contextRule(int i) {
+			return getRuleContext(ContextRuleContext.class,i);
+		}
+		public List<DataTypeRuleContext> dataTypeRule() {
+			return getRuleContexts(DataTypeRuleContext.class);
+		}
+		public DataTypeRuleContext dataTypeRule(int i) {
+			return getRuleContext(DataTypeRuleContext.class,i);
+		}
+		public List<StructuredTypeRuleContext> structuredTypeRule() {
+			return getRuleContexts(StructuredTypeRuleContext.class);
+		}
+		public StructuredTypeRuleContext structuredTypeRule(int i) {
+			return getRuleContext(StructuredTypeRuleContext.class,i);
+		}
+		public List<EntityRuleContext> entityRule() {
+			return getRuleContexts(EntityRuleContext.class);
+		}
+		public EntityRuleContext entityRule(int i) {
+			return getRuleContext(EntityRuleContext.class,i);
+		}
+		public List<ViewRuleContext> viewRule() {
+			return getRuleContexts(ViewRuleContext.class);
+		}
+		public ViewRuleContext viewRule(int i) {
+			return getRuleContext(ViewRuleContext.class,i);
+		}
+		public TerminalNode SEMICOLUMN() { return getToken(CdsParser.SEMICOLUMN, 0); }
+		public ContextRuleContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_contextRule; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).enterContextRule(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).exitContextRule(this);
+		}
+	}
+
+	public final ContextRuleContext contextRule() throws RecognitionException {
+		ContextRuleContext _localctx = new ContextRuleContext(_ctx, getState());
+		enterRule(_localctx, 10, RULE_contextRule);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(149);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==T__16) {
+				{
+				{
+				setState(146);
+				annotationRule();
+				}
+				}
+				setState(151);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(152);
+			((ContextRuleContext)_localctx).artifactType = match(CONTEXT);
+			setState(153);
+			((ContextRuleContext)_localctx).artifactName = identifier();
+			setState(154);
+			match(T__3);
+			setState(162);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__16) | (1L << DEFINE) | (1L << CONTEXT) | (1L << ENTITY) | (1L << VIEW) | (1L << TYPE))) != 0)) {
+				{
+				setState(160);
+				_errHandler.sync(this);
+				switch ( getInterpreter().adaptivePredict(_input,13,_ctx) ) {
+				case 1:
+					{
+					setState(155);
+					contextRule();
+					}
+					break;
+				case 2:
+					{
+					setState(156);
+					dataTypeRule();
+					}
+					break;
+				case 3:
+					{
+					setState(157);
+					structuredTypeRule();
+					}
+					break;
+				case 4:
+					{
+					setState(158);
+					entityRule();
+					}
+					break;
+				case 5:
+					{
+					setState(159);
+					viewRule();
+					}
+					break;
+				}
+				}
+				setState(164);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(165);
+			match(T__4);
+			setState(167);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==SEMICOLUMN) {
+				{
+				setState(166);
+				match(SEMICOLUMN);
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class StructuredTypeRuleContext extends ParserRuleContext {
+		public Token artifactType;
+		public IdentifierContext artifactName;
+		public TerminalNode TYPE() { return getToken(CdsParser.TYPE, 0); }
+		public IdentifierContext identifier() {
+			return getRuleContext(IdentifierContext.class,0);
+		}
+		public List<AnnotationRuleContext> annotationRule() {
+			return getRuleContexts(AnnotationRuleContext.class);
+		}
+		public AnnotationRuleContext annotationRule(int i) {
+			return getRuleContext(AnnotationRuleContext.class,i);
+		}
+		public List<FieldDeclRuleContext> fieldDeclRule() {
+			return getRuleContexts(FieldDeclRuleContext.class);
+		}
+		public FieldDeclRuleContext fieldDeclRule(int i) {
+			return getRuleContext(FieldDeclRuleContext.class,i);
+		}
+		public List<AssociationContext> association() {
+			return getRuleContexts(AssociationContext.class);
+		}
+		public AssociationContext association(int i) {
+			return getRuleContext(AssociationContext.class,i);
+		}
+		public TerminalNode SEMICOLUMN() { return getToken(CdsParser.SEMICOLUMN, 0); }
+		public StructuredTypeRuleContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_structuredTypeRule; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).enterStructuredTypeRule(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).exitStructuredTypeRule(this);
+		}
+	}
+
+	public final StructuredTypeRuleContext structuredTypeRule() throws RecognitionException {
+		StructuredTypeRuleContext _localctx = new StructuredTypeRuleContext(_ctx, getState());
+		enterRule(_localctx, 12, RULE_structuredTypeRule);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(172);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==T__16) {
+				{
+				{
+				setState(169);
+				annotationRule();
+				}
+				}
+				setState(174);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(175);
+			((StructuredTypeRuleContext)_localctx).artifactType = match(TYPE);
+			setState(176);
+			((StructuredTypeRuleContext)_localctx).artifactName = identifier();
+			setState(177);
+			match(T__3);
+			setState(182);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__5) | (1L << NAMESPACE) | (1L << AS) | (1L << ON) | (1L << SELECT) | (1L << FROM) | (1L << WHERE) | (1L << DEFINE) | (1L << UNION) | (1L << DISTINCT) | (1L << HANA) | (1L << JOIN_TYPES) | (1L << USING) | (1L << DEFAULT) | (1L << CONTEXT) | (1L << ENTITY) | (1L << VIEW) | (1L << TYPE) | (1L << ASSOCIATION) | (1L << TO) | (1L << ID))) != 0)) {
+				{
+				setState(180);
+				_errHandler.sync(this);
+				switch ( getInterpreter().adaptivePredict(_input,17,_ctx) ) {
+				case 1:
+					{
+					setState(178);
+					fieldDeclRule();
+					}
+					break;
+				case 2:
+					{
+					setState(179);
+					association();
+					}
+					break;
+				}
+				}
+				setState(184);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(185);
+			match(T__4);
+			setState(187);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==SEMICOLUMN) {
+				{
+				setState(186);
+				match(SEMICOLUMN);
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class EntityRuleContext extends ParserRuleContext {
+		public Token artifactType;
+		public IdentifierContext artifactName;
+		public TerminalNode ENTITY() { return getToken(CdsParser.ENTITY, 0); }
+		public IdentifierContext identifier() {
+			return getRuleContext(IdentifierContext.class,0);
+		}
+		public List<AnnotationRuleContext> annotationRule() {
+			return getRuleContexts(AnnotationRuleContext.class);
+		}
+		public AnnotationRuleContext annotationRule(int i) {
+			return getRuleContext(AnnotationRuleContext.class,i);
+		}
+		public List<ElementDeclRuleContext> elementDeclRule() {
+			return getRuleContexts(ElementDeclRuleContext.class);
+		}
+		public ElementDeclRuleContext elementDeclRule(int i) {
+			return getRuleContext(ElementDeclRuleContext.class,i);
+		}
+		public List<AssociationContext> association() {
+			return getRuleContexts(AssociationContext.class);
+		}
+		public AssociationContext association(int i) {
+			return getRuleContext(AssociationContext.class,i);
+		}
+		public TerminalNode SEMICOLUMN() { return getToken(CdsParser.SEMICOLUMN, 0); }
+		public EntityRuleContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_entityRule; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).enterEntityRule(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).exitEntityRule(this);
+		}
+	}
+
+	public final EntityRuleContext entityRule() throws RecognitionException {
+		EntityRuleContext _localctx = new EntityRuleContext(_ctx, getState());
+		enterRule(_localctx, 14, RULE_entityRule);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(192);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==T__16) {
+				{
+				{
+				setState(189);
+				annotationRule();
+				}
+				}
+				setState(194);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(195);
+			((EntityRuleContext)_localctx).artifactType = match(ENTITY);
+			setState(196);
+			((EntityRuleContext)_localctx).artifactName = identifier();
+			setState(197);
+			match(T__3);
+			setState(202);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__5) | (1L << T__16) | (1L << NAMESPACE) | (1L << AS) | (1L << ON) | (1L << SELECT) | (1L << FROM) | (1L << WHERE) | (1L << DEFINE) | (1L << UNION) | (1L << DISTINCT) | (1L << HANA) | (1L << JOIN_TYPES) | (1L << USING) | (1L << DEFAULT) | (1L << CONTEXT) | (1L << ENTITY) | (1L << VIEW) | (1L << TYPE) | (1L << ASSOCIATION) | (1L << TO) | (1L << ID))) != 0)) {
+				{
+				setState(200);
+				_errHandler.sync(this);
+				switch ( getInterpreter().adaptivePredict(_input,21,_ctx) ) {
+				case 1:
+					{
+					setState(198);
+					elementDeclRule();
+					}
+					break;
+				case 2:
+					{
+					setState(199);
+					association();
+					}
+					break;
+				}
+				}
+				setState(204);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(205);
+			match(T__4);
+			setState(207);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==SEMICOLUMN) {
+				{
+				setState(206);
+				match(SEMICOLUMN);
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class ViewRuleContext extends ParserRuleContext {
+		public Token artifactType;
+		public IdentifierContext artifactName;
+		public TerminalNode AS() { return getToken(CdsParser.AS, 0); }
+		public TerminalNode VIEW() { return getToken(CdsParser.VIEW, 0); }
+		public IdentifierContext identifier() {
+			return getRuleContext(IdentifierContext.class,0);
+		}
+		public List<AnnotationRuleContext> annotationRule() {
+			return getRuleContexts(AnnotationRuleContext.class);
+		}
+		public AnnotationRuleContext annotationRule(int i) {
+			return getRuleContext(AnnotationRuleContext.class,i);
+		}
+		public TerminalNode DEFINE() { return getToken(CdsParser.DEFINE, 0); }
+		public List<SelectRuleContext> selectRule() {
+			return getRuleContexts(SelectRuleContext.class);
+		}
+		public SelectRuleContext selectRule(int i) {
+			return getRuleContext(SelectRuleContext.class,i);
+		}
+		public ViewRuleContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_viewRule; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).enterViewRule(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).exitViewRule(this);
+		}
+	}
+
+	public final ViewRuleContext viewRule() throws RecognitionException {
+		ViewRuleContext _localctx = new ViewRuleContext(_ctx, getState());
+		enterRule(_localctx, 16, RULE_viewRule);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(212);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==T__16) {
+				{
+				{
+				setState(209);
+				annotationRule();
+				}
+				}
+				setState(214);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(216);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==DEFINE) {
+				{
+				setState(215);
+				match(DEFINE);
+				}
+			}
+
+			setState(218);
+			((ViewRuleContext)_localctx).artifactType = match(VIEW);
+			setState(219);
+			((ViewRuleContext)_localctx).artifactName = identifier();
+			setState(220);
+			match(AS);
+			setState(224);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==SELECT || _la==UNION) {
+				{
+				{
+				setState(221);
+				selectRule();
+				}
+				}
+				setState(226);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -485,7 +1085,9 @@ public class CdsParser extends Parser {
 			return getRuleContext(TypeAssignRuleContext.class,0);
 		}
 		public TerminalNode SEMICOLUMN() { return getToken(CdsParser.SEMICOLUMN, 0); }
-		public TerminalNode ID() { return getToken(CdsParser.ID, 0); }
+		public IdentifierContext identifier() {
+			return getRuleContext(IdentifierContext.class,0);
+		}
 		public FieldDeclRuleContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -502,37 +1104,56 @@ public class CdsParser extends Parser {
 
 	public final FieldDeclRuleContext fieldDeclRule() throws RecognitionException {
 		FieldDeclRuleContext _localctx = new FieldDeclRuleContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_fieldDeclRule);
+		enterRule(_localctx, 18, RULE_fieldDeclRule);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(107);
+			setState(232);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
+			case NAMESPACE:
+			case AS:
+			case ON:
+			case SELECT:
+			case FROM:
+			case WHERE:
+			case DEFINE:
+			case UNION:
+			case DISTINCT:
+			case HANA:
+			case JOIN_TYPES:
+			case USING:
+			case DEFAULT:
+			case CONTEXT:
+			case ENTITY:
+			case VIEW:
+			case TYPE:
+			case ASSOCIATION:
+			case TO:
 			case ID:
 				{
-				setState(103);
-				match(ID);
+				setState(227);
+				identifier();
 				}
 				break;
-			case T__3:
+			case T__5:
 				{
-				setState(104);
-				match(T__3);
-				setState(105);
-				match(ID);
-				setState(106);
-				match(T__3);
+				setState(228);
+				match(T__5);
+				setState(229);
+				identifier();
+				setState(230);
+				match(T__5);
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			setState(109);
+			setState(234);
 			match(T__2);
-			setState(110);
+			setState(235);
 			typeAssignRule();
-			setState(111);
+			setState(236);
 			match(SEMICOLUMN);
 			}
 		}
@@ -559,10 +1180,12 @@ public class CdsParser extends Parser {
 		}
 	}
 	public static class AssignBuiltInTypeWithArgsContext extends TypeAssignRuleContext {
-		public Token ref;
+		public IdentifierContext ref;
 		public Token INTEGER;
 		public List<Token> args = new ArrayList<Token>();
-		public TerminalNode ID() { return getToken(CdsParser.ID, 0); }
+		public IdentifierContext identifier() {
+			return getRuleContext(IdentifierContext.class,0);
+		}
 		public List<TerminalNode> INTEGER() { return getTokens(CdsParser.INTEGER); }
 		public TerminalNode INTEGER(int i) {
 			return getToken(CdsParser.INTEGER, i);
@@ -578,10 +1201,13 @@ public class CdsParser extends Parser {
 		}
 	}
 	public static class AssignHanaTypeWithArgsContext extends TypeAssignRuleContext {
-		public Token hanaType;
+		public IdentifierContext hanaType;
 		public Token INTEGER;
 		public List<Token> args = new ArrayList<Token>();
-		public TerminalNode BUILT_IN_HANA_TYPE() { return getToken(CdsParser.BUILT_IN_HANA_TYPE, 0); }
+		public TerminalNode HANA() { return getToken(CdsParser.HANA, 0); }
+		public IdentifierContext identifier() {
+			return getRuleContext(IdentifierContext.class,0);
+		}
 		public List<TerminalNode> INTEGER() { return getTokens(CdsParser.INTEGER); }
 		public TerminalNode INTEGER(int i) {
 			return getToken(CdsParser.INTEGER, i);
@@ -597,8 +1223,11 @@ public class CdsParser extends Parser {
 		}
 	}
 	public static class AssignHanaTypeContext extends TypeAssignRuleContext {
-		public Token hanaType;
-		public TerminalNode BUILT_IN_HANA_TYPE() { return getToken(CdsParser.BUILT_IN_HANA_TYPE, 0); }
+		public IdentifierContext hanaType;
+		public TerminalNode HANA() { return getToken(CdsParser.HANA, 0); }
+		public IdentifierContext identifier() {
+			return getRuleContext(IdentifierContext.class,0);
+		}
 		public AssignHanaTypeContext(TypeAssignRuleContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -610,11 +1239,13 @@ public class CdsParser extends Parser {
 		}
 	}
 	public static class AssignTypeContext extends TypeAssignRuleContext {
-		public Token ID;
-		public List<Token> pathSubMembers = new ArrayList<Token>();
-		public List<TerminalNode> ID() { return getTokens(CdsParser.ID); }
-		public TerminalNode ID(int i) {
-			return getToken(CdsParser.ID, i);
+		public IdentifierContext identifier;
+		public List<IdentifierContext> pathSubMembers = new ArrayList<IdentifierContext>();
+		public List<IdentifierContext> identifier() {
+			return getRuleContexts(IdentifierContext.class);
+		}
+		public IdentifierContext identifier(int i) {
+			return getRuleContext(IdentifierContext.class,i);
 		}
 		public TerminalNode TYPE_OF() { return getToken(CdsParser.TYPE_OF, 0); }
 		public AssignTypeContext(TypeAssignRuleContext ctx) { copyFrom(ctx); }
@@ -630,115 +1261,123 @@ public class CdsParser extends Parser {
 
 	public final TypeAssignRuleContext typeAssignRule() throws RecognitionException {
 		TypeAssignRuleContext _localctx = new TypeAssignRuleContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_typeAssignRule);
+		enterRule(_localctx, 20, RULE_typeAssignRule);
 		int _la;
 		try {
-			setState(147);
+			setState(278);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,12,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,32,_ctx) ) {
 			case 1:
 				_localctx = new AssignBuiltInTypeWithArgsContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(113);
-				((AssignBuiltInTypeWithArgsContext)_localctx).ref = match(ID);
-				setState(114);
-				match(T__4);
-				setState(115);
+				setState(238);
+				((AssignBuiltInTypeWithArgsContext)_localctx).ref = identifier();
+				setState(239);
+				match(T__6);
+				setState(240);
 				((AssignBuiltInTypeWithArgsContext)_localctx).INTEGER = match(INTEGER);
 				((AssignBuiltInTypeWithArgsContext)_localctx).args.add(((AssignBuiltInTypeWithArgsContext)_localctx).INTEGER);
-				setState(120);
+				setState(245);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while (_la==T__5) {
+				while (_la==T__7) {
 					{
 					{
-					setState(116);
-					match(T__5);
-					setState(117);
+					setState(241);
+					match(T__7);
+					setState(242);
 					((AssignBuiltInTypeWithArgsContext)_localctx).INTEGER = match(INTEGER);
 					((AssignBuiltInTypeWithArgsContext)_localctx).args.add(((AssignBuiltInTypeWithArgsContext)_localctx).INTEGER);
 					}
 					}
-					setState(122);
+					setState(247);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(123);
-				match(T__6);
+				setState(248);
+				match(T__8);
 				}
 				break;
 			case 2:
 				_localctx = new AssignHanaTypeContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(124);
-				((AssignHanaTypeContext)_localctx).hanaType = match(BUILT_IN_HANA_TYPE);
+				setState(250);
+				match(HANA);
+				setState(251);
+				match(T__0);
+				setState(252);
+				((AssignHanaTypeContext)_localctx).hanaType = identifier();
 				}
 				break;
 			case 3:
 				_localctx = new AssignHanaTypeWithArgsContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(125);
-				((AssignHanaTypeWithArgsContext)_localctx).hanaType = match(BUILT_IN_HANA_TYPE);
-				setState(126);
-				match(T__4);
-				setState(127);
+				setState(253);
+				match(HANA);
+				setState(254);
+				match(T__0);
+				setState(255);
+				((AssignHanaTypeWithArgsContext)_localctx).hanaType = identifier();
+				setState(256);
+				match(T__6);
+				setState(257);
 				((AssignHanaTypeWithArgsContext)_localctx).INTEGER = match(INTEGER);
 				((AssignHanaTypeWithArgsContext)_localctx).args.add(((AssignHanaTypeWithArgsContext)_localctx).INTEGER);
-				setState(132);
+				setState(262);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while (_la==T__5) {
+				while (_la==T__7) {
 					{
 					{
-					setState(128);
-					match(T__5);
-					setState(129);
+					setState(258);
+					match(T__7);
+					setState(259);
 					((AssignHanaTypeWithArgsContext)_localctx).INTEGER = match(INTEGER);
 					((AssignHanaTypeWithArgsContext)_localctx).args.add(((AssignHanaTypeWithArgsContext)_localctx).INTEGER);
 					}
 					}
-					setState(134);
+					setState(264);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(135);
-				match(T__6);
+				setState(265);
+				match(T__8);
 				}
 				break;
 			case 4:
 				_localctx = new AssignTypeContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(137);
+				setState(268);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==TYPE_OF) {
 					{
-					setState(136);
+					setState(267);
 					match(TYPE_OF);
 					}
 				}
 
-				setState(139);
-				((AssignTypeContext)_localctx).ID = match(ID);
-				((AssignTypeContext)_localctx).pathSubMembers.add(((AssignTypeContext)_localctx).ID);
-				setState(144);
+				setState(270);
+				((AssignTypeContext)_localctx).identifier = identifier();
+				((AssignTypeContext)_localctx).pathSubMembers.add(((AssignTypeContext)_localctx).identifier);
+				setState(275);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==T__0) {
 					{
 					{
-					setState(140);
+					setState(271);
 					match(T__0);
-					setState(141);
-					((AssignTypeContext)_localctx).ID = match(ID);
-					((AssignTypeContext)_localctx).pathSubMembers.add(((AssignTypeContext)_localctx).ID);
+					setState(272);
+					((AssignTypeContext)_localctx).identifier = identifier();
+					((AssignTypeContext)_localctx).pathSubMembers.add(((AssignTypeContext)_localctx).identifier);
 					}
 					}
-					setState(146);
+					setState(277);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
@@ -758,8 +1397,8 @@ public class CdsParser extends Parser {
 	}
 
 	public static class ElementDeclRuleContext extends ParserRuleContext {
-		public Token key;
-		public Token name;
+		public IdentifierContext key;
+		public IdentifierContext name;
 		public TypeAssignRuleContext typeAssignRule() {
 			return getRuleContext(TypeAssignRuleContext.class,0);
 		}
@@ -770,9 +1409,11 @@ public class CdsParser extends Parser {
 		public AnnotationRuleContext annotationRule(int i) {
 			return getRuleContext(AnnotationRuleContext.class,i);
 		}
-		public List<TerminalNode> ID() { return getTokens(CdsParser.ID); }
-		public TerminalNode ID(int i) {
-			return getToken(CdsParser.ID, i);
+		public List<IdentifierContext> identifier() {
+			return getRuleContexts(IdentifierContext.class);
+		}
+		public IdentifierContext identifier(int i) {
+			return getRuleContext(IdentifierContext.class,i);
 		}
 		public List<ElementDetailsContext> elementDetails() {
 			return getRuleContexts(ElementDetailsContext.class);
@@ -796,76 +1437,95 @@ public class CdsParser extends Parser {
 
 	public final ElementDeclRuleContext elementDeclRule() throws RecognitionException {
 		ElementDeclRuleContext _localctx = new ElementDeclRuleContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_elementDeclRule);
+		enterRule(_localctx, 22, RULE_elementDeclRule);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(152);
+			setState(283);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==T__14) {
+			while (_la==T__16) {
 				{
 				{
-				setState(149);
+				setState(280);
 				annotationRule();
 				}
 				}
-				setState(154);
+				setState(285);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(156);
+			setState(287);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,14,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,34,_ctx) ) {
 			case 1:
 				{
-				setState(155);
-				((ElementDeclRuleContext)_localctx).key = match(ID);
+				setState(286);
+				((ElementDeclRuleContext)_localctx).key = identifier();
 				}
 				break;
 			}
-			setState(162);
+			setState(294);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
+			case NAMESPACE:
+			case AS:
+			case ON:
+			case SELECT:
+			case FROM:
+			case WHERE:
+			case DEFINE:
+			case UNION:
+			case DISTINCT:
+			case HANA:
+			case JOIN_TYPES:
+			case USING:
+			case DEFAULT:
+			case CONTEXT:
+			case ENTITY:
+			case VIEW:
+			case TYPE:
+			case ASSOCIATION:
+			case TO:
 			case ID:
 				{
-				setState(158);
-				((ElementDeclRuleContext)_localctx).name = match(ID);
+				setState(289);
+				((ElementDeclRuleContext)_localctx).name = identifier();
 				}
 				break;
-			case T__3:
+			case T__5:
 				{
-				setState(159);
-				match(T__3);
-				setState(160);
-				((ElementDeclRuleContext)_localctx).name = match(ID);
-				setState(161);
-				match(T__3);
+				setState(290);
+				match(T__5);
+				setState(291);
+				((ElementDeclRuleContext)_localctx).name = identifier();
+				setState(292);
+				match(T__5);
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			setState(164);
+			setState(296);
 			match(T__2);
-			setState(165);
+			setState(297);
 			typeAssignRule();
-			setState(169);
+			setState(301);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__7) | (1L << NULL) | (1L << DEFAULT))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__9) | (1L << T__10) | (1L << T__11) | (1L << NULL) | (1L << DEFAULT))) != 0)) {
 				{
 				{
-				setState(166);
+				setState(298);
 				elementDetails();
 				}
 				}
-				setState(171);
+				setState(303);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(172);
+			setState(304);
 			match(SEMICOLUMN);
 			}
 		}
@@ -903,23 +1563,25 @@ public class CdsParser extends Parser {
 
 	public final ElementDetailsContext elementDetails() throws RecognitionException {
 		ElementDetailsContext _localctx = new ElementDetailsContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_elementDetails);
+		enterRule(_localctx, 24, RULE_elementDetails);
 		try {
-			setState(176);
+			setState(308);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case DEFAULT:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(174);
+				setState(306);
 				defaultValue();
 				}
 				break;
-			case T__7:
+			case T__9:
+			case T__10:
+			case T__11:
 			case NULL:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(175);
+				setState(307);
 				elementConstraints();
 				}
 				break;
@@ -939,7 +1601,9 @@ public class CdsParser extends Parser {
 	}
 
 	public static class ElementConstraintsContext extends ParserRuleContext {
-		public TerminalNode NULL() { return getToken(CdsParser.NULL, 0); }
+		public ConstraintsContext constraints() {
+			return getRuleContext(ConstraintsContext.class,0);
+		}
 		public ElementConstraintsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -956,14 +1620,90 @@ public class CdsParser extends Parser {
 
 	public final ElementConstraintsContext elementConstraints() throws RecognitionException {
 		ElementConstraintsContext _localctx = new ElementConstraintsContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_elementConstraints);
+		enterRule(_localctx, 26, RULE_elementConstraints);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(310);
+			constraints();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class AssociationConstraintsContext extends ParserRuleContext {
+		public ConstraintsContext constraints() {
+			return getRuleContext(ConstraintsContext.class,0);
+		}
+		public AssociationConstraintsContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_associationConstraints; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).enterAssociationConstraints(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).exitAssociationConstraints(this);
+		}
+	}
+
+	public final AssociationConstraintsContext associationConstraints() throws RecognitionException {
+		AssociationConstraintsContext _localctx = new AssociationConstraintsContext(_ctx, getState());
+		enterRule(_localctx, 28, RULE_associationConstraints);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(312);
+			constraints();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class ConstraintsContext extends ParserRuleContext {
+		public TerminalNode NULL() { return getToken(CdsParser.NULL, 0); }
+		public ConstraintsContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_constraints; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).enterConstraints(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).exitConstraints(this);
+		}
+	}
+
+	public final ConstraintsContext constraints() throws RecognitionException {
+		ConstraintsContext _localctx = new ConstraintsContext(_ctx, getState());
+		enterRule(_localctx, 30, RULE_constraints);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(178);
+			setState(314);
 			_la = _input.LA(1);
-			if ( !(_la==T__7 || _la==NULL) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__9) | (1L << T__10) | (1L << T__11) | (1L << NULL))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -985,16 +1725,19 @@ public class CdsParser extends Parser {
 	}
 
 	public static class AssociationContext extends ParserRuleContext {
-		public Token ascId;
-		public Token ascKeyword;
-		public Token toKeyword;
+		public IdentifierContext key;
+		public IdentifierContext ascId;
+		public TerminalNode ASSOCIATION() { return getToken(CdsParser.ASSOCIATION, 0); }
+		public TerminalNode TO() { return getToken(CdsParser.TO, 0); }
 		public AssociationTargetContext associationTarget() {
 			return getRuleContext(AssociationTargetContext.class,0);
 		}
 		public TerminalNode SEMICOLUMN() { return getToken(CdsParser.SEMICOLUMN, 0); }
-		public List<TerminalNode> ID() { return getTokens(CdsParser.ID); }
-		public TerminalNode ID(int i) {
-			return getToken(CdsParser.ID, i);
+		public List<IdentifierContext> identifier() {
+			return getRuleContexts(IdentifierContext.class);
+		}
+		public IdentifierContext identifier(int i) {
+			return getRuleContext(IdentifierContext.class,i);
 		}
 		public CardinalityContext cardinality() {
 			return getRuleContext(CardinalityContext.class,0);
@@ -1010,6 +1753,9 @@ public class CdsParser extends Parser {
 		}
 		public UnmanagedForeignKeyContext unmanagedForeignKey(int i) {
 			return getRuleContext(UnmanagedForeignKeyContext.class,i);
+		}
+		public AssociationConstraintsContext associationConstraints() {
+			return getRuleContext(AssociationConstraintsContext.class,0);
 		}
 		public AssociationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1027,48 +1773,58 @@ public class CdsParser extends Parser {
 
 	public final AssociationContext association() throws RecognitionException {
 		AssociationContext _localctx = new AssociationContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_association);
+		enterRule(_localctx, 32, RULE_association);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(180);
-			((AssociationContext)_localctx).ascId = match(ID);
-			setState(181);
+			setState(317);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,38,_ctx) ) {
+			case 1:
+				{
+				setState(316);
+				((AssociationContext)_localctx).key = identifier();
+				}
+				break;
+			}
+			setState(319);
+			((AssociationContext)_localctx).ascId = identifier();
+			setState(320);
 			match(T__2);
-			setState(182);
-			((AssociationContext)_localctx).ascKeyword = match(ID);
-			setState(184);
+			setState(321);
+			match(ASSOCIATION);
+			setState(323);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (_la==T__11) {
+			if (_la==T__13) {
 				{
-				setState(183);
+				setState(322);
 				cardinality();
 				}
 			}
 
-			setState(186);
-			((AssociationContext)_localctx).toKeyword = match(ID);
-			setState(187);
+			setState(325);
+			match(TO);
+			setState(326);
 			associationTarget();
-			setState(192);
+			setState(331);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==T__9 || _la==ON) {
+			while (_la==T__3 || _la==ON) {
 				{
-				setState(190);
+				setState(329);
 				_errHandler.sync(this);
 				switch (_input.LA(1)) {
-				case T__9:
+				case T__3:
 					{
-					setState(188);
+					setState(327);
 					managedForeignKeys();
 					}
 					break;
 				case ON:
 					{
-					setState(189);
+					setState(328);
 					unmanagedForeignKey();
 					}
 					break;
@@ -1076,11 +1832,21 @@ public class CdsParser extends Parser {
 					throw new NoViableAltException(this);
 				}
 				}
-				setState(194);
+				setState(333);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(195);
+			setState(335);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__9) | (1L << T__10) | (1L << T__11) | (1L << NULL))) != 0)) {
+				{
+				setState(334);
+				associationConstraints();
+				}
+			}
+
+			setState(337);
 			match(SEMICOLUMN);
 			}
 		}
@@ -1096,11 +1862,13 @@ public class CdsParser extends Parser {
 	}
 
 	public static class AssociationTargetContext extends ParserRuleContext {
-		public Token ID;
-		public List<Token> pathSubMembers = new ArrayList<Token>();
-		public List<TerminalNode> ID() { return getTokens(CdsParser.ID); }
-		public TerminalNode ID(int i) {
-			return getToken(CdsParser.ID, i);
+		public IdentifierContext identifier;
+		public List<IdentifierContext> pathSubMembers = new ArrayList<IdentifierContext>();
+		public List<IdentifierContext> identifier() {
+			return getRuleContexts(IdentifierContext.class);
+		}
+		public IdentifierContext identifier(int i) {
+			return getRuleContext(IdentifierContext.class,i);
 		}
 		public AssociationTargetContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1118,28 +1886,28 @@ public class CdsParser extends Parser {
 
 	public final AssociationTargetContext associationTarget() throws RecognitionException {
 		AssociationTargetContext _localctx = new AssociationTargetContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_associationTarget);
+		enterRule(_localctx, 34, RULE_associationTarget);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(197);
-			((AssociationTargetContext)_localctx).ID = match(ID);
-			((AssociationTargetContext)_localctx).pathSubMembers.add(((AssociationTargetContext)_localctx).ID);
-			setState(202);
+			setState(339);
+			((AssociationTargetContext)_localctx).identifier = identifier();
+			((AssociationTargetContext)_localctx).pathSubMembers.add(((AssociationTargetContext)_localctx).identifier);
+			setState(344);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==T__0) {
 				{
 				{
-				setState(198);
+				setState(340);
 				match(T__0);
-				setState(199);
-				((AssociationTargetContext)_localctx).ID = match(ID);
-				((AssociationTargetContext)_localctx).pathSubMembers.add(((AssociationTargetContext)_localctx).ID);
+				setState(341);
+				((AssociationTargetContext)_localctx).identifier = identifier();
+				((AssociationTargetContext)_localctx).pathSubMembers.add(((AssociationTargetContext)_localctx).identifier);
 				}
 				}
-				setState(204);
+				setState(346);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -1157,13 +1925,15 @@ public class CdsParser extends Parser {
 	}
 
 	public static class UnmanagedForeignKeyContext extends ParserRuleContext {
-		public Token ID;
-		public List<Token> pathSubMembers = new ArrayList<Token>();
-		public Token source;
+		public IdentifierContext identifier;
+		public List<IdentifierContext> pathSubMembers = new ArrayList<IdentifierContext>();
+		public IdentifierContext source;
 		public TerminalNode ON() { return getToken(CdsParser.ON, 0); }
-		public List<TerminalNode> ID() { return getTokens(CdsParser.ID); }
-		public TerminalNode ID(int i) {
-			return getToken(CdsParser.ID, i);
+		public List<IdentifierContext> identifier() {
+			return getRuleContexts(IdentifierContext.class);
+		}
+		public IdentifierContext identifier(int i) {
+			return getRuleContext(IdentifierContext.class,i);
 		}
 		public UnmanagedForeignKeyContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1181,37 +1951,37 @@ public class CdsParser extends Parser {
 
 	public final UnmanagedForeignKeyContext unmanagedForeignKey() throws RecognitionException {
 		UnmanagedForeignKeyContext _localctx = new UnmanagedForeignKeyContext(_ctx, getState());
-		enterRule(_localctx, 24, RULE_unmanagedForeignKey);
+		enterRule(_localctx, 36, RULE_unmanagedForeignKey);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(205);
+			setState(347);
 			match(ON);
-			setState(206);
-			((UnmanagedForeignKeyContext)_localctx).ID = match(ID);
-			((UnmanagedForeignKeyContext)_localctx).pathSubMembers.add(((UnmanagedForeignKeyContext)_localctx).ID);
-			setState(211);
+			setState(348);
+			((UnmanagedForeignKeyContext)_localctx).identifier = identifier();
+			((UnmanagedForeignKeyContext)_localctx).pathSubMembers.add(((UnmanagedForeignKeyContext)_localctx).identifier);
+			setState(353);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==T__0) {
 				{
 				{
-				setState(207);
+				setState(349);
 				match(T__0);
-				setState(208);
-				((UnmanagedForeignKeyContext)_localctx).ID = match(ID);
-				((UnmanagedForeignKeyContext)_localctx).pathSubMembers.add(((UnmanagedForeignKeyContext)_localctx).ID);
+				setState(350);
+				((UnmanagedForeignKeyContext)_localctx).identifier = identifier();
+				((UnmanagedForeignKeyContext)_localctx).pathSubMembers.add(((UnmanagedForeignKeyContext)_localctx).identifier);
 				}
 				}
-				setState(213);
+				setState(355);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(214);
-			match(T__8);
-			setState(215);
-			((UnmanagedForeignKeyContext)_localctx).source = match(ID);
+			setState(356);
+			match(T__12);
+			setState(357);
+			((UnmanagedForeignKeyContext)_localctx).source = identifier();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1248,33 +2018,33 @@ public class CdsParser extends Parser {
 
 	public final ManagedForeignKeysContext managedForeignKeys() throws RecognitionException {
 		ManagedForeignKeysContext _localctx = new ManagedForeignKeysContext(_ctx, getState());
-		enterRule(_localctx, 26, RULE_managedForeignKeys);
+		enterRule(_localctx, 38, RULE_managedForeignKeys);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(217);
-			match(T__9);
-			setState(218);
+			setState(359);
+			match(T__3);
+			setState(360);
 			foreignKey();
-			setState(223);
+			setState(365);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==T__5) {
+			while (_la==T__7) {
 				{
 				{
-				setState(219);
-				match(T__5);
-				setState(220);
+				setState(361);
+				match(T__7);
+				setState(362);
 				foreignKey();
 				}
 				}
-				setState(225);
+				setState(367);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(226);
-			match(T__10);
+			setState(368);
+			match(T__4);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1289,12 +2059,14 @@ public class CdsParser extends Parser {
 	}
 
 	public static class ForeignKeyContext extends ParserRuleContext {
-		public Token ID;
-		public List<Token> pathSubMembers = new ArrayList<Token>();
-		public Token alias;
-		public List<TerminalNode> ID() { return getTokens(CdsParser.ID); }
-		public TerminalNode ID(int i) {
-			return getToken(CdsParser.ID, i);
+		public IdentifierContext identifier;
+		public List<IdentifierContext> pathSubMembers = new ArrayList<IdentifierContext>();
+		public IdentifierContext alias;
+		public List<IdentifierContext> identifier() {
+			return getRuleContexts(IdentifierContext.class);
+		}
+		public IdentifierContext identifier(int i) {
+			return getRuleContext(IdentifierContext.class,i);
 		}
 		public TerminalNode AS() { return getToken(CdsParser.AS, 0); }
 		public ForeignKeyContext(ParserRuleContext parent, int invokingState) {
@@ -1313,40 +2085,40 @@ public class CdsParser extends Parser {
 
 	public final ForeignKeyContext foreignKey() throws RecognitionException {
 		ForeignKeyContext _localctx = new ForeignKeyContext(_ctx, getState());
-		enterRule(_localctx, 28, RULE_foreignKey);
+		enterRule(_localctx, 40, RULE_foreignKey);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(228);
-			((ForeignKeyContext)_localctx).ID = match(ID);
-			((ForeignKeyContext)_localctx).pathSubMembers.add(((ForeignKeyContext)_localctx).ID);
-			setState(233);
+			setState(370);
+			((ForeignKeyContext)_localctx).identifier = identifier();
+			((ForeignKeyContext)_localctx).pathSubMembers.add(((ForeignKeyContext)_localctx).identifier);
+			setState(375);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==T__0) {
 				{
 				{
-				setState(229);
+				setState(371);
 				match(T__0);
-				setState(230);
-				((ForeignKeyContext)_localctx).ID = match(ID);
-				((ForeignKeyContext)_localctx).pathSubMembers.add(((ForeignKeyContext)_localctx).ID);
+				setState(372);
+				((ForeignKeyContext)_localctx).identifier = identifier();
+				((ForeignKeyContext)_localctx).pathSubMembers.add(((ForeignKeyContext)_localctx).identifier);
 				}
 				}
-				setState(235);
+				setState(377);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(238);
+			setState(380);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==AS) {
 				{
-				setState(236);
+				setState(378);
 				match(AS);
-				setState(237);
-				((ForeignKeyContext)_localctx).alias = match(ID);
+				setState(379);
+				((ForeignKeyContext)_localctx).alias = identifier();
 				}
 			}
 
@@ -1417,77 +2189,77 @@ public class CdsParser extends Parser {
 
 	public final CardinalityContext cardinality() throws RecognitionException {
 		CardinalityContext _localctx = new CardinalityContext(_ctx, getState());
-		enterRule(_localctx, 30, RULE_cardinality);
+		enterRule(_localctx, 42, RULE_cardinality);
 		try {
-			setState(255);
+			setState(397);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,28,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,50,_ctx) ) {
 			case 1:
 				_localctx = new MinMaxCardinalityContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(240);
-				match(T__11);
-				setState(241);
+				setState(382);
+				match(T__13);
+				setState(383);
 				match(ASSOCIATION_MIN);
-				setState(244);
+				setState(386);
 				_errHandler.sync(this);
 				switch (_input.LA(1)) {
 				case INTEGER:
 					{
-					setState(242);
+					setState(384);
 					((MinMaxCardinalityContext)_localctx).max = match(INTEGER);
 					}
 					break;
-				case T__12:
+				case T__14:
 					{
-					setState(243);
-					((MinMaxCardinalityContext)_localctx).many = match(T__12);
+					setState(385);
+					((MinMaxCardinalityContext)_localctx).many = match(T__14);
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(246);
-				match(T__13);
+				setState(388);
+				match(T__15);
 				}
 				break;
 			case 2:
 				_localctx = new MaxCardinalityContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(247);
-				match(T__11);
-				setState(250);
+				setState(389);
+				match(T__13);
+				setState(392);
 				_errHandler.sync(this);
 				switch (_input.LA(1)) {
 				case INTEGER:
 					{
-					setState(248);
+					setState(390);
 					((MaxCardinalityContext)_localctx).max = match(INTEGER);
 					}
 					break;
-				case T__12:
+				case T__14:
 					{
-					setState(249);
-					((MaxCardinalityContext)_localctx).many = match(T__12);
+					setState(391);
+					((MaxCardinalityContext)_localctx).many = match(T__14);
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(252);
-				match(T__13);
+				setState(394);
+				match(T__15);
 				}
 				break;
 			case 3:
 				_localctx = new NoCardinalityContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(253);
-				match(T__11);
-				setState(254);
+				setState(395);
 				match(T__13);
+				setState(396);
+				match(T__15);
 				}
 				break;
 			}
@@ -1509,12 +2281,14 @@ public class CdsParser extends Parser {
 		public TerminalNode STRING() { return getToken(CdsParser.STRING, 0); }
 		public TerminalNode INTEGER() { return getToken(CdsParser.INTEGER, 0); }
 		public TerminalNode DECIMAL() { return getToken(CdsParser.DECIMAL, 0); }
+		public TerminalNode BOOLEAN() { return getToken(CdsParser.BOOLEAN, 0); }
 		public TerminalNode LOCAL_TIME() { return getToken(CdsParser.LOCAL_TIME, 0); }
 		public TerminalNode LOCAL_DATE() { return getToken(CdsParser.LOCAL_DATE, 0); }
 		public TerminalNode UTC_DATE_TIME() { return getToken(CdsParser.UTC_DATE_TIME, 0); }
 		public TerminalNode UTC_TIMESTAMP() { return getToken(CdsParser.UTC_TIMESTAMP, 0); }
-		public TerminalNode NULL() { return getToken(CdsParser.NULL, 0); }
 		public TerminalNode VARBINARY() { return getToken(CdsParser.VARBINARY, 0); }
+		public TerminalNode DATETIME_VALUE_FUNCTION() { return getToken(CdsParser.DATETIME_VALUE_FUNCTION, 0); }
+		public TerminalNode NULL() { return getToken(CdsParser.NULL, 0); }
 		public DefaultValueContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1531,17 +2305,17 @@ public class CdsParser extends Parser {
 
 	public final DefaultValueContext defaultValue() throws RecognitionException {
 		DefaultValueContext _localctx = new DefaultValueContext(_ctx, getState());
-		enterRule(_localctx, 32, RULE_defaultValue);
+		enterRule(_localctx, 44, RULE_defaultValue);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(257);
+			setState(399);
 			match(DEFAULT);
-			setState(258);
+			setState(400);
 			((DefaultValueContext)_localctx).value = _input.LT(1);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NULL) | (1L << INTEGER) | (1L << DECIMAL) | (1L << LOCAL_TIME) | (1L << LOCAL_DATE) | (1L << UTC_DATE_TIME) | (1L << UTC_TIMESTAMP) | (1L << STRING) | (1L << VARBINARY))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << DATETIME_VALUE_FUNCTION) | (1L << NULL) | (1L << BOOLEAN) | (1L << INTEGER) | (1L << DECIMAL) | (1L << LOCAL_TIME) | (1L << LOCAL_DATE) | (1L << UTC_DATE_TIME) | (1L << UTC_TIMESTAMP) | (1L << STRING) | (1L << VARBINARY))) != 0)) ) {
 				((DefaultValueContext)_localctx).value = (Token)_errHandler.recoverInline(this);
 			}
 			else {
@@ -1574,14 +2348,16 @@ public class CdsParser extends Parser {
 		}
 	}
 	public static class AnnPropertyRuleContext extends AnnotationRuleContext {
-		public Token annId;
-		public Token prop;
+		public IdentifierContext annId;
+		public IdentifierContext prop;
 		public AnnValueContext annValue() {
 			return getRuleContext(AnnValueContext.class,0);
 		}
-		public List<TerminalNode> ID() { return getTokens(CdsParser.ID); }
-		public TerminalNode ID(int i) {
-			return getToken(CdsParser.ID, i);
+		public List<IdentifierContext> identifier() {
+			return getRuleContexts(IdentifierContext.class);
+		}
+		public IdentifierContext identifier(int i) {
+			return getRuleContext(IdentifierContext.class,i);
 		}
 		public AnnPropertyRuleContext(AnnotationRuleContext ctx) { copyFrom(ctx); }
 		@Override
@@ -1594,7 +2370,9 @@ public class CdsParser extends Parser {
 		}
 	}
 	public static class AnnObjectRuleContext extends AnnotationRuleContext {
-		public TerminalNode ID() { return getToken(CdsParser.ID, 0); }
+		public IdentifierContext identifier() {
+			return getRuleContext(IdentifierContext.class,0);
+		}
 		public AnnValueContext annValue() {
 			return getRuleContext(AnnValueContext.class,0);
 		}
@@ -1609,7 +2387,9 @@ public class CdsParser extends Parser {
 		}
 	}
 	public static class AnnMarkerRuleContext extends AnnotationRuleContext {
-		public TerminalNode ID() { return getToken(CdsParser.ID, 0); }
+		public IdentifierContext identifier() {
+			return getRuleContext(IdentifierContext.class,0);
+		}
 		public AnnMarkerRuleContext(AnnotationRuleContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -1623,22 +2403,23 @@ public class CdsParser extends Parser {
 
 	public final AnnotationRuleContext annotationRule() throws RecognitionException {
 		AnnotationRuleContext _localctx = new AnnotationRuleContext(_ctx, getState());
-		enterRule(_localctx, 34, RULE_annotationRule);
+		enterRule(_localctx, 46, RULE_annotationRule);
+		int _la;
 		try {
-			setState(272);
+			setState(421);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,29,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,52,_ctx) ) {
 			case 1:
 				_localctx = new AnnObjectRuleContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(260);
-				match(T__14);
-				setState(261);
-				match(ID);
-				setState(262);
+				setState(402);
+				match(T__16);
+				setState(403);
+				identifier();
+				setState(404);
 				match(T__2);
-				setState(263);
+				setState(405);
 				annValue();
 				}
 				break;
@@ -1646,17 +2427,29 @@ public class CdsParser extends Parser {
 				_localctx = new AnnPropertyRuleContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(264);
-				match(T__14);
-				setState(265);
-				((AnnPropertyRuleContext)_localctx).annId = match(ID);
-				setState(266);
-				match(T__0);
-				setState(267);
-				((AnnPropertyRuleContext)_localctx).prop = match(ID);
-				setState(268);
+				setState(407);
+				match(T__16);
+				setState(408);
+				((AnnPropertyRuleContext)_localctx).annId = identifier();
+				setState(413);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while (_la==T__0) {
+					{
+					{
+					setState(409);
+					match(T__0);
+					setState(410);
+					((AnnPropertyRuleContext)_localctx).prop = identifier();
+					}
+					}
+					setState(415);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
+				setState(416);
 				match(T__2);
-				setState(269);
+				setState(417);
 				annValue();
 				}
 				break;
@@ -1664,10 +2457,10 @@ public class CdsParser extends Parser {
 				_localctx = new AnnMarkerRuleContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(270);
-				match(T__14);
-				setState(271);
-				match(ID);
+				setState(419);
+				match(T__16);
+				setState(420);
+				identifier();
 				}
 				break;
 			}
@@ -1712,30 +2505,30 @@ public class CdsParser extends Parser {
 
 	public final AnnValueContext annValue() throws RecognitionException {
 		AnnValueContext _localctx = new AnnValueContext(_ctx, getState());
-		enterRule(_localctx, 36, RULE_annValue);
+		enterRule(_localctx, 48, RULE_annValue);
 		int _la;
 		try {
-			setState(278);
+			setState(427);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case T__11:
+			case T__13:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(274);
+				setState(423);
 				arrRule();
 				}
 				break;
-			case T__15:
+			case T__17:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(275);
+				setState(424);
 				enumRule();
 				}
 				break;
-			case T__9:
+			case T__3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(276);
+				setState(425);
 				obj();
 				}
 				break;
@@ -1743,7 +2536,7 @@ public class CdsParser extends Parser {
 			case STRING:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(277);
+				setState(426);
 				((AnnValueContext)_localctx).literal = _input.LT(1);
 				_la = _input.LA(1);
 				if ( !(_la==BOOLEAN || _la==STRING) ) {
@@ -1772,7 +2565,9 @@ public class CdsParser extends Parser {
 	}
 
 	public static class EnumRuleContext extends ParserRuleContext {
-		public TerminalNode ID() { return getToken(CdsParser.ID, 0); }
+		public IdentifierContext identifier() {
+			return getRuleContext(IdentifierContext.class,0);
+		}
 		public EnumRuleContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1789,14 +2584,14 @@ public class CdsParser extends Parser {
 
 	public final EnumRuleContext enumRule() throws RecognitionException {
 		EnumRuleContext _localctx = new EnumRuleContext(_ctx, getState());
-		enterRule(_localctx, 38, RULE_enumRule);
+		enterRule(_localctx, 50, RULE_enumRule);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(280);
-			match(T__15);
-			setState(281);
-			match(ID);
+			setState(429);
+			match(T__17);
+			setState(430);
+			identifier();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1833,33 +2628,33 @@ public class CdsParser extends Parser {
 
 	public final ArrRuleContext arrRule() throws RecognitionException {
 		ArrRuleContext _localctx = new ArrRuleContext(_ctx, getState());
-		enterRule(_localctx, 40, RULE_arrRule);
+		enterRule(_localctx, 52, RULE_arrRule);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(283);
-			match(T__11);
-			setState(284);
+			setState(432);
+			match(T__13);
+			setState(433);
 			annValue();
-			setState(289);
+			setState(438);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==T__5) {
+			while (_la==T__7) {
 				{
 				{
-				setState(285);
-				match(T__5);
-				setState(286);
+				setState(434);
+				match(T__7);
+				setState(435);
 				annValue();
 				}
 				}
-				setState(291);
+				setState(440);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(292);
-			match(T__13);
+			setState(441);
+			match(T__15);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1896,33 +2691,33 @@ public class CdsParser extends Parser {
 
 	public final ObjContext obj() throws RecognitionException {
 		ObjContext _localctx = new ObjContext(_ctx, getState());
-		enterRule(_localctx, 42, RULE_obj);
+		enterRule(_localctx, 54, RULE_obj);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(294);
-			match(T__9);
-			setState(295);
+			setState(443);
+			match(T__3);
+			setState(444);
 			keyValue();
-			setState(300);
+			setState(449);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==T__5) {
+			while (_la==T__7) {
 				{
 				{
-				setState(296);
-				match(T__5);
-				setState(297);
+				setState(445);
+				match(T__7);
+				setState(446);
 				keyValue();
 				}
 				}
-				setState(302);
+				setState(451);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(303);
-			match(T__10);
+			setState(452);
+			match(T__4);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1937,7 +2732,9 @@ public class CdsParser extends Parser {
 	}
 
 	public static class KeyValueContext extends ParserRuleContext {
-		public TerminalNode ID() { return getToken(CdsParser.ID, 0); }
+		public IdentifierContext identifier() {
+			return getRuleContext(IdentifierContext.class,0);
+		}
 		public AnnValueContext annValue() {
 			return getRuleContext(AnnValueContext.class,0);
 		}
@@ -1957,15 +2754,15 @@ public class CdsParser extends Parser {
 
 	public final KeyValueContext keyValue() throws RecognitionException {
 		KeyValueContext _localctx = new KeyValueContext(_ctx, getState());
-		enterRule(_localctx, 44, RULE_keyValue);
+		enterRule(_localctx, 56, RULE_keyValue);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(305);
-			match(ID);
-			setState(306);
+			setState(454);
+			identifier();
+			setState(455);
 			match(T__2);
-			setState(307);
+			setState(456);
 			annValue();
 			}
 		}
@@ -1980,144 +2777,155 @@ public class CdsParser extends Parser {
 		return _localctx;
 	}
 
-	public static class ArtifactRuleContext extends ParserRuleContext {
-		public Token artifactType;
-		public Token artifactName;
-		public List<TerminalNode> ID() { return getTokens(CdsParser.ID); }
-		public TerminalNode ID(int i) {
-			return getToken(CdsParser.ID, i);
+	public static class SelectRuleContext extends ParserRuleContext {
+		public Token isUnion;
+		public IdentifierContext dependsOnTable;
+		public IdentifierContext dependingTableAlias;
+		public Token isDistinct;
+		public TerminalNode SELECT() { return getToken(CdsParser.SELECT, 0); }
+		public TerminalNode FROM() { return getToken(CdsParser.FROM, 0); }
+		public SelectedColumnsRuleContext selectedColumnsRule() {
+			return getRuleContext(SelectedColumnsRuleContext.class,0);
 		}
-		public List<AnnotationRuleContext> annotationRule() {
-			return getRuleContexts(AnnotationRuleContext.class);
+		public List<IdentifierContext> identifier() {
+			return getRuleContexts(IdentifierContext.class);
 		}
-		public AnnotationRuleContext annotationRule(int i) {
-			return getRuleContext(AnnotationRuleContext.class,i);
+		public IdentifierContext identifier(int i) {
+			return getRuleContext(IdentifierContext.class,i);
 		}
-		public List<ArtifactRuleContext> artifactRule() {
-			return getRuleContexts(ArtifactRuleContext.class);
+		public List<JoinRuleContext> joinRule() {
+			return getRuleContexts(JoinRuleContext.class);
 		}
-		public ArtifactRuleContext artifactRule(int i) {
-			return getRuleContext(ArtifactRuleContext.class,i);
+		public JoinRuleContext joinRule(int i) {
+			return getRuleContext(JoinRuleContext.class,i);
 		}
-		public List<DataTypeRuleContext> dataTypeRule() {
-			return getRuleContexts(DataTypeRuleContext.class);
+		public List<TerminalNode> SEMICOLUMN() { return getTokens(CdsParser.SEMICOLUMN); }
+		public TerminalNode SEMICOLUMN(int i) {
+			return getToken(CdsParser.SEMICOLUMN, i);
 		}
-		public DataTypeRuleContext dataTypeRule(int i) {
-			return getRuleContext(DataTypeRuleContext.class,i);
+		public TerminalNode WHERE() { return getToken(CdsParser.WHERE, 0); }
+		public WhereRuleContext whereRule() {
+			return getRuleContext(WhereRuleContext.class,0);
 		}
-		public List<FieldDeclRuleContext> fieldDeclRule() {
-			return getRuleContexts(FieldDeclRuleContext.class);
-		}
-		public FieldDeclRuleContext fieldDeclRule(int i) {
-			return getRuleContext(FieldDeclRuleContext.class,i);
-		}
-		public List<ElementDeclRuleContext> elementDeclRule() {
-			return getRuleContexts(ElementDeclRuleContext.class);
-		}
-		public ElementDeclRuleContext elementDeclRule(int i) {
-			return getRuleContext(ElementDeclRuleContext.class,i);
-		}
-		public List<AssociationContext> association() {
-			return getRuleContexts(AssociationContext.class);
-		}
-		public AssociationContext association(int i) {
-			return getRuleContext(AssociationContext.class,i);
-		}
-		public TerminalNode SEMICOLUMN() { return getToken(CdsParser.SEMICOLUMN, 0); }
-		public ArtifactRuleContext(ParserRuleContext parent, int invokingState) {
+		public TerminalNode UNION() { return getToken(CdsParser.UNION, 0); }
+		public TerminalNode DISTINCT() { return getToken(CdsParser.DISTINCT, 0); }
+		public TerminalNode AS() { return getToken(CdsParser.AS, 0); }
+		public SelectRuleContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_artifactRule; }
+		@Override public int getRuleIndex() { return RULE_selectRule; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CdsListener ) ((CdsListener)listener).enterArtifactRule(this);
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).enterSelectRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CdsListener ) ((CdsListener)listener).exitArtifactRule(this);
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).exitSelectRule(this);
 		}
 	}
 
-	public final ArtifactRuleContext artifactRule() throws RecognitionException {
-		ArtifactRuleContext _localctx = new ArtifactRuleContext(_ctx, getState());
-		enterRule(_localctx, 46, RULE_artifactRule);
+	public final SelectRuleContext selectRule() throws RecognitionException {
+		SelectRuleContext _localctx = new SelectRuleContext(_ctx, getState());
+		enterRule(_localctx, 58, RULE_selectRule);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(312);
+			setState(459);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==T__14) {
+			if (_la==UNION) {
+				{
+				setState(458);
+				((SelectRuleContext)_localctx).isUnion = match(UNION);
+				}
+			}
+
+			setState(461);
+			match(SELECT);
+			setState(462);
+			match(FROM);
+			setState(463);
+			((SelectRuleContext)_localctx).dependsOnTable = identifier();
+			setState(467);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,57,_ctx) ) {
+			case 1:
 				{
 				{
-				setState(309);
-				annotationRule();
+				setState(464);
+				match(AS);
+				setState(465);
+				((SelectRuleContext)_localctx).dependingTableAlias = identifier();
 				}
 				}
-				setState(314);
+				break;
+			case 2:
+				{
+				setState(466);
+				((SelectRuleContext)_localctx).dependingTableAlias = identifier();
+				}
+				break;
+			}
+			setState(472);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==JOIN_TYPES) {
+				{
+				{
+				setState(469);
+				joinRule();
+				}
+				}
+				setState(474);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(315);
-			((ArtifactRuleContext)_localctx).artifactType = match(ID);
-			setState(316);
-			((ArtifactRuleContext)_localctx).artifactName = match(ID);
-			setState(317);
-			match(T__9);
-			setState(325);
+			setState(476);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__3) | (1L << T__14) | (1L << ID))) != 0)) {
+			if (_la==DISTINCT) {
 				{
-				setState(323);
-				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,34,_ctx) ) {
-				case 1:
-					{
-					setState(318);
-					artifactRule();
-					}
-					break;
-				case 2:
-					{
-					setState(319);
-					dataTypeRule();
-					}
-					break;
-				case 3:
-					{
-					setState(320);
-					fieldDeclRule();
-					}
-					break;
-				case 4:
-					{
-					setState(321);
-					elementDeclRule();
-					}
-					break;
-				case 5:
-					{
-					setState(322);
-					association();
-					}
-					break;
+				setState(475);
+				((SelectRuleContext)_localctx).isDistinct = match(DISTINCT);
 				}
-				}
-				setState(327);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
 			}
-			setState(328);
-			match(T__10);
-			setState(330);
+
+			setState(478);
+			match(T__3);
+			setState(479);
+			selectedColumnsRule();
+			setState(480);
+			match(T__4);
+			setState(482);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==SEMICOLUMN) {
 				{
-				setState(329);
+				setState(481);
 				match(SEMICOLUMN);
+				}
+			}
+
+			setState(489);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==WHERE) {
+				{
+				setState(484);
+				match(WHERE);
+				setState(485);
+				whereRule();
+				setState(487);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				if (_la==SEMICOLUMN) {
+					{
+					setState(486);
+					match(SEMICOLUMN);
+					}
+				}
+
 				}
 			}
 
@@ -2134,125 +2942,647 @@ public class CdsParser extends Parser {
 		return _localctx;
 	}
 
+	public static class JoinRuleContext extends ParserRuleContext {
+		public Token joinType;
+		public IdentifierContext joinArtifactName;
+		public IdentifierContext joinTableAlias;
+		public JoinFieldsContext joinFields() {
+			return getRuleContext(JoinFieldsContext.class,0);
+		}
+		public TerminalNode JOIN_TYPES() { return getToken(CdsParser.JOIN_TYPES, 0); }
+		public List<IdentifierContext> identifier() {
+			return getRuleContexts(IdentifierContext.class);
+		}
+		public IdentifierContext identifier(int i) {
+			return getRuleContext(IdentifierContext.class,i);
+		}
+		public TerminalNode AS() { return getToken(CdsParser.AS, 0); }
+		public JoinRuleContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_joinRule; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).enterJoinRule(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).exitJoinRule(this);
+		}
+	}
+
+	public final JoinRuleContext joinRule() throws RecognitionException {
+		JoinRuleContext _localctx = new JoinRuleContext(_ctx, getState());
+		enterRule(_localctx, 60, RULE_joinRule);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(491);
+			((JoinRuleContext)_localctx).joinType = match(JOIN_TYPES);
+			setState(492);
+			((JoinRuleContext)_localctx).joinArtifactName = identifier();
+			setState(496);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,63,_ctx) ) {
+			case 1:
+				{
+				{
+				setState(493);
+				match(AS);
+				setState(494);
+				((JoinRuleContext)_localctx).joinTableAlias = identifier();
+				}
+				}
+				break;
+			case 2:
+				{
+				setState(495);
+				((JoinRuleContext)_localctx).joinTableAlias = identifier();
+				}
+				break;
+			}
+			setState(498);
+			joinFields();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class JoinFieldsContext extends ParserRuleContext {
+		public JoinFieldsContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_joinFields; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).enterJoinFields(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).exitJoinFields(this);
+		}
+	}
+
+	public final JoinFieldsContext joinFields() throws RecognitionException {
+		JoinFieldsContext _localctx = new JoinFieldsContext(_ctx, getState());
+		enterRule(_localctx, 62, RULE_joinFields);
+		try {
+			int _alt;
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(503);
+			_errHandler.sync(this);
+			_alt = getInterpreter().adaptivePredict(_input,64,_ctx);
+			while ( _alt!=1 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
+				if ( _alt==1+1 ) {
+					{
+					{
+					setState(500);
+					matchWildcard();
+					}
+					} 
+				}
+				setState(505);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,64,_ctx);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class SelectedColumnsRuleContext extends ParserRuleContext {
+		public SelectedColumnsRuleContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_selectedColumnsRule; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).enterSelectedColumnsRule(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).exitSelectedColumnsRule(this);
+		}
+	}
+
+	public final SelectedColumnsRuleContext selectedColumnsRule() throws RecognitionException {
+		SelectedColumnsRuleContext _localctx = new SelectedColumnsRuleContext(_ctx, getState());
+		enterRule(_localctx, 64, RULE_selectedColumnsRule);
+		try {
+			int _alt;
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(509);
+			_errHandler.sync(this);
+			_alt = getInterpreter().adaptivePredict(_input,65,_ctx);
+			while ( _alt!=1 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
+				if ( _alt==1+1 ) {
+					{
+					{
+					setState(506);
+					matchWildcard();
+					}
+					} 
+				}
+				setState(511);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,65,_ctx);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class WhereRuleContext extends ParserRuleContext {
+		public WhereRuleContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_whereRule; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).enterWhereRule(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).exitWhereRule(this);
+		}
+	}
+
+	public final WhereRuleContext whereRule() throws RecognitionException {
+		WhereRuleContext _localctx = new WhereRuleContext(_ctx, getState());
+		enterRule(_localctx, 66, RULE_whereRule);
+		try {
+			int _alt;
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(515);
+			_errHandler.sync(this);
+			_alt = getInterpreter().adaptivePredict(_input,66,_ctx);
+			while ( _alt!=1 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
+				if ( _alt==1+1 ) {
+					{
+					{
+					setState(512);
+					matchWildcard();
+					}
+					} 
+				}
+				setState(517);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,66,_ctx);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class IdentifierContext extends ParserRuleContext {
+		public TerminalNode ID() { return getToken(CdsParser.ID, 0); }
+		public TerminalNode NAMESPACE() { return getToken(CdsParser.NAMESPACE, 0); }
+		public TerminalNode HANA() { return getToken(CdsParser.HANA, 0); }
+		public TerminalNode AS() { return getToken(CdsParser.AS, 0); }
+		public TerminalNode ON() { return getToken(CdsParser.ON, 0); }
+		public TerminalNode SELECT() { return getToken(CdsParser.SELECT, 0); }
+		public TerminalNode FROM() { return getToken(CdsParser.FROM, 0); }
+		public TerminalNode WHERE() { return getToken(CdsParser.WHERE, 0); }
+		public TerminalNode DEFINE() { return getToken(CdsParser.DEFINE, 0); }
+		public TerminalNode UNION() { return getToken(CdsParser.UNION, 0); }
+		public TerminalNode DISTINCT() { return getToken(CdsParser.DISTINCT, 0); }
+		public TerminalNode CONTEXT() { return getToken(CdsParser.CONTEXT, 0); }
+		public TerminalNode ENTITY() { return getToken(CdsParser.ENTITY, 0); }
+		public TerminalNode TYPE() { return getToken(CdsParser.TYPE, 0); }
+		public TerminalNode VIEW() { return getToken(CdsParser.VIEW, 0); }
+		public TerminalNode ASSOCIATION() { return getToken(CdsParser.ASSOCIATION, 0); }
+		public TerminalNode TO() { return getToken(CdsParser.TO, 0); }
+		public TerminalNode JOIN_TYPES() { return getToken(CdsParser.JOIN_TYPES, 0); }
+		public TerminalNode USING() { return getToken(CdsParser.USING, 0); }
+		public TerminalNode DEFAULT() { return getToken(CdsParser.DEFAULT, 0); }
+		public IdentifierContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_identifier; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).enterIdentifier(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CdsListener ) ((CdsListener)listener).exitIdentifier(this);
+		}
+	}
+
+	public final IdentifierContext identifier() throws RecognitionException {
+		IdentifierContext _localctx = new IdentifierContext(_ctx, getState());
+		enterRule(_localctx, 68, RULE_identifier);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(518);
+			_la = _input.LA(1);
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NAMESPACE) | (1L << AS) | (1L << ON) | (1L << SELECT) | (1L << FROM) | (1L << WHERE) | (1L << DEFINE) | (1L << UNION) | (1L << DISTINCT) | (1L << HANA) | (1L << JOIN_TYPES) | (1L << USING) | (1L << DEFAULT) | (1L << CONTEXT) | (1L << ENTITY) | (1L << VIEW) | (1L << TYPE) | (1L << ASSOCIATION) | (1L << TO) | (1L << ID))) != 0)) ) {
+			_errHandler.recoverInline(this);
+			}
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3C\u014f\4\2\t\2\4"+
-		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
-		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
-		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
-		"\3\2\3\2\7\2\65\n\2\f\2\16\28\13\2\3\2\5\2;\n\2\3\3\3\3\3\3\3\3\7\3A\n"+
-		"\3\f\3\16\3D\13\3\3\3\3\3\3\4\3\4\3\4\3\4\7\4L\n\4\f\4\16\4O\13\4\3\4"+
-		"\3\4\3\4\3\4\7\4U\n\4\f\4\16\4X\13\4\3\4\3\4\5\4\\\n\4\3\4\3\4\3\5\3\5"+
-		"\5\5b\n\5\3\6\3\6\3\6\3\6\3\6\3\6\3\7\3\7\3\7\3\7\5\7n\n\7\3\7\3\7\3\7"+
-		"\3\7\3\b\3\b\3\b\3\b\3\b\7\by\n\b\f\b\16\b|\13\b\3\b\3\b\3\b\3\b\3\b\3"+
-		"\b\3\b\7\b\u0085\n\b\f\b\16\b\u0088\13\b\3\b\3\b\5\b\u008c\n\b\3\b\3\b"+
-		"\3\b\7\b\u0091\n\b\f\b\16\b\u0094\13\b\5\b\u0096\n\b\3\t\7\t\u0099\n\t"+
-		"\f\t\16\t\u009c\13\t\3\t\5\t\u009f\n\t\3\t\3\t\3\t\3\t\5\t\u00a5\n\t\3"+
-		"\t\3\t\3\t\7\t\u00aa\n\t\f\t\16\t\u00ad\13\t\3\t\3\t\3\n\3\n\5\n\u00b3"+
-		"\n\n\3\13\3\13\3\f\3\f\3\f\3\f\5\f\u00bb\n\f\3\f\3\f\3\f\3\f\7\f\u00c1"+
-		"\n\f\f\f\16\f\u00c4\13\f\3\f\3\f\3\r\3\r\3\r\7\r\u00cb\n\r\f\r\16\r\u00ce"+
-		"\13\r\3\16\3\16\3\16\3\16\7\16\u00d4\n\16\f\16\16\16\u00d7\13\16\3\16"+
-		"\3\16\3\16\3\17\3\17\3\17\3\17\7\17\u00e0\n\17\f\17\16\17\u00e3\13\17"+
-		"\3\17\3\17\3\20\3\20\3\20\7\20\u00ea\n\20\f\20\16\20\u00ed\13\20\3\20"+
-		"\3\20\5\20\u00f1\n\20\3\21\3\21\3\21\3\21\5\21\u00f7\n\21\3\21\3\21\3"+
-		"\21\3\21\5\21\u00fd\n\21\3\21\3\21\3\21\5\21\u0102\n\21\3\22\3\22\3\22"+
-		"\3\23\3\23\3\23\3\23\3\23\3\23\3\23\3\23\3\23\3\23\3\23\3\23\5\23\u0113"+
-		"\n\23\3\24\3\24\3\24\3\24\5\24\u0119\n\24\3\25\3\25\3\25\3\26\3\26\3\26"+
-		"\3\26\7\26\u0122\n\26\f\26\16\26\u0125\13\26\3\26\3\26\3\27\3\27\3\27"+
-		"\3\27\7\27\u012d\n\27\f\27\16\27\u0130\13\27\3\27\3\27\3\30\3\30\3\30"+
-		"\3\30\3\31\7\31\u0139\n\31\f\31\16\31\u013c\13\31\3\31\3\31\3\31\3\31"+
-		"\3\31\3\31\3\31\3\31\7\31\u0146\n\31\f\31\16\31\u0149\13\31\3\31\3\31"+
-		"\5\31\u014d\n\31\3\31\2\2\32\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \""+
-		"$&(*,.\60\2\5\4\2\n\n\30\30\4\2\30\30\36%\4\2\33\33$$\2\u0164\2\62\3\2"+
-		"\2\2\4<\3\2\2\2\6G\3\2\2\2\ba\3\2\2\2\nc\3\2\2\2\fm\3\2\2\2\16\u0095\3"+
-		"\2\2\2\20\u009a\3\2\2\2\22\u00b2\3\2\2\2\24\u00b4\3\2\2\2\26\u00b6\3\2"+
-		"\2\2\30\u00c7\3\2\2\2\32\u00cf\3\2\2\2\34\u00db\3\2\2\2\36\u00e6\3\2\2"+
-		"\2 \u0101\3\2\2\2\"\u0103\3\2\2\2$\u0112\3\2\2\2&\u0118\3\2\2\2(\u011a"+
-		"\3\2\2\2*\u011d\3\2\2\2,\u0128\3\2\2\2.\u0133\3\2\2\2\60\u013a\3\2\2\2"+
-		"\62\66\5\4\3\2\63\65\5\6\4\2\64\63\3\2\2\2\658\3\2\2\2\66\64\3\2\2\2\66"+
-		"\67\3\2\2\2\67:\3\2\2\28\66\3\2\2\29;\5\b\5\2:9\3\2\2\2:;\3\2\2\2;\3\3"+
-		"\2\2\2<=\7\23\2\2=B\7\34\2\2>?\7\3\2\2?A\7\34\2\2@>\3\2\2\2AD\3\2\2\2"+
-		"B@\3\2\2\2BC\3\2\2\2CE\3\2\2\2DB\3\2\2\2EF\7\35\2\2F\5\3\2\2\2GH\7\26"+
-		"\2\2HM\7\34\2\2IJ\7\3\2\2JL\7\34\2\2KI\3\2\2\2LO\3\2\2\2MK\3\2\2\2MN\3"+
-		"\2\2\2NP\3\2\2\2OM\3\2\2\2PQ\7\4\2\2QV\7\34\2\2RS\7\3\2\2SU\7\34\2\2T"+
-		"R\3\2\2\2UX\3\2\2\2VT\3\2\2\2VW\3\2\2\2W[\3\2\2\2XV\3\2\2\2YZ\7\24\2\2"+
-		"Z\\\7\34\2\2[Y\3\2\2\2[\\\3\2\2\2\\]\3\2\2\2]^\7\35\2\2^\7\3\2\2\2_b\5"+
-		"\n\6\2`b\5\60\31\2a_\3\2\2\2a`\3\2\2\2b\t\3\2\2\2cd\7\34\2\2de\7\34\2"+
-		"\2ef\7\5\2\2fg\5\16\b\2gh\7\35\2\2h\13\3\2\2\2in\7\34\2\2jk\7\6\2\2kl"+
-		"\7\34\2\2ln\7\6\2\2mi\3\2\2\2mj\3\2\2\2no\3\2\2\2op\7\5\2\2pq\5\16\b\2"+
-		"qr\7\35\2\2r\r\3\2\2\2st\7\34\2\2tu\7\7\2\2uz\7\36\2\2vw\7\b\2\2wy\7\36"+
-		"\2\2xv\3\2\2\2y|\3\2\2\2zx\3\2\2\2z{\3\2\2\2{}\3\2\2\2|z\3\2\2\2}\u0096"+
-		"\7\t\2\2~\u0096\7\25\2\2\177\u0080\7\25\2\2\u0080\u0081\7\7\2\2\u0081"+
-		"\u0086\7\36\2\2\u0082\u0083\7\b\2\2\u0083\u0085\7\36\2\2\u0084\u0082\3"+
-		"\2\2\2\u0085\u0088\3\2\2\2\u0086\u0084\3\2\2\2\u0086\u0087\3\2\2\2\u0087"+
-		"\u0089\3\2\2\2\u0088\u0086\3\2\2\2\u0089\u0096\7\t\2\2\u008a\u008c\7&"+
-		"\2\2\u008b\u008a\3\2\2\2\u008b\u008c\3\2\2\2\u008c\u008d\3\2\2\2\u008d"+
-		"\u0092\7\34\2\2\u008e\u008f\7\3\2\2\u008f\u0091\7\34\2\2\u0090\u008e\3"+
-		"\2\2\2\u0091\u0094\3\2\2\2\u0092\u0090\3\2\2\2\u0092\u0093\3\2\2\2\u0093"+
-		"\u0096\3\2\2\2\u0094\u0092\3\2\2\2\u0095s\3\2\2\2\u0095~\3\2\2\2\u0095"+
-		"\177\3\2\2\2\u0095\u008b\3\2\2\2\u0096\17\3\2\2\2\u0097\u0099\5$\23\2"+
-		"\u0098\u0097\3\2\2\2\u0099\u009c\3\2\2\2\u009a\u0098\3\2\2\2\u009a\u009b"+
-		"\3\2\2\2\u009b\u009e\3\2\2\2\u009c\u009a\3\2\2\2\u009d\u009f\7\34\2\2"+
-		"\u009e\u009d\3\2\2\2\u009e\u009f\3\2\2\2\u009f\u00a4\3\2\2\2\u00a0\u00a5"+
-		"\7\34\2\2\u00a1\u00a2\7\6\2\2\u00a2\u00a3\7\34\2\2\u00a3\u00a5\7\6\2\2"+
-		"\u00a4\u00a0\3\2\2\2\u00a4\u00a1\3\2\2\2\u00a5\u00a6\3\2\2\2\u00a6\u00a7"+
-		"\7\5\2\2\u00a7\u00ab\5\16\b\2\u00a8\u00aa\5\22\n\2\u00a9\u00a8\3\2\2\2"+
-		"\u00aa\u00ad\3\2\2\2\u00ab\u00a9\3\2\2\2\u00ab\u00ac\3\2\2\2\u00ac\u00ae"+
-		"\3\2\2\2\u00ad\u00ab\3\2\2\2\u00ae\u00af\7\35\2\2\u00af\21\3\2\2\2\u00b0"+
-		"\u00b3\5\"\22\2\u00b1\u00b3\5\24\13\2\u00b2\u00b0\3\2\2\2\u00b2\u00b1"+
-		"\3\2\2\2\u00b3\23\3\2\2\2\u00b4\u00b5\t\2\2\2\u00b5\25\3\2\2\2\u00b6\u00b7"+
-		"\7\34\2\2\u00b7\u00b8\7\5\2\2\u00b8\u00ba\7\34\2\2\u00b9\u00bb\5 \21\2"+
-		"\u00ba\u00b9\3\2\2\2\u00ba\u00bb\3\2\2\2\u00bb\u00bc\3\2\2\2\u00bc\u00bd"+
-		"\7\34\2\2\u00bd\u00c2\5\30\r\2\u00be\u00c1\5\34\17\2\u00bf\u00c1\5\32"+
-		"\16\2\u00c0\u00be\3\2\2\2\u00c0\u00bf\3\2\2\2\u00c1\u00c4\3\2\2\2\u00c2"+
-		"\u00c0\3\2\2\2\u00c2\u00c3\3\2\2\2\u00c3\u00c5\3\2\2\2\u00c4\u00c2\3\2"+
-		"\2\2\u00c5\u00c6\7\35\2\2\u00c6\27\3\2\2\2\u00c7\u00cc\7\34\2\2\u00c8"+
-		"\u00c9\7\3\2\2\u00c9\u00cb\7\34\2\2\u00ca\u00c8\3\2\2\2\u00cb\u00ce\3"+
-		"\2\2\2\u00cc\u00ca\3\2\2\2\u00cc\u00cd\3\2\2\2\u00cd\31\3\2\2\2\u00ce"+
-		"\u00cc\3\2\2\2\u00cf\u00d0\7\27\2\2\u00d0\u00d5\7\34\2\2\u00d1\u00d2\7"+
-		"\3\2\2\u00d2\u00d4\7\34\2\2\u00d3\u00d1\3\2\2\2\u00d4\u00d7\3\2\2\2\u00d5"+
-		"\u00d3\3\2\2\2\u00d5\u00d6\3\2\2\2\u00d6\u00d8\3\2\2\2\u00d7\u00d5\3\2"+
-		"\2\2\u00d8\u00d9\7\13\2\2\u00d9\u00da\7\34\2\2\u00da\33\3\2\2\2\u00db"+
-		"\u00dc\7\f\2\2\u00dc\u00e1\5\36\20\2\u00dd\u00de\7\b\2\2\u00de\u00e0\5"+
-		"\36\20\2\u00df\u00dd\3\2\2\2\u00e0\u00e3\3\2\2\2\u00e1\u00df\3\2\2\2\u00e1"+
-		"\u00e2\3\2\2\2\u00e2\u00e4\3\2\2\2\u00e3\u00e1\3\2\2\2\u00e4\u00e5\7\r"+
-		"\2\2\u00e5\35\3\2\2\2\u00e6\u00eb\7\34\2\2\u00e7\u00e8\7\3\2\2\u00e8\u00ea"+
-		"\7\34\2\2\u00e9\u00e7\3\2\2\2\u00ea\u00ed\3\2\2\2\u00eb\u00e9\3\2\2\2"+
-		"\u00eb\u00ec\3\2\2\2\u00ec\u00f0\3\2\2\2\u00ed\u00eb\3\2\2\2\u00ee\u00ef"+
-		"\7\24\2\2\u00ef\u00f1\7\34\2\2\u00f0\u00ee\3\2\2\2\u00f0\u00f1\3\2\2\2"+
-		"\u00f1\37\3\2\2\2\u00f2\u00f3\7\16\2\2\u00f3\u00f6\7\32\2\2\u00f4\u00f7"+
-		"\7\36\2\2\u00f5\u00f7\7\17\2\2\u00f6\u00f4\3\2\2\2\u00f6\u00f5\3\2\2\2"+
-		"\u00f7\u00f8\3\2\2\2\u00f8\u0102\7\20\2\2\u00f9\u00fc\7\16\2\2\u00fa\u00fd"+
-		"\7\36\2\2\u00fb\u00fd\7\17\2\2\u00fc\u00fa\3\2\2\2\u00fc\u00fb\3\2\2\2"+
-		"\u00fd\u00fe\3\2\2\2\u00fe\u0102\7\20\2\2\u00ff\u0100\7\16\2\2\u0100\u0102"+
-		"\7\20\2\2\u0101\u00f2\3\2\2\2\u0101\u00f9\3\2\2\2\u0101\u00ff\3\2\2\2"+
-		"\u0102!\3\2\2\2\u0103\u0104\7\31\2\2\u0104\u0105\t\3\2\2\u0105#\3\2\2"+
-		"\2\u0106\u0107\7\21\2\2\u0107\u0108\7\34\2\2\u0108\u0109\7\5\2\2\u0109"+
-		"\u0113\5&\24\2\u010a\u010b\7\21\2\2\u010b\u010c\7\34\2\2\u010c\u010d\7"+
-		"\3\2\2\u010d\u010e\7\34\2\2\u010e\u010f\7\5\2\2\u010f\u0113\5&\24\2\u0110"+
-		"\u0111\7\21\2\2\u0111\u0113\7\34\2\2\u0112\u0106\3\2\2\2\u0112\u010a\3"+
-		"\2\2\2\u0112\u0110\3\2\2\2\u0113%\3\2\2\2\u0114\u0119\5*\26\2\u0115\u0119"+
-		"\5(\25\2\u0116\u0119\5,\27\2\u0117\u0119\t\4\2\2\u0118\u0114\3\2\2\2\u0118"+
-		"\u0115\3\2\2\2\u0118\u0116\3\2\2\2\u0118\u0117\3\2\2\2\u0119\'\3\2\2\2"+
-		"\u011a\u011b\7\22\2\2\u011b\u011c\7\34\2\2\u011c)\3\2\2\2\u011d\u011e"+
-		"\7\16\2\2\u011e\u0123\5&\24\2\u011f\u0120\7\b\2\2\u0120\u0122\5&\24\2"+
-		"\u0121\u011f\3\2\2\2\u0122\u0125\3\2\2\2\u0123\u0121\3\2\2\2\u0123\u0124"+
-		"\3\2\2\2\u0124\u0126\3\2\2\2\u0125\u0123\3\2\2\2\u0126\u0127\7\20\2\2"+
-		"\u0127+\3\2\2\2\u0128\u0129\7\f\2\2\u0129\u012e\5.\30\2\u012a\u012b\7"+
-		"\b\2\2\u012b\u012d\5.\30\2\u012c\u012a\3\2\2\2\u012d\u0130\3\2\2\2\u012e"+
-		"\u012c\3\2\2\2\u012e\u012f\3\2\2\2\u012f\u0131\3\2\2\2\u0130\u012e\3\2"+
-		"\2\2\u0131\u0132\7\r\2\2\u0132-\3\2\2\2\u0133\u0134\7\34\2\2\u0134\u0135"+
-		"\7\5\2\2\u0135\u0136\5&\24\2\u0136/\3\2\2\2\u0137\u0139\5$\23\2\u0138"+
-		"\u0137\3\2\2\2\u0139\u013c\3\2\2\2\u013a\u0138\3\2\2\2\u013a\u013b\3\2"+
-		"\2\2\u013b\u013d\3\2\2\2\u013c\u013a\3\2\2\2\u013d\u013e\7\34\2\2\u013e"+
-		"\u013f\7\34\2\2\u013f\u0147\7\f\2\2\u0140\u0146\5\60\31\2\u0141\u0146"+
-		"\5\n\6\2\u0142\u0146\5\f\7\2\u0143\u0146\5\20\t\2\u0144\u0146\5\26\f\2"+
-		"\u0145\u0140\3\2\2\2\u0145\u0141\3\2\2\2\u0145\u0142\3\2\2\2\u0145\u0143"+
-		"\3\2\2\2\u0145\u0144\3\2\2\2\u0146\u0149\3\2\2\2\u0147\u0145\3\2\2\2\u0147"+
-		"\u0148\3\2\2\2\u0148\u014a\3\2\2\2\u0149\u0147\3\2\2\2\u014a\u014c\7\r"+
-		"\2\2\u014b\u014d\7\35\2\2\u014c\u014b\3\2\2\2\u014c\u014d\3\2\2\2\u014d"+
-		"\61\3\2\2\2\'\66:BMV[amz\u0086\u008b\u0092\u0095\u009a\u009e\u00a4\u00ab"+
-		"\u00b2\u00ba\u00c0\u00c2\u00cc\u00d5\u00e1\u00eb\u00f0\u00f6\u00fc\u0101"+
-		"\u0112\u0118\u0123\u012e\u013a\u0145\u0147\u014c";
+		"\u0004\u0001Z\u0209\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
+		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
+		"\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b\u0002"+
+		"\f\u0007\f\u0002\r\u0007\r\u0002\u000e\u0007\u000e\u0002\u000f\u0007\u000f"+
+		"\u0002\u0010\u0007\u0010\u0002\u0011\u0007\u0011\u0002\u0012\u0007\u0012"+
+		"\u0002\u0013\u0007\u0013\u0002\u0014\u0007\u0014\u0002\u0015\u0007\u0015"+
+		"\u0002\u0016\u0007\u0016\u0002\u0017\u0007\u0017\u0002\u0018\u0007\u0018"+
+		"\u0002\u0019\u0007\u0019\u0002\u001a\u0007\u001a\u0002\u001b\u0007\u001b"+
+		"\u0002\u001c\u0007\u001c\u0002\u001d\u0007\u001d\u0002\u001e\u0007\u001e"+
+		"\u0002\u001f\u0007\u001f\u0002 \u0007 \u0002!\u0007!\u0002\"\u0007\"\u0001"+
+		"\u0000\u0001\u0000\u0005\u0000I\b\u0000\n\u0000\f\u0000L\t\u0000\u0001"+
+		"\u0000\u0001\u0000\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0005"+
+		"\u0001T\b\u0001\n\u0001\f\u0001W\t\u0001\u0001\u0001\u0001\u0001\u0001"+
+		"\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0005\u0002_\b\u0002\n\u0002"+
+		"\f\u0002b\t\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0005"+
+		"\u0002h\b\u0002\n\u0002\f\u0002k\t\u0002\u0001\u0002\u0001\u0002\u0003"+
+		"\u0002o\b\u0002\u0001\u0002\u0001\u0002\u0001\u0003\u0005\u0003t\b\u0003"+
+		"\n\u0003\f\u0003w\t\u0003\u0001\u0003\u0003\u0003z\b\u0003\u0001\u0003"+
+		"\u0003\u0003}\b\u0003\u0001\u0003\u0003\u0003\u0080\b\u0003\u0001\u0003"+
+		"\u0003\u0003\u0083\b\u0003\u0003\u0003\u0085\b\u0003\u0001\u0004\u0005"+
+		"\u0004\u0088\b\u0004\n\u0004\f\u0004\u008b\t\u0004\u0001\u0004\u0001\u0004"+
+		"\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0005\u0005\u0005"+
+		"\u0094\b\u0005\n\u0005\f\u0005\u0097\t\u0005\u0001\u0005\u0001\u0005\u0001"+
+		"\u0005\u0001\u0005\u0001\u0005\u0001\u0005\u0001\u0005\u0001\u0005\u0005"+
+		"\u0005\u00a1\b\u0005\n\u0005\f\u0005\u00a4\t\u0005\u0001\u0005\u0001\u0005"+
+		"\u0003\u0005\u00a8\b\u0005\u0001\u0006\u0005\u0006\u00ab\b\u0006\n\u0006"+
+		"\f\u0006\u00ae\t\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006"+
+		"\u0001\u0006\u0005\u0006\u00b5\b\u0006\n\u0006\f\u0006\u00b8\t\u0006\u0001"+
+		"\u0006\u0001\u0006\u0003\u0006\u00bc\b\u0006\u0001\u0007\u0005\u0007\u00bf"+
+		"\b\u0007\n\u0007\f\u0007\u00c2\t\u0007\u0001\u0007\u0001\u0007\u0001\u0007"+
+		"\u0001\u0007\u0001\u0007\u0005\u0007\u00c9\b\u0007\n\u0007\f\u0007\u00cc"+
+		"\t\u0007\u0001\u0007\u0001\u0007\u0003\u0007\u00d0\b\u0007\u0001\b\u0005"+
+		"\b\u00d3\b\b\n\b\f\b\u00d6\t\b\u0001\b\u0003\b\u00d9\b\b\u0001\b\u0001"+
+		"\b\u0001\b\u0001\b\u0005\b\u00df\b\b\n\b\f\b\u00e2\t\b\u0001\t\u0001\t"+
+		"\u0001\t\u0001\t\u0001\t\u0003\t\u00e9\b\t\u0001\t\u0001\t\u0001\t\u0001"+
+		"\t\u0001\n\u0001\n\u0001\n\u0001\n\u0001\n\u0005\n\u00f4\b\n\n\n\f\n\u00f7"+
+		"\t\n\u0001\n\u0001\n\u0001\n\u0001\n\u0001\n\u0001\n\u0001\n\u0001\n\u0001"+
+		"\n\u0001\n\u0001\n\u0001\n\u0005\n\u0105\b\n\n\n\f\n\u0108\t\n\u0001\n"+
+		"\u0001\n\u0001\n\u0003\n\u010d\b\n\u0001\n\u0001\n\u0001\n\u0005\n\u0112"+
+		"\b\n\n\n\f\n\u0115\t\n\u0003\n\u0117\b\n\u0001\u000b\u0005\u000b\u011a"+
+		"\b\u000b\n\u000b\f\u000b\u011d\t\u000b\u0001\u000b\u0003\u000b\u0120\b"+
+		"\u000b\u0001\u000b\u0001\u000b\u0001\u000b\u0001\u000b\u0001\u000b\u0003"+
+		"\u000b\u0127\b\u000b\u0001\u000b\u0001\u000b\u0001\u000b\u0005\u000b\u012c"+
+		"\b\u000b\n\u000b\f\u000b\u012f\t\u000b\u0001\u000b\u0001\u000b\u0001\f"+
+		"\u0001\f\u0003\f\u0135\b\f\u0001\r\u0001\r\u0001\u000e\u0001\u000e\u0001"+
+		"\u000f\u0001\u000f\u0001\u0010\u0003\u0010\u013e\b\u0010\u0001\u0010\u0001"+
+		"\u0010\u0001\u0010\u0001\u0010\u0003\u0010\u0144\b\u0010\u0001\u0010\u0001"+
+		"\u0010\u0001\u0010\u0001\u0010\u0005\u0010\u014a\b\u0010\n\u0010\f\u0010"+
+		"\u014d\t\u0010\u0001\u0010\u0003\u0010\u0150\b\u0010\u0001\u0010\u0001"+
+		"\u0010\u0001\u0011\u0001\u0011\u0001\u0011\u0005\u0011\u0157\b\u0011\n"+
+		"\u0011\f\u0011\u015a\t\u0011\u0001\u0012\u0001\u0012\u0001\u0012\u0001"+
+		"\u0012\u0005\u0012\u0160\b\u0012\n\u0012\f\u0012\u0163\t\u0012\u0001\u0012"+
+		"\u0001\u0012\u0001\u0012\u0001\u0013\u0001\u0013\u0001\u0013\u0001\u0013"+
+		"\u0005\u0013\u016c\b\u0013\n\u0013\f\u0013\u016f\t\u0013\u0001\u0013\u0001"+
+		"\u0013\u0001\u0014\u0001\u0014\u0001\u0014\u0005\u0014\u0176\b\u0014\n"+
+		"\u0014\f\u0014\u0179\t\u0014\u0001\u0014\u0001\u0014\u0003\u0014\u017d"+
+		"\b\u0014\u0001\u0015\u0001\u0015\u0001\u0015\u0001\u0015\u0003\u0015\u0183"+
+		"\b\u0015\u0001\u0015\u0001\u0015\u0001\u0015\u0001\u0015\u0003\u0015\u0189"+
+		"\b\u0015\u0001\u0015\u0001\u0015\u0001\u0015\u0003\u0015\u018e\b\u0015"+
+		"\u0001\u0016\u0001\u0016\u0001\u0016\u0001\u0017\u0001\u0017\u0001\u0017"+
+		"\u0001\u0017\u0001\u0017\u0001\u0017\u0001\u0017\u0001\u0017\u0001\u0017"+
+		"\u0005\u0017\u019c\b\u0017\n\u0017\f\u0017\u019f\t\u0017\u0001\u0017\u0001"+
+		"\u0017\u0001\u0017\u0001\u0017\u0001\u0017\u0003\u0017\u01a6\b\u0017\u0001"+
+		"\u0018\u0001\u0018\u0001\u0018\u0001\u0018\u0003\u0018\u01ac\b\u0018\u0001"+
+		"\u0019\u0001\u0019\u0001\u0019\u0001\u001a\u0001\u001a\u0001\u001a\u0001"+
+		"\u001a\u0005\u001a\u01b5\b\u001a\n\u001a\f\u001a\u01b8\t\u001a\u0001\u001a"+
+		"\u0001\u001a\u0001\u001b\u0001\u001b\u0001\u001b\u0001\u001b\u0005\u001b"+
+		"\u01c0\b\u001b\n\u001b\f\u001b\u01c3\t\u001b\u0001\u001b\u0001\u001b\u0001"+
+		"\u001c\u0001\u001c\u0001\u001c\u0001\u001c\u0001\u001d\u0003\u001d\u01cc"+
+		"\b\u001d\u0001\u001d\u0001\u001d\u0001\u001d\u0001\u001d\u0001\u001d\u0001"+
+		"\u001d\u0003\u001d\u01d4\b\u001d\u0001\u001d\u0005\u001d\u01d7\b\u001d"+
+		"\n\u001d\f\u001d\u01da\t\u001d\u0001\u001d\u0003\u001d\u01dd\b\u001d\u0001"+
+		"\u001d\u0001\u001d\u0001\u001d\u0001\u001d\u0003\u001d\u01e3\b\u001d\u0001"+
+		"\u001d\u0001\u001d\u0001\u001d\u0003\u001d\u01e8\b\u001d\u0003\u001d\u01ea"+
+		"\b\u001d\u0001\u001e\u0001\u001e\u0001\u001e\u0001\u001e\u0001\u001e\u0003"+
+		"\u001e\u01f1\b\u001e\u0001\u001e\u0001\u001e\u0001\u001f\u0005\u001f\u01f6"+
+		"\b\u001f\n\u001f\f\u001f\u01f9\t\u001f\u0001 \u0005 \u01fc\b \n \f \u01ff"+
+		"\t \u0001!\u0005!\u0202\b!\n!\f!\u0205\t!\u0001\"\u0001\"\u0001\"\u0003"+
+		"\u01f7\u01fd\u0203\u0000#\u0000\u0002\u0004\u0006\b\n\f\u000e\u0010\u0012"+
+		"\u0014\u0016\u0018\u001a\u001c\u001e \"$&(*,.02468:<>@BD\u0000\u0004\u0002"+
+		"\u0000\n\f\'\'\u0004\u0000%%\'\',,5<\u0002\u0000,,;;\u0004\u0000\u0013"+
+		"\u001d&&**-3\u0236\u0000F\u0001\u0000\u0000\u0000\u0002O\u0001\u0000\u0000"+
+		"\u0000\u0004Z\u0001\u0000\u0000\u0000\u0006\u0084\u0001\u0000\u0000\u0000"+
+		"\b\u0089\u0001\u0000\u0000\u0000\n\u0095\u0001\u0000\u0000\u0000\f\u00ac"+
+		"\u0001\u0000\u0000\u0000\u000e\u00c0\u0001\u0000\u0000\u0000\u0010\u00d4"+
+		"\u0001\u0000\u0000\u0000\u0012\u00e8\u0001\u0000\u0000\u0000\u0014\u0116"+
+		"\u0001\u0000\u0000\u0000\u0016\u011b\u0001\u0000\u0000\u0000\u0018\u0134"+
+		"\u0001\u0000\u0000\u0000\u001a\u0136\u0001\u0000\u0000\u0000\u001c\u0138"+
+		"\u0001\u0000\u0000\u0000\u001e\u013a\u0001\u0000\u0000\u0000 \u013d\u0001"+
+		"\u0000\u0000\u0000\"\u0153\u0001\u0000\u0000\u0000$\u015b\u0001\u0000"+
+		"\u0000\u0000&\u0167\u0001\u0000\u0000\u0000(\u0172\u0001\u0000\u0000\u0000"+
+		"*\u018d\u0001\u0000\u0000\u0000,\u018f\u0001\u0000\u0000\u0000.\u01a5"+
+		"\u0001\u0000\u0000\u00000\u01ab\u0001\u0000\u0000\u00002\u01ad\u0001\u0000"+
+		"\u0000\u00004\u01b0\u0001\u0000\u0000\u00006\u01bb\u0001\u0000\u0000\u0000"+
+		"8\u01c6\u0001\u0000\u0000\u0000:\u01cb\u0001\u0000\u0000\u0000<\u01eb"+
+		"\u0001\u0000\u0000\u0000>\u01f7\u0001\u0000\u0000\u0000@\u01fd\u0001\u0000"+
+		"\u0000\u0000B\u0203\u0001\u0000\u0000\u0000D\u0206\u0001\u0000\u0000\u0000"+
+		"FJ\u0003\u0002\u0001\u0000GI\u0003\u0004\u0002\u0000HG\u0001\u0000\u0000"+
+		"\u0000IL\u0001\u0000\u0000\u0000JH\u0001\u0000\u0000\u0000JK\u0001\u0000"+
+		"\u0000\u0000KM\u0001\u0000\u0000\u0000LJ\u0001\u0000\u0000\u0000MN\u0003"+
+		"\u0006\u0003\u0000N\u0001\u0001\u0000\u0000\u0000OP\u0005\u0013\u0000"+
+		"\u0000PU\u0003D\"\u0000QR\u0005\u0001\u0000\u0000RT\u0003D\"\u0000SQ\u0001"+
+		"\u0000\u0000\u0000TW\u0001\u0000\u0000\u0000US\u0001\u0000\u0000\u0000"+
+		"UV\u0001\u0000\u0000\u0000VX\u0001\u0000\u0000\u0000WU\u0001\u0000\u0000"+
+		"\u0000XY\u00054\u0000\u0000Y\u0003\u0001\u0000\u0000\u0000Z[\u0005&\u0000"+
+		"\u0000[`\u0003D\"\u0000\\]\u0005\u0001\u0000\u0000]_\u0003D\"\u0000^\\"+
+		"\u0001\u0000\u0000\u0000_b\u0001\u0000\u0000\u0000`^\u0001\u0000\u0000"+
+		"\u0000`a\u0001\u0000\u0000\u0000ac\u0001\u0000\u0000\u0000b`\u0001\u0000"+
+		"\u0000\u0000cd\u0005\u0002\u0000\u0000di\u0003D\"\u0000ef\u0005\u0001"+
+		"\u0000\u0000fh\u0003D\"\u0000ge\u0001\u0000\u0000\u0000hk\u0001\u0000"+
+		"\u0000\u0000ig\u0001\u0000\u0000\u0000ij\u0001\u0000\u0000\u0000jn\u0001"+
+		"\u0000\u0000\u0000ki\u0001\u0000\u0000\u0000lm\u0005\u0014\u0000\u0000"+
+		"mo\u0003D\"\u0000nl\u0001\u0000\u0000\u0000no\u0001\u0000\u0000\u0000"+
+		"op\u0001\u0000\u0000\u0000pq\u00054\u0000\u0000q\u0005\u0001\u0000\u0000"+
+		"\u0000rt\u0003\b\u0004\u0000sr\u0001\u0000\u0000\u0000tw\u0001\u0000\u0000"+
+		"\u0000us\u0001\u0000\u0000\u0000uv\u0001\u0000\u0000\u0000v\u0085\u0001"+
+		"\u0000\u0000\u0000wu\u0001\u0000\u0000\u0000xz\u0003\n\u0005\u0000yx\u0001"+
+		"\u0000\u0000\u0000yz\u0001\u0000\u0000\u0000z\u0085\u0001\u0000\u0000"+
+		"\u0000{}\u0003\f\u0006\u0000|{\u0001\u0000\u0000\u0000|}\u0001\u0000\u0000"+
+		"\u0000}\u0085\u0001\u0000\u0000\u0000~\u0080\u0003\u000e\u0007\u0000\u007f"+
+		"~\u0001\u0000\u0000\u0000\u007f\u0080\u0001\u0000\u0000\u0000\u0080\u0085"+
+		"\u0001\u0000\u0000\u0000\u0081\u0083\u0003\u0010\b\u0000\u0082\u0081\u0001"+
+		"\u0000\u0000\u0000\u0082\u0083\u0001\u0000\u0000\u0000\u0083\u0085\u0001"+
+		"\u0000\u0000\u0000\u0084u\u0001\u0000\u0000\u0000\u0084y\u0001\u0000\u0000"+
+		"\u0000\u0084|\u0001\u0000\u0000\u0000\u0084\u007f\u0001\u0000\u0000\u0000"+
+		"\u0084\u0082\u0001\u0000\u0000\u0000\u0085\u0007\u0001\u0000\u0000\u0000"+
+		"\u0086\u0088\u0003.\u0017\u0000\u0087\u0086\u0001\u0000\u0000\u0000\u0088"+
+		"\u008b\u0001\u0000\u0000\u0000\u0089\u0087\u0001\u0000\u0000\u0000\u0089"+
+		"\u008a\u0001\u0000\u0000\u0000\u008a\u008c\u0001\u0000\u0000\u0000\u008b"+
+		"\u0089\u0001\u0000\u0000\u0000\u008c\u008d\u00050\u0000\u0000\u008d\u008e"+
+		"\u0003D\"\u0000\u008e\u008f\u0005\u0003\u0000\u0000\u008f\u0090\u0003"+
+		"\u0014\n\u0000\u0090\u0091\u00054\u0000\u0000\u0091\t\u0001\u0000\u0000"+
+		"\u0000\u0092\u0094\u0003.\u0017\u0000\u0093\u0092\u0001\u0000\u0000\u0000"+
+		"\u0094\u0097\u0001\u0000\u0000\u0000\u0095\u0093\u0001\u0000\u0000\u0000"+
+		"\u0095\u0096\u0001\u0000\u0000\u0000\u0096\u0098\u0001\u0000\u0000\u0000"+
+		"\u0097\u0095\u0001\u0000\u0000\u0000\u0098\u0099\u0005-\u0000\u0000\u0099"+
+		"\u009a\u0003D\"\u0000\u009a\u00a2\u0005\u0004\u0000\u0000\u009b\u00a1"+
+		"\u0003\n\u0005\u0000\u009c\u00a1\u0003\b\u0004\u0000\u009d\u00a1\u0003"+
+		"\f\u0006\u0000\u009e\u00a1\u0003\u000e\u0007\u0000\u009f\u00a1\u0003\u0010"+
+		"\b\u0000\u00a0\u009b\u0001\u0000\u0000\u0000\u00a0\u009c\u0001\u0000\u0000"+
+		"\u0000\u00a0\u009d\u0001\u0000\u0000\u0000\u00a0\u009e\u0001\u0000\u0000"+
+		"\u0000\u00a0\u009f\u0001\u0000\u0000\u0000\u00a1\u00a4\u0001\u0000\u0000"+
+		"\u0000\u00a2\u00a0\u0001\u0000\u0000\u0000\u00a2\u00a3\u0001\u0000\u0000"+
+		"\u0000\u00a3\u00a5\u0001\u0000\u0000\u0000\u00a4\u00a2\u0001\u0000\u0000"+
+		"\u0000\u00a5\u00a7\u0005\u0005\u0000\u0000\u00a6\u00a8\u00054\u0000\u0000"+
+		"\u00a7\u00a6\u0001\u0000\u0000\u0000\u00a7\u00a8\u0001\u0000\u0000\u0000"+
+		"\u00a8\u000b\u0001\u0000\u0000\u0000\u00a9\u00ab\u0003.\u0017\u0000\u00aa"+
+		"\u00a9\u0001\u0000\u0000\u0000\u00ab\u00ae\u0001\u0000\u0000\u0000\u00ac"+
+		"\u00aa\u0001\u0000\u0000\u0000\u00ac\u00ad\u0001\u0000\u0000\u0000\u00ad"+
+		"\u00af\u0001\u0000\u0000\u0000\u00ae\u00ac\u0001\u0000\u0000\u0000\u00af"+
+		"\u00b0\u00050\u0000\u0000\u00b0\u00b1\u0003D\"\u0000\u00b1\u00b6\u0005"+
+		"\u0004\u0000\u0000\u00b2\u00b5\u0003\u0012\t\u0000\u00b3\u00b5\u0003 "+
+		"\u0010\u0000\u00b4\u00b2\u0001\u0000\u0000\u0000\u00b4\u00b3\u0001\u0000"+
+		"\u0000\u0000\u00b5\u00b8\u0001\u0000\u0000\u0000\u00b6\u00b4\u0001\u0000"+
+		"\u0000\u0000\u00b6\u00b7\u0001\u0000\u0000\u0000\u00b7\u00b9\u0001\u0000"+
+		"\u0000\u0000\u00b8\u00b6\u0001\u0000\u0000\u0000\u00b9\u00bb\u0005\u0005"+
+		"\u0000\u0000\u00ba\u00bc\u00054\u0000\u0000\u00bb\u00ba\u0001\u0000\u0000"+
+		"\u0000\u00bb\u00bc\u0001\u0000\u0000\u0000\u00bc\r\u0001\u0000\u0000\u0000"+
+		"\u00bd\u00bf\u0003.\u0017\u0000\u00be\u00bd\u0001\u0000\u0000\u0000\u00bf"+
+		"\u00c2\u0001\u0000\u0000\u0000\u00c0\u00be\u0001\u0000\u0000\u0000\u00c0"+
+		"\u00c1\u0001\u0000\u0000\u0000\u00c1\u00c3\u0001\u0000\u0000\u0000\u00c2"+
+		"\u00c0\u0001\u0000\u0000\u0000\u00c3\u00c4\u0005.\u0000\u0000\u00c4\u00c5"+
+		"\u0003D\"\u0000\u00c5\u00ca\u0005\u0004\u0000\u0000\u00c6\u00c9\u0003"+
+		"\u0016\u000b\u0000\u00c7\u00c9\u0003 \u0010\u0000\u00c8\u00c6\u0001\u0000"+
+		"\u0000\u0000\u00c8\u00c7\u0001\u0000\u0000\u0000\u00c9\u00cc\u0001\u0000"+
+		"\u0000\u0000\u00ca\u00c8\u0001\u0000\u0000\u0000\u00ca\u00cb\u0001\u0000"+
+		"\u0000\u0000\u00cb\u00cd\u0001\u0000\u0000\u0000\u00cc\u00ca\u0001\u0000"+
+		"\u0000\u0000\u00cd\u00cf\u0005\u0005\u0000\u0000\u00ce\u00d0\u00054\u0000"+
+		"\u0000\u00cf\u00ce\u0001\u0000\u0000\u0000\u00cf\u00d0\u0001\u0000\u0000"+
+		"\u0000\u00d0\u000f\u0001\u0000\u0000\u0000\u00d1\u00d3\u0003.\u0017\u0000"+
+		"\u00d2\u00d1\u0001\u0000\u0000\u0000\u00d3\u00d6\u0001\u0000\u0000\u0000"+
+		"\u00d4\u00d2\u0001\u0000\u0000\u0000\u00d4\u00d5\u0001\u0000\u0000\u0000"+
+		"\u00d5\u00d8\u0001\u0000\u0000\u0000\u00d6\u00d4\u0001\u0000\u0000\u0000"+
+		"\u00d7\u00d9\u0005\u0019\u0000\u0000\u00d8\u00d7\u0001\u0000\u0000\u0000"+
+		"\u00d8\u00d9\u0001\u0000\u0000\u0000\u00d9\u00da\u0001\u0000\u0000\u0000"+
+		"\u00da\u00db\u0005/\u0000\u0000\u00db\u00dc\u0003D\"\u0000\u00dc\u00e0"+
+		"\u0005\u0014\u0000\u0000\u00dd\u00df\u0003:\u001d\u0000\u00de\u00dd\u0001"+
+		"\u0000\u0000\u0000\u00df\u00e2\u0001\u0000\u0000\u0000\u00e0\u00de\u0001"+
+		"\u0000\u0000\u0000\u00e0\u00e1\u0001\u0000\u0000\u0000\u00e1\u0011\u0001"+
+		"\u0000\u0000\u0000\u00e2\u00e0\u0001\u0000\u0000\u0000\u00e3\u00e9\u0003"+
+		"D\"\u0000\u00e4\u00e5\u0005\u0006\u0000\u0000\u00e5\u00e6\u0003D\"\u0000"+
+		"\u00e6\u00e7\u0005\u0006\u0000\u0000\u00e7\u00e9\u0001\u0000\u0000\u0000"+
+		"\u00e8\u00e3\u0001\u0000\u0000\u0000\u00e8\u00e4\u0001\u0000\u0000\u0000"+
+		"\u00e9\u00ea\u0001\u0000\u0000\u0000\u00ea\u00eb\u0005\u0003\u0000\u0000"+
+		"\u00eb\u00ec\u0003\u0014\n\u0000\u00ec\u00ed\u00054\u0000\u0000\u00ed"+
+		"\u0013\u0001\u0000\u0000\u0000\u00ee\u00ef\u0003D\"\u0000\u00ef\u00f0"+
+		"\u0005\u0007\u0000\u0000\u00f0\u00f5\u00055\u0000\u0000\u00f1\u00f2\u0005"+
+		"\b\u0000\u0000\u00f2\u00f4\u00055\u0000\u0000\u00f3\u00f1\u0001\u0000"+
+		"\u0000\u0000\u00f4\u00f7\u0001\u0000\u0000\u0000\u00f5\u00f3\u0001\u0000"+
+		"\u0000\u0000\u00f5\u00f6\u0001\u0000\u0000\u0000\u00f6\u00f8\u0001\u0000"+
+		"\u0000\u0000\u00f7\u00f5\u0001\u0000\u0000\u0000\u00f8\u00f9\u0005\t\u0000"+
+		"\u0000\u00f9\u0117\u0001\u0000\u0000\u0000\u00fa\u00fb\u0005\u001c\u0000"+
+		"\u0000\u00fb\u00fc\u0005\u0001\u0000\u0000\u00fc\u0117\u0003D\"\u0000"+
+		"\u00fd\u00fe\u0005\u001c\u0000\u0000\u00fe\u00ff\u0005\u0001\u0000\u0000"+
+		"\u00ff\u0100\u0003D\"\u0000\u0100\u0101\u0005\u0007\u0000\u0000\u0101"+
+		"\u0106\u00055\u0000\u0000\u0102\u0103\u0005\b\u0000\u0000\u0103\u0105"+
+		"\u00055\u0000\u0000\u0104\u0102\u0001\u0000\u0000\u0000\u0105\u0108\u0001"+
+		"\u0000\u0000\u0000\u0106\u0104\u0001\u0000\u0000\u0000\u0106\u0107\u0001"+
+		"\u0000\u0000\u0000\u0107\u0109\u0001\u0000\u0000\u0000\u0108\u0106\u0001"+
+		"\u0000\u0000\u0000\u0109\u010a\u0005\t\u0000\u0000\u010a\u0117\u0001\u0000"+
+		"\u0000\u0000\u010b\u010d\u0005=\u0000\u0000\u010c\u010b\u0001\u0000\u0000"+
+		"\u0000\u010c\u010d\u0001\u0000\u0000\u0000\u010d\u010e\u0001\u0000\u0000"+
+		"\u0000\u010e\u0113\u0003D\"\u0000\u010f\u0110\u0005\u0001\u0000\u0000"+
+		"\u0110\u0112\u0003D\"\u0000\u0111\u010f\u0001\u0000\u0000\u0000\u0112"+
+		"\u0115\u0001\u0000\u0000\u0000\u0113\u0111\u0001\u0000\u0000\u0000\u0113"+
+		"\u0114\u0001\u0000\u0000\u0000\u0114\u0117\u0001\u0000\u0000\u0000\u0115"+
+		"\u0113\u0001\u0000\u0000\u0000\u0116\u00ee\u0001\u0000\u0000\u0000\u0116"+
+		"\u00fa\u0001\u0000\u0000\u0000\u0116\u00fd\u0001\u0000\u0000\u0000\u0116"+
+		"\u010c\u0001\u0000\u0000\u0000\u0117\u0015\u0001\u0000\u0000\u0000\u0118"+
+		"\u011a\u0003.\u0017\u0000\u0119\u0118\u0001\u0000\u0000\u0000\u011a\u011d"+
+		"\u0001\u0000\u0000\u0000\u011b\u0119\u0001\u0000\u0000\u0000\u011b\u011c"+
+		"\u0001\u0000\u0000\u0000\u011c\u011f\u0001\u0000\u0000\u0000\u011d\u011b"+
+		"\u0001\u0000\u0000\u0000\u011e\u0120\u0003D\"\u0000\u011f\u011e\u0001"+
+		"\u0000\u0000\u0000\u011f\u0120\u0001\u0000\u0000\u0000\u0120\u0126\u0001"+
+		"\u0000\u0000\u0000\u0121\u0127\u0003D\"\u0000\u0122\u0123\u0005\u0006"+
+		"\u0000\u0000\u0123\u0124\u0003D\"\u0000\u0124\u0125\u0005\u0006\u0000"+
+		"\u0000\u0125\u0127\u0001\u0000\u0000\u0000\u0126\u0121\u0001\u0000\u0000"+
+		"\u0000\u0126\u0122\u0001\u0000\u0000\u0000\u0127\u0128\u0001\u0000\u0000"+
+		"\u0000\u0128\u0129\u0005\u0003\u0000\u0000\u0129\u012d\u0003\u0014\n\u0000"+
+		"\u012a\u012c\u0003\u0018\f\u0000\u012b\u012a\u0001\u0000\u0000\u0000\u012c"+
+		"\u012f\u0001\u0000\u0000\u0000\u012d\u012b\u0001\u0000\u0000\u0000\u012d"+
+		"\u012e\u0001\u0000\u0000\u0000\u012e\u0130\u0001\u0000\u0000\u0000\u012f"+
+		"\u012d\u0001\u0000\u0000\u0000\u0130\u0131\u00054\u0000\u0000\u0131\u0017"+
+		"\u0001\u0000\u0000\u0000\u0132\u0135\u0003,\u0016\u0000\u0133\u0135\u0003"+
+		"\u001a\r\u0000\u0134\u0132\u0001\u0000\u0000\u0000\u0134\u0133\u0001\u0000"+
+		"\u0000\u0000\u0135\u0019\u0001\u0000\u0000\u0000\u0136\u0137\u0003\u001e"+
+		"\u000f\u0000\u0137\u001b\u0001\u0000\u0000\u0000\u0138\u0139\u0003\u001e"+
+		"\u000f\u0000\u0139\u001d\u0001\u0000\u0000\u0000\u013a\u013b\u0007\u0000"+
+		"\u0000\u0000\u013b\u001f\u0001\u0000\u0000\u0000\u013c\u013e\u0003D\""+
+		"\u0000\u013d\u013c\u0001\u0000\u0000\u0000\u013d\u013e\u0001\u0000\u0000"+
+		"\u0000\u013e\u013f\u0001\u0000\u0000\u0000\u013f\u0140\u0003D\"\u0000"+
+		"\u0140\u0141\u0005\u0003\u0000\u0000\u0141\u0143\u00051\u0000\u0000\u0142"+
+		"\u0144\u0003*\u0015\u0000\u0143\u0142\u0001\u0000\u0000\u0000\u0143\u0144"+
+		"\u0001\u0000\u0000\u0000\u0144\u0145\u0001\u0000\u0000\u0000\u0145\u0146"+
+		"\u00052\u0000\u0000\u0146\u014b\u0003\"\u0011\u0000\u0147\u014a\u0003"+
+		"&\u0013\u0000\u0148\u014a\u0003$\u0012\u0000\u0149\u0147\u0001\u0000\u0000"+
+		"\u0000\u0149\u0148\u0001\u0000\u0000\u0000\u014a\u014d\u0001\u0000\u0000"+
+		"\u0000\u014b\u0149\u0001\u0000\u0000\u0000\u014b\u014c\u0001\u0000\u0000"+
+		"\u0000\u014c\u014f\u0001\u0000\u0000\u0000\u014d\u014b\u0001\u0000\u0000"+
+		"\u0000\u014e\u0150\u0003\u001c\u000e\u0000\u014f\u014e\u0001\u0000\u0000"+
+		"\u0000\u014f\u0150\u0001\u0000\u0000\u0000\u0150\u0151\u0001\u0000\u0000"+
+		"\u0000\u0151\u0152\u00054\u0000\u0000\u0152!\u0001\u0000\u0000\u0000\u0153"+
+		"\u0158\u0003D\"\u0000\u0154\u0155\u0005\u0001\u0000\u0000\u0155\u0157"+
+		"\u0003D\"\u0000\u0156\u0154\u0001\u0000\u0000\u0000\u0157\u015a\u0001"+
+		"\u0000\u0000\u0000\u0158\u0156\u0001\u0000\u0000\u0000\u0158\u0159\u0001"+
+		"\u0000\u0000\u0000\u0159#\u0001\u0000\u0000\u0000\u015a\u0158\u0001\u0000"+
+		"\u0000\u0000\u015b\u015c\u0005\u0015\u0000\u0000\u015c\u0161\u0003D\""+
+		"\u0000\u015d\u015e\u0005\u0001\u0000\u0000\u015e\u0160\u0003D\"\u0000"+
+		"\u015f\u015d\u0001\u0000\u0000\u0000\u0160\u0163\u0001\u0000\u0000\u0000"+
+		"\u0161\u015f\u0001\u0000\u0000\u0000\u0161\u0162\u0001\u0000\u0000\u0000"+
+		"\u0162\u0164\u0001\u0000\u0000\u0000\u0163\u0161\u0001\u0000\u0000\u0000"+
+		"\u0164\u0165\u0005\r\u0000\u0000\u0165\u0166\u0003D\"\u0000\u0166%\u0001"+
+		"\u0000\u0000\u0000\u0167\u0168\u0005\u0004\u0000\u0000\u0168\u016d\u0003"+
+		"(\u0014\u0000\u0169\u016a\u0005\b\u0000\u0000\u016a\u016c\u0003(\u0014"+
+		"\u0000\u016b\u0169\u0001\u0000\u0000\u0000\u016c\u016f\u0001\u0000\u0000"+
+		"\u0000\u016d\u016b\u0001\u0000\u0000\u0000\u016d\u016e\u0001\u0000\u0000"+
+		"\u0000\u016e\u0170\u0001\u0000\u0000\u0000\u016f\u016d\u0001\u0000\u0000"+
+		"\u0000\u0170\u0171\u0005\u0005\u0000\u0000\u0171\'\u0001\u0000\u0000\u0000"+
+		"\u0172\u0177\u0003D\"\u0000\u0173\u0174\u0005\u0001\u0000\u0000\u0174"+
+		"\u0176\u0003D\"\u0000\u0175\u0173\u0001\u0000\u0000\u0000\u0176\u0179"+
+		"\u0001\u0000\u0000\u0000\u0177\u0175\u0001\u0000\u0000\u0000\u0177\u0178"+
+		"\u0001\u0000\u0000\u0000\u0178\u017c\u0001\u0000\u0000\u0000\u0179\u0177"+
+		"\u0001\u0000\u0000\u0000\u017a\u017b\u0005\u0014\u0000\u0000\u017b\u017d"+
+		"\u0003D\"\u0000\u017c\u017a\u0001\u0000\u0000\u0000\u017c\u017d\u0001"+
+		"\u0000\u0000\u0000\u017d)\u0001\u0000\u0000\u0000\u017e\u017f\u0005\u000e"+
+		"\u0000\u0000\u017f\u0182\u0005+\u0000\u0000\u0180\u0183\u00055\u0000\u0000"+
+		"\u0181\u0183\u0005\u000f\u0000\u0000\u0182\u0180\u0001\u0000\u0000\u0000"+
+		"\u0182\u0181\u0001\u0000\u0000\u0000\u0183\u0184\u0001\u0000\u0000\u0000"+
+		"\u0184\u018e\u0005\u0010\u0000\u0000\u0185\u0188\u0005\u000e\u0000\u0000"+
+		"\u0186\u0189\u00055\u0000\u0000\u0187\u0189\u0005\u000f\u0000\u0000\u0188"+
+		"\u0186\u0001\u0000\u0000\u0000\u0188\u0187\u0001\u0000\u0000\u0000\u0189"+
+		"\u018a\u0001\u0000\u0000\u0000\u018a\u018e\u0005\u0010\u0000\u0000\u018b"+
+		"\u018c\u0005\u000e\u0000\u0000\u018c\u018e\u0005\u0010\u0000\u0000\u018d"+
+		"\u017e\u0001\u0000\u0000\u0000\u018d\u0185\u0001\u0000\u0000\u0000\u018d"+
+		"\u018b\u0001\u0000\u0000\u0000\u018e+\u0001\u0000\u0000\u0000\u018f\u0190"+
+		"\u0005*\u0000\u0000\u0190\u0191\u0007\u0001\u0000\u0000\u0191-\u0001\u0000"+
+		"\u0000\u0000\u0192\u0193\u0005\u0011\u0000\u0000\u0193\u0194\u0003D\""+
+		"\u0000\u0194\u0195\u0005\u0003\u0000\u0000\u0195\u0196\u00030\u0018\u0000"+
+		"\u0196\u01a6\u0001\u0000\u0000\u0000\u0197\u0198\u0005\u0011\u0000\u0000"+
+		"\u0198\u019d\u0003D\"\u0000\u0199\u019a\u0005\u0001\u0000\u0000\u019a"+
+		"\u019c\u0003D\"\u0000\u019b\u0199\u0001\u0000\u0000\u0000\u019c\u019f"+
+		"\u0001\u0000\u0000\u0000\u019d\u019b\u0001\u0000\u0000\u0000\u019d\u019e"+
+		"\u0001\u0000\u0000\u0000\u019e\u01a0\u0001\u0000\u0000\u0000\u019f\u019d"+
+		"\u0001\u0000\u0000\u0000\u01a0\u01a1\u0005\u0003\u0000\u0000\u01a1\u01a2"+
+		"\u00030\u0018\u0000\u01a2\u01a6\u0001\u0000\u0000\u0000\u01a3\u01a4\u0005"+
+		"\u0011\u0000\u0000\u01a4\u01a6\u0003D\"\u0000\u01a5\u0192\u0001\u0000"+
+		"\u0000\u0000\u01a5\u0197\u0001\u0000\u0000\u0000\u01a5\u01a3\u0001\u0000"+
+		"\u0000\u0000\u01a6/\u0001\u0000\u0000\u0000\u01a7\u01ac\u00034\u001a\u0000"+
+		"\u01a8\u01ac\u00032\u0019\u0000\u01a9\u01ac\u00036\u001b\u0000\u01aa\u01ac"+
+		"\u0007\u0002\u0000\u0000\u01ab\u01a7\u0001\u0000\u0000\u0000\u01ab\u01a8"+
+		"\u0001\u0000\u0000\u0000\u01ab\u01a9\u0001\u0000\u0000\u0000\u01ab\u01aa"+
+		"\u0001\u0000\u0000\u0000\u01ac1\u0001\u0000\u0000\u0000\u01ad\u01ae\u0005"+
+		"\u0012\u0000\u0000\u01ae\u01af\u0003D\"\u0000\u01af3\u0001\u0000\u0000"+
+		"\u0000\u01b0\u01b1\u0005\u000e\u0000\u0000\u01b1\u01b6\u00030\u0018\u0000"+
+		"\u01b2\u01b3\u0005\b\u0000\u0000\u01b3\u01b5\u00030\u0018\u0000\u01b4"+
+		"\u01b2\u0001\u0000\u0000\u0000\u01b5\u01b8\u0001\u0000\u0000\u0000\u01b6"+
+		"\u01b4\u0001\u0000\u0000\u0000\u01b6\u01b7\u0001\u0000\u0000\u0000\u01b7"+
+		"\u01b9\u0001\u0000\u0000\u0000\u01b8\u01b6\u0001\u0000\u0000\u0000\u01b9"+
+		"\u01ba\u0005\u0010\u0000\u0000\u01ba5\u0001\u0000\u0000\u0000\u01bb\u01bc"+
+		"\u0005\u0004\u0000\u0000\u01bc\u01c1\u00038\u001c\u0000\u01bd\u01be\u0005"+
+		"\b\u0000\u0000\u01be\u01c0\u00038\u001c\u0000\u01bf\u01bd\u0001\u0000"+
+		"\u0000\u0000\u01c0\u01c3\u0001\u0000\u0000\u0000\u01c1\u01bf\u0001\u0000"+
+		"\u0000\u0000\u01c1\u01c2\u0001\u0000\u0000\u0000\u01c2\u01c4\u0001\u0000"+
+		"\u0000\u0000\u01c3\u01c1\u0001\u0000\u0000\u0000\u01c4\u01c5\u0005\u0005"+
+		"\u0000\u0000\u01c57\u0001\u0000\u0000\u0000\u01c6\u01c7\u0003D\"\u0000"+
+		"\u01c7\u01c8\u0005\u0003\u0000\u0000\u01c8\u01c9\u00030\u0018\u0000\u01c9"+
+		"9\u0001\u0000\u0000\u0000\u01ca\u01cc\u0005\u001a\u0000\u0000\u01cb\u01ca"+
+		"\u0001\u0000\u0000\u0000\u01cb\u01cc\u0001\u0000\u0000\u0000\u01cc\u01cd"+
+		"\u0001\u0000\u0000\u0000\u01cd\u01ce\u0005\u0016\u0000\u0000\u01ce\u01cf"+
+		"\u0005\u0017\u0000\u0000\u01cf\u01d3\u0003D\"\u0000\u01d0\u01d1\u0005"+
+		"\u0014\u0000\u0000\u01d1\u01d4\u0003D\"\u0000\u01d2\u01d4\u0003D\"\u0000"+
+		"\u01d3\u01d0\u0001\u0000\u0000\u0000\u01d3\u01d2\u0001\u0000\u0000\u0000"+
+		"\u01d3\u01d4\u0001\u0000\u0000\u0000\u01d4\u01d8\u0001\u0000\u0000\u0000"+
+		"\u01d5\u01d7\u0003<\u001e\u0000\u01d6\u01d5\u0001\u0000\u0000\u0000\u01d7"+
+		"\u01da\u0001\u0000\u0000\u0000\u01d8\u01d6\u0001\u0000\u0000\u0000\u01d8"+
+		"\u01d9\u0001\u0000\u0000\u0000\u01d9\u01dc\u0001\u0000\u0000\u0000\u01da"+
+		"\u01d8\u0001\u0000\u0000\u0000\u01db\u01dd\u0005\u001b\u0000\u0000\u01dc"+
+		"\u01db\u0001\u0000\u0000\u0000\u01dc\u01dd\u0001\u0000\u0000\u0000\u01dd"+
+		"\u01de\u0001\u0000\u0000\u0000\u01de\u01df\u0005\u0004\u0000\u0000\u01df"+
+		"\u01e0\u0003@ \u0000\u01e0\u01e2\u0005\u0005\u0000\u0000\u01e1\u01e3\u0005"+
+		"4\u0000\u0000\u01e2\u01e1\u0001\u0000\u0000\u0000\u01e2\u01e3\u0001\u0000"+
+		"\u0000\u0000\u01e3\u01e9\u0001\u0000\u0000\u0000\u01e4\u01e5\u0005\u0018"+
+		"\u0000\u0000\u01e5\u01e7\u0003B!\u0000\u01e6\u01e8\u00054\u0000\u0000"+
+		"\u01e7\u01e6\u0001\u0000\u0000\u0000\u01e7\u01e8\u0001\u0000\u0000\u0000"+
+		"\u01e8\u01ea\u0001\u0000\u0000\u0000\u01e9\u01e4\u0001\u0000\u0000\u0000"+
+		"\u01e9\u01ea\u0001\u0000\u0000\u0000\u01ea;\u0001\u0000\u0000\u0000\u01eb"+
+		"\u01ec\u0005\u001d\u0000\u0000\u01ec\u01f0\u0003D\"\u0000\u01ed\u01ee"+
+		"\u0005\u0014\u0000\u0000\u01ee\u01f1\u0003D\"\u0000\u01ef\u01f1\u0003"+
+		"D\"\u0000\u01f0\u01ed\u0001\u0000\u0000\u0000\u01f0\u01ef\u0001\u0000"+
+		"\u0000\u0000\u01f0\u01f1\u0001\u0000\u0000\u0000\u01f1\u01f2\u0001\u0000"+
+		"\u0000\u0000\u01f2\u01f3\u0003>\u001f\u0000\u01f3=\u0001\u0000\u0000\u0000"+
+		"\u01f4\u01f6\t\u0000\u0000\u0000\u01f5\u01f4\u0001\u0000\u0000\u0000\u01f6"+
+		"\u01f9\u0001\u0000\u0000\u0000\u01f7\u01f8\u0001\u0000\u0000\u0000\u01f7"+
+		"\u01f5\u0001\u0000\u0000\u0000\u01f8?\u0001\u0000\u0000\u0000\u01f9\u01f7"+
+		"\u0001\u0000\u0000\u0000\u01fa\u01fc\t\u0000\u0000\u0000\u01fb\u01fa\u0001"+
+		"\u0000\u0000\u0000\u01fc\u01ff\u0001\u0000\u0000\u0000\u01fd\u01fe\u0001"+
+		"\u0000\u0000\u0000\u01fd\u01fb\u0001\u0000\u0000\u0000\u01feA\u0001\u0000"+
+		"\u0000\u0000\u01ff\u01fd\u0001\u0000\u0000\u0000\u0200\u0202\t\u0000\u0000"+
+		"\u0000\u0201\u0200\u0001\u0000\u0000\u0000\u0202\u0205\u0001\u0000\u0000"+
+		"\u0000\u0203\u0204\u0001\u0000\u0000\u0000\u0203\u0201\u0001\u0000\u0000"+
+		"\u0000\u0204C\u0001\u0000\u0000\u0000\u0205\u0203\u0001\u0000\u0000\u0000"+
+		"\u0206\u0207\u0007\u0003\u0000\u0000\u0207E\u0001\u0000\u0000\u0000CJ"+
+		"U`inuy|\u007f\u0082\u0084\u0089\u0095\u00a0\u00a2\u00a7\u00ac\u00b4\u00b6"+
+		"\u00bb\u00c0\u00c8\u00ca\u00cf\u00d4\u00d8\u00e0\u00e8\u00f5\u0106\u010c"+
+		"\u0113\u0116\u011b\u011f\u0126\u012d\u0134\u013d\u0143\u0149\u014b\u014f"+
+		"\u0158\u0161\u016d\u0177\u017c\u0182\u0188\u018d\u019d\u01a5\u01ab\u01b6"+
+		"\u01c1\u01cb\u01d3\u01d8\u01dc\u01e2\u01e7\u01e9\u01f0\u01f7\u01fd\u0203";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

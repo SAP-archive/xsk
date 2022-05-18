@@ -1,0 +1,10 @@
+namespace sap.db;
+
+@Schema : 'TEST_SCHEMA'
+context NoValueAnnotation {
+  @nokey: 'TEST'
+  entity Test {
+     Name : String(32);
+  };
+}
+

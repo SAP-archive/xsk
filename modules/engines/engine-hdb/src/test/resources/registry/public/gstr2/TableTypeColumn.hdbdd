@@ -1,0 +1,17 @@
+namespace gstr2;
+@Schema: 'ADMIN'
+context TableTypeColumn {
+
+   @Catalog.tableType : #COLUMN
+   Entity CONFIGURATION1{
+      KEY UUID: String(255) NOT NULL;
+      COMPANY_ID: String(255) NOT NULL;
+   };
+
+   @Catalog: { tableType : #COLUMN }
+   Entity CONFIGURATION2{
+      KEY UUID: String(255) NOT NULL;
+      COMPANY_ID: String(255) NOT NULL;
+   };
+
+};

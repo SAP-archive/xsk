@@ -1,0 +1,11 @@
+namespace sap.db;
+
+@Schema : 'TEST_SCHEMA'
+context AnnotationCannotBeUsedAsMarker {
+
+  @Catalog
+  entity Test {
+     Name : String(32);
+  };
+}
+

@@ -12,33 +12,22 @@
 migrationLaunchView.controller("MigrationStatisticsController", [
     "$scope",
     "$http",
-    "$interval",
-    function ($scope, $http, $interval) {
+    function ($scope, $http) {
         let body = { migrations: "empty" };
         let defaultErrorTitle = "Error loading migrations information.";
-        populateData();
-        $interval(populateData, 5000);
-
-        function populateData() {
-            $http
-                .post(
-                    "/services/v4/js/ide-migration/server/migration/api/migration-rest-api.js/migrationsTrack",
-                    JSON.stringify(body),
-                    { headers: { "Content-Type": "application/json" } }
-                )
-                .then(
-                    function (response) {
-                        $scope.migrations = JSON.parse(JSON.stringify(response.data));
-                        $scope.hideTable = $scope.migrations === "empty";
-                    },
-                    function (response) {
-                        $messageHub.announceAlertError(
-                            defaultErrorTitle,
-                            response.data.error.message
-                        );
-                        console.error(response);
-                    }
-                );
-        }
+        $http
+            .post("/services/v4/js/ide-migration/server/migration/api/migration-rest-api.mjs/migrationsTrack", JSON.stringify(body), {
+                headers: { "Content-Type": "application/json" },
+            })
+            .then(
+                function (response) {
+                    $scope.migrations = JSON.parse(JSON.stringify(response.data));
+                    $scope.hideTable = $scope.migrations === "empty";
+                },
+                function (response) {
+                    $messageHub.announceAlertError(defaultErrorTitle, response.data.error.message);
+                    console.error(response);
+                }
+            );
     },
 ]);

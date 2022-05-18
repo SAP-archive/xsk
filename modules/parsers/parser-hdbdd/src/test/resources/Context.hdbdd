@@ -3,19 +3,19 @@ namespace sap.db;
 @Schema : 'GSTR2DB'
 context Context {
      Entity Entity {
-                Id:               String(5000);
-                Name:               String(5000);
-                Description:      type of Entity.Name;
-                Type:                 String(20);
-                key key: Integer;
-                entity:  type of Entity.Id;
+          Id            : String(5000);
+          Name          : String(5000);
+          Description   : type of Entity.Name;
+          Type          : String(20);
+          key key       : Integer;
+          entity        : type of Entity.Id;
       };
 
-      entity To {
-        key id: Integer;
-        to: String(32);
-        association : association to Entity on association.Id = id;
-      }
+     Entity To {
+          key id        : Integer;
+          to            : String(32);
+          association   : association to Entity on association.Id = id;
+     }
 
      type Type: String(30);
 };

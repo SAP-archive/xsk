@@ -7,24 +7,38 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      XSK_VERSION_BUILD: ${{ steps.XSK_VERSION_PRINT.outputs.XSK_VERSION_OUTPUT }}
+      XSK_HELM_SHA: ${{ steps.XSK_HELM_SHA.outputs.XSK_HELM_SHA_PRINT }}
     steps:
+    #--------Restore success job-------#
+    - name: Previous succeeded job
+      id: success
+      uses: actions/cache@v2
+      with:
+          path: success-job-${{ github.sha }}-${{ matrix.name }}
+          key: success-job-job-${{ github.sha }}-${{ matrix.name }}
+    #--------Restore success job-------# 
     - uses: actions/checkout@v2
       with:
         token: ${{ secrets.GH_TOKEN }}
         fetch-depth: 0
-    - name: Download sapmachine JDK 11
+    - name: Download sapmachine JDK 17
       run: |
-        download_url="https://github.com/SAP/SapMachine/releases/download/sapmachine-11.0.11%2B8/sapmachine-jdk-11.0.11-ea.8_linux-x64_bin.tar.gz"
-        wget -O "${RUNNER_TEMP}/sapmachine-jdk-11.0.11.tar.gz" "${download_url}"
-    - name: Setup sapmachine JDK 11
+        download_url="https://github.com/SAP/SapMachine/releases/download/sapmachine-17.0.2/sapmachine-jdk-17.0.2_linux-x64_bin.tar.gz"
+        wget -O "${RUNNER_TEMP}/sapmachine-jdk-17.tar.gz" "${download_url}"
+    - name: Setup sapmachine JDK 17
       uses: actions/setup-java@v2
       with:
         distribution: 'jdkfile'
-        jdkFile: ${{ runner.temp }}/sapmachine-jdk-11.0.11.tar.gz
-        java-version: '11.0.11'
+        jdkFile: ${{ runner.temp }}/sapmachine-jdk-17.tar.gz
+        java-version: '17.0.2'
         architecture: x64
     - name: Set XSK Version
       run: echo XSK_VERSION=${GITHUB_REF#refs/*/} | tr pre " " | sed 's/   //'  >> $GITHUB_ENV
+    - name: XSK_VERSION_OUTPUT
+      run: echo "::set-output name=XSK_VERSION_OUTPUT::$XSK_VERSION"
+      id: XSK_VERSION_PRINT
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v1
       with:
@@ -33,6 +47,8 @@ jobs:
       uses: docker/setup-buildx-action@v1
       with:
         install: true
+    - name: Set Multi-Builder Docker Buildx
+      run: docker buildx create --use --name multi-builder --platform linux/arm64,linux/amd64
     - name: Maven Build
       run: mvn clean install
     - name: Docker Login
@@ -57,6 +73,16 @@ jobs:
         cp -r "${JAVA_HOME}" jdk
         docker build --load -t dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }} --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
         docker push dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }}
+        cd ../../
+    - name: Push XSK for SAP Kyma Runtime
+      run: |
+        cd releng/sap-kyma-runtime
+        docker build --load -t dirigiblelabs/xsk-kyma-runtime-base -f Dockerfile-base .
+        docker push dirigiblelabs/xsk-kyma-runtime-base
+        docker build --load -t dirigiblelabs/xsk-kyma-runtime .
+        docker push dirigiblelabs/xsk-kyma-runtime
+        docker build --load -t dirigiblelabs/xsk-kyma-runtime-distro -f Dockerfile-distro .
+        docker push dirigiblelabs/xsk-kyma-runtime-distro
         cd ../../
     - uses: buildpacks/github-actions/setup-pack@v4.1.0
     - name: XSK Buildpack
@@ -100,6 +126,22 @@ jobs:
         pack builder create dirigiblelabs/buildpacks-builder-xsk-kyma --config ./builder.toml
         docker tag dirigiblelabs/buildpacks-builder-xsk-kyma dirigiblelabs/buildpacks-builder-xsk-kyma:${{ env.XSK_VERSION }}
         docker push dirigiblelabs/buildpacks-builder-xsk-kyma:${{ env.XSK_VERSION }}
+        cd ../../../../
+    - name: XSK Kyma Runtime Buildpack
+      run: |
+        cd releng/buildpacks/xsk-kyma-runtime/
+        docker build --load -t dirigiblelabs/buildpacks-stack-base-xsk-kyma-runtime . --target base
+        docker push dirigiblelabs/buildpacks-stack-base-xsk-kyma-runtime
+        docker build --load -t dirigiblelabs/buildpacks-stack-run-xsk-kyma-runtime . --target run
+        docker push dirigiblelabs/buildpacks-stack-run-xsk-kyma-runtime
+        docker build --load -t dirigiblelabs/buildpacks-stack-build-xsk-kyma-runtime . --target build
+        docker push dirigiblelabs/buildpacks-stack-build-xsk-kyma-runtime
+        cd buildpack/
+        find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/latest/g'' {} \;
+        pack buildpack package dirigiblelabs/buildpacks-xsk-kyma-runtime --config ./package.toml
+        docker push dirigiblelabs/buildpacks-xsk-kyma-runtime
+        pack builder create dirigiblelabs/buildpacks-builder-xsk-kyma-runtime --config ./builder.toml
+        docker push dirigiblelabs/buildpacks-builder-xsk-kyma-runtime
         cd ../../../../
     - name: XSK Cloud Foundry Buildpack
       run: |
@@ -145,37 +187,56 @@ jobs:
         ####
         git fetch
         git checkout gh-pages
-        cp charts/* .
+        cp charts/* .        
     - name: Helm Charts Release - Set Chart Version - XSK
       run: |
-        cd charts-temp/helm-charts/xsk/
-        find *.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
-        cd ../xsk-kpack/
-        find *.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
-        cd templates/
-        find *.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+        cd charts-temp/helm-charts/
+        find xsk/*.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+        find xsk-kpack/*.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+        find xsk-kpack/templates/*.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+        find xsk-landscape/*.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
     - name: Helm Charts Release
       run: |
         cp charts/* charts-temp/helm-charts/
         cd charts-temp/helm-charts/
-
+          
         gpg --no-tty --batch --export-secret-keys > ~/.gnupg/secring.gpg
-
         helm package --sign --key "XSK-gpg" --keyring /home/runner/.gnupg/secring.gpg xsk
         helm package --sign --key "XSK-gpg" --keyring /home/runner/.gnupg/secring.gpg xsk-kpack
-
-#------------------Update XSK Instance-------------------#
-
-    - name: Kubectl tool installer
-      uses: Azure/setup-kubectl@v1
-    - name: Setup Kube Config File
+        helm package --sign --key "XSK-gpg" --keyring /home/runner/.gnupg/secring.gpg xsk-landscape        
+    - name: Verify helm chart
       run: |
-        mkdir $HOME/.kube
-        echo "${{ secrets.KUBE_CONFIG }}" >> $HOME/.kube/config
-    - name: Update XSK Instance
-      run: kubectl set image deployment/xsk-trial xsk=dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }} -n xsk-trial
-
-#------------------Update XSK Instance-------------------#
+        wget https://xsk.io/charts/pubring.gpg -O ~/.gnupg/pubring.gpg
+        cd charts-temp/helm-charts/
+        OUTPUT=$(helm verify --keyring ~/.gnupg/pubring.gpg xsk-${{ env.XSK_VERSION }}.tgz)
+        OUTPUT="${OUTPUT//'%'/'%25'}"
+        OUTPUT="${OUTPUT//$'\n'/'%0A'}"
+        OUTPUT="${OUTPUT//$'\r'/'%0D'}"
+        HELM_SHA=$(echo "$OUTPUT" | tail -n1)
+        SHA=$(sed -e 's#.*sha256:\(\)#\1#' <<< $HELM_SHA )
+        echo "::set-output name=XSK_HELM_SHA_PRINT::$SHA"
+      id: XSK_HELM_SHA
+    - name: Helm Chart Release Index
+      run: |
+        cd charts-temp/
+        helm repo index helm-charts/ --url https://sap.github.io/xsk/charts
+        cp -rf helm-charts/index.yaml ../.
+        cp -rf helm-charts/xsk-${{ env.XSK_VERSION }}.tgz ../charts/
+        cp -rf helm-charts/xsk-${{ env.XSK_VERSION }}.tgz.prov ../charts/
+        cp -rf helm-charts/xsk-kpack-${{ env.XSK_VERSION }}.tgz ../charts/
+        cp -rf helm-charts/xsk-kpack-${{ env.XSK_VERSION }}.tgz.prov ../charts/
+        cp -rf helm-charts/xsk-landscape-${{ env.XSK_VERSION }}.tgz ../charts/
+        cp -rf helm-charts/xsk-landscape-${{ env.XSK_VERSION }}.tgz.prov ../charts/
+        cd ..
+        git config user.name "$GITHUB_ACTOR"
+        git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+        git add index.yaml
+        git add charts/
+        git commit -m "Updates Helm Charts - Release ${{ env.XSK_VERSION }} - ci skip"
+        git push origin gh-pages
+        git add .
+        git reset --hard
+        git checkout main
 
     - name: Slack Notification
       if: ${{ failure() }}
@@ -184,3 +245,19 @@ jobs:
         payload: "{\"type\":\"Pre-release\",\"url\":\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}"
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  Stage-release:
+      needs: build 
+      uses: ./.github/workflows/stage-release.yaml
+      with:
+        XSK_VERSION: ${{ needs.build.outputs.XSK_VERSION_BUILD }}
+        XSK_HELM_SHA: ${{ needs.build.outputs.XSK_HELM_SHA }}
+        XSK_DISPATCH: 'false'
+      secrets:
+        STAGE_KYMA_CONFIG: ${{ secrets.STAGE_KYMA_CONFIG }}
+        STAGE_HANA_URL: ${{ secrets.STAGE_HANA_URL }}
+        STAGE_HANA_USERNAME: ${{ secrets.STAGE_HANA_USERNAME }}
+        STAGE_HANA_PASSWORD: ${{ secrets.STAGE_HANA_PASSWORD }}
+        STAGE_KYMA_HOST: ${{ secrets.STAGE_KYMA_HOST }}
+        STAGE_NAMESPACE: ${{ secrets.STAGE_NAMESPACE }}
+        STAGE_SERVICE_ACCOUNT: ${{ secrets.STAGE_SERVICE_ACCOUNT }}

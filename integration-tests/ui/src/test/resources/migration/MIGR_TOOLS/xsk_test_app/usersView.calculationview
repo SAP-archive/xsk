@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="usersView" applyPrivilegeType="SQL_ANALYTIC_PRIVILEGE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="2.3" defaultClient="$$client$$" visibility="internal" outputViewType="Projection" calculationScenarioType="TREE_BASED" enforceSqlExecution="false">
+<descriptions defaultDescription="xsk_test_app"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="users">
+    <viewAttributes allViewAttributes="true"/>
+    <resourceUri>xsk_test_app::usersTable</resourceUri>
+  </DataSource>
+</dataSources>
+<calculationViews/>
+<logicalModel id="users">
+  <attributes>
+      <attribute id="Name" order="1" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="User Name"/>
+        <keyMapping columnObjectName="xsk_test_app::usersTable" columnName="Name"/>
+      </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures/>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

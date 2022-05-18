@@ -1,0 +1,118 @@
+name: Stage-release
+
+on:
+  workflow_dispatch:
+    inputs:
+      XSK_VERSION:
+        description: 'XSK version'
+        required: true
+  workflow_call:
+    inputs:
+      XSK_VERSION:
+        required: true
+        type: string
+      XSK_HELM_SHA:
+        required: true
+        type: string
+      XSK_DISPATCH:
+        required: true
+        type: string
+    secrets:
+      STAGE_KYMA_CONFIG:
+        required: true
+      STAGE_HANA_URL:
+        required: true
+      STAGE_HANA_USERNAME:
+        required: true
+      STAGE_HANA_PASSWORD:
+        required: true
+      STAGE_KYMA_HOST:
+        required: true
+      STAGE_NAMESPACE:
+        required: true
+      STAGE_SERVICE_ACCOUNT:
+        required: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    #------Restore previous job---------#
+    - name: Composer cache
+      if: steps.success.outputs.cache-hit != 'true'
+      uses: actions/cache@v2
+      with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+    - run : echo "done" > success-job-${{ github.sha }}-${{ matrix.name }}
+    #--------Restore previous job-------#
+    # Set XSK Kyma context 
+    - name: Kubernetes set context
+      uses: Azure/k8s-set-context@v1
+      with:
+        method: kubeconfig
+        kubeconfig: ${{ secrets.STAGE_KYMA_CONFIG }}
+
+    # Install helm
+    - uses: azure/setup-helm@v1
+      with:
+        version: 'latest' # default is latest stable
+      id: install
+
+    # Add repo
+    - name: Add XSK helm repo
+      run: |
+        helm repo add xsk https://www.xsk.io
+        mkdir ~/.gnupg
+        wget https://xsk.io/charts/pubring.gpg -O ~/.gnupg/pubring.gpg
+
+    # Check chart sha and set XSK version
+    - name: Check and set XSK version
+      uses: nick-fields/retry@v2
+      with:
+        timeout_seconds: 5
+        max_attempts: 10
+        retry_on: error
+        command: |          
+          if [[ ! -z "${{ inputs.XSK_DISPATCH }}" ]] 
+          then
+              OUTPUT=$(helm pull xsk/xsk --version ${{ inputs.XSK_VERSION }} --verify)
+              OUTPUT="${OUTPUT//'%'/'%25'}"
+              OUTPUT="${OUTPUT//$'\n'/'%0A'}"
+              OUTPUT="${OUTPUT//$'\r'/'%0D'}"
+              HELM_SHA=$(echo "$OUTPUT" | tail -n1)
+              SHA=$(sed -e 's#.*sha256:\(\)#\1#' <<< $HELM_SHA)
+              if [ $SHA != ${{ inputs.XSK_HELM_SHA }} ]
+                then
+                  echo "Failed to verify sha!"
+                  exit 1
+              fi
+              echo "::set-output name=XSK_VERSION_OUTPUT::${{ inputs.XSK_VERSION }}"
+          else 
+            helm pull xsk/xsk --version ${{ github.event.inputs.XSK_VERSION }} --verify
+            XSK_VERSION=${{ github.event.inputs.XSK_VERSION }}
+            echo "::set-output name=XSK_VERSION_OUTPUT::$XSK_VERSION"
+          fi
+      id: XSK_VERSION
+
+    # Deploy XSK on stage
+    - name: Deploy XSK helm chart
+      run: |
+        XSK_VERSION="${{ steps.XSK_VERSION.outputs.XSK_VERSION_OUTPUT }}"
+        helm upgrade --install xsk-stage xsk/xsk --version $XSK_VERSION -n ${{ secrets.STAGE_NAMESPACE }} \
+        --set hana.enabled=true \
+        --set hana.url="jdbc:sap://${{ secrets.STAGE_HANA_URL }}/?encrypt=true&validateCertificate=false" \
+        --set hana.username=${{ secrets.STAGE_HANA_USERNAME }} \
+        --set hana.password=${{ secrets.STAGE_HANA_PASSWORD }} \
+        --set kyma.enabled=true \
+        --set kyma.host=${{ secrets.STAGE_KYMA_HOST }} \
+        --set serviceAccount.name=${{ secrets.STAGE_SERVICE_ACCOUNT }} \
+        --set application.image=dirigiblelabs/xsk-kyma:$XSK_VERSION
+
+    # Wait for XSK Service Container to Startup
+    - name: Wait XSK Startup
+      uses: nick-invision/retry@v2
+      with:
+        timeout_seconds: 15
+        max_attempts: 15
+        warning_on_retry: false
+        command: curl -m 5 --silent --fail --request GET https://${{ secrets.STAGE_NAMESPACE }}.${{ secrets.STAGE_KYMA_HOST }}/services/v4/healthcheck | jq --exit-status -n 'inputs | if has("status") then .status=="Ready" else false end' > /dev/null

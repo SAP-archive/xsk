@@ -61,3 +61,12 @@ Create the name of the service account to use
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Create secret to pull the private image
+*/}}
+{{- define "imagePullSecret" }}
+{{- with .Values.application }}
+{{- printf "{\"auths\":{\"%s\":{\"dockerUsername\":\"%s\",\"dockerPassword\":\"%s\",\"dockerEmail\":\"%s\",\"auth\":\"%s\"}}}" .dockerServer .dockerUsername .dockerPassword .dockerEmail (printf "%s:%s" .dockerUsername .dockerPassword | b64enc) | b64enc }}
+{{- end }}
+{{- end }}

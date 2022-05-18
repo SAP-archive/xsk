@@ -1,45 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>com.sap.xsk</groupId>
-		<artifactId>xsk-resources-parent</artifactId>
-		<version>0.14.0-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
-	</parent>
+  <parent>
+    <groupId>com.sap.xsk</groupId>
+    <artifactId>xsk-resources-parent</artifactId>
+    <version>0.17.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
 
-	<name>XSK - Resources - Neo SDK</name>
-	<artifactId>xsk-resources-neo-sdk</artifactId>
-	<version>0.14.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
+  <name>XSK - Resources - Neo SDK</name>
+  <artifactId>xsk-resources-neo-sdk</artifactId>
+  <version>0.17.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>${maven-dependency-plugin.version}</version>
-				<executions>
-					<execution>
-						<id>unpack</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>unpack</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>com.sap.cloud</groupId>
-									<artifactId>neo-java-web-sdk</artifactId>
-									<version>${neo-java-web-sdk.version}</version>
-									<type>zip</type>
-									<outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk</outputDirectory>
-									<overWrite>true</overWrite>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>${maven-dependency-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>com.sap.cloud</groupId>
+                  <artifactId>neo-java-web-sdk</artifactId>
+                  <version>${neo-java-web-sdk.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/sdk</outputDirectory>
+                  <overWrite>true</overWrite>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
           <execution>
             <id>copy</id>
             <phase>generate-resources</phase>
@@ -53,7 +54,7 @@
                   <artifactId>javax.activation</artifactId>
                   <version>${neo-java-web-sdk.javax.activation.version}</version>
                   <type>jar</type>
-                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/tools/lib/cmd</outputDirectory>
+                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/sdk/tools/lib/cmd</outputDirectory>
                   <overWrite>true</overWrite>
                 </artifactItem>
                 <artifactItem>
@@ -61,7 +62,7 @@
                   <artifactId>jaxb-api</artifactId>
                   <version>${neo-java-web-sdk.jaxb.version}</version>
                   <type>jar</type>
-                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/tools/lib/cmd</outputDirectory>
+                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/sdk/tools/lib/cmd</outputDirectory>
                   <overWrite>true</overWrite>
                 </artifactItem>
                 <artifactItem>
@@ -69,7 +70,7 @@
                   <artifactId>jaxb-core</artifactId>
                   <version>${neo-java-web-sdk.jaxb.version}</version>
                   <type>jar</type>
-                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/tools/lib/cmd</outputDirectory>
+                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/sdk/tools/lib/cmd</outputDirectory>
                   <overWrite>true</overWrite>
                 </artifactItem>
                 <artifactItem>
@@ -77,19 +78,20 @@
                   <artifactId>jaxb-impl</artifactId>
                   <version>${neo-java-web-sdk.jaxb.version}</version>
                   <type>jar</type>
-                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/tools/lib/cmd</outputDirectory>
+                  <outputDirectory>src/main/resources/META-INF/dirigible/resources-neo-sdk/sdk/tools/lib/cmd</outputDirectory>
                   <overWrite>true</overWrite>
                 </artifactItem>
               </artifactItems>
             </configuration>
           </execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
-	<properties>
-		<license.header.location>../../licensing-header.txt</license.header.location>
-	</properties>
+  <properties>
+    <license.header.location>../../licensing-header.txt</license.header.location>
+    <maven.clean.plugin.directory>target</maven.clean.plugin.directory>
+  </properties>
 
 </project>

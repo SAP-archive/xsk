@@ -1,0 +1,4 @@
+table.schemaName = "TEST";
+table.columns = [
+  {name = "Col1"; sqlType = NVARCHAR; nullable = false; length = 20; comment = "dummy comment";}
+];

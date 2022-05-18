@@ -9,9 +9,8 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-// Generated from com/sap/xsk/parser/hdbschema/core/Hdbschema.g4 by ANTLR 4.3
+// Generated from com/sap/xsk/parser/hdbschema/core/Hdbschema.g4 by ANTLR 4.10.1
 package com.sap.xsk.parser.hdbschema.core;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -27,12 +26,11 @@ public interface HdbschemaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitHdbschemaDefinition(@NotNull HdbschemaParser.HdbschemaDefinitionContext ctx);
-
+	T visitHdbschemaDefinition(HdbschemaParser.HdbschemaDefinitionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link HdbschemaParser#schemaNameProp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSchemaNameProp(@NotNull HdbschemaParser.SchemaNamePropContext ctx);
+	T visitSchemaNameProp(HdbschemaParser.SchemaNamePropContext ctx);
 }

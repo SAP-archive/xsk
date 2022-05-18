@@ -12,6 +12,7 @@
 package com.sap.xsk.models.hdbcalculationview.tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import com.sap.ndb.bimodelcalculation.CalculationScenario;
@@ -51,8 +52,9 @@ public class HDBCalculationViewTest {
     Marshaller m = context.createMarshaller();
     m.marshal(calculationScenario, writer);
 
-    System.out.println(writer.toString());
-
+    String serializedContent = writer.toString();
+	System.out.println(serializedContent);
+	assertNotNull("The serialized content should not be null", serializedContent);
   }
 
   @Test

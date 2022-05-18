@@ -26,4 +26,4 @@ $.response.setBody("Timeout: " +timeout);
 $.response.setBody("Token: " +token);
 $.response.setBody("Auth Type: " +authType);
 
-assertTrue(username === "tester" && appPrivileges !== null && sysPrivileges != null && timeout !== null && authType !== null && token != null);
+assertTrue(username === "TestUser" && appPrivileges !== null && sysPrivileges != null && timeout !== null && authType !== null && token != null);

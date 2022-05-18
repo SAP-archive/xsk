@@ -21,19 +21,21 @@ import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureCdsModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
+import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
 import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import com.sap.xsk.hdb.ds.transformer.hdbdd.HdbddTransformer;
 import com.sap.xsk.parser.hdbdd.core.CdsLexer;
 import com.sap.xsk.parser.hdbdd.core.CdsParser;
-import com.sap.xsk.parser.hdbdd.custom.EntityDefinitionListener;
+import com.sap.xsk.parser.hdbdd.custom.ArtifactDefinitionListener;
 import com.sap.xsk.parser.hdbdd.custom.ReferenceResolvingListener;
 import com.sap.xsk.parser.hdbdd.custom.XSKHdbddErrorListener;
 import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import com.sap.xsk.parser.hdbdd.symbols.SymbolTable;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntitySymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
+import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
@@ -81,6 +83,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
       } catch (CDSRuntimeException | XSKArtifactParserException e) {
         this.symbolTable.clearSymbolsByFullName();
         this.symbolTable.clearEntityGraph();
+        this.symbolTable.clearViewGraph();
         throw new XSKDataStructuresException(e.getMessage());
       }
     }
@@ -88,6 +91,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
     XSKDataStructureCdsModel cdsModel = populateXSKDataStructureCdsModel(parametersModel.getLocation(), parametersModel.getContent());
     this.symbolTable.clearSymbolsByFullName();
     this.symbolTable.clearEntityGraph();
+    this.symbolTable.clearViewGraph();
     parsedNodes.clear();
 
     return cdsModel;
@@ -97,42 +101,47 @@ public class XSKHdbddParser implements XSKDataStructureParser {
   private void parseHdbdd(String location, String content) throws IOException, XSKArtifactParserException {
     ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
     ANTLRInputStream inputStream = new ANTLRInputStream(is);
-    CdsLexer hdbtiLexer = new CdsLexer(inputStream);
-    CommonTokenStream tokenStream = new CommonTokenStream(hdbtiLexer);
+    CdsLexer hdbddLexer = new CdsLexer(inputStream);
+    CommonTokenStream tokenStream = new CommonTokenStream(hdbddLexer);
 
     XSKHdbddErrorListener lexerErrorListener = new XSKHdbddErrorListener();
-    hdbtiLexer.removeErrorListeners();//remove the ConsoleErrorListener
-    hdbtiLexer.addErrorListener(lexerErrorListener);
+    hdbddLexer.removeErrorListeners();//remove the ConsoleErrorListener
+    hdbddLexer.addErrorListener(lexerErrorListener);
+
+    CdsParser hdbddParser = new CdsParser(tokenStream);
+    hdbddParser.setBuildParseTree(true);
+
     XSKHdbddErrorListener parserErrorListener = new XSKHdbddErrorListener();
+    hdbddParser.removeErrorListeners();
+    hdbddParser.addErrorListener(parserErrorListener);
 
-    CdsParser hdbtiParser = new CdsParser(tokenStream);
-    hdbtiParser.setBuildParseTree(true);
-    hdbtiParser.removeErrorListeners();
-    hdbtiParser.addErrorListener(parserErrorListener);
+    ParseTree parseTree = hdbddParser.cdsFile();
 
-    ParseTree parseTree = hdbtiParser.cdsFile();
-    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location, XSKCommonsConstants.HDBDD_PARSER);
-    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location, XSKCommonsConstants.HDBDD_PARSER);
+    XSKCommonsUtils.logParserErrors(parserErrorListener.getErrors(), XSKCommonsConstants.PARSER_ERROR, location,
+        XSKCommonsConstants.HDBDD_PARSER);
+    XSKCommonsUtils.logParserErrors(lexerErrorListener.getErrors(), XSKCommonsConstants.LEXER_ERROR, location,
+        XSKCommonsConstants.HDBDD_PARSER);
 
-    EntityDefinitionListener entityDefinitionListener = new EntityDefinitionListener();
-    entityDefinitionListener.setSymbolTable(symbolTable);
-    entityDefinitionListener.setFileLocation(location);
+    ArtifactDefinitionListener artifactDefinitionListener = new ArtifactDefinitionListener();
+    artifactDefinitionListener.setSymbolTable(symbolTable);
+    artifactDefinitionListener.setFileLocation(location);
 
     ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
     try {
-      parseTreeWalker.walk(entityDefinitionListener, parseTree);
+      parseTreeWalker.walk(artifactDefinitionListener, parseTree);
     } catch (CDSRuntimeException e) {
       XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
           "", XSKCommonsConstants.HDBDD_PARSER, XSKCommonsConstants.MODULE_PARSERS,
           XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
-      dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location),location,ENTITY_ARTEFACT, ArtefactState.FAILED_CREATE, e.getMessage());
+      dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location), location, ENTITY_ARTEFACT,
+          ArtefactState.FAILED_CREATE, e.getMessage());
       throw new CDSRuntimeException(String.format("Failed to parse file: %s. %s", location, e.getMessage()));
     }
 
-    entityDefinitionListener.getPackagesUsed().forEach(p -> {
+    artifactDefinitionListener.getPackagesUsed().forEach(p -> {
       String fileLocation = getFileLocation(p);
       addFileToDependencyTree(fileLocation, location);
-      if(!parsedNodes.isEmpty() && parsedNodes.contains(fileLocation)){
+      if (!parsedNodes.isEmpty() && parsedNodes.contains(fileLocation)) {
         return;
       }
 
@@ -146,16 +155,17 @@ public class XSKHdbddParser implements XSKDataStructureParser {
         XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
             "", XSKCommonsConstants.HDBDD_PARSER, XSKCommonsConstants.MODULE_PARSERS,
             XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
-        dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location),location,ENTITY_ARTEFACT, ArtefactState.FAILED_CREATE, e.getMessage());
+        dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location), location, ENTITY_ARTEFACT,
+            ArtefactState.FAILED_CREATE, e.getMessage());
       }
     });
 
     ReferenceResolvingListener referenceResolvingListener = new ReferenceResolvingListener();
-    referenceResolvingListener.setCdsFileScope(entityDefinitionListener.getCdsFileScope());
+    referenceResolvingListener.setCdsFileScope(artifactDefinitionListener.getCdsFileScope());
     referenceResolvingListener.setSymbolTable(symbolTable);
-    referenceResolvingListener.setEntityElements(entityDefinitionListener.getEntityElements());
-    referenceResolvingListener.setTypeables(entityDefinitionListener.getTypeables());
-    referenceResolvingListener.setAssociations(entityDefinitionListener.getAssociations());
+    referenceResolvingListener.setEntityElements(artifactDefinitionListener.getEntityElements());
+    referenceResolvingListener.setTypeables(artifactDefinitionListener.getTypeables());
+    referenceResolvingListener.setAssociations(artifactDefinitionListener.getAssociations());
 
     try {
       parseTreeWalker.walk(referenceResolvingListener, parseTree);
@@ -163,7 +173,8 @@ public class XSKHdbddParser implements XSKDataStructureParser {
       XSKCommonsUtils.logCustomErrors(location, XSKCommonsConstants.PARSER_ERROR, "", "", e.getMessage(),
           "", XSKCommonsConstants.HDBDD_PARSER, XSKCommonsConstants.MODULE_PARSERS,
           XSKCommonsConstants.SOURCE_PUBLISH_REQUEST, XSKCommonsConstants.PROGRAM_XSK);
-      dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location),location,ENTITY_ARTEFACT, ArtefactState.FAILED_CREATE, e.getMessage());
+      dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location), location, ENTITY_ARTEFACT,
+          ArtefactState.FAILED_CREATE, e.getMessage());
       throw new CDSRuntimeException(String.format("Failed to parse file: %s. %s", location, e.getMessage()));
     }
   }
@@ -229,6 +240,7 @@ public class XSKHdbddParser implements XSKDataStructureParser {
 
   private void getCdsModelWithParsedData(XSKDataStructureCdsModel cdsModel) {
     List<EntitySymbol> parsedEntities = this.symbolTable.getSortedEntities();
+    List<ViewSymbol> parsedViews = this.symbolTable.getSortedViews();
 
     List<XSKDataStructureHDBTableModel> tableModels = new ArrayList<>();
     parsedEntities.forEach(e -> {
@@ -241,13 +253,20 @@ public class XSKHdbddParser implements XSKDataStructureParser {
     List<StructuredDataTypeSymbol> structuredDataTypes = this.symbolTable.getTableTypes();
     List<XSKDataStructureHDBTableTypeModel> hdbTableTypeModels = new ArrayList<>();
     structuredDataTypes.forEach(sdt -> {
-      if(!(sdt.getAnnotations().containsKey("GenerateTableType")) || (sdt.getAnnotation("GenerateTableType").getKeyValuePairs().get("booleanValue").getValue()).equals("true")) {
+      if (!(sdt.getAnnotations().containsKey("GenerateTableType")) || (sdt.getAnnotation("GenerateTableType").getKeyValuePairs()
+          .get("booleanValue").getValue()).equals("true")) {
         hdbTableTypeModels.add(this.hdbddTransformer.transformStructuredDataTypeToHdbTableType(sdt));
       }
     });
 
+    List<XSKDataStructureHDBViewModel> viewModels = new ArrayList<>();
+    parsedViews.forEach(v ->
+        viewModels.add(this.hdbddTransformer.transformViewSymbolToHdbViewModel(v, cdsModel.getLocation()))
+    );
+
     cdsModel.setTableModels(tableModels);
     cdsModel.setTableTypeModels(hdbTableTypeModels);
+    cdsModel.setViewModels(viewModels);
   }
 
   private String getFileLocation(String fullPackagePath) {

@@ -11,19 +11,6 @@
  */
 package com.sap.xsk.hdb.ds.processors.table;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Map;
-
-import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
-import org.eclipse.dirigible.database.sql.ISqlDialect;
-import org.eclipse.dirigible.database.sql.SqlFactory;
-import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.artefacts.HDBTableSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
@@ -35,6 +22,17 @@ import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Map;
+import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
+import org.eclipse.dirigible.database.sql.ISqlDialect;
+import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Table Drop Processor.
@@ -53,11 +51,11 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
    * @param tableModel the table model
    * @throws SQLException the SQL exception
    */
-  public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel)
+  public boolean execute(Connection connection, XSKDataStructureHDBTableModel tableModel)
       throws SQLException {
     logger.info("Processing Drop Table: " + tableModel.getName());
 
-    String tableName = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName(), tableModel.getSchema());
+    String tableName = XSKHDBUtils.escapeArtifactName(tableModel.getName(), tableModel.getSchema());
     String tableNameWithoutSchema = tableModel.getName();
 
     //Drop public synonym
@@ -80,7 +78,8 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
             break;
           } else {
             String errorMessage = String.format("Tables are not supported for %s !", dialect.getDatabaseName(connection));
-            XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
+            XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
+                XSKCommonsConstants.HDB_TABLE_PARSER);
             applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_DELETE, errorMessage);
             throw new IllegalStateException(errorMessage);
           }
@@ -98,18 +97,21 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
             String errorMessage = String
                 .format("Drop operation for the non empty Table %s will not be executed. Delete all the records in the table first.",
                     tableName);
-            XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
+            XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
+                XSKCommonsConstants.HDB_TABLE_PARSER);
             logger.error(errorMessage);
             applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_DELETE, errorMessage);
-            return;
+            return false;
           }
         }
       } catch (SQLException e) {
         String errorMessage = String.format("Drop table[%s] skipped due to an error: {%s}", tableModel, e.getMessage());
-        XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
+        XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
+            XSKCommonsConstants.HDB_TABLE_PARSER);
         logger.error(sql);
         logger.error(e.getMessage(), e);
         applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_DELETE, errorMessage);
+        return false;
       } finally {
         if (statement != null) {
           statement.close();
@@ -124,11 +126,12 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
       }
 
       sql = SqlFactory.getNative(connection).drop().table(tableName).build();
-      executeUpdate(connection, sql, tableModel);
+      return executeUpdate(connection, sql, tableModel);
     }
+    return true;
   }
 
-  private void executeUpdate(Connection connection, String sql, XSKDataStructureHDBTableModel tableModel)
+  private boolean executeUpdate(Connection connection, String sql, XSKDataStructureHDBTableModel tableModel)
       throws SQLException {
     PreparedStatement statement = null;
     try {
@@ -137,12 +140,15 @@ public class XSKTableDropProcessor extends AbstractXSKProcessor<XSKDataStructure
       statement.executeUpdate();
       String message = String.format("Drop table %s successfully", tableModel.getName());
       applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.SUCCESSFUL_DELETE, message);
+      return true;
     } catch (SQLException e) {
       String message = String.format("Drop table[%s] skipped due to an error: {%s}", tableModel, e.getMessage());
-      XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
+      XSKCommonsUtils.logProcessorErrors(e.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
+          XSKCommonsConstants.HDB_TABLE_PARSER);
       logger.error(sql);
       logger.error(e.getMessage(), e);
       applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_DELETE, message);
+      return false;
     } finally {
       if (statement != null) {
         statement.close();

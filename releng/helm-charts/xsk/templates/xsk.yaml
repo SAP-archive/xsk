@@ -1,31 +1,16 @@
-{{- if ne .Values.namespace.create false }}
-apiVersion: v1
-kind: Namespace
-metadata:
-    name: {{ required "Missing namespace" .Values.namespace.name }}
-{{- end }}
----
 {{- if .Values.hana.enabled }}
 apiVersion: v1
 kind: Secret
 metadata:
   name: {{ .Values.hana.secretName }}
-  namespace: {{ .Values.namespace.name }}
 type: Opaque
 stringData:
   DIRIGIBLE_DATABASE_CUSTOM_DATASOURCES: HANA
   DIRIGIBLE_DATABASE_DATASOURCE_NAME_DEFAULT: HANA
-  DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE: "true"
   DIRIGIBLE_DATABASE_PROVIDER: custom
-  DIRIGIBLE_FLOWABLE_USE_DEFAULT_DATABASE: "false"
-  DIRIGIBLE_MESSAGING_USE_DEFAULT_DATABASE: "false"
-  DIRIGIBLE_SCHEDULER_DATABASE_DRIVER: com.sap.db.jdbc.Driver
-  DIRIGIBLE_SCHEDULER_DATABASE_PASSWORD: {{ required "Missing HANA password" .Values.hana.password }}
-  DIRIGIBLE_SCHEDULER_DATABASE_URL: jdbc:sap://{{ required "Missing HANA url" .Values.hana.url }}/?encrypt=true&validateCertificate=false
-  DIRIGIBLE_SCHEDULER_DATABASE_USER: {{ required "Missing HANA username" .Values.hana.username }}
   HANA_DRIVER: com.sap.db.jdbc.Driver
   HANA_PASSWORD: {{ required "Missing HANA password" .Values.hana.password }}
-  HANA_URL: jdbc:sap://{{ required "Missing HANA url" .Values.hana.url }}/?encrypt=true&validateCertificate=false
+  HANA_URL: {{ required "Missing HANA url" .Values.hana.url }}
   HANA_USERNAME: {{ required "Missing HANA username" .Values.hana.username }}
 ---
 {{- else }}
@@ -33,23 +18,20 @@ stringData:
 {{ required "Missing HANA set configuration 'hana.enabled=true' " .Values.hana.enabled }}
 {{- end }}
 {{- end }}
-{{- if .Values.application.fastBootstrap }}
+{{- if .Values.application.privateDockerRegistry }}
 apiVersion: v1
+data:
+  .dockerconfigjson: {{ template "imagePullSecret" . }}
 kind: Secret
 metadata:
-  name: fast-boostrap-secret
-  namespace: {{ .Values.namespace.name }}
-type: Opaque
-stringData:
-  DIRIGIBLE_JOB_DEFAULT_TIMEOUT: "1"
-  DIRIGIBLE_SCHEDULER_MEMORY_STORE: "true"
+  name: {{ required "Missing docker secret name" .Values.application.dockerSecretName }}
+type: kubernetes.io/dockerconfigjson 
 ---
 {{- end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "xsk.fullname" . }}
-  namespace: {{ .Values.namespace.name }}
   labels:
     {{- include "xsk.labels" . | nindent 4 }}
 spec:
@@ -74,10 +56,6 @@ spec:
             - secretRef:
                 name: {{ required "Missing HANA secret name" .Values.hana.secretName }}
           {{- end }}
-          {{- if .Values.application.fastBootstrap }}
-            - secretRef:
-                name: fast-boostrap-secret
-          {{- end }}
           env:
             {{- if .Values.kyma.enabled }}
             - name: DIRIGIBLE_HOST
@@ -92,14 +70,16 @@ spec:
           {{- if .Values.application.image }}
           image: {{ required "Missing application image" .Values.application.image }}                    
           {{- else if .Values.kyma.enabled }}
-          image: dirigiblelabs/xsk-kyma:latest
+          image: dirigiblelabs/xsk-kyma:{{ required "Missing chart version" .Chart.Version }}
           {{- else }}
-          image: dirigiblelabs/xsk
+          image: dirigiblelabs/xsk:{{ required "Missing chart version" .Chart.Version }}
           {{- end }}  
           imagePullPolicy: {{ required "Missing application image pull policy" .Values.application.imagePullPolicy }}
+          {{- if .Values.persistentVolumeClaim.enabled }}
           volumeMounts:
           - name: {{ required "Missing volume mounts name" .Values.deployment.volumeMountsName }}
             mountPath: {{ required "Missing volume mounts path" .Values.deployment.volumeMountsMountPath }}
+          {{- end }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           ports:
@@ -116,28 +96,34 @@ spec:
               port: {{ required "Missing deployment liveness probe http get port" .Values.deployment.LivenessProbeHttpGetPort}}
             initialDelaySeconds: {{ required "Missing deployment liveness probe http get port" .Values.deployment.LivenessProbeInitialDelaySeconds}}
             periodSeconds: {{ required "Missing deployment liveness probe http get port" .Values.deployment.LivenessProbePeriodSeconds}}
+      {{- if .Values.application.privateDockerRegistry }}
+      imagePullSecrets:
+      - name: {{ required "Missing docker secret name" .Values.application.dockerSecretName }}
+      {{- end }}
+      {{- if .Values.persistentVolumeClaim.enabled }}
       volumes:
       - name: {{ required "Missing volume mounts name" .Values.deployment.volumesName }}
         persistentVolumeClaim:
           claimName: {{ required "Missing volume mounts name" .Values.deployment.volumespersistentVolumeClaimClaimName }}
+      {{- end }}
 ---
+{{- if .Values.persistentVolumeClaim.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ required "Missing persistent volume claim name" .Values.persistentVolumeClaim.name }}
-  namespace: {{ required "Missing namespace" .Values.namespace.name }}
 spec:
   accessModes:
   - {{ required "Missing persistent volume claim access mode" .Values.persistentVolumeClaim.accessModes }}
   resources:
     requests:
       storage: {{ required "Missing persistent volume claim resource storage" .Values.persistentVolumeClaim.resourcesStorage }}
+{{- end }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "xsk.fullname" . }}
-  namespace: {{ required "Missing namespace" .Values.namespace.name }}
   labels:
     {{- include "xsk.labels" . | nindent 4 }}
 spec:
@@ -155,7 +141,6 @@ apiVersion: gateway.kyma-project.io/v1alpha1
 kind: APIRule
 metadata:
   name: {{ include "xsk.fullname" . }}
-  namespace: {{ required "Missing namespace" .Values.namespace.name }}
 spec:
   gateway: kyma-gateway.kyma-system.svc.cluster.local
   rules:
@@ -179,13 +164,11 @@ apiVersion: servicecatalog.k8s.io/v1beta1
 kind: ServiceInstance
 metadata:
   name: xsuaa-{{ include "xsk.fullname" . }}
-  namespace: {{ required "Missing namespace" .Values.namespace.name }}
 spec:
   clusterServiceClassExternalName: xsuaa
   clusterServiceClassRef:
     name: xsuaa
   clusterServicePlanExternalName: broker
-  externalID: {{ uuidv4 }}
   parameters:
     xsappname: {{ include "xsk.fullname" . }}-xsuaa
     oauth2-configuration:
@@ -226,9 +209,7 @@ apiVersion: servicecatalog.k8s.io/v1beta1
 kind: ServiceBinding
 metadata:
   name: xsuaa-{{ include "xsk.fullname" . }}-binding
-  namespace: {{ required "Missing namespace" .Values.namespace.name }}
 spec:
-  externalID: {{ uuidv4 }}
   instanceRef:
     name: xsuaa-{{ include "xsk.fullname" . }}
   parameters: {}
@@ -238,7 +219,6 @@ apiVersion: servicecatalog.kyma-project.io/v1alpha1
 kind: ServiceBindingUsage
 metadata:
   name: xsuaa-{{ include "xsk.fullname" . }}-usage
-  namespace: {{ required "Missing namespace" .Values.namespace.name }}
 spec:
   parameters:
     envPrefix:

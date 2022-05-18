@@ -11,30 +11,28 @@
  */
 package com.sap.xsk.hdb.ds.processors.table;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.Map;
-
-import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
-import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
-import org.eclipse.dirigible.database.sql.ISqlDialect;
-import org.eclipse.dirigible.database.sql.SqlFactory;
-import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.artefacts.HDBTableSynchronizationArtefactType;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
-import com.sap.xsk.hdb.ds.processors.table.utils.XSKTableEscapeService;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
 import com.sap.xsk.utils.XSKHDBUtils;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
+import org.eclipse.dirigible.database.sql.DatabaseArtifactTypes;
+import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.database.sql.Table;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Table Create Processor.
@@ -44,7 +42,7 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
   private static final Logger logger = LoggerFactory.getLogger(XSKTableCreateProcessor.class);
   private static final HDBTableSynchronizationArtefactType TABLE_ARTEFACT = new HDBTableSynchronizationArtefactType();
 
-  private Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
+  private final Map<String, IXSKDataStructureManager> managerServices = XSKHDBModule.getManagerServices();
 
   /**
    * Execute the corresponding statement.
@@ -55,44 +53,37 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
    * @throws SQLException the SQL exception
    * @see <a href="https://github.com/SAP/xsk/wiki/Parser-hdbtable">hdbtable against postgresql itest</a>
    */
-  public void execute(Connection connection, XSKDataStructureHDBTableModel tableModel)
+  public boolean execute(Connection connection, XSKDataStructureHDBTableModel tableModel)
       throws SQLException {
     logger.info("Processing Create Table: " + tableModel.getName());
 
-    String sql = null;
+    Collection<String> indicesStatements = new ArrayList<>();
+    String tableCreateStatement;
     String tableNameWithoutSchema = tableModel.getName();
-    String tableNameWithSchema = XSKHDBUtils.escapeArtifactName(connection, tableModel.getName(), tableModel.getSchema());
-
-    XSKTableEscapeService escapeService = new XSKTableEscapeService(connection, tableModel);
+    String tableNameWithSchema = XSKHDBUtils.escapeArtifactName(tableModel.getName(), tableModel.getSchema());
 
     switch (tableModel.getDBContentType()) {
       case XS_CLASSIC: {
-        sql = escapeService.getDatabaseSpecificSQL();
+        Table table = new TableBuilder().build(tableModel);
+        tableCreateStatement = table.getCreateTableStatement();
+        indicesStatements.addAll(table.getCreateIndicesStatements());
         break;
       }
       case OTHERS: {
-        ISqlDialect dialect = SqlFactory.deriveDialect(connection);
-        if (dialect.getClass().equals(HanaSqlDialect.class)) {
-          sql = XSKConstants.XSK_HDBTABLE_CREATE + tableModel.getRawContent();
-          break;
-        } else {
-          String errorMessage = String.format("Tables are not supported for %s !", dialect.getDatabaseName(connection));
-          XSKCommonsUtils.logProcessorErrors(errorMessage, XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
-          applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_CREATE, errorMessage);
-          throw new IllegalStateException(errorMessage);
-        }
+        tableCreateStatement = XSKConstants.XSK_HDBTABLE_CREATE + tableModel.getRawContent();
+        break;
       }
-    }
-    try {
-      executeSql(sql, connection);
-      String message = String.format("Create table %s successfully", tableModel.getName());
-      applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.SUCCESSFUL_CREATE, message);
-    } catch (SQLException ex) {
-      XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(), XSKCommonsConstants.HDB_TABLE_PARSER);
-      String message = String.format("Create table [%s] skipped due to an error: %s", tableModel, ex.getMessage());
-      applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_CREATE, message);
+      default:
+        throw new IllegalStateException("Unsupported content type: " + tableModel.getDBContentType());
     }
 
+    boolean success = processStatements(connection, tableModel, indicesStatements, tableCreateStatement);
+    processSynonym(connection, tableModel, tableNameWithoutSchema, tableNameWithSchema);
+    return success;
+  }
+
+  private void processSynonym(Connection connection, XSKDataStructureHDBTableModel tableModel, String tableNameWithoutSchema,
+      String tableNameWithSchema) throws SQLException {
     boolean shouldCreatePublicSynonym = SqlFactory.getNative(connection)
         .exists(connection, tableNameWithSchema, DatabaseArtifactTypes.TABLE);
     if (shouldCreatePublicSynonym) {
@@ -101,29 +92,36 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
     }
   }
 
-  @Override
-  public void executeSql(String sql, Connection connection) throws SQLException {
-    String[] queries = sql.split(String.format("((?=%1$s))", "CREATE"));
-    String createTableQuery = queries[0];
+  private boolean processStatements(Connection connection, XSKDataStructureHDBTableModel tableModel, Collection<String> indicesStatements,
+      String tableCreateStatement) {
+    try {
+      executeSql(tableCreateStatement, connection);
 
-    try (PreparedStatement statement = connection.prepareStatement(createTableQuery)) {
-      logger.info(createTableQuery);
-      statement.executeUpdate();
-    } catch (SQLException e) {
-      logger.error(sql);
-      logger.error(e.getMessage(), e);
-      throw e;
-    }
-
-    for(int i=1;i<queries.length;i++){
-      try (PreparedStatement statement= connection.prepareStatement(queries[i])) {
-        logger.info(queries[i]);
-        statement.executeUpdate();
-      } catch (SQLException exception) {
-        logger.error(sql);
-        logger.error(exception.getMessage(), exception);
-        throw exception;
+      if (!indicesStatements.isEmpty()) {
+        executeBatch(indicesStatements, connection);
       }
+
+      String message = String.format("Create table %s successfully", tableModel.getName());
+      applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.SUCCESSFUL_CREATE, message);
+      return true;
+    } catch (SQLException ex) {
+      logger.error("Creation of table failed. Used SQL - create table {}, indices {}", tableCreateStatement,
+          String.join("; ", indicesStatements), ex);
+      XSKCommonsUtils.logProcessorErrors(ex.getMessage(), XSKCommonsConstants.PROCESSOR_ERROR, tableModel.getLocation(),
+          XSKCommonsConstants.HDB_TABLE_PARSER);
+      String message = String.format("Create table [%s] failed due to an error: %s", tableModel, ex.getMessage());
+      applyArtefactState(tableModel.getName(), tableModel.getLocation(), TABLE_ARTEFACT, ArtefactState.FAILED_CREATE, message);
+      return false;
+    }
+  }
+
+  private void executeBatch(Collection<String> createStatements, Connection connection) throws SQLException {
+    try (Statement statement = connection.createStatement()) {
+      for (String createSQL : createStatements) {
+        logger.debug("Adding SQL statement to the batch - {}", createSQL);
+        statement.addBatch(createSQL);
+      }
+      statement.executeBatch();
     }
   }
 }

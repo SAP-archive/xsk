@@ -1,1 +1,8 @@
-{"guid":"xsk-ide-xsjob","repository":{"type":"git","branch":"main","url":"https://github.com/dirigiblelabs/xsk-ide-xsjobs.git"}}
+{
+    "guid": "xsk-ide-xsjob",
+    "repository": {
+        "type": "git",
+        "branch": "main",
+        "url": "https://github.com/dirigiblelabs/xsk-ide-xsjob.git"
+    }
+}

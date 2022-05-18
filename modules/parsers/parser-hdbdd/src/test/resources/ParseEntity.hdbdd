@@ -1,7 +1,8 @@
 namespace sap.table;
 @Schema : 'TEST_SCHEMA'
-@Catalog.tableType : #COLUMN
 
+@Catalog.tableType : #COLUMN
+@Catalog.index : [ { name:'Index1' } ]
 entity ParseEntity{
 Key GSTIN : hana.VARCHAR(25);
 KeY FIN_PERIOD : hana.VARCHAR(10);

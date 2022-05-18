@@ -47,9 +47,8 @@ try {
 assertTrue(batchExecutes == 2 && !executeResult && closeAssertion && updatedRows == 3 && metadataAssertion && moreResultsAssertion && parameterMetaDataAssertion && isClosedAssertion && closeAssertion);
 
 function setStatementFields() {
-  var inputStream = Java.type('java.io.ByteArrayInputStream');
-  var blob = new inputStream([123]);
-  statement.setBlob(1, blob);
+  var blob = [123];
+  statement.setBlob(1, [123]);
 
   statement.setBigInt(2, 1000000000000000);
 
@@ -57,10 +56,9 @@ function setStatementFields() {
   var dateinput = new date(1990, 10, 10);
   statement.setDate(3, dateinput);
 
-  var charArray = Java.type('java.io.CharArrayReader');
-  var clob = new charArray(['a', 'b', 'c']);
+  var clob = "abcd";
 
-  statement.setClob(4,clob);
+  statement.setClob(4, clob);
 
   statement.setDouble(5, 13.37);
 

@@ -1,0 +1,24 @@
+namespace sap.db;
+
+@Schema: 'ADMIN'
+
+context AssociationMissingElementForUnmanagedForeignKey {
+
+    entity  Orders{
+        key Id               : String(32);
+        CustomerName         : String(500);
+        Countries            : association[] to Country on Countries.Id = Id;
+        City                 : association to AssociationMissingElementForUnmanagedForeignKey.City;
+    };
+
+    entity Country {
+        key I               : String(32);
+        Name                : String(32);
+    };
+
+    entity City {
+        key Id              : String(32);
+        key Name            : String(32);
+        key PostalCode      : String(32);
+    };
+};

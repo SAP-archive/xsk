@@ -23,13 +23,21 @@ import java.io.StringReader;
 
 public class CalculationViewDataSourceTransformation {
 
-  private static final String CALCULATION_VIEW_DATA_SOURCE_TRANSFORMATION_XSLT = "<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\n"
+  private static final String CALCULATION_VIEW_DATA_SOURCE_TRANSFORMATION_XSLT = "<xsl:stylesheet version=\"2.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\n"
       + "    <xsl:template match=\"DataSource/@type\" />\n"
       + "    <xsl:template match=\"@*|node()\">\n"
       + "        <xsl:copy>\n"
       + "            <xsl:apply-templates select=\"@*|node()\"/>\n"
       + "        </xsl:copy>\n"
       + "    </xsl:template>\n"
+      + "    <xsl:template match=\"logicalJoin/@associatedObjectUri\">\n"
+      + "         <xsl:attribute name=\"associatedObjectUri\">\n"
+      + "           <xsl:value-of select=\"concat(tokenize(., '/')[2], '::', tokenize(., '/')[last()])\" disable-output-escaping=\"yes\"  />\n"
+      + "         </xsl:attribute>\n"
+      + "     </xsl:template>\n"
+      + "     <xsl:template match=\"measureMapping/@schemaName\">\n"
+      + "         <xsl:copy-of select=\"/@*[name(.)!='schemaName']|node()\" />\n"
+      + "     </xsl:template>\n"
       + "</xsl:stylesheet>";
 
   public byte[] removeTypeArtifact(byte[] bytes) throws TransformerException {

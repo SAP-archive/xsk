@@ -1,8 +1,8 @@
 name: Nightly Build
 
 on:
-  push:
-    branches: [ yakov/migratiion-selenium-test-fixes ]
+  schedule:
+    - cron: "0 22 * * *"
 
   workflow_dispatch:
 

@@ -1,0 +1,19 @@
+table.schemaName = "XSK_SAMPLES_HDI_CUBE";
+table.tableType = COLUMNSTORE;
+table.columns = [
+	{name = "SalesOrderId"; sqlType = INTEGER; nullable = false;},
+	{name = "ContactId"; sqlType = INTEGER; nullable = false;},
+	{name = "Continent"; sqlType = NVARCHAR; length = 50; nullable = true;},
+	{name = "Country"; sqlType = NVARCHAR; length = 150; nullable = true;},
+	{name = "City"; sqlType = NVARCHAR; length = 250; nullable = true;},
+	{name = "ProductId"; sqlType = INTEGER; nullable = false;},
+	{name = "ProductName"; sqlType = NVARCHAR; length = 250; nullable = false;},
+	{name = "Price"; sqlType = DECIMAL; nullable = false; precision = 10; scale = 2;},
+	{name = "CustomerId"; sqlType = INTEGER; nullable = false;},
+	{name = "FirstName"; sqlType = NVARCHAR; length = 50; nullable = false;},
+	{name = "LastName"; sqlType = NVARCHAR; length = 50; nullable = false;},
+	{name = "Gender"; sqlType = NVARCHAR; length = 20; nullable = false;},
+	{name = "PhoneNumber"; sqlType = NVARCHAR; length = 20; nullable = true;},
+	{name = "EmailAddress"; sqlType = NVARCHAR; length = 20; nullable = true;}
+	];
+table.primaryKey.pkcolumns = ["SalesOrderId"];

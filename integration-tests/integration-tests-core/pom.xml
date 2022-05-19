@@ -10,23 +10,26 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <name>XSK - Integration Tests - Applications</name>
-  <artifactId>xsk-integration-tests-applications</artifactId>
+  <name>XSK - Integration Tests - Core</name>
+  <artifactId>integration-tests-core</artifactId>
   <version>0.17.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <dependencies>
     <dependency>
-      <groupId>com.sap.xsk</groupId>
-      <artifactId>integration-tests-core</artifactId>
-      <version>0.17.0-SNAPSHOT</version>
-      <scope>test</scope>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-commons-api</artifactId>
+      <version>${dirigible.version}</version>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpmime</artifactId>
+      <version>4.5.13</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpasyncclient</artifactId>
+      <version>4.1.5</version>
     </dependency>
   </dependencies>
 

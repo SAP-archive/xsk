@@ -9,25 +9,15 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.xsk.integration.tests.migration;
+package com.sap.xsk.integration.tests.core.client.http;
 
-class ExpectedContent {
+public class XSKHttpClientException extends RuntimeException {
 
-  private final String filePath;
-  private final byte[] content;
-
-  ExpectedContent(String filePath, byte[] content) {
-    this.filePath = filePath;
-    this.content = content;
+  public XSKHttpClientException(String message, Throwable cause) {
+    super(message, cause);
   }
 
-  String getFilePath() {
-    return filePath;
+  public XSKHttpClientException(String message) {
+    super(message);
   }
-
-  byte[] getContent() {
-    return content;
-  }
-
-  String getProject() { return filePath.split("/")[1]; }
 }

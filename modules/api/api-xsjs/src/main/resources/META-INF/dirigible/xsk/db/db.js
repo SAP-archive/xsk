@@ -208,7 +208,7 @@ function XscCallableStatement(callableStatement) {
 	};
 }
 
-function XscConnection(dConnection) {
+function XscConnection (dConnection) {
 	this.close = function () {
 		dConnection.close();
 	};
@@ -241,6 +241,7 @@ function XscConnection(dConnection) {
 		return dConnection.getAutoCommit();
 	};
 }
+exports.XscConnection = XscConnection;
 
 // ParameterMetaData should be provided in Dirigible API
 function XscParameterMetaData(dParameterMetaData) {

@@ -5,21 +5,21 @@
   <parent>
     <artifactId>xsk-integration-tests-parent</artifactId>
     <groupId>com.sap.xsk</groupId>
-    <version>0.17.0-SNAPSHOT</version>
+    <version>0.16.1</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
   <name>XSK - Integration Tests - Applications</name>
   <artifactId>xsk-integration-tests-applications</artifactId>
-  <version>0.17.0-SNAPSHOT</version>
+  <version>0.16.1</version>
   <packaging>jar</packaging>
 
   <dependencies>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>integration-tests-core</artifactId>
-      <version>0.17.0-SNAPSHOT</version>
+      <version>0.16.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>

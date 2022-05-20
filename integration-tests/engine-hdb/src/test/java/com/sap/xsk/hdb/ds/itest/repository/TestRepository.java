@@ -16,6 +16,7 @@ import org.eclipse.dirigible.repository.api.IResource;
 import org.eclipse.dirigible.repository.api.RepositoryReadException;
 
 public class TestRepository extends AbstractTestRepository {
+
     @Override
     public IResource getResource(String s) {
         try {
@@ -30,8 +31,11 @@ public class TestRepository extends AbstractTestRepository {
         return null;
     }
 
-  @Override
-  public boolean hasResource(String s) throws RepositoryReadException {
-    return false;
-  }
+    public void deleteLinkedPath(String repositoryPath) {
+    }
+
+    @Override
+    public boolean hasResource(String s) throws RepositoryReadException {
+        return false;
+    }
 }

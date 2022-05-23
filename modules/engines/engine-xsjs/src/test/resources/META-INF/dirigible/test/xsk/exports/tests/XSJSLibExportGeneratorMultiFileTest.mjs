@@ -1,9 +1,10 @@
-import { assertEquals } from './utils/utils.mjs'
+import { assertEquals } from '../utils/utils.mjs'
+import { getParams } from '../utils/stateTableParamsProvider.mjs'
+import { fetchAllEntriesInTable } from '../utils/utils.mjs'
 import { XSJSLibExportsGenerator } from '/exports/XSJSLibExportsGenerator.mjs'
 import { repository } from '@dirigible-v4/platform'
 import { digest } from '@dirigible-v4/utils'
-import { getParams } from './utils/stateTableParamsProvider.mjs'
-import { fetchAllEntriesInTable } from './utils/utils.mjs'
+
 
 function testMultiFileFolderExportGeneration() {
   const stateTableParams = getParams();
@@ -23,15 +24,20 @@ function testMultiFileFolderExportGeneration() {
 
   // run generation and assert content is valid for all resources
   const generator = new XSJSLibExportsGenerator(stateTableParams);
-  generator.run(baseCollection.getPath());
-  assertEquals(baseExpectedContent, baseResource.getText(), "Unexpected xsjslib content after exports generation.");
-  assertEquals(childExpectedContent, childResource.getText(), "Unexpected xsjslib content after exports generation.");
+  generator.run(baseCollection.getPath(), "ExistentFolder");
+  assertEquals(baseInput, baseResource.getText(), "Unexpected xsjslib content after exports generation.");
+  assertEquals(childInput, childResource.getText(), "Unexpected xsjslib content after exports generation.");
+  const baseGeneratedExports = repository.getResource(baseResource.getPath() + ".generated_exports");
+  const childGeneratedExports = repository.getResource(childResource.getPath() + ".generated_exports");
+  assertEquals(baseExpectedContent, baseGeneratedExports.getText(), "Unexpected xsjslib content after exports generation.");
+  assertEquals(childExpectedContent, childGeneratedExports.getText(), "Unexpected xsjslib content after exports generation.");
+
 
   // assert state table entries are with expected count
   const entries = fetchAllEntriesInTable(stateTableParams);
   const expected = [
-    {"ID":0, "LOCATION": baseLocation, "HASH": digest.md5Hex(baseExpectedContent)},
-    {"ID":1, "LOCATION": childLocation, "HASH": digest.md5Hex(childExpectedContent)}
+    {"ID":0, "LOCATION": baseLocation, "HASH": digest.md5Hex(baseInput)},
+    {"ID":1, "LOCATION": childLocation, "HASH": digest.md5Hex(childInput)}
   ];
   assertEquals(2, entries.length, "Unexpected count of entries in DB.");
 
@@ -46,11 +52,6 @@ function testMultiFileFolderExportGeneration() {
   assertEquals(JSON.stringify(Object.keys(expected[1])), JSON.stringify(Object.keys(childActual)), "Unexpected entry keys.");
   assertEquals(expected[1].LOCATION, childActual.LOCATION, "Unexpected entry location.");
   assertEquals(expected[1].HASH, childActual.HASH, "Unexpected entry hash.");
-
-  childResource.delete();
-  baseResource.delete();
-  childCollection.delete();
-  baseCollection.delete();
 }
 
 testMultiFileFolderExportGeneration();

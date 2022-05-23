@@ -2,7 +2,7 @@ import { dao } from '@dirigible-v4/db'
 import { query } from '@dirigible-v4/db'
 import { digest } from '@dirigible-v4/utils'
 
-export class XSJSLibArtefactStateTable {
+export class XSJSLibStateTable {
   tableName = "";
   tableSchema = "";
   table = null;
@@ -10,30 +10,10 @@ export class XSJSLibArtefactStateTable {
   constructor(tableName, tableSchema) {
     this.tableName = tableName;
     this.tableSchema = tableSchema;
-    this.table = this._getOrCreateXSJSLibArtefactStateTable();
+    this.table = this._getOrCreateXSJSLibStateTable();
   }
 
-  findEntryByResourceLocation(location) {
-    const sql = "SELECT * FROM \"" + this.tableSchema + "\".\"" + this.tableName +"\" WHERE LOCATION = ?";
-    return query.execute(sql, [location], "local", "SystemDB").shift();
-  }
-
-  createEntryForResource(location, content) {
-    this.table.insert({
-      location: location,
-      hash: digest.md5Hex(content)
-    });
-  }
-
-  updateEntryForResource(oldEntry, location, content) {
-    this.table.update({
-      id: oldEntry.ID,
-      location: location,
-      hash: digest.md5Hex(content)
-    });
-  }
-
-  _getOrCreateXSJSLibArtefactStateTable() {
+  _getOrCreateXSJSLibStateTable() {
     try {
       const table = dao.create({
         table: this.tableName,
@@ -55,7 +35,7 @@ export class XSJSLibArtefactStateTable {
           required: true
         }]
       },
-      "XSJSLibArtefactStateTable",
+      "XSJSLibStateTable",
       "SystemDB",
       "local"
       );
@@ -68,6 +48,26 @@ export class XSJSLibArtefactStateTable {
     } catch(e) {
       throw new Error("Cannot check if synchrnoisation is needed. Reason: " + e);
     }
+  }
+
+  findEntryByResourceLocation(location) {
+    const sql = "SELECT * FROM \"" + this.tableSchema + "\".\"" + this.tableName +"\" WHERE LOCATION = ?";
+    return query.execute(sql, [location], "local", "SystemDB").shift();
+  }
+
+  createEntryForResource(location, content) {
+    this.table.insert({
+      location: location,
+      hash: digest.md5Hex(content)
+    });
+  }
+
+  updateEntryForResource(oldEntry, location, content) {
+    this.table.update({
+      id: oldEntry.ID,
+      location: location,
+      hash: digest.md5Hex(content)
+    });
   }
 
   clear() {

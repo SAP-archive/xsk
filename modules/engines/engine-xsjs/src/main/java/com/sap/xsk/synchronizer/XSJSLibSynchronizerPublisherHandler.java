@@ -21,7 +21,7 @@ public class XSJSLibSynchronizerPublisherHandler extends MetadataPublisherHandle
   }
 
   @Override
-  public void afterUnpublish(String location) {
+  public void beforeUnpublish(String location) {
     XSJSLibSynchronizerArtefactsCleaner cleaner = new XSJSLibSynchronizerArtefactsCleaner();
     cleaner.cleanup(location);
   }

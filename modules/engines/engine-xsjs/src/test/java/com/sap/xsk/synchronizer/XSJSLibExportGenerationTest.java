@@ -14,26 +14,17 @@ package com.sap.xsk.synchronizer;
 import com.sap.xsk.XSJSTest;
 import com.sap.xsk.engine.XSKJavascriptEngineExecutor;
 import com.sap.xsk.exceptions.XSJSLibArtefactCleanerSQLException;
-import com.sap.xsk.exceptions.XSJSLibExportsGenerationSourceNotFoundException;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
-import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.scheduler.api.ISchedulerCoreService;
 import org.eclipse.dirigible.core.scheduler.service.definition.JobDefinition;
-import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
-import org.eclipse.dirigible.engine.js.graalvm.debugger.GraalVMJavascriptDebugProcessor;
 import org.eclipse.dirigible.engine.js.graalvm.processor.GraalVMJavascriptEngineExecutor;
-import org.eclipse.dirigible.repository.api.IEntity;
-import org.eclipse.dirigible.repository.api.IRepository;
-import org.eclipse.dirigible.repository.local.LocalRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -48,7 +39,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnitParamsRunner.class)
-public class ExportGenerationTest extends XSJSTest {
+public class XSJSLibExportGenerationTest extends XSJSTest {
 
   @Before
   public void beforeTest() {
@@ -111,18 +102,24 @@ public class ExportGenerationTest extends XSJSTest {
   public void artefactCleanerCreateAndCleanupStateTableTest() throws SQLException {
     // Run a script that creates a table with an Entry(location: "testFolder/abc.xsjslib", hash: "abc");
     runJs("/test/xsk/exports/utils/createTableHelper.mjs");
-
     String testFolder = "testFolder/";
-    XSJSLibSynchronizerArtefactsCleaner cleaner = new XSJSLibSynchronizerArtefactsCleaner();
-    cleaner.cleanup(testFolder);
 
     DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE);
     try (PreparedStatement selectStatement = dataSource.getConnection()
-        .prepareStatement(
-            "SELECT FROM \""
-                + XSJSLibSynchronizer.XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME
-                + "\" WHERE \"LOCATION\" LIKE '" + testFolder + "'")
-    ) {
+        .prepareStatement("SELECT * FROM PROCESSED_XSJSLIB_ARTEFACTS")) {
+      ResultSet result = selectStatement.executeQuery();
+      assertNotNull("Unexpected null result set before state table cleanup", result);
+
+      result.last();
+      int entries = result.getRow();
+      assertEquals("Unexpected count of entries before state table cleanup", 1, entries);
+    }
+
+    XSJSLibSynchronizerArtefactsCleaner cleaner = new XSJSLibSynchronizerArtefactsCleaner();
+    cleaner.cleanup(testFolder);
+
+    try (PreparedStatement selectStatement = dataSource.getConnection()
+        .prepareStatement("SELECT * FROM PROCESSED_XSJSLIB_ARTEFACTS")) {
       ResultSet result = selectStatement.executeQuery();
       assertNotNull("Unexpected null result set after state table cleanup", result);
 
@@ -134,14 +131,14 @@ public class ExportGenerationTest extends XSJSTest {
 
   @Test
   @Parameters({
-      "/test/xsk/exports/stateTableWriteTest.mjs",
-      "/test/xsk/exports/stateTableUpdateTest.mjs",
-      "/test/xsk/exports/stateTableFindTest.mjs",
-      "/test/xsk/exports/contentChangeCheckTest.mjs",
-      "/test/xsk/exports/contentModifierTest.mjs",
-      "/test/xsk/exports/singleFileExportGenerationTest.mjs",
-      "/test/xsk/exports/singleFileExportUpdateTest.mjs",
-      "/test/xsk/exports/multiFileExportGenerationTest.mjs",
+      "/test/xsk/exports/tests/XSJSLibStateTableWriteTest.mjs",
+      "/test/xsk/exports/tests/XSJSLibStateTableUpdateTest.mjs",
+      "/test/xsk/exports/tests/XSJSLibStateTableFindTest.mjs",
+      "/test/xsk/exports/tests/XSJSLibExportsGeneratorIsContentChangedTest.mjs",
+      "/test/xsk/exports/tests/XSJSLibParserTest.mjs",
+      "/test/xsk/exports/tests/XSJSLibExportGeneratorSingleFileTest.mjs",
+      "/test/xsk/exports/tests/XSJSLibExportGeneratorSingleFileModifyTest.mjs",
+      "/test/xsk/exports/tests/XSJSLibExportGeneratorMultiFileTest.mjs",
   })
   public void exportsGeneratorTest(String testModule) throws ScriptingException {
     runJsTest(testModule);

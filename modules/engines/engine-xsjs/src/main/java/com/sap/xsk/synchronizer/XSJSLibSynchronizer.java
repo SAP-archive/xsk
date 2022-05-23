@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.synchronizer;
 
+import com.sap.xsk.synchronizer.XSJSLibSynchronizerPathTypeResolver.ResolvedPathType;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.IOrderedSynchronizerContribution;
@@ -26,11 +27,15 @@ public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrdere
 
   private static final Logger logger = LoggerFactory.getLogger(XSJSLibSynchronizer.class);
 
-  private static final String XSJSLIB_RUN_GENERATION_LOCATION = "/exports/XSJSLibRunGeneration.mjs";
+  private static final String XSJSLIB_GENERATION_RUNNER_LOCATION = "/exports/XSJSLibRunner.mjs";
 
   public static final String XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME = "PROCESSED_XSJSLIB_ARTEFACTS";
 
+  private final XSJSLibSynchronizerPathTypeResolver resolver = new XSJSLibSynchronizerPathTypeResolver();
+
   private final String targetRegistryPath;
+
+  private final ResolvedPathType targetRegistryPathType;
 
   public XSJSLibSynchronizer() {
     this(XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
@@ -38,6 +43,7 @@ public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrdere
 
   public XSJSLibSynchronizer(String targetRegistryPath) {
     this.targetRegistryPath = targetRegistryPath;
+    this.targetRegistryPathType = resolver.resolveWithResourceFirst(targetRegistryPath);
   }
 
   public static void forceSynchronization(String targetRegistryPath) {
@@ -53,19 +59,36 @@ public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrdere
   public void synchronizeXSJSLibs() {
     logger.trace("Synchronizing XSJSLibs...");
 
-    Map<Object, Object> context = new HashMap<>();
-    context.put("targetRegistryPath", targetRegistryPath);
-    context.put("stateTableName", XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME);
+    if(resolver.isNonSynchronizableType(targetRegistryPathType)) {
+      logger.trace("Done synchronizing XSJSLibs.");
+      return;
+    }
 
+    Map<Object, Object> context = buildContext();
     GraalVMJavascriptEngineExecutor graalVMJavascriptEngineExecutor = new GraalVMJavascriptEngineExecutor();
     graalVMJavascriptEngineExecutor.executeService(
-        XSJSLIB_RUN_GENERATION_LOCATION,
+        XSJSLIB_GENERATION_RUNNER_LOCATION,
         context,
         true,
         false
     );
 
     logger.trace("Done synchronizing XSJSLibs.");
+  }
+
+  private Map<Object, Object> buildContext() {
+    Map<Object, Object> context = new HashMap<>();
+
+    context.put("targetRegistryPath", targetRegistryPath);
+    context.put("stateTableName", XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME);
+
+    switch(targetRegistryPathType) {
+      case ExistentXSJSLibFile: context.put("targetRegistryPathType", "ExistentXSJSLibFile"); break;
+      case ExistentFolder: context.put("targetRegistryPathType", "ExistentFolder"); break;
+      default: throw new RuntimeException("XSJSLibSynchronizer: Unhandled ResolvedPathType.");
+    }
+
+    return context;
   }
 
   @Override

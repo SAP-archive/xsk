@@ -22,8 +22,17 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import com.sap.xsk.parser.hana.core.HanaLexer;
+import com.sap.xsk.parser.hana.core.HanaParser;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
+import custom.HanaProcedureListener;
+import models.ProcedureDefinitionModel;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.dirigible.core.workspace.api.IFile;
@@ -55,7 +64,8 @@ public class XSKProjectFilesModificator {
       String fileExtension = getProjectFileExtension(projectFile);
       replaceSessionUser(fileExtension, projectFile);
       modifyAnalyticPrivilegeFile(fileExtension, projectFile);
-      replaceReservedWordRow(fileExtension,projectFile);
+      replaceReservedWordRow(fileExtension, projectFile);
+      transformUpdateFromStatement(fileExtension, projectFile);
     }
   }
 
@@ -154,5 +164,28 @@ public class XSKProjectFilesModificator {
       projectFile.setContent(new String(currentContent).replaceAll(ROW_DEFINITION,ROW_DEFINITION_REPLACEMENT)
           .replaceAll(ROW_VALUE, ROW_VALUE_REPLACEMENT).getBytes());
     }
+  }
+
+  private void transformUpdateFromStatement(String fileExtension, IFile analyticPrivilegeFile){
+    if (fileExtension.equalsIgnoreCase(HDB_PROCEDURE_FILE_EXTENSION)){
+      ProcedureDefinitionModel model = parseHDBPProcedureModel(new String(analyticPrivilegeFile.getContent()));
+      System.out.println();
+    }
+  }
+
+  private ProcedureDefinitionModel parseHDBPProcedureModel(String sample) {
+    CharStream inputStream = CharStreams.fromString("CREATE " + sample);
+    HanaLexer lexer = new HanaLexer(inputStream);
+    CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+
+    HanaParser parser = new HanaParser(tokenStream);
+    parser.setBuildParseTree(true);
+    ParseTree parseTree = parser.sql_script();
+
+    HanaProcedureListener listener = new HanaProcedureListener();
+    ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
+    parseTreeWalker.walk(listener, parseTree);
+
+    return listener.getProcedureModel();
   }
 }

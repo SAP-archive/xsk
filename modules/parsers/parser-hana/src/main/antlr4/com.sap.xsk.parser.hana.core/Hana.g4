@@ -238,7 +238,7 @@ proc_sql
 	;
 
 update_stmt
-    : UPDATE general_table_ref update_set_clause from_clause? where_clause? static_returning_clause? error_logging_clause?
+    : UPDATE general_table_ref (AS table_alias)? update_set_clause from_clause? where_clause? static_returning_clause? error_logging_clause?
     ;
 
 insert_stmt

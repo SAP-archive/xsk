@@ -1,0 +1,109 @@
+CREATE PROCEDURE "LEARNING"."ey.learning::process_emailRecords" ()
+       	LANGUAGE SQLSCRIPT
+       	SQL SECURITY INVOKER
+       	DEFAULT SCHEMA LEARNING
+
+       AS
+       BEGIN
+
+           INSERT INTO "LEARNING"."ey.learning::imt.talent_emailsent_audit"
+           (ML_AUDIT_ID, MAIL_TO, MAIL_BDY, MAIL_SUBJ,SO_ID,FAC_ID,TEMPLATE_ID,AUDT_FLAG,SOFAC_EMAIL_FLAG,SOFAC_EMAIL_REM_DT,SOFAC_EMAIL_REM_FLAG,SOFAC_EML_ID,RCD_TIMESTAMP)
+           SELECT
+               "LEARNING"."ey.learning::ML_AUDIT_ID".NEXTVAL,
+                P.EMAIL_ID
+               ,CASE
+                   WHEN ET.MLBDY_TEMPLATE_IND = 'Request Availability' --SOFAC.TEMPLATE_ID = 3
+                     THEN
+                       REPLACE(
+                       REPLACE(ET.MAIL_BDY_EML,
+                               --'@@fac_name@@','Dear ' || P.FIRST_NAME || ','),
+                               'Dear Colleague / facilitator’s name if possible,','Dear ' || P.FULL_NAME || ','),
+                               '@@MsgPlcHolder@@',ET.MSG_TXT)
+                   WHEN ET.MLBDY_TEMPLATE_IND = 'Confirmation' --SOFAC.TEMPLATE_ID = 5
+                      THEN
+                       REPLACE(
+                       REPLACE(
+                       REPLACE(
+                       REPLACE(
+                       REPLACE(
+                       REPLACE(
+                       REPLACE(
+                       REPLACE(
+                       REPLACE(
+                       REPLACE(
+                       REPLACE(ET.MAIL_BDY_EML,
+                               'Dear Colleague,','Dear ' || P.FIRST_NAME || ','),
+                               --'@@fac_name@@','Dear ' || P.FULL_NAME ),
+                               '@@MsgPlcHolder@@',ET.MSG_TXT),
+                               '@@SO_NAME@@',IFNULL(SOH.SO_NAME,'')),
+                               '@@SO_ID@@',IFNULL(SOH.SO_ID,'')),
+                               '@@CLASS@@',IFNULL(SOH.SO_CLASSROOM,'')),
+                               '@@ROLE@@',IFNULL(SOF.FAC_ROLE,'')),
+                               '@@START_DT@@',IFNULL(TO_VARCHAR(UTCTOLOCAL(SOH.START_DT,SOH.TIMEZONE_ID,'platform'), 'DD-MON-YYYY HH24:MI'),'')),
+                               '@@END_DT@@',IFNULL(TO_VARCHAR(UTCTOLOCAL(SOH.END_DT,SOH.TIMEZONE_ID,'platform'), 'DD-MON-YYYY HH24:MI'),'')),
+                               '@@LOCATION@@',IFNULL(SOH.SO_LOCATION,'')),
+                               '@@STF_ADM@@',IFNULL((SELECT PRO.FULL_NAME FROM "LEARNING"."ey.learning::imt.talent_imt_facilitator_profile" PRO INNER JOIN
+                                                       (SELECT COALESCE(
+                                                        ( -- 1st Cond: Check if the user who created/updated the record, is that user staffing admin on the SO
+                                                           SELECT STADM.STF_ID from "LEARNING"."ey.learning::imt.talent_imt_so_stadmin" STADM
+                                                           WHERE STADM.SO_ID = SOFAC.SO_ID AND STADM.STF_ID = COALESCE(SOFAC.UPDATE_USER,SOFAC.CREATE_USER))
+                                                       ,( -- 2nd Cond: Check if the user who created/updated the record, whether that user is staffing admin SO in TDDH
+                                                           SELECT TH."StfAdm" from "LEARNING"."ey.learning::imt.talent_tddh_api_layer.scheduleoffering" TH
+                                                           WHERE TH."ScheduledOfferingID" = SOFAC."SO_ID" AND TH."StfAdm" = COALESCE(SOFAC.UPDATE_USER,SOFAC.CREATE_USER))
+                                                       ,( -- 3rd Cond: If both the above condition yeilds no users then we show the user who updates/creates the record
+                                                           COALESCE(UPDATE_USER,CREATE_USER))) USER_ID FROM DUMMY) as CUST_STF
+                                                       ON PRO.USER_ID = CUST_STF.USER_ID
+                                                       ),'')),
+                               '@@STF_COMMENTS@@',IFNULL(SOF.STF_COMMENTS,''))
+
+                   WHEN SOFAC.TEMPLATE_ID IS NULL AND SOFAC.PERS_MAIL_BDY IS NOT NULL AND PERS_SUBJ IS NOT NULL
+                       THEN  SOFAC.PERS_MAIL_BDY
+                   ELSE  ''
+                END as MAIL_BODY
+               ,CASE WHEN SOFAC.TEMPLATE_ID IS NOT NULL
+                       THEN (CASE WHEN FLAG = 'CLOSED' THEN 'Reminder: ' || ET.MAIL_SUBJ
+                                  ELSE ET.MAIL_SUBJ END)
+                     WHEN SOFAC.TEMPLATE_ID IS NULL AND SOFAC.PERS_MAIL_BDY IS NOT NULL AND PERS_SUBJ IS NOT NULL
+                       THEN SOFAC.PERS_SUBJ
+                    ELSE  ''
+               END as MAIL_SUBJ
+               ,SOFAC.SO_ID
+               ,SOFAC.FAC_ID
+               ,SOFAC.TEMPLATE_ID
+               ,'PROCESS' as AUDT_FLAG
+               ,SOFAC.FLAG
+               ,SOFAC.REM_DT
+               ,SOFAC.REM_FLAG
+               ,SOFAC.SOFAC_EML_ID
+               ,SOFAC.RCD_TIMESTAMP
+           FROM "LEARNING"."ey.learning::imt.talent_sofac_email" as SOFAC
+                   LEFT JOIN "LEARNING"."ey.learning::imt.talent_imt_facilitator_profile" as P
+                       ON SOFAC.FAC_ID = P.USER_ID
+                   LEFT JOIN "LEARNING"."ey.learning::imt.talent_email_templates" as ET
+                       ON SOFAC.TEMPLATE_ID = ET.TEMPLATE_ID
+                   LEFT JOIN "LEARNING"."ey.learning::imt.talent_imt_so_header" as SOH
+                       ON SOFAC.SO_ID = SOH.SO_ID
+                   LEFT JOIN "LEARNING"."ey.learning::imt.talent_imt_so_facilitator" as SOF
+                       ON SOFAC.SO_ID = SOF.SO_ID AND SOFAC.FAC_ID = SOF.FAC_ID
+           WHERE
+           SOF.ASSIGN_STAT = 'Requested' AND
+          ( FLAG='PROCESS' OR ( FLAG='CLOSED' AND REM_FLAG = 'PROCESS' AND TO_DATE(REM_DT) = TO_DATE(CURRENT_UTCTIMESTAMP) AND  REM_DT >= CURRENT_UTCTIMESTAMP) )
+          ;
+
+
+           -- Below code is to BYPASS the multiple emails to the same recipient in Request Availiablity module
+           -- where we have option to send bulk emails
+           byPass =
+           SELECT SOFAC.SO_ID,SOFAC.FAC_ID,ROW_NUMBER() OVER (PARTITION BY SOFAC.FAC_ID ORDER BY SOFAC.FAC_ID) AS row_num,SOFAC.ML_AUDIT_ID,SOFAC.SOFAC_EML_ID,SOFAC.RCD_TIMESTAMP,SOFAC.TEMPLATE_ID
+           FROM  "LEARNING"."ey.learning::imt.talent_emailsent_audit" as SOFAC
+                   LEFT JOIN "LEARNING"."ey.learning::imt.talent_email_templates" as ET
+                       ON SOFAC.TEMPLATE_ID = ET.TEMPLATE_ID
+           WHERE AUDT_FLAG = 'PROCESS' AND ET.MLBDY_TEMPLATE_IND = 'Request Availability'; --AND TEMPLATE_ID = 3;
+
+            UPDATE A SET AUDT_FLAG = 'PROCESS-BYPASS'
+            FROM "LEARNING"."ey.learning::imt.talent_emailsent_audit" as A
+                    INNER JOIN :byPass B
+                        ON A.ML_AUDIT_ID = B.ML_AUDIT_ID AND A.SOFAC_EML_ID = B.SOFAC_EML_ID AND A.RCD_TIMESTAMP = B.RCD_TIMESTAMP
+            WHERE B.row_num <> 1;
+
+       END;

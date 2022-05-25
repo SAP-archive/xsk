@@ -815,7 +815,7 @@ public class CdsParser extends Parser {
 			setState(182);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__5) | (1L << NAMESPACE) | (1L << AS) | (1L << ON) | (1L << SELECT) | (1L << FROM) | (1L << WHERE) | (1L << DEFINE) | (1L << UNION) | (1L << DISTINCT) | (1L << HANA) | (1L << JOIN_TYPES) | (1L << USING) | (1L << DEFAULT) | (1L << CONTEXT) | (1L << ENTITY) | (1L << VIEW) | (1L << TYPE) | (1L << ASSOCIATION) | (1L << TO) | (1L << ID))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__5) | (1L << NAMESPACE) | (1L << AS) | (1L << ON) | (1L << SELECT) | (1L << FROM) | (1L << WHERE) | (1L << DEFINE) | (1L << UNION) | (1L << DISTINCT) | (1L << HANA) | (1L << JOIN_TYPES) | (1L << USING) | (1L << DEFAULT) | (1L << CONTEXT) | (1L << ENTITY) | (1L << VIEW) | (1L << TYPE) | (1L << ASSOCIATION) | (1L << TO) | (1L << ID) | (1L << STRING))) != 0)) {
 				{
 				setState(180);
 				_errHandler.sync(this);
@@ -933,7 +933,7 @@ public class CdsParser extends Parser {
 			setState(202);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__5) | (1L << T__16) | (1L << NAMESPACE) | (1L << AS) | (1L << ON) | (1L << SELECT) | (1L << FROM) | (1L << WHERE) | (1L << DEFINE) | (1L << UNION) | (1L << DISTINCT) | (1L << HANA) | (1L << JOIN_TYPES) | (1L << USING) | (1L << DEFAULT) | (1L << CONTEXT) | (1L << ENTITY) | (1L << VIEW) | (1L << TYPE) | (1L << ASSOCIATION) | (1L << TO) | (1L << ID))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__5) | (1L << T__16) | (1L << NAMESPACE) | (1L << AS) | (1L << ON) | (1L << SELECT) | (1L << FROM) | (1L << WHERE) | (1L << DEFINE) | (1L << UNION) | (1L << DISTINCT) | (1L << HANA) | (1L << JOIN_TYPES) | (1L << USING) | (1L << DEFAULT) | (1L << CONTEXT) | (1L << ENTITY) | (1L << VIEW) | (1L << TYPE) | (1L << ASSOCIATION) | (1L << TO) | (1L << ID) | (1L << STRING))) != 0)) {
 				{
 				setState(200);
 				_errHandler.sync(this);
@@ -1131,6 +1131,7 @@ public class CdsParser extends Parser {
 			case ASSOCIATION:
 			case TO:
 			case ID:
+			case STRING:
 				{
 				setState(227);
 				identifier();
@@ -1489,6 +1490,7 @@ public class CdsParser extends Parser {
 			case ASSOCIATION:
 			case TO:
 			case ID:
+			case STRING:
 				{
 				setState(289);
 				((ElementDeclRuleContext)_localctx).name = identifier();
@@ -3171,6 +3173,7 @@ public class CdsParser extends Parser {
 
 	public static class IdentifierContext extends ParserRuleContext {
 		public TerminalNode ID() { return getToken(CdsParser.ID, 0); }
+		public TerminalNode STRING() { return getToken(CdsParser.STRING, 0); }
 		public TerminalNode NAMESPACE() { return getToken(CdsParser.NAMESPACE, 0); }
 		public TerminalNode HANA() { return getToken(CdsParser.HANA, 0); }
 		public TerminalNode AS() { return getToken(CdsParser.AS, 0); }
@@ -3213,7 +3216,7 @@ public class CdsParser extends Parser {
 			{
 			setState(518);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NAMESPACE) | (1L << AS) | (1L << ON) | (1L << SELECT) | (1L << FROM) | (1L << WHERE) | (1L << DEFINE) | (1L << UNION) | (1L << DISTINCT) | (1L << HANA) | (1L << JOIN_TYPES) | (1L << USING) | (1L << DEFAULT) | (1L << CONTEXT) | (1L << ENTITY) | (1L << VIEW) | (1L << TYPE) | (1L << ASSOCIATION) | (1L << TO) | (1L << ID))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NAMESPACE) | (1L << AS) | (1L << ON) | (1L << SELECT) | (1L << FROM) | (1L << WHERE) | (1L << DEFINE) | (1L << UNION) | (1L << DISTINCT) | (1L << HANA) | (1L << JOIN_TYPES) | (1L << USING) | (1L << DEFAULT) | (1L << CONTEXT) | (1L << ENTITY) | (1L << VIEW) | (1L << TYPE) | (1L << ASSOCIATION) | (1L << TO) | (1L << ID) | (1L << STRING))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -3316,33 +3319,33 @@ public class CdsParser extends Parser {
 		"\t \u0001!\u0005!\u0202\b!\n!\f!\u0205\t!\u0001\"\u0001\"\u0001\"\u0003"+
 		"\u01f7\u01fd\u0203\u0000#\u0000\u0002\u0004\u0006\b\n\f\u000e\u0010\u0012"+
 		"\u0014\u0016\u0018\u001a\u001c\u001e \"$&(*,.02468:<>@BD\u0000\u0004\u0002"+
-		"\u0000\n\f\'\'\u0004\u0000%%\'\',,5<\u0002\u0000,,;;\u0004\u0000\u0013"+
-		"\u001d&&**-3\u0236\u0000F\u0001\u0000\u0000\u0000\u0002O\u0001\u0000\u0000"+
-		"\u0000\u0004Z\u0001\u0000\u0000\u0000\u0006\u0084\u0001\u0000\u0000\u0000"+
-		"\b\u0089\u0001\u0000\u0000\u0000\n\u0095\u0001\u0000\u0000\u0000\f\u00ac"+
-		"\u0001\u0000\u0000\u0000\u000e\u00c0\u0001\u0000\u0000\u0000\u0010\u00d4"+
-		"\u0001\u0000\u0000\u0000\u0012\u00e8\u0001\u0000\u0000\u0000\u0014\u0116"+
-		"\u0001\u0000\u0000\u0000\u0016\u011b\u0001\u0000\u0000\u0000\u0018\u0134"+
-		"\u0001\u0000\u0000\u0000\u001a\u0136\u0001\u0000\u0000\u0000\u001c\u0138"+
-		"\u0001\u0000\u0000\u0000\u001e\u013a\u0001\u0000\u0000\u0000 \u013d\u0001"+
-		"\u0000\u0000\u0000\"\u0153\u0001\u0000\u0000\u0000$\u015b\u0001\u0000"+
-		"\u0000\u0000&\u0167\u0001\u0000\u0000\u0000(\u0172\u0001\u0000\u0000\u0000"+
-		"*\u018d\u0001\u0000\u0000\u0000,\u018f\u0001\u0000\u0000\u0000.\u01a5"+
-		"\u0001\u0000\u0000\u00000\u01ab\u0001\u0000\u0000\u00002\u01ad\u0001\u0000"+
-		"\u0000\u00004\u01b0\u0001\u0000\u0000\u00006\u01bb\u0001\u0000\u0000\u0000"+
-		"8\u01c6\u0001\u0000\u0000\u0000:\u01cb\u0001\u0000\u0000\u0000<\u01eb"+
-		"\u0001\u0000\u0000\u0000>\u01f7\u0001\u0000\u0000\u0000@\u01fd\u0001\u0000"+
-		"\u0000\u0000B\u0203\u0001\u0000\u0000\u0000D\u0206\u0001\u0000\u0000\u0000"+
-		"FJ\u0003\u0002\u0001\u0000GI\u0003\u0004\u0002\u0000HG\u0001\u0000\u0000"+
-		"\u0000IL\u0001\u0000\u0000\u0000JH\u0001\u0000\u0000\u0000JK\u0001\u0000"+
-		"\u0000\u0000KM\u0001\u0000\u0000\u0000LJ\u0001\u0000\u0000\u0000MN\u0003"+
-		"\u0006\u0003\u0000N\u0001\u0001\u0000\u0000\u0000OP\u0005\u0013\u0000"+
-		"\u0000PU\u0003D\"\u0000QR\u0005\u0001\u0000\u0000RT\u0003D\"\u0000SQ\u0001"+
-		"\u0000\u0000\u0000TW\u0001\u0000\u0000\u0000US\u0001\u0000\u0000\u0000"+
-		"UV\u0001\u0000\u0000\u0000VX\u0001\u0000\u0000\u0000WU\u0001\u0000\u0000"+
-		"\u0000XY\u00054\u0000\u0000Y\u0003\u0001\u0000\u0000\u0000Z[\u0005&\u0000"+
-		"\u0000[`\u0003D\"\u0000\\]\u0005\u0001\u0000\u0000]_\u0003D\"\u0000^\\"+
-		"\u0001\u0000\u0000\u0000_b\u0001\u0000\u0000\u0000`^\u0001\u0000\u0000"+
+		"\u0000\n\f\'\'\u0004\u0000%%\'\',,5<\u0002\u0000,,;;\u0005\u0000\u0013"+
+		"\u001d&&**-3;;\u0236\u0000F\u0001\u0000\u0000\u0000\u0002O\u0001\u0000"+
+		"\u0000\u0000\u0004Z\u0001\u0000\u0000\u0000\u0006\u0084\u0001\u0000\u0000"+
+		"\u0000\b\u0089\u0001\u0000\u0000\u0000\n\u0095\u0001\u0000\u0000\u0000"+
+		"\f\u00ac\u0001\u0000\u0000\u0000\u000e\u00c0\u0001\u0000\u0000\u0000\u0010"+
+		"\u00d4\u0001\u0000\u0000\u0000\u0012\u00e8\u0001\u0000\u0000\u0000\u0014"+
+		"\u0116\u0001\u0000\u0000\u0000\u0016\u011b\u0001\u0000\u0000\u0000\u0018"+
+		"\u0134\u0001\u0000\u0000\u0000\u001a\u0136\u0001\u0000\u0000\u0000\u001c"+
+		"\u0138\u0001\u0000\u0000\u0000\u001e\u013a\u0001\u0000\u0000\u0000 \u013d"+
+		"\u0001\u0000\u0000\u0000\"\u0153\u0001\u0000\u0000\u0000$\u015b\u0001"+
+		"\u0000\u0000\u0000&\u0167\u0001\u0000\u0000\u0000(\u0172\u0001\u0000\u0000"+
+		"\u0000*\u018d\u0001\u0000\u0000\u0000,\u018f\u0001\u0000\u0000\u0000."+
+		"\u01a5\u0001\u0000\u0000\u00000\u01ab\u0001\u0000\u0000\u00002\u01ad\u0001"+
+		"\u0000\u0000\u00004\u01b0\u0001\u0000\u0000\u00006\u01bb\u0001\u0000\u0000"+
+		"\u00008\u01c6\u0001\u0000\u0000\u0000:\u01cb\u0001\u0000\u0000\u0000<"+
+		"\u01eb\u0001\u0000\u0000\u0000>\u01f7\u0001\u0000\u0000\u0000@\u01fd\u0001"+
+		"\u0000\u0000\u0000B\u0203\u0001\u0000\u0000\u0000D\u0206\u0001\u0000\u0000"+
+		"\u0000FJ\u0003\u0002\u0001\u0000GI\u0003\u0004\u0002\u0000HG\u0001\u0000"+
+		"\u0000\u0000IL\u0001\u0000\u0000\u0000JH\u0001\u0000\u0000\u0000JK\u0001"+
+		"\u0000\u0000\u0000KM\u0001\u0000\u0000\u0000LJ\u0001\u0000\u0000\u0000"+
+		"MN\u0003\u0006\u0003\u0000N\u0001\u0001\u0000\u0000\u0000OP\u0005\u0013"+
+		"\u0000\u0000PU\u0003D\"\u0000QR\u0005\u0001\u0000\u0000RT\u0003D\"\u0000"+
+		"SQ\u0001\u0000\u0000\u0000TW\u0001\u0000\u0000\u0000US\u0001\u0000\u0000"+
+		"\u0000UV\u0001\u0000\u0000\u0000VX\u0001\u0000\u0000\u0000WU\u0001\u0000"+
+		"\u0000\u0000XY\u00054\u0000\u0000Y\u0003\u0001\u0000\u0000\u0000Z[\u0005"+
+		"&\u0000\u0000[`\u0003D\"\u0000\\]\u0005\u0001\u0000\u0000]_\u0003D\"\u0000"+
+		"^\\\u0001\u0000\u0000\u0000_b\u0001\u0000\u0000\u0000`^\u0001\u0000\u0000"+
 		"\u0000`a\u0001\u0000\u0000\u0000ac\u0001\u0000\u0000\u0000b`\u0001\u0000"+
 		"\u0000\u0000cd\u0005\u0002\u0000\u0000di\u0003D\"\u0000ef\u0005\u0001"+
 		"\u0000\u0000fh\u0003D\"\u0000ge\u0001\u0000\u0000\u0000hk\u0001\u0000"+

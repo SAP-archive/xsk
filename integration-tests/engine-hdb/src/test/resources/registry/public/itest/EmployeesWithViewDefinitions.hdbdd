@@ -84,4 +84,21 @@ context EmployeesWithViewDefinitions {
           'Developer' as "EmployeeRoleType",
           '2200' as "EmployeeSalary"
         };
+
+        context embedded_context {
+             view embedded_view as select from EmployeesWithViewDefinitions.employees {
+                   ID,
+                   NAME
+             };
+
+             entity embedded_entity {
+                   key ID : String(32);
+                   NAME : String(500);
+             };
+        }
+
+        view outer_view as select from embedded_context.embedded_entity {
+            ID,
+            NAME
+        };
 }

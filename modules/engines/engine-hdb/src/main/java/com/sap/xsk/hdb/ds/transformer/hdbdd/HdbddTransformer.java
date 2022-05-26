@@ -31,6 +31,7 @@ import com.sap.xsk.parser.hdbdd.symbols.view.SelectSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
@@ -173,9 +174,14 @@ public class HdbddTransformer {
         if (dependsOnTable.equalsIgnoreCase(DUMMY_TABLE)) {
           dependsOnTable = dependsOnTable.toUpperCase();
         } else {
-          String dependsOnTableFullName = fullTableNameBuilderFromViewSymbol(dependsOnTable, viewSymbol);
-          // Replace the short name in the select columns with the full name
-          selectColumns = replaceWithQuotes(selectColumns, dependsOnTable, dependsOnTableFullName);
+          String dependsOnTableFullName = viewSymbol.getEnclosingScope().resolve(dependsOnTable).getFullName();
+          selectColumns = Arrays.stream(selectColumns.replaceAll("\\s+", "").split(",")).map(s -> {
+            if (s.startsWith("\"")) {
+              return s;
+            } else {
+              return "\"" + s + "\"";
+            }
+          }).collect(Collectors.joining(","));
           // Set the dependant table to be with the full name
           dependsOnTable = dependsOnTableFullName;
         }
@@ -211,7 +217,8 @@ public class HdbddTransformer {
     return selectSql.toString();
   }
 
-  public String traverseJoinStatements(SelectSymbol selectSymbol, ViewSymbol viewSymbol, String dependsOnTable, List<String> aliasesForReplacement) {
+  public String traverseJoinStatements(SelectSymbol selectSymbol, ViewSymbol viewSymbol, String dependsOnTable,
+      List<String> aliasesForReplacement) {
     StringBuilder joinStatements = new StringBuilder();
 
     for (Symbol symbol : selectSymbol.getJoinStatements()) {
@@ -383,7 +390,8 @@ public class HdbddTransformer {
     return subElements;
   }
 
-  private XSKDataStructureHDBTableColumnModel getAssociationForeignKeyColumn(AssociationSymbol associationSymbol, EntityElementSymbol foreignKey){
+  private XSKDataStructureHDBTableColumnModel getAssociationForeignKeyColumn(AssociationSymbol associationSymbol,
+      EntityElementSymbol foreignKey) {
     XSKDataStructureHDBTableColumnModel columnModel = transformFieldSymbolToColumnModel(foreignKey, false);
     columnModel.setPrimaryKey(associationSymbol.isKey());
     columnModel.setNullable(!associationSymbol.isNotNull());

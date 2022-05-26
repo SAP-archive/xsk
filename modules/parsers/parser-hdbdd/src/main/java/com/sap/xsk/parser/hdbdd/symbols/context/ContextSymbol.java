@@ -40,17 +40,44 @@ public class ContextSymbol extends Symbol implements Scope {
 
   @Override
   public Symbol resolve(String name) {
-    Symbol symbol = symbols.get(name);
-    if (symbol != null) {
-      return symbol;
-    }
+    if(name.contains(".")){
+      String[] identifiers = name.split("\\.");
+      Scope currentScope = this;
+      Symbol resolvedSymbol = this.getSymbols().get(identifiers[0]);
+      while(resolvedSymbol == null){
+        if(currentScope instanceof CDSFileScope) {
+          return null;
+        }
 
-    // if not here, check any enclosing com.sap.xsk.parser.hdbdd.symbols.scope
-    if (getEnclosingScope() != null) {
-      return getEnclosingScope().resolve(name);
-    }
+        currentScope = currentScope.getEnclosingScope();
+        resolvedSymbol = currentScope.resolve(identifiers[0]);
+      }
+      for(int i = 1; i < identifiers.length; i++){
+        if(resolvedSymbol instanceof ContextSymbol) {
+          currentScope = (ContextSymbol) resolvedSymbol;
+          resolvedSymbol = ((ContextSymbol) currentScope).getSymbols().get(identifiers[i]);
+          if (resolvedSymbol == null) {
+            return null;
+          }
+        } else {
+          return null;
+        }
+      }
 
-    return null; // not found
+      return resolvedSymbol;
+    } else {
+      Symbol symbol = symbols.get(name);
+      if (symbol != null) {
+        return symbol;
+      }
+
+      // if not here, check any enclosing com.sap.xsk.parser.hdbdd.symbols.scope
+      if (getEnclosingScope() != null) {
+        return getEnclosingScope().resolve(name);
+      }
+
+      return null; // not found
+    }
   }
 
   public Map<String, Symbol> getSymbols() {

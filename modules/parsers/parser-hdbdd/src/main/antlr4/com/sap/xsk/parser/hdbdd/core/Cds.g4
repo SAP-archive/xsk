@@ -50,7 +50,7 @@ arrRule: '[' annValue (',' annValue)* ']';
 obj: '{' keyValue (',' keyValue)* '}';
 keyValue: identifier ':' annValue;
 
-selectRule: isUnion=UNION? SELECT FROM dependsOnTable=identifier ((AS dependingTableAlias=identifier) | dependingTableAlias=identifier)? joinRule* isDistinct=DISTINCT? '{' selectedColumnsRule '}' ';'? (WHERE whereRule ';'?)?;
+selectRule: isUnion=UNION? SELECT FROM dependsOnTable+=identifier ('.' dependsOnTable+=identifier)* ((AS dependingTableAlias=identifier) | dependingTableAlias=identifier)? joinRule* isDistinct=DISTINCT? '{' selectedColumnsRule '}' ';'? (WHERE whereRule ';'?)?;
 joinRule: joinType=JOIN_TYPES joinArtifactName=identifier ((AS joinTableAlias=identifier) | joinTableAlias=identifier)? joinFields;
 joinFields: .*?;
 selectedColumnsRule: .*?;

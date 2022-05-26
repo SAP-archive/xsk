@@ -499,7 +499,7 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
     }
 
     if (ctx.dependsOnTable != null) {
-      selectSymbol.setDependsOnTable(handleStringLiteral(ctx.dependsOnTable.getText()));
+      selectSymbol.setDependsOnTable(handleStringLiteral(ctx.dependsOnTable.stream().map(e -> e.getText()).collect(Collectors.joining("."))));
     }
 
     if (ctx.dependingTableAlias != null) {

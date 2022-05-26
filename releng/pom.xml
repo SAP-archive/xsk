@@ -19,6 +19,7 @@
 		<module>sap-cf</module>
 		<module>sap-kyma</module>
 		<module>sap-kyma-runtime</module>
+    <module>server-lite</module>
 	</modules>
 
 	<build>

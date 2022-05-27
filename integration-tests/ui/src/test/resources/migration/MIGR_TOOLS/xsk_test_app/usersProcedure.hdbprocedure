@@ -1,4 +1,4 @@
-PROCEDURE "XSK_TEST_APP"."xsk_test_app::usersProcedure" ( )
+PROCEDURE "XSK_TEST_APP_COPY"."xsk_test_app::usersProcedure" ( )
    LANGUAGE SQLSCRIPT
    SQL SECURITY INVOKER
    DEFAULT SCHEMA "XSK_TEST_APP"

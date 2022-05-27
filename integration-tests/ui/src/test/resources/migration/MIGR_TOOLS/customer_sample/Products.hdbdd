@@ -1,0 +1,30 @@
+namespace "customer_sample";
+
+@Schema: 'DBADMIN'
+
+context Products {
+
+ entity  XOrders{
+        key Id               : String(100);
+        CustomerSurname      : String(500);
+        Status               : String(100);
+        CreatedAt            : UTCTimestamp;
+   		CreatedBy            : String(5000);
+        Description          : String(100);
+        Address              : String(5000);
+        Phone                : String(5000);
+        Email                : type of Sample."Email-";
+    };
+    
+     entity  Sample{
+        key Id               : String(32);
+        "Email-"             : String(300);
+    };
+    
+};
+
+
+
+
+
+

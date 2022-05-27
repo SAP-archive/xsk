@@ -217,6 +217,14 @@
           <groupId>org.eclipse.dirigible</groupId>
           <artifactId>dirigible-ide-ui-registry</artifactId>
         </exclusion>
+		<exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-core-registry</artifactId>
+        </exclusion>
+		<exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-service-registry</artifactId>
+        </exclusion>
         <exclusion>
           <groupId>org.eclipse.dirigible</groupId>
           <artifactId>dirigible-ide-ui-security-menu</artifactId>

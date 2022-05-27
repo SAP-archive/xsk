@@ -15,8 +15,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 import com.sap.xsk.exceptions.XSKArtifactParserException;
@@ -24,23 +22,17 @@ import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEntity;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAEventType;
 import com.sap.xsk.parser.xsodata.model.XSKHDBXSODATAHandlerMethod;
 import com.sap.xsk.utils.XSKCommonsDBUtils;
-import com.sap.xsk.xsodata.ds.model.XSKDBArtifactModel;
 import com.sap.xsk.xsodata.ds.model.XSKODataModel;
 import com.sap.xsk.xsodata.ds.service.XSKOData2TransformerException;
 import com.sap.xsk.xsodata.ds.service.XSKODataParser;
 import com.sap.xsk.xsodata.ds.service.XSKTableMetadataProvider;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import javax.sql.DataSource;
 import org.apache.commons.io.IOUtils;
-import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableColumnModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableRelationModel;
@@ -52,47 +44,30 @@ import org.eclipse.dirigible.engine.odata2.definition.ODataHandlerTypes;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Answers;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class XSKODataUtilsTest extends AbstractDirigibleTest {
-
-  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-  private Connection mockConnection;
+public class XSKODataUtilsTest {
 
   @Mock
   private DataSource mockDataSource;
 
   @Mock
-  private ResultSet mockResultSet;
-
-  @Mock
-  private PreparedStatement mockPreparedStatement;
-
-  @Mock
   private XSKTableMetadataProvider metadataProvider;
 
-  @InjectMocks
   private XSKODataUtils oDataUtil;
 
-  @Spy
-  @InjectMocks
-  private final XSKODataParser parser = new XSKODataParser();
-
   @Before
-  public void openMocks() {
-    MockitoAnnotations.openMocks(this);
+  public void setUp() {
+    this.oDataUtil = new XSKODataUtils(metadataProvider);
   }
 
   @Test
   public void testConvertMultiplicityOneToMany() throws Exception {
+    XSKODataParser parser = new XSKODataParser();
     String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_multiplicity_one_to_many.xsodata"),
         StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_multiplicity_one_to_many.xsodata", content);
@@ -105,6 +80,7 @@ public class XSKODataUtilsTest extends AbstractDirigibleTest {
 
   @Test
   public void testConvertWithoutSetOfPropAndLimitedExposedNavigations() throws Exception {
+    XSKODataParser parser = new XSKODataParser();
     String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_without_set_of_prop.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_without_set_of_prop.xsodata", content);
 
@@ -185,6 +161,7 @@ public class XSKODataUtilsTest extends AbstractDirigibleTest {
 
   @Test
   public void testConvertWithSetOfPropAndLimitedExposedNavigations() throws Exception {
+    XSKODataParser parser = new XSKODataParser();
     String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_with_set_of_prop.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_with_set_of_prop.xsodata", content);
 
@@ -272,6 +249,7 @@ public class XSKODataUtilsTest extends AbstractDirigibleTest {
 
   @Test
   public void testConvertOfEvents() throws Exception {
+    XSKODataParser parser = new XSKODataParser();
     String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_with_events.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_with_events.xsodata", content);
 
@@ -375,6 +353,7 @@ public class XSKODataUtilsTest extends AbstractDirigibleTest {
 
   @Test
   public void testCalcView() throws Exception {
+    XSKODataParser parser = new XSKODataParser();
     String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_calc_view.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_calc_view.xsodata", content);
 
@@ -384,11 +363,7 @@ public class XSKODataUtilsTest extends AbstractDirigibleTest {
     PersistenceTableModel model = new PersistenceTableModel("kneo.test.calcviews::calc", Arrays.asList(column1, column2, column3),
         new ArrayList<>());
     model.setTableType("CALC VIEW");
-
     when(metadataProvider.getPersistenceTableModel("kneo.test.calcviews::calc")).thenReturn(model);
-    when(mockDataSource.getConnection()).thenReturn(mockConnection);
-    when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
-    when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
 
     ODataDefinition oDataDefinition = oDataUtil.convertXSKODataModelToODataDefinition(xskoDataModel);
 
@@ -398,58 +373,10 @@ public class XSKODataUtilsTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void testCalcViewWithInputParameters() throws Exception {
-    String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_calc_view_with_input_parameters.xsodata"), StandardCharsets.UTF_8);
-
-    XSKDBArtifactModel xskDBArtifactModelCalcView = new XSKDBArtifactModel(ISqlKeywords.METADATA_CALC_VIEW, ISqlKeywords.METADATA_CALC_VIEW, ISqlKeywords.METADATA_CALC_VIEW);
-
-    when(mockDataSource.getConnection()).thenReturn(mockConnection);
-    when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
-    when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
-
-    doReturn(List.of(xskDBArtifactModelCalcView)).when(parser).getDBArtifactsByName(anyString());
-
-    XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_calc_view_with_input_parameters.xsodata", content);
-
-    PersistenceTableColumnModel column1 = new PersistenceTableColumnModel("COLUMN1", "Edm.Int32", true, false);
-    PersistenceTableColumnModel column2 = new PersistenceTableColumnModel("COLUMN2", "Edm.Int32", true, false);
-    PersistenceTableColumnModel column3 = new PersistenceTableColumnModel("COLUMN3", "Edm.Int32", true, false);
-    PersistenceTableModel model = new PersistenceTableModel("kneo.test.calcviews::calc", Arrays.asList(column1, column2, column3),
-        new ArrayList<>());
-    model.setTableType("CALC VIEW");
-
-    when(metadataProvider.getPersistenceTableModel("kneo.test.calcviews::calc")).thenReturn(model);
-    when(mockDataSource.getConnection()).thenReturn(mockConnection);
-    when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
-    when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
-    when(mockResultSet.next()).thenReturn(true).thenReturn(false).thenReturn(true).thenReturn(false);
-    when(mockResultSet.getString("VARIABLE_NAME")).thenReturn("CurrentUserId");
-    when(mockResultSet.getString("COLUMN_SQL_TYPE")).thenReturn("INTEGER");
-    when(mockResultSet.getString("MANDATORY")).thenReturn("0");
-
-    ODataDefinition oDataDefinition = oDataUtil.convertXSKODataModelToODataDefinition(xskoDataModel);
-
-    assertEquals(3, oDataDefinition.getEntities().get(0).getProperties().size());
-    assertEquals(1, oDataDefinition.getEntities().get(0).getParameters().size());
-
-    assertEquals(0, oDataDefinition.getEntities().get(1).getProperties().size());
-    assertEquals(1, oDataDefinition.getEntities().get(1).getParameters().size());
-    assertEquals(1, oDataDefinition.getEntities().get(1).getNavigations().size());
-
-    assertEquals(3, oDataDefinition.getEntities().get(2).getProperties().size());
-    assertEquals(1, oDataDefinition.getEntities().get(2).getParameters().size());
-
-    assertEquals(0, oDataDefinition.getEntities().get(3).getProperties().size());
-    assertEquals(1, oDataDefinition.getEntities().get(3).getParameters().size());
-    assertEquals(1, oDataDefinition.getEntities().get(3).getNavigations().size());
-
-    assertEquals(2, oDataDefinition.getAssociations().size());
-  }
-
-  @Test
   public void testSynonym() throws Exception {
     try (MockedStatic<XSKCommonsDBUtils> xskCommonsDBUtils = Mockito.mockStatic(XSKCommonsDBUtils.class)) {
 
+      XSKODataParser parser = new XSKODataParser();
       String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_synonym.xsodata"), StandardCharsets.UTF_8);
       XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_synonym.xsodata", content);
 
@@ -462,9 +389,6 @@ public class XSKODataUtilsTest extends AbstractDirigibleTest {
       calcViewModel.setTableType(ISqlKeywords.METADATA_CALC_VIEW);
 
       when(metadataProvider.getPersistenceTableModel("TestCalcView")).thenReturn(calcViewModel);
-      when(mockDataSource.getConnection()).thenReturn(mockConnection);
-      when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
-      when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
 
       ODataDefinition oDataDefinition = oDataUtil.convertXSKODataModelToODataDefinition(xskoDataModel);
 
@@ -477,6 +401,7 @@ public class XSKODataUtilsTest extends AbstractDirigibleTest {
 
   @Test
   public void testProperNavigationConstruction() throws IOException, XSKArtifactParserException, SQLException {
+    XSKODataParser parser = new XSKODataParser();
     String content = IOUtils.toString(this.getClass().getResourceAsStream("/entity_with_3_navigations.xsodata"), StandardCharsets.UTF_8);
     XSKODataModel xskoDataModel = parser.parseXSODataArtifact("np/entity_with_3_navigations.xsodata", content);
 

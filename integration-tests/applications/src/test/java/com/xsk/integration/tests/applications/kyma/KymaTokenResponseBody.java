@@ -9,23 +9,19 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.xsk.integration.tests.migration;
+package com.xsk.integration.tests.applications.kyma;
 
-class ExpectedContent {
+import com.google.gson.annotations.SerializedName;
 
-  private final String filePath;
-  private final byte[] content;
+public class KymaTokenResponseBody {
+    @SerializedName("access_token")
+    private final String accessToken;
 
-  ExpectedContent(String filePath, byte[] content) {
-    this.filePath = filePath;
-    this.content = content;
-  }
+    public KymaTokenResponseBody(String accessToken) {
+        this.accessToken = accessToken;
+    }
 
-  String getFilePath() {
-    return filePath;
-  }
-
-  byte[] getContent() {
-    return content;
-  }
+    public String getAccessToken() {
+        return accessToken;
+    }
 }

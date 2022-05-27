@@ -19,7 +19,7 @@ export class XSJSLibExportsGenerator {
 
   _generateExportsRecursively(parentCollection) {
     if (!parentCollection.exists() || !this.processedArtefactsTable) {
-      throw new Error("Collection not found: " + parentCollection.getPath());
+      return;
     }
 
     const resourceNames = this._toJsArray(parentCollection.getResourcesNames());

@@ -81,7 +81,7 @@ exports.setParamByType = function (preparedStatement, paramType, paramValue, par
             break;
         case "SMALLDECIMAL":
         case "DECIMAL":
-            preparedStatement.setBigDecimal(paramIndex, tryConvertNumberToBigDecimal(paramValue));
+            preparedStatement.setBigDecimal(paramIndex, paramValue);
             break;
         case "REAL":
         case "FLOAT":
@@ -138,11 +138,3 @@ exports.setParamByType = function (preparedStatement, paramType, paramValue, par
             throw new Error(`The '${paramType}' data type in the preparedStatement is not supported`);
     }
 };
-
-function tryConvertNumberToBigDecimal(maybeNumber) {
-    if (typeof maybeNumber === 'number') {
-        const BigDecimal = Java.type("java.math.BigDecimal");
-        return BigDecimal.valueOf(maybeNumber);
-    }
-    return maybeNumber;
-}

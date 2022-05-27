@@ -30,7 +30,6 @@ import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
 import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class XSKHDBTableParserHanaITTest extends AbstractXSKHDBITTest {
@@ -82,7 +81,6 @@ public class XSKHDBTableParserHanaITTest extends AbstractXSKHDBITTest {
     }
 
     @Test
-    @Ignore
     public void testHDBTableAlterWhenCompatibleChange() throws Exception {
 
         try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
@@ -137,7 +135,6 @@ public class XSKHDBTableParserHanaITTest extends AbstractXSKHDBITTest {
     }
 
     @Test
-    @Ignore
     public void testHDBTableAlterWhenNullableToNotNullableChange() throws Exception {
         try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
 
@@ -166,7 +163,6 @@ public class XSKHDBTableParserHanaITTest extends AbstractXSKHDBITTest {
     }
 
     @Test
-    @Ignore
     public void testHDBTableAlterWhenNotUniqueToUniqueChange() throws Exception {
         try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
 
@@ -195,7 +191,6 @@ public class XSKHDBTableParserHanaITTest extends AbstractXSKHDBITTest {
     }
 
     @Test
-    @Ignore
     public void testHDBTableAlterWhenAddingExistingColumnToPKList() throws Exception {
         try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
 
@@ -226,7 +221,6 @@ public class XSKHDBTableParserHanaITTest extends AbstractXSKHDBITTest {
     }
 
     @Test
-    @Ignore
     public void testHDBTableAlterWhenAddingNewColumnToPKList() throws Exception {
         try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
 
@@ -255,7 +249,6 @@ public class XSKHDBTableParserHanaITTest extends AbstractXSKHDBITTest {
     }
 
     @Test
-    @Ignore
     public void testHDBTableAlterWhenAddingNewNotNullableColumn() throws Exception {
         try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
 
@@ -284,7 +277,6 @@ public class XSKHDBTableParserHanaITTest extends AbstractXSKHDBITTest {
     }
 
     @Test
-    @Ignore
     public void testHDBTableAlterWhenExistingColumnTypeChange() throws Exception {
         try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
 

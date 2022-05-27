@@ -9,23 +9,15 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.xsk.integration.tests.migration;
+package com.xsk.integration.tests.applications;
 
-class ExpectedContent {
+import com.xsk.integration.tests.applications.deployment.ApplicationDeploymentRule;
+import org.junit.ClassRule;
+import org.junit.Test;
 
-  private final String filePath;
-  private final byte[] content;
+public class KymaTest {
 
-  ExpectedContent(String filePath, byte[] content) {
-    this.filePath = filePath;
-    this.content = content;
-  }
+    @ClassRule
+    public static ApplicationDeploymentRule applicationDeploymentRule = new ApplicationDeploymentRule("simple", DeploymentType.KYMA);
 
-  String getFilePath() {
-    return filePath;
-  }
-
-  byte[] getContent() {
-    return content;
-  }
 }

@@ -149,6 +149,33 @@ const Body = function (bodyValue) {
 };
 
 exports.WebRequest = function (method, path) {
+  const tildeHeaders = {
+    '~server_protocol': function () {
+      return dRequest.getProtocol()
+    },
+    '~server_name': function () {
+      return dRequest.getServerName()
+    },
+    '~server_port': function () {
+      return dRequest.getServerPort()
+    },
+    '~request_line': function (webRequest) {
+      return WEB_UTILS.getMethodName(webRequest.method) + ' ' + webRequest.path + ' ' + dRequest.getProtocol()
+    },
+    '~request_method': function (webRequest) {
+      return WEB_UTILS.getMethodName(webRequest.method)
+    },
+    '~request_uri': function (webRequest) {
+      return webRequest.path
+    },
+    '~path': function (webRequest) {
+      return webRequest.path
+    },
+    '~path_translated': function (webRequest) {
+      return webRequest.path
+    }
+  }
+
   if (typeof method === 'number') {
     if (typeof path !== 'string') {
       throw new Error('Expected string as a path (second argument)');
@@ -165,6 +192,8 @@ exports.WebRequest = function (method, path) {
         throw new Error('Not supported for outbound requests');
       }
     });
+
+    addTildeHeaders(this, ['~server_protocol', '~request_method', '~request_uri']);
   } else {
     const XSJS_FILE_EXTENSION_LENGTH = 5;
     const XSJS_FILE_EXTENSION = ".xsjs";
@@ -241,6 +270,15 @@ exports.WebRequest = function (method, path) {
         })
       });
 
+      var additionalHeaders = ['~server_name', '~server_port', '~server_protocol', '~request_line', '~request_method', '~request_uri', '~path', '~path_translated'];
+
+      additionalHeaders.forEach(headerName => {
+        dHeadersArray.push({
+          "name": headerName,
+          "value": tildeHeaders[headerName](this)
+        });
+      });
+
       return new TupelList(dHeadersArray, true);
     }.bind(this)();
 
@@ -265,6 +303,13 @@ exports.WebRequest = function (method, path) {
     });
     return arrayToReturn;
   };
+
+  function addTildeHeaders(webRequest, headersToAdd) {
+    headersToAdd.forEach(headerName => {
+      const headerValue = tildeHeaders[headerName](webRequest);
+      webRequest.headers.set(headerName, headerValue);
+    })
+  }
 };
 
 exports.WebResponse = function (clientResponse) {

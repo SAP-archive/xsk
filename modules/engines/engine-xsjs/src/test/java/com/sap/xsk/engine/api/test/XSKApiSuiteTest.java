@@ -29,7 +29,6 @@ import javax.servlet.http.HttpSession;
 
 import com.sap.cloud.sdk.testutil.MockDestination;
 import com.sap.cloud.sdk.testutil.MockUtil;
-import com.sap.xsk.XSJSTest;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.apache.cxf.helpers.IOUtils;
@@ -54,13 +53,18 @@ import org.mockito.Mockito;
 import com.sap.xsk.engine.XSKJavascriptEngineExecutor;
 
 @RunWith(JUnitParamsRunner.class)
-public class XSKApiSuiteTest extends XSJSTest {
+public class XSKApiSuiteTest extends AbstractDirigibleTest {
 
   private IExtensionsCoreService extensionsCoreService;
 
   private IRepository repository;
 
   private XSKJavascriptEngineExecutor graaljsJavascriptEngineExecutor;
+
+  public XSKApiSuiteTest() {
+    // should be executed before parent @Before method as parent would otherwise initialize the DB in a persistent way
+    Configuration.set("DIRIGIBLE_DATABASE_H2_URL", "jdbc:h2:mem:xsk-tests");
+  }
 
   @Before
   public void setUp() {

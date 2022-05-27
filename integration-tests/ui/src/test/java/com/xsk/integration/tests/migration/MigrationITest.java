@@ -12,49 +12,43 @@
 package com.xsk.integration.tests.migration;
 
 import com.google.common.base.Strings;
-import com.sap.xsk.integration.tests.core.client.http.XSKHttpClient;
-import com.sap.xsk.integration.tests.core.client.http.local.LocalXSKHttpClient;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.util.EntityUtils;
 import org.junit.After;
 import org.junit.Test;
 
-import static com.xsk.integration.tests.migration.DirigibleConnectionProperties.LOCALHOST_URI;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @RunWith(JUnitParamsRunner.class)
 public class MigrationITest {
 
-  private final ExpectedContentProvider expectedContentProvider = ExpectedContentProvider.getInstance();
+  private ExpectedContentProvider expectedContentProvider = ExpectedContentProvider.getInstance();
   private WebBrowser webBrowser;
   private MigrationCredentials credentials;
-  private Map<String, List<ExpectedContent>> expectedContentList;
+  private List<ExpectedContent> expectedContentList;
 
   @Test
-  @Parameters({"Chrome", "Firefox"})
+  @Parameters({"Chrome", /*"Migration-Chrome-Hana2",*/ "Firefox" /*"Migration-Firefox-Hana2"*/})
   public void migrationTest(String param) throws IOException {
     setup(param);
     loginIfNecessary();
@@ -64,7 +58,8 @@ public class MigrationITest {
     selectDeliveryUnits();
     approveChanges();
     goToWorkspace();
-    validateProjectFIles();
+    openFilesFromJstree();
+    validateAllMigratedFileContents();
   }
 
   private void setup(String param) {
@@ -75,17 +70,14 @@ public class MigrationITest {
 
   private void loginIfNecessary() {
     try {
-      webBrowser.waitForVisibilityOfElement(By.xpath("/html/body/div/div/h3[text() = 'Sign in to SAP XSK']"));
+      webBrowser.waitForVisibilityOfElement(By.xpath("/html/body/div/div/h3[text() = 'Sign in to Eclipse Dirigible']"));
     } catch (Throwable t) {
       return; // assume we're already logged in
     }
 
-    webBrowser.log();
-    webBrowser.switchToDefaultContent();
-    webBrowser.enterAndAssertField(By.name("j_username"), DirigibleConnectionProperties.AUTH_USERNAME);
-    webBrowser.enterAndAssertField(By.name("j_password"), DirigibleConnectionProperties.AUTH_PASSWORD);
-    webBrowser.log();
-    webBrowser.submitForm(By.name("loginForm"));
+    webBrowser.enterAndAssertField(By.xpath("//input[@placeholder='Username']"), DirigibleConnectionProperties.AUTH_USERNAME);
+    webBrowser.enterAndAssertField(By.xpath("//input[@placeholder='Password']"), DirigibleConnectionProperties.AUTH_PASSWORD);
+    webBrowser.clickItem(By.xpath("//button[text() = 'Log in']"));
   }
 
   private void navigateToMigrationPerspective() {
@@ -124,6 +116,7 @@ public class MigrationITest {
 
   private void approveChanges() {
     webBrowser.clickItem(By.xpath("//*[@ng-click=\"startMigration()\"]"));
+
   }
 
   private void goToWorkspace() {
@@ -133,91 +126,60 @@ public class MigrationITest {
     webBrowser.log();
   }
 
-  private void validateProjectFIles() throws IOException {
-    expandJsTree();
-    for (var projectName : expectedContentList.keySet()) {
-      for (var file : expectedContentList.get(projectName)) {
-        switchToWorkspaceFrame();
-        openFileInJsTree(file);
-        validateProjectFile(file);
-        webBrowser.log();
-        closeFileTab(file);
-      }
-      webBrowser.log();
-    }
-  }
-
-  private void expandJsTree() {
-    switchToWorkspaceFrame();
-    webBrowser.executeJavascript("$(\".jstree\").jstree(\"open_all\")");
-    webBrowser.log();
-  }
-
-  private void switchToWorkspaceFrame() {
+  private void openFilesFromJstree() {
+    // Select the workspace iframe and expand the tree view in jstree
     webBrowser.switchToDefaultContent();
     webBrowser.switchToIframe(By.xpath("//iframe[@src='../ide-workspace/workspace.html']"));
     webBrowser.waitForVisibilityOfElement(By.id("j1_1_anchor"));
-  }
+    webBrowser.log();
+    webBrowser.executeJavascript("$(\".jstree\").jstree(\"open_all\")");
 
-  void openFileInJsTree(ExpectedContent file) {
-    var projectName = file.getProject();
-    var fileName = Paths.get(file.getFilePath()).getFileName();
-
-    // Find the project folder's jstree node.
-    By projectAnchorXpath = By.xpath("//*[text()='" + projectName + "']");
-    var projectAnchors = webBrowser.findAllVisibleWebElements(projectAnchorXpath);
-    if (projectAnchors.size() != 1) {
-      throw new RuntimeException("Selenium test error: zero or multiple jstree anchors for project found.");
+    // Double-click all jstree anchors by their file name (text content).
+    for (var expectedContent : expectedContentList) {
+      var fileName = Paths.get(expectedContent.getFilePath()).getFileName();
+      By anchorXpath = By.xpath("//*[text()='" + fileName + "']");
+      webBrowser.doubleClickVisibleElementBy(anchorXpath);
+      webBrowser.sleep(500);
+      webBrowser.log();
     }
-    var projectAnchor = projectAnchors.get(0).findElement(By.xpath("./.."));
 
-    // Find the file's jstree node.
-    var fileAnchors = projectAnchor.findElements(By.xpath(".//*[text()='" + fileName + "']"));
-    if (fileAnchors.size() != 1) {
-      throw new RuntimeException("Selenium test error: zero or multiple jstree anchors for file found.");
-    }
-    var fileAnchor = fileAnchors.get(0);
-
-    // Open the file by clicking on the jstree node or via context menu.
-    if (isNonTextEditorFile(file.getFilePath())) {
-      webBrowser.contextClick(fileAnchor);
-      webBrowser.clickItem(By.xpath("//*[text()='Open with...']"));
-      webBrowser.clickItem(By.xpath("//*[text()='Code Editor']"));
-    } else {
-      webBrowser.doubleClickItem(fileAnchor);
-    }
-  }
-
-  private void validateProjectFile(ExpectedContent file) throws IOException {
     webBrowser.switchToDefaultContent();
+  }
 
-    var filePath = file.getFilePath();
+  private void validateAllMigratedFileContents() throws IOException {
+    var workspaceUrl = "http://"
+        + DirigibleConnectionProperties.HOST
+        + ":" + DirigibleConnectionProperties.PORT
+        + "/services/v4/ide/workspaces/"
+        + expectedContentProvider.getExpectedWorkspaceName()
+        + "/";
+
+    var projectUrl = workspaceUrl + expectedContentProvider.getExpectedProjectName();
     var iframes = webBrowser.findElementsBy(By.tagName("iframe"));
+    int assertedFilesCount = 0;
 
-    for (var iframe : iframes) {
-      var srcAttribute = iframe.getAttribute("src");
-      var parsedSrc = splitQuery(new URL(srcAttribute));
-      var fileQueryParameter = parsedSrc.get("file");
+    for (var expectedContent : expectedContentList) {
+      var expectedFilePath = expectedContent.getFilePath();
+      var expectedFileContent = expectedContent.getContent();
+      var expectedFileName = Paths.get(expectedFilePath).getFileName().toString();
 
-      if (collectionHasElementEndingWith(fileQueryParameter, filePath)) {
-        if (isImageFile(filePath)) {
-          assertImageFileEquals(file);
-        } else {
-          assertMonacoTextFileEquals(iframe, file);
+      for (var iframe : iframes) {
+        var srcAttribute = iframe.getAttribute("src");
+        var parsedSrc = splitQuery(new URL(srcAttribute));
+        var fileQueryParameter = parsedSrc.get("file");
+        if (collectionHasElementEndingWith(fileQueryParameter, expectedFilePath)) {
+          if (isImageFile(expectedFileName)) {
+            var imageUrl = projectUrl + expectedFilePath;
+            assertImageFileEquals(imageUrl, expectedFileContent);
+          } else {
+            assertMonacoTextFileEquals(iframe, expectedFileContent);
+          }
+          assertedFilesCount++;
         }
       }
     }
-  }
 
-  private void closeFileTab(ExpectedContent file) {
-    webBrowser.switchToDefaultContent();
-    var fileName = Paths.get(file.getFilePath()).getFileName().toString();
-    var tabs = webBrowser.findElementsBy(By.xpath("//*[@title='" + fileName + "']"));
-    tabs.forEach(tab -> {
-      var closeTabs = tab.findElements(By.className("lm_close_tab"));
-      closeTabs.forEach(WebElement::click);
-    });
-    webBrowser.switchToDefaultContent();
+    assertEquals(assertedFilesCount, expectedContentList.size());
   }
 
   private Map<String, List<String>> splitQuery(URL url) {
@@ -240,82 +202,44 @@ public class MigrationITest {
     );
   }
 
-  private boolean isImageFile(String filePath) {
-    return filePath.toLowerCase().endsWith(".jpg")
-        || filePath.toLowerCase().endsWith(".png")
-        || filePath.toLowerCase().endsWith(".gif");
+  private boolean isImageFile(String fileName) {
+    return fileName.toLowerCase().endsWith(".jpg")
+        || fileName.toLowerCase().endsWith(".png")
+        || fileName.toLowerCase().endsWith(".gif");
   }
 
-  private boolean isNonTextEditorFile(String filePath) {
-    // The following files use a gui editor and don't open by default as text.
-    return filePath.toLowerCase().endsWith(".csv")
-        || filePath.toLowerCase().endsWith(".hdi");
-  }
-
-  void assertImageFileEquals(ExpectedContent file) throws IOException {
-    var migratedImage = getImageFileContent(file.getFilePath());
-    var expectedFileContent = file.getContent();
-
-    System.out.println(
-        "[MigrationITest] Asserting image file equals: "
-            + file.getFilePath()
-            + "\n Expected Byte Length: \n"
-            + expectedFileContent.length
-            + "\n Actual Byte Length: \n"
-            + migratedImage.length
-    );
+  void assertImageFileEquals(String imageURL, byte[] expectedFileContent) throws IOException {
+    var migratedImage = getImageFileContent(new URL(imageURL));
 
     assertArrayEquals("Images after migration must match expected content",
         expectedFileContent, migratedImage);
   }
 
-  void assertMonacoTextFileEquals(WebElement monacoTabIframe, ExpectedContent file) {
+  void assertMonacoTextFileEquals(WebElement monacoTabIframe, byte[] expectedFileContent) {
     var migratedTextFile = getTextFileContent(monacoTabIframe)
         .replaceAll("\\s", "");
-    var expectedTextFile = new String(file.getContent(), StandardCharsets.UTF_8)
+    var expectedTextFile = new String(expectedFileContent, StandardCharsets.UTF_8)
         .replaceAll("\\s", "");
-
-    System.out.println(
-        "[MigrationITest] Asserting text file equals: "
-            + file.getFilePath()
-            + "\n Expected: \n"
-            + expectedTextFile
-            + "\n Actual: \n"
-            + migratedTextFile
-    );
 
     assertEquals("Text files after migration must match expected content ",
         expectedTextFile, migratedTextFile);
   }
 
-  private byte[] getImageFileContent(String filePath) throws IOException {
-    var imageUrl = new URL(
-        "http://"
-            + DirigibleConnectionProperties.HOST
-            + ":" + DirigibleConnectionProperties.PORT
-            + "/services/v4/ide/workspaces/"
-            + expectedContentProvider.getExpectedWorkspaceName()
-            + filePath
-    );
-
-    XSKHttpClient client = LocalXSKHttpClient.create(LOCALHOST_URI);
-    try {
-      HttpUriRequest request = RequestBuilder.get(imageUrl.toURI()).build();
-      var response = client.executeRequestAsync(request).get();
-      HttpEntity entity = response.getEntity();
-      webBrowser.sleep(3000); // This sleep lets the image load in the editor so it is visible in the next .log() call
-      return EntityUtils.toByteArray(entity);
-    } catch (URISyntaxException | InterruptedException | ExecutionException e) {
-      throw new RuntimeException(e);
-    }
+  private byte[] getImageFileContent(URL imageUrl) throws IOException {
+    URLConnection connection = imageUrl.openConnection();
+    String basicAuth = "Basic " + new String(Base64.getEncoder().encode(DirigibleConnectionProperties.AUTH.getBytes()));
+    connection.setRequestProperty("Authorization", basicAuth);
+    BufferedInputStream migratedImageStream = new BufferedInputStream(connection.getInputStream());
+    return migratedImageStream.readAllBytes();
   }
 
-  String getTextFileContent(WebElement monacoTabIframe) {
+  String getTextFileContent(WebElement iframe) {
     webBrowser.switchToDefaultContent();
-    webBrowser.switchToIframe(monacoTabIframe);
-    webBrowser.sleep(3000); // This sleep is required, otherwise monaco on js execution in next line is undefined.
+    webBrowser.switchToIframe(iframe);
+    webBrowser.sleep(3000);
     var migratedText = webBrowser.executeJavascript("return monaco.editor.getModels().at(0).getValue();");
     webBrowser.switchToDefaultContent();
+
     return migratedText;
   }
 

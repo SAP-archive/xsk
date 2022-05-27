@@ -3,6 +3,7 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta charset="utf-8">
+    <title>SAP XSK &trade; | Busy</title>
 
 		<!-- Twitter Bootstrap with Theme Support -->
 		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
@@ -97,7 +98,7 @@
 			}
 
 			.Running:before {
-			    font-family: 'FontAwesome';
+			    font-family: 'FontAwesome', sans-serif;
 			    font-size:1.3em;
 			    color: yellow;
 			    content: '\f054';  /* the chevron right icon */
@@ -105,7 +106,7 @@
 			}
 
 			.Succeeded:before {
-			    font-family: 'FontAwesome';
+			    font-family: 'FontAwesome', sans-serif;
 			    font-size:1.3em;
 			    color: green;
 			    content: '\f00c';  /* the check icon */
@@ -113,7 +114,7 @@
 			}
 
 			.Failed:before {
-			    font-family: 'FontAwesome';
+			    font-family: 'FontAwesome', sans-serif;
 			    font-size:1.3em;
 			    color: red;
 			    content: '\f00d';  /* the times icon */
@@ -142,12 +143,11 @@
 			<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></span></h1>
 
 			<table class="table table-striped">
-		    <thead>
+        <caption>Jobs status</caption>
 		        <tr>
-		            <td>Name</td>
-		            <td>Status</td>
+		            <th scope="col">Name</th>
+		            <th scope="col">Status</th>
 		        </tr>
-		    </thead>
 		    <tbody>
 		        <tr ng-repeat="job in jobs">
 				   <td>{{job.name}}</td>

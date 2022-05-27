@@ -254,7 +254,7 @@
 
 
         <dirigible.version>6.2.29</dirigible.version>
-        <revision>0.170.0-SNAPSHOT</revision>
+        <revision>1.0.0-dev</revision>
 
 
         <!-- Sonar Cloud -->

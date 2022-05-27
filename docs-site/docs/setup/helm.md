@@ -81,7 +81,7 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
         --set kyma.host=<kyma-host>
         ```
 
-        This will install additionally an `ApiRule` and XSUAA `ServiceInstance` and `ServiceBinding`. The appropriate roles should be assigned to the user.
+        This will install additionally an `ApiRule` and XSUAA `ServiceInstance` and `ServiceBinding` with SAP BTP Service Operator. The appropriate roles should be assigned to the user.
 
     === "Kyma with SAP HANA database"
 
@@ -95,7 +95,7 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
         --set kyma.host=<kyma-apirule-host>
         ```
 
-        This will install additionally an `ApiRule`, XSUAA `ServiceInstance`, `ServiceBinding` and HANA instance. The appropriate roles should be assigned to the user.
+        This will install additionally an `ApiRule`, XSUAA `ServiceInstance`, `ServiceBinding` with SAP BTP Service Operator and HANA instance. The appropriate roles should be assigned to the user.
 
     === "Kyma with custom roles"
 
@@ -107,7 +107,7 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
         --set kyma.roles={"<new-role>"\,"<new-role>"}
         ```
 
-        This will install additionally an `ApiRule` and XSUAA `ServiceInstance` and `ServiceBinding` with default roles `Developer` and `Operator` and will add your new roles. The appropriate roles should be assigned to the user.
+        This will install additionally an `ApiRule` and XSUAA `ServiceInstance` and `ServiceBinding` with SAP BTP Service Operator with default roles `Developer` and `Operator` and will add your new roles. The appropriate roles should be assigned to the user.
 
     ??? info "Configuration Options"
         

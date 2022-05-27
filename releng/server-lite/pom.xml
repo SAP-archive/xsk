@@ -155,11 +155,23 @@
         </exclusion>
         <exclusion>
           <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-ide-service-terminal</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
           <artifactId>dirigible-ide-ui-documents</artifactId>
         </exclusion>
         <exclusion>
           <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-api-facade-documents</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
           <artifactId>dirigible-ide-ui-operations</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-service-operations</artifactId>
         </exclusion>
         <exclusion>
           <groupId>org.eclipse.dirigible</groupId>

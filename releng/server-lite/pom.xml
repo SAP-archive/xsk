@@ -215,6 +215,10 @@
         </exclusion>
         <exclusion>
           <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-api-facade-log</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
           <artifactId>dirigible-ide-ui-plugins</artifactId>
         </exclusion>
         <exclusion>
@@ -248,6 +252,14 @@
         <exclusion>
           <groupId>org.eclipse.dirigible</groupId>
           <artifactId>dirigible-ide-ui-websockets</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-service-websockets</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-core-websockets</artifactId>
         </exclusion>
 			</exclusions>
 		</dependency>

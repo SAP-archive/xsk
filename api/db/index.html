@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://www.xsk.io/api/db/">
       
       <link rel="icon" href="/img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.11">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.15">
     
     
       
@@ -19,10 +19,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.8c5ef100.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.c382b1dc.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.9647289d.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cc9b2e1e.min.css">
         
       
     
@@ -1955,47 +1955,47 @@
 <li>Status: <code>alpha</code></li>
 </ul>
 <h2 id="sample-usage">Sample Usage</h2>
-<div class="highlight"><pre><span></span><code><span class="kd">let</span> <span class="nx">connection</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="nx">connection</span><span class="p">;</span><span class="w"></span>
 
-<span class="k">try</span> <span class="p">{</span>
-    <span class="nx">connection</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">db</span><span class="p">.</span><span class="nx">getConnection</span><span class="p">();</span>
+<span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">$</span><span class="p">.</span><span class="nx">db</span><span class="p">.</span><span class="nx">getConnection</span><span class="p">();</span><span class="w"></span>
 
-    <span class="c1">// Make sure to create the table only once</span>
-    <span class="k">try</span> <span class="p">{</span>
-        <span class="nx">connection</span><span class="p">.</span><span class="nx">prepareStatement</span><span class="p">(</span><span class="s2">&quot;CREATE TABLE SAMPLE_USERS (NAME varchar(255), AGE int)&quot;</span><span class="p">).</span><span class="nx">execute</span><span class="p">();</span>
-    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// Do nothing, as the table already exists</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="c1">// Make sure to create the table only once</span><span class="w"></span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">connection</span><span class="p">.</span><span class="nx">prepareStatement</span><span class="p">(</span><span class="s2">&quot;CREATE TABLE SAMPLE_USERS (NAME varchar(255), AGE int)&quot;</span><span class="p">).</span><span class="nx">execute</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Do nothing, as the table already exists</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-    <span class="kd">let</span> <span class="nx">insertStatement</span> <span class="o">=</span> <span class="nx">connection</span><span class="p">.</span><span class="nx">prepareStatement</span><span class="p">(</span><span class="s2">&quot;INSERT INTO SAMPLE_USERS (NAME, AGE) VALUES (&#39;Bob&#39;, 20)&quot;</span><span class="p">);</span>
-    <span class="nx">insertStatement</span><span class="p">.</span><span class="nx">executeUpdate</span><span class="p">();</span>
-    <span class="nx">insertStatement</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">insertStatement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">connection</span><span class="p">.</span><span class="nx">prepareStatement</span><span class="p">(</span><span class="s2">&quot;INSERT INTO SAMPLE_USERS (NAME, AGE) VALUES (&#39;Bob&#39;, 20)&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="nx">insertStatement</span><span class="p">.</span><span class="nx">executeUpdate</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="nx">insertStatement</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span><span class="w"></span>
 
-    <span class="nx">insertStatement</span> <span class="o">=</span> <span class="nx">connection</span><span class="p">.</span><span class="nx">prepareStatement</span><span class="p">(</span><span class="s2">&quot;INSERT INTO SAMPLE_USERS (NAME, AGE) VALUES (&#39;Alice&#39;, 21)&quot;</span><span class="p">);</span>
-    <span class="nx">insertStatement</span><span class="p">.</span><span class="nx">executeUpdate</span><span class="p">();</span>
-    <span class="nx">insertStatement</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+<span class="w">    </span><span class="nx">insertStatement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">connection</span><span class="p">.</span><span class="nx">prepareStatement</span><span class="p">(</span><span class="s2">&quot;INSERT INTO SAMPLE_USERS (NAME, AGE) VALUES (&#39;Alice&#39;, 21)&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="nx">insertStatement</span><span class="p">.</span><span class="nx">executeUpdate</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="nx">insertStatement</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span><span class="w"></span>
 
-    <span class="kd">let</span> <span class="nx">selectStatement</span> <span class="o">=</span> <span class="nx">connection</span><span class="p">.</span><span class="nx">prepareStatement</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM SAMPLE_USERS&quot;</span><span class="p">);</span>
-    <span class="nx">selectStatement</span><span class="p">.</span><span class="nx">execute</span><span class="p">();</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">selectStatement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">connection</span><span class="p">.</span><span class="nx">prepareStatement</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM SAMPLE_USERS&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="nx">selectStatement</span><span class="p">.</span><span class="nx">execute</span><span class="p">();</span><span class="w"></span>
 
-    <span class="kd">let</span> <span class="nx">resultSet</span> <span class="o">=</span> <span class="nx">selectStatement</span><span class="p">.</span><span class="nx">getResultSet</span><span class="p">();</span>
-    <span class="kd">let</span> <span class="nx">names</span> <span class="o">=</span>  <span class="p">[];</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">resultSet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">selectStatement</span><span class="p">.</span><span class="nx">getResultSet</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">names</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="p">[];</span><span class="w"></span>
 
-    <span class="k">while</span> <span class="p">(</span><span class="nx">resultSet</span><span class="p">.</span><span class="nx">next</span><span class="p">())</span> <span class="p">{</span>
-        <span class="nx">names</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">resultSet</span><span class="p">.</span><span class="nx">getString</span><span class="p">(</span><span class="mf">1</span><span class="p">));</span>
-    <span class="p">}</span>    
-    <span class="nx">selectStatement</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
-    <span class="nx">resultSet</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nx">resultSet</span><span class="p">.</span><span class="nx">next</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">names</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">resultSet</span><span class="p">.</span><span class="nx">getString</span><span class="p">(</span><span class="mf">1</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w">    </span>
+<span class="w">    </span><span class="nx">selectStatement</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="nx">resultSet</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span><span class="w"></span>
 
-    <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">names</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
-<span class="p">}</span> <span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">connection</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">connection</span><span class="p">.</span><span class="nx">rollback</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="s2">&quot;Transaction was rolled back: &quot;</span>  <span class="o">+</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
-<span class="p">}</span> <span class="k">finally</span> <span class="p">{</span>
-    <span class="nx">connection</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="nx">names</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">connection</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">connection</span><span class="p">.</span><span class="nx">rollback</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="s2">&quot;Transaction was rolled back: &quot;</span><span class="w">  </span><span class="o">+</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">connection</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h2 id="functions">Functions</h2>
 <table>
@@ -2789,7 +2789,7 @@
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes"], "search": "../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.748e2769.min.js"></script>
+      <script src="../../assets/javascripts/bundle.a6c66575.min.js"></script>
       
     
   </body>

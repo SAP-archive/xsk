@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://www.xsk.io/api/trace/">
       
       <link rel="icon" href="/img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.11">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.15">
     
     
       
@@ -19,10 +19,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.8c5ef100.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.c382b1dc.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.9647289d.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cc9b2e1e.min.css">
         
       
     
@@ -1703,21 +1703,21 @@
 <li>Status: <code>alpha</code></li>
 </ul>
 <h2 id="sample-usage">Sample Usage</h2>
-<div class="highlight"><pre><span></span><code><span class="kd">let</span> <span class="nx">trace</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">trace</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="nx">trace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">$</span><span class="p">.</span><span class="nx">trace</span><span class="p">;</span><span class="w"></span>
 
-<span class="c1">// Check trace methods availability in the &quot;Preview&quot; tab</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="s2">&quot;Debug logging enabled: &quot;</span> <span class="o">+</span> <span class="nx">trace</span><span class="p">.</span><span class="nx">isDebugEnabled</span><span class="p">()</span>
-    <span class="o">+</span> <span class="s2">&quot;, Error logging enabled: &quot;</span> <span class="o">+</span> <span class="nx">trace</span><span class="p">.</span><span class="nx">isErrorEnabled</span><span class="p">()</span>
-    <span class="o">+</span> <span class="s2">&quot;, Fatal logging enabled: &quot;</span> <span class="o">+</span> <span class="nx">trace</span><span class="p">.</span><span class="nx">isFatalEnabled</span><span class="p">()</span>
-    <span class="o">+</span> <span class="s2">&quot;, Info logging enabled: &quot;</span> <span class="o">+</span> <span class="nx">trace</span><span class="p">.</span><span class="nx">isInfoEnabled</span><span class="p">()</span>
-    <span class="o">+</span> <span class="s2">&quot;, Warning logging enabled: &quot;</span> <span class="o">+</span><span class="nx">trace</span><span class="p">.</span><span class="nx">isWarningEnabled</span><span class="p">());</span>
+<span class="c1">// Check trace methods availability in the &quot;Preview&quot; tab</span><span class="w"></span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">setBody</span><span class="p">(</span><span class="s2">&quot;Debug logging enabled: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">trace</span><span class="p">.</span><span class="nx">isDebugEnabled</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;, Error logging enabled: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">trace</span><span class="p">.</span><span class="nx">isErrorEnabled</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;, Fatal logging enabled: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">trace</span><span class="p">.</span><span class="nx">isFatalEnabled</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;, Info logging enabled: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">trace</span><span class="p">.</span><span class="nx">isInfoEnabled</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;, Warning logging enabled: &quot;</span><span class="w"> </span><span class="o">+</span><span class="nx">trace</span><span class="p">.</span><span class="nx">isWarningEnabled</span><span class="p">());</span><span class="w"></span>
 
-<span class="c1">// If the trace method is enabled, it will print the message in the &quot;Console&quot; tab</span>
-<span class="nx">trace</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s2">&quot;Debug message!&quot;</span><span class="p">);</span>
-<span class="nx">trace</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Error message!&quot;</span><span class="p">);</span>
-<span class="nx">trace</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Fatal message!&quot;</span><span class="p">);</span>
-<span class="nx">trace</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s2">&quot;Info message!&quot;</span><span class="p">);</span>
-<span class="nx">trace</span><span class="p">.</span><span class="nx">warning</span><span class="p">(</span><span class="s2">&quot;Warning message!&quot;</span><span class="p">);</span>
+<span class="c1">// If the trace method is enabled, it will print the message in the &quot;Console&quot; tab</span><span class="w"></span>
+<span class="nx">trace</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s2">&quot;Debug message!&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="nx">trace</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Error message!&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="nx">trace</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Fatal message!&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="nx">trace</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s2">&quot;Info message!&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="nx">trace</span><span class="p">.</span><span class="nx">warning</span><span class="p">(</span><span class="s2">&quot;Warning message!&quot;</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <h2 id="constants">Constants</h2>
 <table>
@@ -1945,7 +1945,7 @@
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes"], "search": "../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.748e2769.min.js"></script>
+      <script src="../../assets/javascripts/bundle.a6c66575.min.js"></script>
       
     
   </body>

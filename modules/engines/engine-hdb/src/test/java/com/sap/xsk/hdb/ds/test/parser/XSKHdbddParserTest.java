@@ -573,4 +573,14 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
 
     assertEquals(expectedRawContent, viewModel.getRawContent().trim());
   }
+
+  @Test
+  public void testParseHDBDDWithNestedViewDefinition() throws Exception {
+    String expectedRawContent = org.apache.commons.io.IOUtils
+        .toString(XSKHdbddParserTest.class.getResourceAsStream("/expected-results/ViewDefinitionNested.sql"), StandardCharsets.UTF_8);
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ViewDefinitionNested.hdbdd", "");
+    XSKDataStructureHDBViewModel viewModel = ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0);
+
+    assertEquals(expectedRawContent, viewModel.getRawContent().trim());
+  }
 }

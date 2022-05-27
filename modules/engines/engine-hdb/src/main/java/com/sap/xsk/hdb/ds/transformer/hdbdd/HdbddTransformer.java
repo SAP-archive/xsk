@@ -18,6 +18,7 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintPrima
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
+import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.AssociationSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
@@ -174,16 +175,13 @@ public class HdbddTransformer {
         if (dependsOnTable.equalsIgnoreCase(DUMMY_TABLE)) {
           dependsOnTable = dependsOnTable.toUpperCase();
         } else {
-          String dependsOnTableFullName = viewSymbol.getEnclosingScope().resolve(dependsOnTable).getFullName();
-          selectColumns = Arrays.stream(selectColumns.replaceAll("\\s+", "").split(",")).map(s -> {
-            if (s.startsWith("\"")) {
-              return s;
-            } else {
-              return "\"" + s + "\"";
-            }
-          }).collect(Collectors.joining(","));
+          Symbol resolvedDependsOnTable = viewSymbol.getEnclosingScope().resolve(dependsOnTable);
+          if(resolvedDependsOnTable == null) {
+            throw new CDSRuntimeException(String.format("Could not resolve referenced entity: " +  dependsOnTable));
+          }
+          selectColumns = encloseColumnsInQuotes(selectColumns);
           // Set the dependant table to be with the full name
-          dependsOnTable = dependsOnTableFullName;
+          dependsOnTable = resolvedDependsOnTable.getFullName();
         }
       }
 
@@ -397,5 +395,15 @@ public class HdbddTransformer {
     columnModel.setNullable(!associationSymbol.isNotNull());
 
     return columnModel;
+  }
+
+  private String encloseColumnsInQuotes(String columns) {
+    return Arrays.stream(columns.replaceAll("\\s+", "").split(",")).map(s -> {
+      if (s.startsWith("\"")) {
+        return s;
+      } else {
+        return "\"" + s + "\"";
+      }
+    }).collect(Collectors.joining(","));
   }
 }

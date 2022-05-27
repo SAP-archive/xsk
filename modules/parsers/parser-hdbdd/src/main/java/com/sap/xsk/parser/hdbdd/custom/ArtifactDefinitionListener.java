@@ -77,6 +77,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
@@ -499,7 +500,7 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
     }
 
     if (ctx.dependsOnTable != null) {
-      selectSymbol.setDependsOnTable(handleStringLiteral(ctx.dependsOnTable.stream().map(e -> e.getText()).collect(Collectors.joining("."))));
+      selectSymbol.setDependsOnTable(handleStringLiteral(ctx.dependsOnTable.stream().map(RuleContext::getText).collect(Collectors.joining("."))));
     }
 
     if (ctx.dependingTableAlias != null) {

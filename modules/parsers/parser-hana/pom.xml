@@ -6,14 +6,14 @@
     <parent>
         <groupId>com.sap.xsk</groupId>
         <artifactId>xsk-modules-parsers-parent</artifactId>
-        <version>0.17.0-SNAPSHOT</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <name>XSK - Modules - Parsers - Hana</name>
     <artifactId>xsk-modules-parsers-hana</artifactId>
-    <version>0.17.0-SNAPSHOT</version>
+    <version>${revision}</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -30,7 +30,7 @@
         <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-parsers-commons</artifactId>
-            <version>0.17.0-SNAPSHOT</version>
+            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

@@ -6,13 +6,13 @@
   <parent>
 		<groupId>com.sap.xsk</groupId>
 		<artifactId>xsk-parent</artifactId>
-		<version>0.17.0-SNAPSHOT</version>
+		<version>${revision}</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>XSK - Integration Tests - Parent</name>
 	<artifactId>xsk-integration-tests-parent</artifactId>
-	<version>0.17.0-SNAPSHOT</version>
+	<version>${revision}</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -23,6 +23,7 @@
   </modules>
 
 	<properties>
+    <revision>0.17.0-SNAPSHOT</revision>
 		<license.header.location>../licensing-header.txt</license.header.location>
 	</properties>
 

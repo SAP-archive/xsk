@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package com.sap.xsk.synchronizer;
 
 import com.sap.xsk.XSJSTest;
@@ -32,14 +43,14 @@ public class XSJSLibSynchronizerPathTypeResolverTest extends XSJSTest {
     ResolvedPathType type6 = resolver.resolveWithResourceFirst("/resolveWithResourceFirstTestNonExistent");
     ResolvedPathType type7 = resolver.resolveWithResourceFirst("/resolveWithResourceFirstTest/test2.html");
 
-    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.ExistentXSJSLibFile, type1);
-    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.ExistentOtherFile, type2);
-    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.ExistentFolder, type3);
-    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.ExistentFolder, type4);
+    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.EXISTENT_XSJSLIB_FILE, type1);
+    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.EXISTENT_OTHER_FILE, type2);
+    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.EXISTENT_FOLDER, type3);
+    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.EXISTENT_FOLDER, type4);
 
-    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.NonExistentFileOrFolder, type5);
-    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.NonExistentFileOrFolder, type6);
-    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.NonExistentFileOrFolder, type7);
+    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.NON_EXISTENT_FILE_OR_FOLDER, type5);
+    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.NON_EXISTENT_FILE_OR_FOLDER, type6);
+    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.NON_EXISTENT_FILE_OR_FOLDER, type7);
   }
 
   @Test
@@ -61,13 +72,13 @@ public class XSJSLibSynchronizerPathTypeResolverTest extends XSJSTest {
     ResolvedPathType type6 = resolver.resolveWithCollectionFirst("/resolveWithResourceFirstTestNonExistent");
     ResolvedPathType type7 = resolver.resolveWithCollectionFirst("/resolveWithResourceFirstTest/test2.html");
 
-    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.ExistentXSJSLibFile, type1);
-    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.ExistentOtherFile, type2);
-    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.ExistentFolder, type3);
-    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.ExistentFolder, type4);
+    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.EXISTENT_XSJSLIB_FILE, type1);
+    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.EXISTENT_OTHER_FILE, type2);
+    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.EXISTENT_FOLDER, type3);
+    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.EXISTENT_FOLDER, type4);
 
-    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.NonExistentFileOrFolder, type5);
-    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.NonExistentFileOrFolder, type6);
-    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.NonExistentFileOrFolder, type7);
+    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.NON_EXISTENT_FILE_OR_FOLDER, type5);
+    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.NON_EXISTENT_FILE_OR_FOLDER, type6);
+    assertEquals("Unexpected ResolvedPathType.", ResolvedPathType.NON_EXISTENT_FILE_OR_FOLDER, type7);
   }
 }

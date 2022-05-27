@@ -14,7 +14,6 @@ package com.sap.xsk.synchronizer;
 import com.sap.xsk.exceptions.XSJSLibArtefactCleanerSQLException;
 import com.sap.xsk.synchronizer.XSJSLibSynchronizerPathTypeResolver.ResolvedPathType;
 import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.repository.api.ICollection;
 import org.eclipse.dirigible.repository.api.IRepository;
 import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
@@ -24,7 +23,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class XSJSLibSynchronizerArtefactsCleaner {
-  private static final Logger logger = LoggerFactory.getLogger(XSJSLibSynchronizer.class);
+  private static final Logger logger = LoggerFactory.getLogger(XSJSLibSynchronizerArtefactsCleaner.class);
 
   private static final IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
 
@@ -35,8 +34,8 @@ public class XSJSLibSynchronizerArtefactsCleaner {
   public void cleanup(String registryPath) {
     ResolvedPathType type = resolver.resolveWithCollectionFirst(registryPath);
     switch(type) {
-      case ExistentXSJSLibFile: cleanupResourcePath(registryPath); break;
-      case ExistentFolder: cleanupCollectionPath(registryPath); break;
+      case EXISTENT_XSJSLIB_FILE: cleanupResourcePath(registryPath); break;
+      case EXISTENT_FOLDER: cleanupCollectionPath(registryPath); break;
       default: logger.info("XSJSLibSynchronizer: Nothing to cleanup."); break;
     }
   }

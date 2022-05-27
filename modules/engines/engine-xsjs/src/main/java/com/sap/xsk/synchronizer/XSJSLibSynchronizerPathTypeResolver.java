@@ -20,10 +20,10 @@ public class XSJSLibSynchronizerPathTypeResolver {
   private static final IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
 
   public enum ResolvedPathType {
-    ExistentXSJSLibFile,
-    ExistentFolder,
-    ExistentOtherFile,
-    NonExistentFileOrFolder
+    EXISTENT_XSJSLIB_FILE,
+    EXISTENT_FOLDER,
+    EXISTENT_OTHER_FILE,
+    NON_EXISTENT_FILE_OR_FOLDER
   }
 
   public ResolvedPathType resolveWithResourceFirst(String registryPath) {
@@ -31,13 +31,13 @@ public class XSJSLibSynchronizerPathTypeResolver {
 
     if(resource.exists()) {
       return registryPath.endsWith(".xsjslib") ?
-          ResolvedPathType.ExistentXSJSLibFile : ResolvedPathType.ExistentOtherFile;
+          ResolvedPathType.EXISTENT_XSJSLIB_FILE : ResolvedPathType.EXISTENT_OTHER_FILE;
     }
     else {
       ICollection collection = repository.getCollection(registryPath);
 
       return collection.exists() ?
-          ResolvedPathType.ExistentFolder : ResolvedPathType.NonExistentFileOrFolder;
+          ResolvedPathType.EXISTENT_FOLDER : ResolvedPathType.NON_EXISTENT_FILE_OR_FOLDER;
     }
   }
 
@@ -45,23 +45,23 @@ public class XSJSLibSynchronizerPathTypeResolver {
     ICollection collection = repository.getCollection(registryPath);
 
     if(collection.exists()) {
-      return ResolvedPathType.ExistentFolder;
+      return ResolvedPathType.EXISTENT_FOLDER;
     }
     else {
         IResource resource = repository.getResource(registryPath);
 
         if(resource.exists()) {
           return registryPath.endsWith(".xsjslib") ?
-              ResolvedPathType.ExistentXSJSLibFile : ResolvedPathType.ExistentOtherFile;
+              ResolvedPathType.EXISTENT_XSJSLIB_FILE : ResolvedPathType.EXISTENT_OTHER_FILE;
         }
         else {
-          return ResolvedPathType.NonExistentFileOrFolder;
+          return ResolvedPathType.NON_EXISTENT_FILE_OR_FOLDER;
         }
       }
     }
 
   public boolean isNonSynchronizableType(ResolvedPathType type) {
-    return type == ResolvedPathType.ExistentOtherFile
-        || type == ResolvedPathType.NonExistentFileOrFolder;
+    return type == ResolvedPathType.EXISTENT_OTHER_FILE
+        || type == ResolvedPathType.NON_EXISTENT_FILE_OR_FOLDER;
   }
 }

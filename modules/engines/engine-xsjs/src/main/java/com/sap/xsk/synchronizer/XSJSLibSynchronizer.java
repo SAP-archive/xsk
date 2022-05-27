@@ -31,6 +31,8 @@ public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrdere
 
   public static final String XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME = "PROCESSED_XSJSLIB_ARTEFACTS";
 
+  private static final String DONE_SYNCHRONIZING_LOG_MESSAGE = "Done synchronizing XSJSLibs.";
+
   private final XSJSLibSynchronizerPathTypeResolver resolver = new XSJSLibSynchronizerPathTypeResolver();
 
   private final String targetRegistryPath;
@@ -60,7 +62,7 @@ public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrdere
     logger.trace("Synchronizing XSJSLibs...");
 
     if(resolver.isNonSynchronizableType(targetRegistryPathType)) {
-      logger.trace("Done synchronizing XSJSLibs.");
+      logger.trace(DONE_SYNCHRONIZING_LOG_MESSAGE);
       return;
     }
 
@@ -73,7 +75,7 @@ public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrdere
         false
     );
 
-    logger.trace("Done synchronizing XSJSLibs.");
+    logger.trace(DONE_SYNCHRONIZING_LOG_MESSAGE);
   }
 
   private Map<Object, Object> buildContext() {
@@ -83,8 +85,8 @@ public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrdere
     context.put("stateTableName", XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME);
 
     switch(targetRegistryPathType) {
-      case ExistentXSJSLibFile: context.put("targetRegistryPathType", "ExistentXSJSLibFile"); break;
-      case ExistentFolder: context.put("targetRegistryPathType", "ExistentFolder"); break;
+      case EXISTENT_XSJSLIB_FILE: context.put("targetRegistryPathType", "ExistentXSJSLibFile"); break;
+      case EXISTENT_FOLDER: context.put("targetRegistryPathType", "ExistentFolder"); break;
       default: throw new RuntimeException("XSJSLibSynchronizer: Unhandled ResolvedPathType.");
     }
 
@@ -109,7 +111,7 @@ public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrdere
         logger.trace("Synchronizing XSJSLibs...");
         synchronizeXSJSLibs();
         afterSynchronizing();
-        logger.trace("Done synchronizing XSJSLibs.");
+        logger.trace(DONE_SYNCHRONIZING_LOG_MESSAGE);
       }
     }
   }

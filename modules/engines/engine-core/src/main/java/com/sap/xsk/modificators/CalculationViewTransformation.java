@@ -23,7 +23,7 @@ import java.io.StringReader;
 
 public class CalculationViewTransformation {
 
-  private static final String CALCULATION_VIEW_DATA_SOURCE_TRANSFORMATION_XSLT = "<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\n"
+  private static final String CALCULATION_VIEW_DATA_SOURCE_TRANSFORMATION_XSLT = "<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"https://www.w3.org/1999/XSL/Transform\">\n"
       + "    <xsl:template match=\"DataSource/@type\" />\n"
       + "    <xsl:template match=\"@*|node()\">\n"
       + "        <xsl:copy>\n"

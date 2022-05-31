@@ -32,7 +32,6 @@ import com.sap.xsk.parser.hdbdd.symbols.view.SelectSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.eclipse.dirigible.api.v3.security.UserFacade;

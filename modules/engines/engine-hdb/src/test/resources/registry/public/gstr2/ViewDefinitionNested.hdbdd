@@ -5,18 +5,19 @@ namespace gstr2;
 context ViewDefinitionNested {
 
       context embedded_context {
-           view embedded_view as select from ViewDefinitionNested.employees {
+           view embedded_view as select from ViewDefinitionNested.employee_context.employees {
                  ID,
                  NAME
            };
       }
 
-      entity employees {
-          key ID       : String(32);
-          NAME         : String(500);
-          ADDRESS      : String(5000);
-          AGE          : Integer;
-          PHONE        : String(200);
-      };
-
+      context employee_context {
+          entity employees {
+              key ID       : String(32);
+              NAME         : String(500);
+              ADDRESS      : String(5000);
+              AGE          : Integer;
+              PHONE        : String(200);
+          };
+      }
 }

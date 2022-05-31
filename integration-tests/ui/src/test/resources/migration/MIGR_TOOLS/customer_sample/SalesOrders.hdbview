@@ -1,0 +1,3 @@
+schema="XSK_SAMPLES_HDI_CUBE";
+query="SELECT * FROM \"hdi-cube::SalesOrdersTable\"";
+depends_on= ["hdi-cube::SalesOrdersTable"];

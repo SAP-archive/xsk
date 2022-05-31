@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.synchronizer;
 
+import com.sap.xsk.XSJSTest;
 import com.sap.xsk.engine.XSKJavascriptEngineExecutor;
 import com.sap.xsk.exceptions.XSJSLibArtefactCleanerSQLException;
 import com.sap.xsk.exceptions.XSJSLibExportsGenerationSourceNotFoundException;
@@ -22,6 +23,7 @@ import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.scheduler.api.ISchedulerCoreService;
 import org.eclipse.dirigible.core.scheduler.service.definition.JobDefinition;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
+import org.eclipse.dirigible.engine.js.graalvm.debugger.GraalVMJavascriptDebugProcessor;
 import org.eclipse.dirigible.engine.js.graalvm.processor.GraalVMJavascriptEngineExecutor;
 import org.eclipse.dirigible.repository.api.IEntity;
 import org.eclipse.dirigible.repository.api.IRepository;
@@ -46,22 +48,21 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnitParamsRunner.class)
-public class ExportGenerationTest extends AbstractDirigibleTest {
-
-  public ExportGenerationTest() {
-    // should be executed before parent @Before method as parent would otherwise initialize the DB in a persistent way
-    Configuration.set("DIRIGIBLE_DATABASE_H2_URL", "jdbc:h2:mem:xsk-tests");
-  }
+public class ExportGenerationTest extends XSJSTest {
 
   @Before
   public void beforeTest() {
-    setUpRepository();
     cleanup();
   }
 
   @After
   public void afterTest() {
     cleanup();
+  }
+
+  private void cleanup() {
+    dropTableIfExists(XSJSLibSynchronizer.XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME);
+    dropTableIfExists("XSJSLIB_EXPORT_TEST_TABLE");
   }
 
   @Test
@@ -148,7 +149,7 @@ public class ExportGenerationTest extends AbstractDirigibleTest {
 
   @Test
   public void importTest() throws ScriptingException {
-    XSJSLibSynchronizer.forceSynchronization("../../test/xsk/import/");
+    XSJSLibSynchronizer.forceSynchronization("../../test/xsk/import/"); // look two directories back as the test resources are outside the repository root
 
     Map<Object, Object> context = new HashMap<>();
     XSKJavascriptEngineExecutor xskJavascriptEngineExecutor = new XSKJavascriptEngineExecutor();
@@ -177,24 +178,6 @@ public class ExportGenerationTest extends AbstractDirigibleTest {
         true,
         false
     );
-  }
-
-  private void cleanup() {
-    cleanupRepository();
-    dropTableIfExists(XSJSLibSynchronizer.XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME);
-    dropTableIfExists("XSJSLIB_EXPORT_TEST_TABLE");
-  }
-
-  private void setUpRepository() {
-    String rootFolder = "target/test-classes/META-INF/";
-    IRepository repository = new LocalRepository(rootFolder, false);
-    StaticObjects.set(StaticObjects.REPOSITORY, repository);
-  }
-
-  private void cleanupRepository() {
-    IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
-    repository.getRoot().getResources().forEach(IEntity::delete);
-    repository.getRoot().getCollections().forEach(IEntity::delete);
   }
 
   private void dropTableIfExists(String tableName) {

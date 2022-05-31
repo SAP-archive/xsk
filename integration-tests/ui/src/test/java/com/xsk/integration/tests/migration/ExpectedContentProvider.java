@@ -17,18 +17,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 class ExpectedContentProvider {
 
   private static final ExpectedContentProvider contentProvider = new ExpectedContentProvider();
   private static final String deliveryUnitPath = "/migration";
   private static final String getDeliveryUnitName = "MIGR_TOOLS";
-  private static final String projectName = "xsk_test_app";
   private static final String workspaceName = "workspace";
-  private static final String contentPath = deliveryUnitPath + "/" + getDeliveryUnitName + "/" + projectName;
+  private static final String contentPath = deliveryUnitPath + "/" + getDeliveryUnitName;
 
-  private final List<ExpectedContent> expectedContentList;
+  private final Map<String, List<ExpectedContent>> expectedContentList;
 
   private static ExpectedContentProvider instance;
 
@@ -43,13 +44,23 @@ class ExpectedContentProvider {
     return instance;
   }
 
-  private ArrayList<ExpectedContent> getValidationProjectFiles() {
-    var expectedContentList = new ArrayList<ExpectedContent>();
+  private Map<String, List<ExpectedContent>> getValidationProjectFiles() {
+    var expectedContentList = new HashMap<String, List<ExpectedContent>>();
+
     try {
       for (var fileName : getResourceFilePaths(contentPath)) {
         var trimmedFileName = fileName.replace(contentPath, "");
         ExpectedContent file = new ExpectedContent(trimmedFileName, getResourceFileContent(fileName));
-        expectedContentList.add(file);
+        var projectName = file.getProject();
+
+        if(!expectedContentList.containsKey(projectName)) {
+          var initialProjectFiles = new ArrayList<ExpectedContent>();
+          initialProjectFiles.add(file);
+          expectedContentList.put(projectName, initialProjectFiles);
+        } else {
+          var oldProjectFiles = expectedContentList.get(projectName);
+          oldProjectFiles.add(file);
+        }
       }
     } catch (IOException e) {
       throw new RuntimeException("Could not load expected files", e);
@@ -94,16 +105,12 @@ class ExpectedContentProvider {
     return Thread.currentThread().getContextClassLoader();
   }
 
-  List<ExpectedContent> getExpectedContentList() {
+  Map<String, List<ExpectedContent>> getExpectedContentList() {
     return contentProvider.expectedContentList;
   }
 
   String getExpectedDeliveryUnitName() {
     return getDeliveryUnitName;
-  }
-
-  String getExpectedProjectName() {
-    return projectName;
   }
 
   String getExpectedWorkspaceName() {

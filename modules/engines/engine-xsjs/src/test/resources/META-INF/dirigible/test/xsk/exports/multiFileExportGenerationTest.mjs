@@ -23,7 +23,7 @@ function testMultiFileFolderExportGeneration() {
 
   // run generation and assert content is valid for all resources
   const generator = new XSJSLibExportsGenerator(stateTableParams);
-  generator.run(baseCollection);
+  generator.run(baseCollection.getPath());
   assertEquals(baseExpectedContent, baseResource.getText(), "Unexpected xsjslib content after exports generation.");
   assertEquals(childExpectedContent, childResource.getText(), "Unexpected xsjslib content after exports generation.");
 

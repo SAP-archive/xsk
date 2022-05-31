@@ -30,18 +30,18 @@ public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrdere
 
   public static final String XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME = "PROCESSED_XSJSLIB_ARTEFACTS";
 
-  private final String targetLocation;
+  private final String targetRegistryPath;
 
   public XSJSLibSynchronizer() {
     this(XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
   }
 
-  public XSJSLibSynchronizer(String targetLocation) {
-    this.targetLocation = targetLocation;
+  public XSJSLibSynchronizer(String targetRegistryPath) {
+    this.targetRegistryPath = targetRegistryPath;
   }
 
-  public static void forceSynchronization(String targetLocation) {
-    XSJSLibSynchronizer synchronizer = new XSJSLibSynchronizer(targetLocation);
+  public static void forceSynchronization(String targetRegistryPath) {
+    XSJSLibSynchronizer synchronizer = new XSJSLibSynchronizer(targetRegistryPath);
     synchronizer.setForcedSynchronization(true);
     try {
       synchronizer.synchronize();
@@ -54,7 +54,7 @@ public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrdere
     logger.trace("Synchronizing XSJSLibs...");
 
     Map<Object, Object> context = new HashMap<>();
-    context.put("targetRegistryPath", targetLocation);
+    context.put("targetRegistryPath", targetRegistryPath);
     context.put("stateTableName", XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME);
 
     GraalVMJavascriptEngineExecutor graalVMJavascriptEngineExecutor = new GraalVMJavascriptEngineExecutor();

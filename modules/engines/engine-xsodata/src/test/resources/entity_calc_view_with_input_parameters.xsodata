@@ -1,0 +1,14 @@
+service namespace "np"{
+
+    "kneo.test.calcviews::calc" as "CalcView1"
+         keys generate local "ID"
+         parameters via key and entity;
+
+     "kneo.test.calcviews::calc" as "CalcView2"
+         keys generate local "ID"
+         parameters via entity "CVParams" results property "AllResults";
+
+}
+annotations     {
+	enable OData4SAP;
+}

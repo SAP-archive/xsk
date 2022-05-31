@@ -11,6 +11,8 @@
         "/xsk_test_app/usersHDBAnalyticPrivilege.hdbanalyticprivilege",
         "/xsk_test_app/usersTableFunction.hdbtablefunction",
         "/xsk_test_app/usersView.calculationview",
+        "/customer_sample/hdi-synonyms.hdbsynonym",
+        "/customer_sample/hdi-public-synonyms.hdbpublicsynonym",
         "/xsk_test_app/hdi-public-synonyms.hdbpublicsynonym",
         "/xsk_test_app/hdi-synonyms.hdbsynonym",
         "/xsk_test_app/usersTableFunction.hdbtablefunction"

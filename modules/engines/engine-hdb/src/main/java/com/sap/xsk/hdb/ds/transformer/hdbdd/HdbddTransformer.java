@@ -171,18 +171,7 @@ public class HdbddTransformer {
 
       // Check if the dependant table has :: to know whether short or full name is used in the hdbdd view definition. In case it is not we should build the full name
       if (!dependsOnTable.contains(PACKAGE_DELIMITER)) {
-        // Check if the dependant table name is DUMMY. This is a reserved table name for hana dummy tables. We make sure to make it in uppercase
-        if (dependsOnTable.equalsIgnoreCase(DUMMY_TABLE)) {
-          dependsOnTable = dependsOnTable.toUpperCase();
-        } else {
-          Symbol resolvedDependsOnTable = viewSymbol.getEnclosingScope().resolve(dependsOnTable);
-          if(resolvedDependsOnTable == null) {
-            throw new CDSRuntimeException(String.format("Could not resolve referenced entity: " +  dependsOnTable));
-          }
-          selectColumns = encloseColumnsInQuotes(selectColumns);
-          // Set the dependant table to be with the full name
-          dependsOnTable = resolvedDependsOnTable.getFullName();
-        }
+        dependsOnTable = getFullTableName(viewSymbol, dependsOnTable);
       }
 
       if (unionBol) {
@@ -397,13 +386,15 @@ public class HdbddTransformer {
     return columnModel;
   }
 
-  private String encloseColumnsInQuotes(String columns) {
-    return Arrays.stream(columns.replaceAll("\\s+", "").split(",")).map(s -> {
-      if (s.startsWith("\"")) {
-        return s;
-      } else {
-        return "\"" + s + "\"";
+  private String getFullTableName(ViewSymbol dependingView, String tableName) {
+    if (tableName.equalsIgnoreCase(DUMMY_TABLE)) {
+      return tableName.toUpperCase();
+    } else {
+      Symbol resolvedDependsOnTable = dependingView.getEnclosingScope().resolve(tableName);
+      if (resolvedDependsOnTable == null) {
+        throw new CDSRuntimeException(String.format("Could not resolve referenced entity: %s", tableName));
       }
-    }).collect(Collectors.joining(","));
+      return resolvedDependsOnTable.getFullName();
+    }
   }
 }

@@ -31,9 +31,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType;
 
-import java.io.IOException;
-import java.sql.Timestamp;
-
 public class XSKHDBProcedureParser implements XSKDataStructureParser<XSKDataStructureHDBProcedureModel> {
 
     private final XSKDataStructuresSynchronizer dataStructuresSynchronizer;
@@ -109,4 +106,5 @@ public class XSKHDBProcedureParser implements XSKDataStructureParser<XSKDataStru
     public Class<XSKDataStructureHDBProcedureModel> getDataStructureClass() {
         return XSKDataStructureHDBProcedureModel.class;
     }
+
 }

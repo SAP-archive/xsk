@@ -304,7 +304,7 @@ public class XSKDataStructureModel {
     return true;
   }
 
-    public static abstract class Builder<B extends Builder<B>> {
+    public abstract static class Builder<B extends Builder<B>> {
         private String location;
         private String name;
         private String type;
@@ -356,10 +356,6 @@ public class XSKDataStructureModel {
             return self();
         }
 
-        public B dbContentType(XSKDBContentType dbContentType) {
-            this.dbContentType = dbContentType;
-            return self();
-        }
 
         public XSKDataStructureModel build() {
             return new XSKDataStructureModel(this);

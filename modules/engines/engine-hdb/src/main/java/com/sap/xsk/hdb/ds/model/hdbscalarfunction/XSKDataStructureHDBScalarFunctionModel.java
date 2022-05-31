@@ -15,5 +15,4 @@ import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctio
 
 public class XSKDataStructureHDBScalarFunctionModel extends XSKDataStructureHDBTableFunctionModel {
 
-  
 }

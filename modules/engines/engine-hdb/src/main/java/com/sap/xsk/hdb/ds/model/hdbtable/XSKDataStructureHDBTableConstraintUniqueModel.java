@@ -23,12 +23,8 @@ public class XSKDataStructureHDBTableConstraintUniqueModel extends XSKDataStruct
   }
 
   public XSKDataStructureHDBTableConstraintUniqueModel(String indexName, String order, String[] indexColumns){
-    if (indexName != null){
-      this.indexName = indexName;
-    }
-    if (order != null){
-      this.order = order;
-    }
+    this.indexName = indexName;
+    this.order = order;
     this.setColumns(indexColumns);
   }
 

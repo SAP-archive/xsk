@@ -532,7 +532,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   public void testParseHDBDDWithNoTableTypeAnnotation() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/NoTableType.hdbdd", "");
     String tableType = ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType();
-    assertNull("No table type defined for HDBDD", tableType);
+    assertNull("No table type should have been defined for this HDBDD, but table type is specified", tableType);
   }
 
   @Test
@@ -578,15 +578,15 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   @Test
   public void testParseHDBDDWithUniqueCatalogIndex() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/CatalogIndexUnique.hdbdd", "");
-    boolean isUnique = ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getConstraints().getUniqueIndices().isEmpty();
-    assertFalse("Catalog index is not unique", isUnique);
+    boolean hasUniqueIndices = ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getConstraints().getUniqueIndices().isEmpty();
+    assertFalse("Expected value for catalog unique index to be true, but it is false", hasUniqueIndices);
   }
 
   @Test
-  public void testParseHDBDDWithNonUniqueCatalogIndex() throws Exception {
+  public void testParseHDBDDWithNoUniqueCatalogIndex() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/CatalogIndexNonUnique.hdbdd", "");
-    boolean isNotUnique = ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getIndexes().get(0).isUnique();
-    assertFalse("Catalog index is unique", isNotUnique);
+    boolean hasNoUniqueIndices = ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getIndexes().get(0).isUnique();
+    assertFalse("Expected value for catalog unique index to be false, but it is true", hasNoUniqueIndices);
   }
 
 }

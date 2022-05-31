@@ -159,6 +159,14 @@
         </exclusion>
         <exclusion>
           <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-ext</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-ext-kafka</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
           <artifactId>dirigible-ide-ui-documents</artifactId>
         </exclusion>
         <exclusion>
@@ -233,11 +241,11 @@
           <groupId>org.eclipse.dirigible</groupId>
           <artifactId>dirigible-ide-ui-registry</artifactId>
         </exclusion>
-		<exclusion>
+		    <exclusion>
           <groupId>org.eclipse.dirigible</groupId>
           <artifactId>dirigible-core-registry</artifactId>
         </exclusion>
-		<exclusion>
+		    <exclusion>
           <groupId>org.eclipse.dirigible</groupId>
           <artifactId>dirigible-service-registry</artifactId>
         </exclusion>
@@ -261,10 +269,45 @@
           <groupId>org.eclipse.dirigible</groupId>
           <artifactId>dirigible-core-websockets</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-engine-wiki</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-bpm</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-ide-ui-form-builder</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-ide-ui-form-builder-menu</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-cms</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-api-javascript-cms</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-api-javascript-documents</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-engine-wiki</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-templates</artifactId>
+        </exclusion>
 			</exclusions>
 		</dependency>
 	</dependencies>
-
 	<properties>
 		<license.header.location>../../licensing-header.txt</license.header.location>
 	</properties>

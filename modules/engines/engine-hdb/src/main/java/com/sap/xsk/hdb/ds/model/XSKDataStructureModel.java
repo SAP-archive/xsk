@@ -11,16 +11,15 @@
  */
 package com.sap.xsk.hdb.ds.model;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The basis for all the data structure models.
@@ -57,8 +56,23 @@ public class XSKDataStructureModel {
   @Transient
   private transient XSKDBContentType dbContentType;
 
-  /**
-   * Gets the location.
+    public XSKDataStructureModel() {
+    }
+
+    protected XSKDataStructureModel(Builder<?> builder) {
+        location = builder.location;
+        name = builder.name;
+        type = builder.type;
+        hash = builder.hash;
+        createdBy = builder.createdBy;
+        createdAt = builder.createdAt;
+        schema = builder.schema;
+        rawContent = builder.rawContent;
+        dbContentType = builder.dbContentType;
+    }
+
+   /**
+           * Gets the location.
    *
    * @return the location
    */
@@ -289,5 +303,79 @@ public class XSKDataStructureModel {
     }
     return true;
   }
+
+    public static abstract class Builder<B extends Builder<B>> {
+        private String location;
+        private String name;
+        private String type;
+        private String hash;
+        private String createdBy;
+        private Timestamp createdAt;
+        private String schema;
+        private String rawContent;
+        private XSKDBContentType dbContentType;
+
+
+        public B withName(String name) {
+            this.name = name;
+            return self();
+        }
+
+        public B withLocation(String location) {
+            this.location = location;
+            return self();
+        }
+
+        public B withType(String type) {
+            this.type = type;
+            return self();
+        }
+
+        public B withHash(String hash) {
+            this.hash = hash;
+            return self();
+        }
+
+        public B createdAt(Timestamp timestamp) {
+            this.createdAt = timestamp;
+            return self();
+        }
+
+        public B createdBy(String createdBy) {
+            this.createdBy = createdBy;
+            return self();
+        }
+
+        public B withSchema(String schema) {
+            this.schema = schema;
+            return self();
+        }
+
+        public B rawContent(String rawContent) {
+            this.rawContent = rawContent;
+            return self();
+        }
+
+        public B dbContentType(XSKDBContentType dbContentType) {
+            this.dbContentType = dbContentType;
+            return self();
+        }
+
+        public XSKDataStructureModel build() {
+            return new XSKDataStructureModel(this);
+        }
+
+        protected abstract B self();
+
+        protected Builder() {
+        }
+    }
+
+    private static class BaseBuilder extends Builder<BaseBuilder> {
+        @Override
+        protected BaseBuilder self() {
+            return this;
+        }
+    }
 
 }

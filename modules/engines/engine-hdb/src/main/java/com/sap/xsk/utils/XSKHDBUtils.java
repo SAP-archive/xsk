@@ -16,6 +16,7 @@ import static com.sap.xsk.utils.XSKCommonsConstants.MODULE_PARSERS;
 import static com.sap.xsk.utils.XSKCommonsConstants.PARSER_ERROR;
 import static com.sap.xsk.utils.XSKCommonsConstants.PROGRAM_XSK;
 import static com.sap.xsk.utils.XSKCommonsConstants.SOURCE_PUBLISH_REQUEST;
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
@@ -169,11 +170,13 @@ public class XSKHDBUtils {
   public static String removeSqlCommentsFromContent(String content) {
     return content.replaceAll(commentRegex, "").trim();
   }
-  public static ParseTree getParsedThree (XSKDataStructureParametersModel parametersModel) throws IOException {
+  public static ParseTree getParsedThree (XSKDataStructureParametersModel parametersModel) throws XSKArtifactParserException {
 
     CharStream inputStream;
     try (ByteArrayInputStream is = new ByteArrayInputStream(parametersModel.getContent().getBytes())) {
       inputStream = CharStreams.fromStream(is);
+    }catch (IOException exception){
+      throw new XSKArtifactParserException("Cannot get parsed tree",exception);
     }
 
     HanaLexer lexer = new HanaLexer(inputStream);
@@ -186,6 +189,10 @@ public class XSKHDBUtils {
 
     return parser.sql_script();
 
+  }
+
+  public static Timestamp getTimestamp(){
+    return new Timestamp(new java.util.Date().getTime());
   }
 
 }

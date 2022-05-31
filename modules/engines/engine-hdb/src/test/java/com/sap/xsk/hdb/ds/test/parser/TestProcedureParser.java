@@ -15,38 +15,17 @@ import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
-import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
-import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
-public class ParserTestContentProvider {
-
-    String getTestContent(String location) throws IOException {
-        InputStream in = ParserTestContentProvider.class.getResourceAsStream(location);
-        return IOUtils.toString(Objects.requireNonNull(in), StandardCharsets.UTF_8);
-    }
-
+public class TestProcedureParser {
+    TestContentProvider testContentProvider = new TestContentProvider();
     XSKDataStructureHDBProcedureModel parseProcedure(@NotNull XSKDataStructureParser<XSKDataStructureHDBProcedureModel> parser, String location, String content)
             throws XSKDataStructuresException, XSKArtifactParserException, IOException {
         XSKDataStructureParametersModel parametersModel =
-                getParametersModel(null, location, content, null);
+                testContentProvider.getParametersModel(null, location, content, null);
         return parser.parse(parametersModel);
-    }
-
-    XSKDataStructureHDBTableFunctionModel parseTableFunction(@NotNull XSKDataStructureParser<XSKDataStructureHDBTableFunctionModel> parser, String location, String content)
-            throws XSKDataStructuresException, XSKArtifactParserException, IOException {
-        XSKDataStructureParametersModel parametersModel =
-                getParametersModel(null, location, content, null);
-        return parser.parse(parametersModel);
-    }
-
-    private XSKDataStructureParametersModel getParametersModel(String type, String location, String content, String workspacePath) {
-        return new XSKDataStructureParametersModel(type, location, content, workspacePath);
     }
 }

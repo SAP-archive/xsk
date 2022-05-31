@@ -97,14 +97,15 @@ public class XSKHDBModule extends AbstractDirigibleModule {
   }
 
   private static void bindParsersToFileExtension(Map<String, XSKDataStructureParser> parserServices) {
+    XSKDataStructuresSynchronizer xskDataStructuresSynchronizer = new XSKDataStructuresSynchronizer();
     XSKHDBTableFunctionParser tableFunctionParser = new XSKHDBTableFunctionParser(
-        new XSKDataStructuresSynchronizer(),
+        xskDataStructuresSynchronizer,
         new HDBTableFunctionSynchronizationArtefactType(),
         new XSKHDBTableFunctionLogger()
     );
 
     XSKHDBProcedureParser hdbProcedureParser = new XSKHDBProcedureParser(
-            new XSKDataStructuresSynchronizer(),
+            xskDataStructuresSynchronizer,
             new HDBProcedureSynchronizationArtefactType(),
             new XSKHDBProcedureLogger()
     );

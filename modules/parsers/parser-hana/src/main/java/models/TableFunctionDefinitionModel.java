@@ -11,8 +11,6 @@
  */
 package models;
 
-import java.util.Objects;
-
 public class TableFunctionDefinitionModel extends DefinitionModel {
 
 
@@ -21,12 +19,10 @@ public class TableFunctionDefinitionModel extends DefinitionModel {
     }
 
     public void checkForAllMandatoryFieldsPresence() {
-        checkPresence(this.getName(), "name");
+        if (this.getName() == null) {
+            throw new TableFunctionMissingPropertyException("Missing mandatory field name");
+        }
+
     }
 
-    private <T> void checkPresence(T field, String fieldName) {
-        if (Objects.isNull(field)) {
-            throw new TableFunctionMissingPropertyException("Missing mandatory field " + fieldName);
-        }
-    }
 }

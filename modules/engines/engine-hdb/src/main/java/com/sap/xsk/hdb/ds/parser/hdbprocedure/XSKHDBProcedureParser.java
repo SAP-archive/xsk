@@ -51,7 +51,7 @@ public class XSKHDBProcedureParser implements XSKDataStructureParser<XSKDataStru
 
     @Override
     public XSKDataStructureHDBProcedureModel parse(XSKDataStructureParametersModel parametersModel)
-            throws IOException, XSKDataStructuresException, XSKArtifactParserException {
+            throws XSKDataStructuresException, XSKArtifactParserException {
 
         String location = parametersModel.getLocation();
 
@@ -70,17 +70,19 @@ public class XSKHDBProcedureParser implements XSKDataStructureParser<XSKDataStru
 
     private XSKDataStructureHDBProcedureModel createModel(HDBProcedureDefinitionModel antlrModel,
                                                           XSKDataStructureParametersModel params) {
-        XSKDataStructureHDBProcedureModel hdbProcedureModel = new XSKDataStructureHDBProcedureModel();
-        hdbProcedureModel.setSchema(antlrModel.getSchema());
-        hdbProcedureModel.setName(antlrModel.getName());
-        hdbProcedureModel.setLocation(params.getLocation());
-        hdbProcedureModel.setType(getType());
-        hdbProcedureModel.setHash(DigestUtils.md5Hex(params.getContent())); //NOSONAR
-        hdbProcedureModel.setCreatedBy(UserFacade.getName());
-        hdbProcedureModel.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-        hdbProcedureModel.setContent(params.getContent());
-        hdbProcedureModel.setRawContent(params.getContent());
-        return hdbProcedureModel;
+        return  XSKDataStructureHDBProcedureModel
+                .builder()
+                .withName(antlrModel.getName())
+                .withHash(DigestUtils.md5Hex(params.getContent()))//NOSONAR
+                .createdAt(XSKHDBUtils.getTimestamp())
+                .createdBy(UserFacade.getName())
+                .withLocation(params.getLocation())
+                .withType(getType())
+                .rawContent(params.getContent())
+                .content(params.getContent())
+                .withSchema(antlrModel.getSchema())
+                .build();
+
     }
 
     private void validateAntlrModel(HDBProcedureDefinitionModel antlrModel, String location) throws XSKDataStructuresException {

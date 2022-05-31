@@ -13,7 +13,6 @@ package com.sap.xsk.hdb.ds.model.hdbprocedure;
 
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 
-
 public class XSKDataStructureHDBProcedureModel extends XSKDataStructureModel {
 
     private String content;
@@ -26,4 +25,39 @@ public class XSKDataStructureHDBProcedureModel extends XSKDataStructureModel {
         this.content = content;
     }
 
+    public XSKDataStructureHDBProcedureModel() {
+
+    }
+
+    private XSKDataStructureHDBProcedureModel(Builder builder) {
+        super(builder);
+        content = builder.content;
+    }
+
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder extends XSKDataStructureModel.Builder<Builder> {
+        private String content;
+
+        Builder() {
+        }
+
+        public Builder content(String content) {
+            this.content = content;
+            return self();
+        }
+
+        @Override
+        public XSKDataStructureHDBProcedureModel build() {
+            return new XSKDataStructureHDBProcedureModel(this);
+        }
+
+        @Override
+        protected Builder self() {
+            return this;
+        }
+    }
 }

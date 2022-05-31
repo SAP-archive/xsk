@@ -30,7 +30,8 @@ import static org.mockito.Mockito.doNothing;
 
 public class XSKHDBProcedureParserTest {
 
-    ParserTestContentProvider contentProvider = new ParserTestContentProvider();
+    TestContentProvider contentProvider = new TestContentProvider();
+    TestProcedureParser procedureParser = new TestProcedureParser();
     private XSKHDBProcedureParser parser;
 
     @Before
@@ -50,7 +51,7 @@ public class XSKHDBProcedureParserTest {
         String content = contentProvider.getTestContent(location);
 
 
-        var model = contentProvider.parseProcedure(parser, location, content);
+        var model = procedureParser.parseProcedure(parser, location, content);
         assertEquals("Unexpected hdbprocedure schema.", "MYSCHEMA", model.getSchema());
         assertEquals("Unexpected hdbprocedure name.", "hdb_view::OrderProcedure", model.getName());
         assertEquals("Unexpected hdbprocedure content.", content, model.getContent());

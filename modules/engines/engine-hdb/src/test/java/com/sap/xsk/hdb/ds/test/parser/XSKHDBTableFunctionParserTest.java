@@ -33,7 +33,8 @@ import static org.mockito.Mockito.*;
 
 public class XSKHDBTableFunctionParserTest extends AbstractDirigibleTest {
 
-    ParserTestContentProvider contentProvider = new ParserTestContentProvider();
+   TestContentProvider contentProvider = new TestContentProvider();
+   TestTableFunctionParser tableFunctionParser = new TestTableFunctionParser();
     private XSKHDBTableFunctionParser parser;
 
     private XSKDataStructuresSynchronizer dataStructuresSynchronizerMock;
@@ -56,7 +57,7 @@ public class XSKHDBTableFunctionParserTest extends AbstractDirigibleTest {
         String location = "/OrderTableFunction.hdbtablefunction";
         String content = contentProvider.getTestContent(location);
 
-        XSKDataStructureHDBTableFunctionModel model = contentProvider.parseTableFunction(parser, location, content);
+        XSKDataStructureHDBTableFunctionModel model = tableFunctionParser.parseTableFunction(parser, location, content);
         assertEquals("Unexpected tablefunction schema.", "MYSCHEMA", model.getSchema());
         assertEquals("Unexpected tablefunction name.", "hdb_view::OrderTableFunction", model.getName());
         assertEquals("Unexpected tablefunction content.", content, model.getContent());
@@ -75,8 +76,7 @@ public class XSKHDBTableFunctionParserTest extends AbstractDirigibleTest {
         String location = "/OrderTableFunctionNoSchema.hdbtablefunction";
         String content = contentProvider.getTestContent(location);
 
-        XSKDataStructureHDBTableFunctionModel model = contentProvider.parseTableFunction(parser, location, content);
-
+        XSKDataStructureHDBTableFunctionModel model = tableFunctionParser.parseTableFunction(parser, location, content);
         assertNull("Unexpected tablefunction schema.", model.getSchema());
         assertEquals("Unexpected tablefunction name.", "hdb_view::OrderTableFunction", model.getName());
         assertEquals("Unexpected tablefunction content.", content, model.getContent());
@@ -96,7 +96,7 @@ public class XSKHDBTableFunctionParserTest extends AbstractDirigibleTest {
         XSKDataStructuresException caughtException = assertThrows(
                 "Unexpected missing exception",
                 XSKDataStructuresException.class,
-                () -> contentProvider.parseTableFunction(parser, location, content));
+                () -> tableFunctionParser.parseTableFunction(parser, location, content));
         Throwable caughtExceptionCause = caughtException.getCause();
 
         assertEquals("Unexpected exception message", "Wrong format of HDB Table Function: " + location + " during parsing. ",

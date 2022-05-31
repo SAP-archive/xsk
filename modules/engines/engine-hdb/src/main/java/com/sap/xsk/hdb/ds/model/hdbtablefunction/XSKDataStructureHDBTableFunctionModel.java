@@ -28,23 +28,23 @@ public class XSKDataStructureHDBTableFunctionModel extends XSKDataStructureModel
     public XSKDataStructureHDBTableFunctionModel() {
     }
 
-    public XSKDataStructureHDBTableFunctionModel(Builder builder) {
+    public XSKDataStructureHDBTableFunctionModel(HDBTableFunctionModelBuilder builder) {
         super(builder);
         content = builder.content;
     }
 
-    public static Builder builder() {
-        return new Builder();
+    public static HDBTableFunctionModelBuilder builder() {
+        return new HDBTableFunctionModelBuilder();
     }
 
 
-    public static final class Builder extends XSKDataStructureModel.Builder<Builder> {
+    public static final class HDBTableFunctionModelBuilder extends XSKDataStructureModel.Builder<HDBTableFunctionModelBuilder> {
         private String content;
 
-        Builder() {
+        HDBTableFunctionModelBuilder() {
         }
 
-        public Builder content(String content) {
+        public HDBTableFunctionModelBuilder content(String content) {
             this.content = content;
             return self();
         }
@@ -55,7 +55,7 @@ public class XSKDataStructureHDBTableFunctionModel extends XSKDataStructureModel
         }
 
         @Override
-        protected Builder self() {
+        protected HDBTableFunctionModelBuilder self() {
             return this;
         }
     }

@@ -29,23 +29,23 @@ public class XSKDataStructureHDBProcedureModel extends XSKDataStructureModel {
 
     }
 
-    private XSKDataStructureHDBProcedureModel(Builder builder) {
+    private XSKDataStructureHDBProcedureModel(HDBProcedureModelBuilder builder) {
         super(builder);
         content = builder.content;
     }
 
 
-    public static Builder builder() {
-        return new Builder();
+    public static HDBProcedureModelBuilder builder() {
+        return new HDBProcedureModelBuilder();
     }
 
-    public static final class Builder extends XSKDataStructureModel.Builder<Builder> {
+    public static final class HDBProcedureModelBuilder extends XSKDataStructureModel.Builder<HDBProcedureModelBuilder> {
         private String content;
 
-        Builder() {
+        HDBProcedureModelBuilder() {
         }
 
-        public Builder content(String content) {
+        public HDBProcedureModelBuilder content(String content) {
             this.content = content;
             return self();
         }
@@ -56,7 +56,7 @@ public class XSKDataStructureHDBProcedureModel extends XSKDataStructureModel {
         }
 
         @Override
-        protected Builder self() {
+        protected HDBProcedureModelBuilder self() {
             return this;
         }
     }

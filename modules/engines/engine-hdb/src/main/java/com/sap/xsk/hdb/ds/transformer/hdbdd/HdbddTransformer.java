@@ -125,22 +125,28 @@ public class HdbddTransformer {
     for (int i = 0; i < entitySymbol.getElements().size(); i++) {
       EntityElementSymbol currentElement = entitySymbol.getElements().get(i);
       if (currentElement.getAnnotation(SEARCH_INDEX_ANNOTATION) != null) {
-        boolean hasFuzzySearchIndex = false;
-        Map<String, AbstractAnnotationValue> searchIndexAnnotationValueMap = currentElement.getAnnotation(SEARCH_INDEX_ANNOTATION).getKeyValuePairs();
-        AnnotationObj fuzzyIndexAnnotationObject = (AnnotationObj) searchIndexAnnotationValueMap.get(FUZZY_ANNOTATION);
-        AbstractAnnotationValue fuzzyIndexAnnotationValue = searchIndexAnnotationValueMap.get(FUZZY_SEARCH_INDEX_ENABLED);
-
-        if (fuzzyIndexAnnotationObject != null && fuzzyIndexAnnotationObject.getKeyValuePairs().get(FUZZY_SEARCH_INDEX_ENABLED) != null){
-          hasFuzzySearchIndex = Boolean.parseBoolean(fuzzyIndexAnnotationObject.getKeyValuePairs().get(FUZZY_SEARCH_INDEX_ENABLED).getValue());
-        }
-        else if (fuzzyIndexAnnotationValue != null){
-          hasFuzzySearchIndex = Boolean.parseBoolean(fuzzyIndexAnnotationValue.getValue());
-        }
-
-        tableModel.getColumns().get(i).setFuzzySearchIndex(hasFuzzySearchIndex);
+        tableModel.getColumns().get(i).setFuzzySearchIndex(handlePossibleSearchIndexAnnotations(currentElement));
       }
     }
     return tableModel;
+  }
+
+  private Boolean handlePossibleSearchIndexAnnotations(EntityElementSymbol currentElement){
+    boolean hasFuzzySearchIndex = false;
+    Map<String, AbstractAnnotationValue> searchIndexAnnotationValueMap = currentElement.getAnnotation(SEARCH_INDEX_ANNOTATION).getKeyValuePairs();
+    AnnotationObj fuzzyIndexAnnotationObject = (AnnotationObj) searchIndexAnnotationValueMap.get(FUZZY_ANNOTATION);
+    AbstractAnnotationValue fuzzyIndexAnnotationValue = searchIndexAnnotationValueMap.get(FUZZY_SEARCH_INDEX_ENABLED);
+    AbstractAnnotationValue fuzzyIndexAnnotationObjectValue = fuzzyIndexAnnotationObject != null ?
+        fuzzyIndexAnnotationObject.getKeyValuePairs().get(FUZZY_SEARCH_INDEX_ENABLED) : null;
+
+    if (fuzzyIndexAnnotationObjectValue != null){
+      hasFuzzySearchIndex = Boolean.parseBoolean(fuzzyIndexAnnotationObjectValue.getValue());
+    }
+    else if (fuzzyIndexAnnotationValue != null){
+      hasFuzzySearchIndex = Boolean.parseBoolean(fuzzyIndexAnnotationValue.getValue());
+    }
+
+    return hasFuzzySearchIndex;
   }
 
   public XSKDataStructureHDBViewModel transformViewSymbolToHdbViewModel(ViewSymbol viewSymbol, String location) {

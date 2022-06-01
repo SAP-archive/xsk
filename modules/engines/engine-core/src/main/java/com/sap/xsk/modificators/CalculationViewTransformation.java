@@ -42,7 +42,7 @@ public class CalculationViewTransformation {
       + "</xsl:stylesheet>";
 
   public byte[] removeTypeArtifact(byte[] bytes) throws TransformerException {
-    TransformerFactory factory = TransformerFactory.newInstance();
+    TransformerFactory factory = javax.xml.transform.TransformerFactory.newInstance();
     factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
     factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
     Source source = new StreamSource(new StringReader(CALCULATION_VIEW_DATA_SOURCE_TRANSFORMATION_XSLT));

@@ -41,8 +41,7 @@ try {
  
     while(iterator.next()) {
         var currentRow = iterator.value();
-        totalText += `${metadata[0].name}: ${currentRow[0]}, ${metadata[1].name}: ${currentRow[1]}\n`;
-        // totalText += `${metadata[0].name}: ${currentRow[metadata[0].name]}, ${metadata[1].name}: ${currentRow[metadata[1].name]}\n`;
+        totalText += `${metadata[0].name}: ${currentRow[metadata[0].name]}, ${metadata[1].name}: ${currentRow[metadata[1].name]}\n`;
     }
     $.response.setBody(totalText );
 } catch(e) {

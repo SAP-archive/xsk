@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.modificators;
 
+import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;

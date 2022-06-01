@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.synchronizer;
 
+import com.sap.xsk.exceptions.XSJSLibSynchronizerUnresolvedPathTypeException;
 import com.sap.xsk.synchronizer.XSJSLibSynchronizerPathTypeResolver.ResolvedPathType;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
@@ -87,7 +88,7 @@ public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrdere
     switch(targetRegistryPathType) {
       case EXISTENT_XSJSLIB_FILE: context.put("targetRegistryPathType", "ExistentXSJSLibFile"); break;
       case EXISTENT_FOLDER: context.put("targetRegistryPathType", "ExistentFolder"); break;
-      default: throw new RuntimeException("XSJSLibSynchronizer: Unhandled ResolvedPathType.");
+      default: throw new XSJSLibSynchronizerUnresolvedPathTypeException("XSJSLibSynchronizer: Unhandled ResolvedPathType.");
     }
 
     return context;

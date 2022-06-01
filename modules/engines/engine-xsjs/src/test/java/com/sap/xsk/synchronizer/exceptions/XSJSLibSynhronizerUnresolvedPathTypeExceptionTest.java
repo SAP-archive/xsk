@@ -11,16 +11,15 @@
  */
 package com.sap.xsk.synchronizer.exceptions;
 
-import com.sap.xsk.exceptions.XSJSLibArtefactCleanerSQLException;
+import com.sap.xsk.exceptions.XSJSLibSynchronizerUnresolvedPathTypeException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class XSJSLibArtefactCleanerSQLExceptionTest {
+public class XSJSLibSynhronizerUnresolvedPathTypeExceptionTest {
   @Test
-  public void artefactCleanerSQLExceptionTest() {
-    XSJSLibArtefactCleanerSQLException exception = new XSJSLibArtefactCleanerSQLException("test", new RuntimeException("test2"));
+  public void unresolvedPathTypeExceptionTest() {
+    XSJSLibSynchronizerUnresolvedPathTypeException exception = new XSJSLibSynchronizerUnresolvedPathTypeException("test");
     assertEquals("Unexpected exception message", "test", exception.getMessage());
-    assertEquals("Unexpected exception cause", RuntimeException.class, exception.getCause().getClass());
   }
 }

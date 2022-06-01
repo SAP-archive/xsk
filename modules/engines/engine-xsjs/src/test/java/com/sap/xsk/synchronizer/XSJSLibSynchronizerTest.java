@@ -13,7 +13,7 @@ package com.sap.xsk.synchronizer;
 
 import com.sap.xsk.XSJSTest;
 import com.sap.xsk.engine.XSKJavascriptEngineExecutor;
-import com.sap.xsk.exceptions.XSJSLibArtefactCleanerSQLException;
+import com.sap.xsk.exceptions.XSJSLibSynchronizerDBCleanerSQLException;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
@@ -63,7 +63,7 @@ public class XSJSLibSynchronizerTest extends XSJSTest {
         dropStatement.executeUpdate();
       }
     } catch (SQLException e) {
-      throw new XSJSLibArtefactCleanerSQLException("Could not drop table after test", e);
+      throw new XSJSLibSynchronizerDBCleanerSQLException("Could not drop table after test", e);
     }
   }
 

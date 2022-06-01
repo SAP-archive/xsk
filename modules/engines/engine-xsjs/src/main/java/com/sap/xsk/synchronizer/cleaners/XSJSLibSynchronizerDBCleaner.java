@@ -11,7 +11,7 @@
  */
 package com.sap.xsk.synchronizer.cleaners;
 
-import com.sap.xsk.exceptions.XSJSLibArtefactCleanerSQLException;
+import com.sap.xsk.exceptions.XSJSLibSynchronizerDBCleanerSQLException;
 import com.sap.xsk.synchronizer.XSJSLibSynchronizer;
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
@@ -34,7 +34,7 @@ public class XSJSLibSynchronizerDBCleaner implements XSJSLibSynchronizerCleaner 
       deleteStatement.setString(1, registryPath + "%");
       deleteStatement.executeUpdate();
     } catch (SQLException e) {
-      throw new XSJSLibArtefactCleanerSQLException("Could not cleanup xsjslib synchronizer entries. ", e);
+      throw new XSJSLibSynchronizerDBCleanerSQLException("Could not cleanup xsjslib synchronizer entries. ", e);
     }
   }
 }

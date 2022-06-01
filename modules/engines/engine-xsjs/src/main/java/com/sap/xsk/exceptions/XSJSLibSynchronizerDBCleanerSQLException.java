@@ -11,9 +11,9 @@
  */
 package com.sap.xsk.exceptions;
 
-public class XSJSLibArtefactCleanerSQLException extends RuntimeException {
+public class XSJSLibSynchronizerDBCleanerSQLException extends RuntimeException {
 
-  public XSJSLibArtefactCleanerSQLException(String message, Throwable cause) {
+  public XSJSLibSynchronizerDBCleanerSQLException(String message, Throwable cause) {
     super(message, cause);
   }
 }

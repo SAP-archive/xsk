@@ -1,13 +1,20 @@
+/*
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package com.sap.xsk.synchronizer;
 
 import com.sap.xsk.synchronizer.XSJSLibSynchronizerPathTypeResolver.ResolvedPathType;
 import com.sap.xsk.synchronizer.cleaners.XSJSLibSynchronizerCleaner;
-import com.sap.xsk.synchronizer.cleaners.XSJSLibSynchronizerDBCleaner;
-import com.sap.xsk.synchronizer.cleaners.XSJSLibSynchronizerFileCleaner;
-import org.eclipse.dirigible.repository.api.IRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.sql.DataSource;
 
 public class XSJSLibSynchronizerUnpublisher {
   private static final Logger logger = LoggerFactory.getLogger(XSJSLibSynchronizerUnpublisher.class);

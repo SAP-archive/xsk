@@ -17,7 +17,9 @@ import org.eclipse.dirigible.repository.api.IRepository;
 import org.eclipse.dirigible.repository.api.IResource;
 
 public class XSJSLibSynchronizerPathTypeResolver {
-  private static final IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
+  private final IRepository repository;
+
+  private static final String XSJSLIB_FILE_EXTENSION = ".xsjslib";
 
   public enum ResolvedPathType {
     EXISTENT_XSJSLIB_FILE,
@@ -26,11 +28,15 @@ public class XSJSLibSynchronizerPathTypeResolver {
     NON_EXISTENT_FILE_OR_FOLDER
   }
 
+  XSJSLibSynchronizerPathTypeResolver() {
+    this.repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
+  }
+
   public ResolvedPathType resolveWithResourceFirst(String registryPath) {
     IResource resource = repository.getResource(registryPath);
 
     if(resource.exists()) {
-      return registryPath.endsWith(".xsjslib") ?
+      return registryPath.endsWith(XSJSLIB_FILE_EXTENSION) ?
           ResolvedPathType.EXISTENT_XSJSLIB_FILE : ResolvedPathType.EXISTENT_OTHER_FILE;
     }
     else {
@@ -51,7 +57,7 @@ public class XSJSLibSynchronizerPathTypeResolver {
         IResource resource = repository.getResource(registryPath);
 
         if(resource.exists()) {
-          return registryPath.endsWith(".xsjslib") ?
+          return registryPath.endsWith(XSJSLIB_FILE_EXTENSION) ?
               ResolvedPathType.EXISTENT_XSJSLIB_FILE : ResolvedPathType.EXISTENT_OTHER_FILE;
         }
         else {

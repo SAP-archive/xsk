@@ -42,6 +42,7 @@ public class CalculationViewTransformation {
 
   public byte[] removeTypeArtifact(byte[] bytes) throws TransformerException {
     TransformerFactory factory = TransformerFactory.newInstance();
+    factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
     Source source = new StreamSource(new StringReader(CALCULATION_VIEW_DATA_SOURCE_TRANSFORMATION_XSLT));
     Transformer transformer = factory.newTransformer(source);
     StreamSource text = new StreamSource(new ByteArrayInputStream(bytes));

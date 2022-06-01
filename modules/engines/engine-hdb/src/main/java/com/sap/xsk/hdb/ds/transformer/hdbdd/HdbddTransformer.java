@@ -18,6 +18,8 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintPrima
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
+import com.sap.xsk.parser.hdbdd.annotation.metadata.AbstractAnnotationValue;
+import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationObj;
 import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.AssociationSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
@@ -32,6 +34,7 @@ import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
@@ -44,6 +47,7 @@ public class HdbddTransformer {
   private static final String CATALOG_ANNOTATION = "Catalog";
   private static final String CATALOG_OBJ_TABLE_TYPE = "tableType";
   private static final String SEARCH_INDEX_ANNOTATION = "SearchIndex";
+  private static final String FUZZY_ANNOTATION = "fuzzy";
   private static final String FUZZY_SEARCH_INDEX_ENABLED = "enabled";
   private static final String DUMMY_TABLE = "DUMMY";
   private static final String QUOTE = "\"";
@@ -121,8 +125,19 @@ public class HdbddTransformer {
     for (int i = 0; i < entitySymbol.getElements().size(); i++) {
       EntityElementSymbol currentElement = entitySymbol.getElements().get(i);
       if (currentElement.getAnnotation(SEARCH_INDEX_ANNOTATION) != null) {
-        tableModel.getColumns().get(i).setFuzzySearchIndex(Boolean.parseBoolean(
-            currentElement.getAnnotation(SEARCH_INDEX_ANNOTATION).getKeyValuePairs().get(FUZZY_SEARCH_INDEX_ENABLED).getValue()));
+        boolean hasFuzzySearchIndex = false;
+        Map<String, AbstractAnnotationValue> searchIndexAnnotationValueMap = currentElement.getAnnotation(SEARCH_INDEX_ANNOTATION).getKeyValuePairs();
+        AnnotationObj fuzzyIndexAnnotationObject = (AnnotationObj) searchIndexAnnotationValueMap.get(FUZZY_ANNOTATION);
+        AbstractAnnotationValue fuzzyIndexAnnotationValue = searchIndexAnnotationValueMap.get(FUZZY_SEARCH_INDEX_ENABLED);
+
+        if (fuzzyIndexAnnotationObject != null && fuzzyIndexAnnotationObject.getKeyValuePairs().get(FUZZY_SEARCH_INDEX_ENABLED) != null){
+          hasFuzzySearchIndex = Boolean.parseBoolean(fuzzyIndexAnnotationObject.getKeyValuePairs().get(FUZZY_SEARCH_INDEX_ENABLED).getValue());
+        }
+        else if (fuzzyIndexAnnotationValue != null){
+          hasFuzzySearchIndex = Boolean.parseBoolean(fuzzyIndexAnnotationValue.getValue());
+        }
+
+        tableModel.getColumns().get(i).setFuzzySearchIndex(hasFuzzySearchIndex);
       }
     }
     return tableModel;

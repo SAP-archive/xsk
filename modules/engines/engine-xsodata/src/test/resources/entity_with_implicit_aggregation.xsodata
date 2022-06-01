@@ -1,0 +1,8 @@
+service namespace "my.demo.namespace" {
+
+//Aggregations https://github.wdf.sap.corp/xs2/xsodata/blob/master/documentation/aggregations.md
+
+ //Implicit Aggregations
+ "package::PLANNED_ACTUAL_SALES" as "PlannedCalcView"
+       aggregates always;
+}

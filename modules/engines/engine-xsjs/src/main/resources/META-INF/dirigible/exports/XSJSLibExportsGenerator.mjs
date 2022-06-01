@@ -1,6 +1,7 @@
 import { XSJSLibContentModifier } from '/exports/XSJSLibContentModifier.mjs'
 import { XSJSLibArtefactStateTable } from '/exports/XSJSLibArtefactStateTable.mjs'
 import { digest } from '@dirigible-v4/utils'
+import { repository } from '@dirigible-v4/platform'
 
 export class XSJSLibExportsGenerator {
 
@@ -13,13 +14,24 @@ export class XSJSLibExportsGenerator {
     );
   }
 
-  run(targetRegistryCollection) {
-    this._generateExportsRecursively(targetRegistryCollection);
+  run(targetPath) {
+    const targetResource = repository.getResource(targetPath);
+    const targetCollection = repository.getCollection(targetPath);
+
+    if(targetResource.exists()) {
+      this._checkTableAndGenerateExportsIfNeeded(targetResource);
+    }
+    else if(targetCollection.exists()) {
+      this._generateExportsRecursively(targetCollection);
+    }
+    else {
+      throw new Error("XSJSLibSynchronizer repository target not found at: " + targetPath);
+    }
   }
 
   _generateExportsRecursively(parentCollection) {
-    if (!parentCollection.exists() || !this.processedArtefactsTable) {
-      return;
+    if (!parentCollection.exists()) {
+      throw new Error("Collection not found: " + parentCollection.getPath());
     }
 
     const resourceNames = this._toJsArray(parentCollection.getResourcesNames());
@@ -48,12 +60,23 @@ export class XSJSLibExportsGenerator {
   }
 
   _checkTableAndGenerateExportsIfNeeded(resource) {
+    if(!resource.exists()) {
+      throw new Error("XSJSLibSynchronizer resource not found.");
+    }
+
+    if(!resource.getPath().endsWith(".xsjslib")) {
+      return;
+    }
+
+    if (!this.processedArtefactsTable) {
+      throw new Error("XSJSLibSynchronizer state table not found.");
+    }
+
     const content = resource.getText();
     const location = resource.getPath();
+    const foundEntry = this.processedArtefactsTable.findEntryByResourceLocation(location);
 
     const contentModifier = new XSJSLibContentModifier();
-
-    const foundEntry = this.processedArtefactsTable.findEntryByResourceLocation(location);
 
     if (!foundEntry) {
         const contentWithExports = contentModifier.writeExportsToResource(resource, content);

@@ -23,6 +23,7 @@
         <module>xsk-workspace-menu</module>
         <module>xsk-ide-xsjob</module>
         <module>xsk-ide-hdi</module>
+        <module>xsk-ide-xsaccess</module>
     </modules>
 
     <properties>

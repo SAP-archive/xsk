@@ -14,8 +14,8 @@ package com.sap.xsk.hdb.ds.itest.hdbprocedure;
 import static org.junit.Assert.assertTrue;
 
 import com.sap.xsk.hdb.ds.itest.AbstractXSKHDBITTest;
-import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
-import com.sap.xsk.hdb.ds.itest.utils.HanaITestUtils;
+import com.sap.xsk.integration.tests.core.hdb.module.XSKHDBTestModule;
+import com.sap.xsk.integration.tests.core.hdb.utils.HanaITestUtils;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;

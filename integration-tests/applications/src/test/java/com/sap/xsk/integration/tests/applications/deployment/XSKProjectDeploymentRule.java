@@ -15,29 +15,44 @@ import org.junit.rules.ExternalResource;
 
 import java.net.URL;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 
+import static com.sap.xsk.integration.tests.applications.deployment.XSKProjectDeploymentConstants.CUSTOM_APPS_DIR_NAME;
+import static com.sap.xsk.integration.tests.applications.deployment.XSKProjectDeploymentConstants.SAMPLES_DIR_NAME;
+
 public class XSKProjectDeploymentRule extends ExternalResource {
-    private final XSKProjectDeployer projectPublisher;
-    private final String applicationName;
 
-    public XSKProjectDeploymentRule(String applicationName, XSKProjectDeploymentType XSKProjectDeploymentType) {
-        this.applicationName = applicationName;
-        projectPublisher = new XSKProjectDeployer(XSKProjectDeploymentType);
+  private final XSKProjectDeployer projectDeployer;
+  private final String applicationName;
+  private final XSKProjectApplicationType xskProjectApplicationType;
+
+  public XSKProjectDeploymentRule(String applicationName, XSKProjectApplicationType xskProjectApplicationType,
+      XSKProjectDeploymentType xskProjectDeploymentType) {
+    this.applicationName = applicationName;
+    this.xskProjectApplicationType = xskProjectApplicationType;
+    this.projectDeployer = new XSKProjectDeployer(xskProjectDeploymentType);
+  }
+
+  @Override
+  protected void before() throws Throwable {
+    super.before();
+    Path resourcePath;
+
+    if (XSKProjectApplicationType.SAMPLE.equals(xskProjectApplicationType)) {
+      resourcePath = Path.of(Paths.get("").toAbsolutePath().getParent().getParent() + SAMPLES_DIR_NAME + applicationName);
+    } else {
+      URL resource = getClass().getResource(CUSTOM_APPS_DIR_NAME + applicationName);
+      String resourcePathString = Objects.requireNonNull(resource).getPath();
+      resourcePath = Path.of(resourcePathString);
     }
 
-    @Override
-    protected void before() throws Throwable {
-        super.before();
-        URL resource = getClass().getResource("/test-applications/" + applicationName);
-        String resourcePathString = Objects.requireNonNull(resource).getPath();
-        Path resourcePath = Path.of(resourcePathString);
-        projectPublisher.deploy(applicationName, resourcePath);
-    }
+    projectDeployer.deploy(applicationName, resourcePath);
+  }
 
-    @Override
-    protected void after() {
-        super.after();
-        projectPublisher.undeploy(applicationName, applicationName);
-    }
+  @Override
+  protected void after() {
+    super.after();
+    projectDeployer.undeploy(applicationName, applicationName);
+  }
 }

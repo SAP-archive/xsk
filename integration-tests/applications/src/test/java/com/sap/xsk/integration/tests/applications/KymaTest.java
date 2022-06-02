@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.integration.tests.applications;
 
+import com.sap.xsk.integration.tests.applications.deployment.XSKProjectApplicationType;
 import com.sap.xsk.integration.tests.applications.deployment.XSKProjectDeploymentRule;
 import com.sap.xsk.integration.tests.applications.deployment.XSKProjectDeploymentType;
 import org.junit.ClassRule;
@@ -18,6 +19,6 @@ import org.junit.ClassRule;
 public class KymaTest {
 
     @ClassRule
-    public static XSKProjectDeploymentRule xskProjectDeploymentRule = new XSKProjectDeploymentRule("simple", XSKProjectDeploymentType.KYMA);
+    public static XSKProjectDeploymentRule xskProjectDeploymentRule = new XSKProjectDeploymentRule("simple", XSKProjectApplicationType.CUSTOM, XSKProjectDeploymentType.KYMA);
 
 }

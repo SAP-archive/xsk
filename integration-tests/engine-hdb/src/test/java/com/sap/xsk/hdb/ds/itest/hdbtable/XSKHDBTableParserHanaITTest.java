@@ -11,13 +11,13 @@
  */
 package com.sap.xsk.hdb.ds.itest.hdbtable;
 
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_USERNAME;
+import static com.sap.xsk.integration.tests.core.hdb.utils.TestConstants.HANA_USERNAME;
 import static org.junit.Assert.assertTrue;
 
 import com.sap.xsk.hdb.ds.facade.XSKHDBCoreSynchronizationFacade;
 import com.sap.xsk.hdb.ds.itest.AbstractXSKHDBITTest;
-import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
-import com.sap.xsk.hdb.ds.itest.utils.HanaITestUtils;
+import com.sap.xsk.integration.tests.core.hdb.module.XSKHDBTestModule;
+import com.sap.xsk.integration.tests.core.hdb.utils.HanaITestUtils;
 import com.sap.xsk.hdb.ds.processors.table.XSKTableAlterHandler;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;

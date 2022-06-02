@@ -24,24 +24,26 @@ import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import static com.sap.xsk.integration.tests.applications.deployment.XSKProjectDeploymentConstants.PROJECT_BASE_URI;
+
 public class XSKProjectDeployer {
 
   private final WorkspaceClient workspaceClient;
   private final PublisherClient publisherClient;
 
   public XSKProjectDeployer(XSKProjectDeploymentType XSKProjectDeploymentType) {
-    XSKHttpClient xskHttpClient = createXSKHttpClient(XSKProjectDeploymentType);
-    this.workspaceClient = new WorkspaceClient(xskHttpClient);
-    this.publisherClient = new PublisherClient(xskHttpClient);
+    XSKHttpClient xskHttpAsyncClient = createXSKHttpAsyncClient(XSKProjectDeploymentType);
+    this.workspaceClient = new WorkspaceClient(xskHttpAsyncClient);
+    this.publisherClient = new PublisherClient(xskHttpAsyncClient);
   }
 
-  public XSKHttpClient createXSKHttpClient(XSKProjectDeploymentType XSKProjectDeploymentType) {
+  public XSKHttpClient createXSKHttpAsyncClient(XSKProjectDeploymentType XSKProjectDeploymentType) {
     if (XSKProjectDeploymentType == com.sap.xsk.integration.tests.applications.deployment.XSKProjectDeploymentType.KYMA) {
       String host = Configuration.get("KYMA_HOST");
       var uri = URI.create(host);
       return KymaXSKHttpClient.create(uri);
     } else {
-      var uri = URI.create("http://localhost:8080");
+      var uri = URI.create(PROJECT_BASE_URI);
       return LocalXSKHttpClient.create(uri);
     }
   }

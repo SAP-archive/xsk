@@ -9,7 +9,7 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.itest.repository;
+package com.sap.xsk.integration.tests.core.hdb.repository;
 
 import java.io.IOException;
 import org.eclipse.dirigible.repository.api.IResource;

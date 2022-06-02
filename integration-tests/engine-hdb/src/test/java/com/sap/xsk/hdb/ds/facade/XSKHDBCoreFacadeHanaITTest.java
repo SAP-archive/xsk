@@ -25,8 +25,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.sap.xsk.hdb.ds.itest.AbstractXSKHDBITTest;
-import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
-import com.sap.xsk.hdb.ds.itest.utils.HanaITestUtils;
+import com.sap.xsk.integration.tests.core.hdb.module.XSKHDBTestModule;
+import com.sap.xsk.integration.tests.core.hdb.utils.HanaITestUtils;
 
 public class XSKHDBCoreFacadeHanaITTest extends AbstractXSKHDBITTest {
 

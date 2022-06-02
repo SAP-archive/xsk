@@ -94,7 +94,7 @@ public class XSKHDBProcedureParser implements XSKDataStructureParser<XSKDataStru
                     ISynchronizerArtefactType.ArtefactState.FAILED_CREATE,
                     e.getMessage());
 
-            throw new XSKDataStructuresException("Wrong format of HDB Table Function: " + location + " during parsing. ", e);
+            throw new XSKDataStructuresException("Wrong format of HDB Procedure: " + location + " during parsing. ", e);
         }
     }
 

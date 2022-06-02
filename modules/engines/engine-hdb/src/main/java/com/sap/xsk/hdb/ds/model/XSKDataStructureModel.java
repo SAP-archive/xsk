@@ -60,7 +60,6 @@ public class XSKDataStructureModel {
    * @deprecated
    * Use constructor with builder
    */
-  @Deprecated
   public XSKDataStructureModel() {
   }
 
@@ -92,7 +91,6 @@ public class XSKDataStructureModel {
    * @deprecated Setters should not be used.
    * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
-  @Deprecated
   public void setLocation(String location) {
     this.location = location;
   }
@@ -113,7 +111,6 @@ public class XSKDataStructureModel {
    * @deprecated Setters should not be used.
    * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
-  @Deprecated
   public void setName(String name) {
     this.name = name;
   }
@@ -134,7 +131,6 @@ public class XSKDataStructureModel {
    * @deprecated Setters should not be used.
    * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
-  @Deprecated
   public void setType(String type) {
     this.type = type;
   }
@@ -155,7 +151,6 @@ public class XSKDataStructureModel {
    * @deprecated Setters should not be used.
    * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
-  @Deprecated
   public void setHash(String hash) {
     this.hash = hash;
   }
@@ -185,7 +180,6 @@ public class XSKDataStructureModel {
    * @deprecated Setters should not be used.
    * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
-  @Deprecated
   public void setCreatedBy(String createdBy) {
     this.createdBy = createdBy;
   }
@@ -209,7 +203,6 @@ public class XSKDataStructureModel {
    * @deprecated Setters should not be used.
    * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
-  @Deprecated
   public void setCreatedAt(Timestamp createdAt) {
     if (createdAt == null) {
       this.createdAt = null;
@@ -230,7 +223,6 @@ public class XSKDataStructureModel {
    * @deprecated Setters should not be used.
    * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
-  @Deprecated
   public void setSchema(String schema) {
     this.schema = schema;
   }
@@ -251,7 +243,6 @@ public class XSKDataStructureModel {
    * @deprecated Setters should not be used.
    * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
-  @Deprecated
   public void setRawContent(String rawContent) {
     this.rawContent = rawContent;
   }
@@ -265,7 +256,6 @@ public class XSKDataStructureModel {
    * @deprecated Setters should not be used.
    * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
-  @Deprecated
   public void setDbContentType(XSKDBContentType dbContentType) {
     this.dbContentType = dbContentType;
   }

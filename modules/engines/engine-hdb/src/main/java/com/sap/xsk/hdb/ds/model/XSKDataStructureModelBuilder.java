@@ -105,7 +105,4 @@ public class XSKDataStructureModelBuilder {
   public XSKDataStructureModel build() {
     return new XSKDataStructureModel(this);
   }
-
-  public XSKDataStructureModelBuilder() {
-  }
 }

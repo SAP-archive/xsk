@@ -54,7 +54,7 @@ public class XSKHDBProcedureParserTest {
         var model = procedureParser.parseProcedure(parser, location, content);
         assertEquals("Unexpected hdbprocedure schema.", "MYSCHEMA", model.getSchema());
         assertEquals("Unexpected hdbprocedure name.", "hdb_view::OrderProcedure", model.getName());
-        assertEquals("Unexpected hdbprocedure content.", content, model.getContent());
+        assertEquals("Unexpected hdbprocedure content.", content, model.getRawContent());
         assertEquals("Unexpected hdbprocedure raw content.", content, model.getRawContent());
         assertEquals("Unexpected hdbprocedure location.", location, model.getLocation());
         assertEquals("Unexpected hdbprocedure type.", "HDBPROC", model.getType());

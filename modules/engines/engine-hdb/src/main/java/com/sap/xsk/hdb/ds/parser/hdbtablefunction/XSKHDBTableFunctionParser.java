@@ -12,7 +12,9 @@
 package com.sap.xsk.hdb.ds.parser.hdbtablefunction;
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.artefacts.HDBTableFunctionSynchronizationArtefactType;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelBuilder;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
+import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
 import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
@@ -67,17 +69,17 @@ public class XSKHDBTableFunctionParser implements XSKDataStructureParser<XSKData
   private XSKDataStructureHDBTableFunctionModel createModel(TableFunctionDefinitionModel antlrModel,
       XSKDataStructureParametersModel params) {
 
-    return  XSKDataStructureHDBTableFunctionModel.builder()
-            .withName(antlrModel.getName())
-            .withHash(DigestUtils.md5Hex(params.getContent()))//NOSONAR
-            .createdAt(XSKHDBUtils.getTimestamp())
-            .createdBy(UserFacade.getName())
-            .withLocation(params.getLocation())
-            .withType(getType())
-            .rawContent(params.getContent())
-            .content(params.getContent())
-            .withSchema(antlrModel.getSchema())
-            .build();
+    XSKDataStructureModelBuilder builder = new XSKDataStructureModelBuilder()
+        .withName(antlrModel.getName())
+        .withHash(DigestUtils.md5Hex(params.getContent()))//NOSONAR
+        .createdAt(XSKHDBUtils.getTimestamp())
+        .createdBy(UserFacade.getName())
+        .withLocation(params.getLocation())
+        .withType(getType())
+        .rawContent(params.getContent())
+        .withSchema(antlrModel.getSchema());
+
+    return new XSKDataStructureHDBTableFunctionModel(builder);
   }
 
   private void validateAntlrModel(TableFunctionDefinitionModel antlrModel, String location) throws XSKDataStructuresException {

@@ -60,7 +60,7 @@ public class XSKHDBTableFunctionParserTest extends AbstractDirigibleTest {
         XSKDataStructureHDBTableFunctionModel model = tableFunctionParser.parseTableFunction(parser, location, content);
         assertEquals("Unexpected tablefunction schema.", "MYSCHEMA", model.getSchema());
         assertEquals("Unexpected tablefunction name.", "hdb_view::OrderTableFunction", model.getName());
-        assertEquals("Unexpected tablefunction content.", content, model.getContent());
+        assertEquals("Unexpected tablefunction content.", content, model.getRawContent());
         assertEquals("Unexpected tablefunction raw content.", content, model.getRawContent());
         assertEquals("Unexpected tablefunction location.", location, model.getLocation());
         assertEquals("Unexpected tablefunction type.", "HDBTABLEFUNC", model.getType());
@@ -79,7 +79,7 @@ public class XSKHDBTableFunctionParserTest extends AbstractDirigibleTest {
         XSKDataStructureHDBTableFunctionModel model = tableFunctionParser.parseTableFunction(parser, location, content);
         assertNull("Unexpected tablefunction schema.", model.getSchema());
         assertEquals("Unexpected tablefunction name.", "hdb_view::OrderTableFunction", model.getName());
-        assertEquals("Unexpected tablefunction content.", content, model.getContent());
+        assertEquals("Unexpected tablefunction content.", content, model.getRawContent());
         assertEquals("Unexpected tablefunction raw content.", content, model.getRawContent());
         assertEquals("Unexpected tablefunction location.", location, model.getLocation());
         assertEquals("Unexpected tablefunction type.", "HDBTABLEFUNC", model.getType());

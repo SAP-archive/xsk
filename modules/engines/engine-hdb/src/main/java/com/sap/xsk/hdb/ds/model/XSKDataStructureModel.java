@@ -56,23 +56,28 @@ public class XSKDataStructureModel {
   @Transient
   private transient XSKDBContentType dbContentType;
 
-    public XSKDataStructureModel() {
-    }
+  /**
+   * @deprecated
+   * Use constructor with builder
+   */
+  @Deprecated
+  public XSKDataStructureModel() {
+  }
 
-    protected XSKDataStructureModel(Builder<?> builder) {
-        location = builder.location;
-        name = builder.name;
-        type = builder.type;
-        hash = builder.hash;
-        createdBy = builder.createdBy;
-        createdAt = builder.createdAt;
-        schema = builder.schema;
-        rawContent = builder.rawContent;
-        dbContentType = builder.dbContentType;
-    }
+  protected XSKDataStructureModel(XSKDataStructureModelBuilder builder) {
+    location = builder.getLocation();
+    name = builder.getName();
+    type = builder.getType();
+    hash = builder.getHash();
+    createdBy = builder.getCreatedBy();
+    createdAt = builder.getCreatedAt();
+    schema = builder.getSchema();
+    rawContent = builder.getRawContent();
+    dbContentType = builder.getDbContentType();
+  }
 
-   /**
-           * Gets the location.
+  /**
+   * Gets the location.
    *
    * @return the location
    */
@@ -84,7 +89,10 @@ public class XSKDataStructureModel {
    * Sets the location.
    *
    * @param location the new location
+   * @deprecated Setters should not be used.
+   * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
+  @Deprecated
   public void setLocation(String location) {
     this.location = location;
   }
@@ -102,7 +110,10 @@ public class XSKDataStructureModel {
    * Sets the name.
    *
    * @param name the new name
+   * @deprecated Setters should not be used.
+   * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
+  @Deprecated
   public void setName(String name) {
     this.name = name;
   }
@@ -120,7 +131,10 @@ public class XSKDataStructureModel {
    * Sets the type.
    *
    * @param type the new type
+   * @deprecated Setters should not be used.
+   * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
+  @Deprecated
   public void setType(String type) {
     this.type = type;
   }
@@ -138,7 +152,10 @@ public class XSKDataStructureModel {
    * Sets the hash.
    *
    * @param hash the new hash
+   * @deprecated Setters should not be used.
+   * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
+  @Deprecated
   public void setHash(String hash) {
     this.hash = hash;
   }
@@ -165,7 +182,10 @@ public class XSKDataStructureModel {
    * Sets the created by.
    *
    * @param createdBy the new created by
+   * @deprecated Setters should not be used.
+   * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
+  @Deprecated
   public void setCreatedBy(String createdBy) {
     this.createdBy = createdBy;
   }
@@ -186,7 +206,10 @@ public class XSKDataStructureModel {
    * Sets the created at.
    *
    * @param createdAt the new created at
+   * @deprecated Setters should not be used.
+   * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
+  @Deprecated
   public void setCreatedAt(Timestamp createdAt) {
     if (createdAt == null) {
       this.createdAt = null;
@@ -204,7 +227,10 @@ public class XSKDataStructureModel {
 
   /**
    * @param schema the schema to set
+   * @deprecated Setters should not be used.
+   * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
+  @Deprecated
   public void setSchema(String schema) {
     this.schema = schema;
   }
@@ -222,7 +248,10 @@ public class XSKDataStructureModel {
    * In case the model contains Hana2 version syntax, the rawContent should be set.
    *
    * @param rawContent the new HANA2 syntax content
+   * @deprecated Setters should not be used.
+   * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
+  @Deprecated
   public void setRawContent(String rawContent) {
     this.rawContent = rawContent;
   }
@@ -231,6 +260,12 @@ public class XSKDataStructureModel {
     return dbContentType;
   }
 
+  /**
+   * @param dbContentType
+   * @deprecated Setters should not be used.
+   * <p> Use {@link XSKDataStructureModelBuilder} instead.
+   */
+  @Deprecated
   public void setDbContentType(XSKDBContentType dbContentType) {
     this.dbContentType = dbContentType;
   }
@@ -303,75 +338,5 @@ public class XSKDataStructureModel {
     }
     return true;
   }
-
-    public abstract static class Builder<B extends Builder<B>> {
-        private String location;
-        private String name;
-        private String type;
-        private String hash;
-        private String createdBy;
-        private Timestamp createdAt;
-        private String schema;
-        private String rawContent;
-        private XSKDBContentType dbContentType;
-
-
-        public B withName(String name) {
-            this.name = name;
-            return self();
-        }
-
-        public B withLocation(String location) {
-            this.location = location;
-            return self();
-        }
-
-        public B withType(String type) {
-            this.type = type;
-            return self();
-        }
-
-        public B withHash(String hash) {
-            this.hash = hash;
-            return self();
-        }
-
-        public B createdAt(Timestamp timestamp) {
-            this.createdAt = timestamp;
-            return self();
-        }
-
-        public B createdBy(String createdBy) {
-            this.createdBy = createdBy;
-            return self();
-        }
-
-        public B withSchema(String schema) {
-            this.schema = schema;
-            return self();
-        }
-
-        public B rawContent(String rawContent) {
-            this.rawContent = rawContent;
-            return self();
-        }
-
-
-        public XSKDataStructureModel build() {
-            return new XSKDataStructureModel(this);
-        }
-
-        protected abstract B self();
-
-        protected Builder() {
-        }
-    }
-
-    private static class BaseBuilder extends Builder<BaseBuilder> {
-        @Override
-        protected BaseBuilder self() {
-            return this;
-        }
-    }
 
 }

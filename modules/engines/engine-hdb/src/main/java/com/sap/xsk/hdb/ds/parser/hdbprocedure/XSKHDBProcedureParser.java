@@ -15,6 +15,7 @@ import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.artefacts.HDBProcedureSynchronizationArtefactType;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelBuilder;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
 import com.sap.xsk.hdb.ds.parser.XSKDataStructureParser;
@@ -67,8 +68,8 @@ public class XSKHDBProcedureParser implements XSKDataStructureParser<XSKDataStru
 
     private XSKDataStructureHDBProcedureModel createModel(HDBProcedureDefinitionModel antlrModel,
                                                           XSKDataStructureParametersModel params) {
-        return  XSKDataStructureHDBProcedureModel
-                .builder()
+
+      XSKDataStructureModelBuilder builder = new XSKDataStructureModelBuilder()
                 .withName(antlrModel.getName())
                 .withHash(DigestUtils.md5Hex(params.getContent()))//NOSONAR
                 .createdAt(XSKHDBUtils.getTimestamp())
@@ -76,9 +77,9 @@ public class XSKHDBProcedureParser implements XSKDataStructureParser<XSKDataStru
                 .withLocation(params.getLocation())
                 .withType(getType())
                 .rawContent(params.getContent())
-                .content(params.getContent())
-                .withSchema(antlrModel.getSchema())
-                .build();
+                .withSchema(antlrModel.getSchema());
+
+      return new XSKDataStructureHDBProcedureModel(builder);
 
     }
 

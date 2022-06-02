@@ -12,52 +12,11 @@
 package com.sap.xsk.hdb.ds.model.hdbprocedure;
 
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelBuilder;
 
 public class XSKDataStructureHDBProcedureModel extends XSKDataStructureModel {
 
-    private String content;
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public XSKDataStructureHDBProcedureModel() {
-
-    }
-
-    private XSKDataStructureHDBProcedureModel(HDBProcedureModelBuilder builder) {
-        super(builder);
-        content = builder.content;
-    }
-
-
-    public static HDBProcedureModelBuilder builder() {
-        return new HDBProcedureModelBuilder();
-    }
-
-    public static final class HDBProcedureModelBuilder extends XSKDataStructureModel.Builder<HDBProcedureModelBuilder> {
-        private String content;
-
-        HDBProcedureModelBuilder() {
-        }
-
-        public HDBProcedureModelBuilder content(String content) {
-            this.content = content;
-            return self();
-        }
-
-        @Override
-        public XSKDataStructureHDBProcedureModel build() {
-            return new XSKDataStructureHDBProcedureModel(this);
-        }
-
-        @Override
-        protected HDBProcedureModelBuilder self() {
-            return this;
-        }
-    }
+  public XSKDataStructureHDBProcedureModel(XSKDataStructureModelBuilder builder) {
+    super(builder);
+  }
 }

@@ -56,6 +56,10 @@ spec:
             - secretRef:
                 name: {{ required "Missing HANA secret name" .Values.hana.secretName }}
           {{- end }}
+          {{- if .Values.kyma.enabled }}
+            - secretRef:
+                name: xsuaa-{{ include "xsk.fullname" . }}-binding
+          {{- end }}
           env:
             {{- if .Values.kyma.enabled }}
             - name: DIRIGIBLE_HOST
@@ -160,15 +164,14 @@ spec:
     name: {{ include "xsk.fullname" . }}
     port: 8080
 ---
-apiVersion: servicecatalog.k8s.io/v1beta1
+apiVersion: services.cloud.sap.com/v1
 kind: ServiceInstance
 metadata:
   name: xsuaa-{{ include "xsk.fullname" . }}
 spec:
-  clusterServiceClassExternalName: xsuaa
-  clusterServiceClassRef:
-    name: xsuaa
-  clusterServicePlanExternalName: broker
+  serviceOfferingName: xsuaa
+  servicePlanName: application
+  externalName: {{ include "xsk.fullname" . }}-service-instance
   parameters:
     xsappname: {{ include "xsk.fullname" . }}-xsuaa
     oauth2-configuration:
@@ -205,29 +208,15 @@ spec:
     {{- end }}
       
 ---
-apiVersion: servicecatalog.k8s.io/v1beta1
+apiVersion: services.cloud.sap.com/v1
 kind: ServiceBinding
 metadata:
   name: xsuaa-{{ include "xsk.fullname" . }}-binding
 spec:
-  instanceRef:
-    name: xsuaa-{{ include "xsk.fullname" . }}
-  parameters: {}
+  serviceInstanceName: xsuaa-{{ include "xsk.fullname" . }}
+  externalName: {{ include "xsk.fullname" . }}-binding-external
   secretName: xsuaa-{{ include "xsk.fullname" . }}-binding
----
-apiVersion: servicecatalog.kyma-project.io/v1alpha1
-kind: ServiceBindingUsage
-metadata:
-  name: xsuaa-{{ include "xsk.fullname" . }}-usage
-spec:
-  parameters:
-    envPrefix:
-      name: ""
-  serviceBindingRef:
-    name: xsuaa-{{ include "xsk.fullname" . }}-binding
-  usedBy:
-    kind: deployment
-    name: {{ include "xsk.fullname" . }}
+  parameters: {}
 {{- else }}
 {{- if or .Values.kyma.host }}
 {{ required "Missing Kyma set configuration 'kyma.enabled=true' " .Values.kyma.enabled }}

@@ -1,10 +1,20 @@
+/*
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package com.sap.xsk.parser.parser.custom;
 
 import com.sap.xsk.parser.hana.core.HanaLexer;
 import com.sap.xsk.parser.hana.core.HanaParser;
-import custom.HanaProcedureListener;
+import custom.HanaProcedureUpdateStatementListener;
 import models.ProcedureDefinitionModel;
-import models.UpdateStatementDefinitionModel;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -14,20 +24,16 @@ import org.junit.Test;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-public class HanaProcedureListenerTest {
+import static org.junit.Assert.assertEquals;
+
+public class HanaProcedureUpdateStatementListenerTest {
 
   @Test
-  public void parseHdbProcedure() throws Exception {
-    String tableFunctionSample = getSample("/test.hdbprocedure");
+  public void parseHdbProcedureUpdateStatements() throws Exception {
+    String tableFunctionSample = getSample("/sample.hdbprocedure");
     ProcedureDefinitionModel model = parseHDBPProcedureModel(tableFunctionSample);
 
-    System.out.println();
-  }
-
-  private String getMergeIntoStatement(UpdateStatementDefinitionModel model){
-    String tableName = model.getFromClauseDefinitionModel().getTableName();
-    String mergeStmt = "MERGE INTO" + tableName;
-    return mergeStmt;
+    assertEquals(5, model.getUpdateStatements().size());
   }
 
   private String getSample(String sampleName) throws IOException {
@@ -44,7 +50,7 @@ public class HanaProcedureListenerTest {
     parser.setBuildParseTree(true);
     ParseTree parseTree = parser.sql_script();
 
-    HanaProcedureListener listener = new HanaProcedureListener();
+    HanaProcedureUpdateStatementListener listener = new HanaProcedureUpdateStatementListener();
     ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
     parseTreeWalker.walk(listener, parseTree);
 

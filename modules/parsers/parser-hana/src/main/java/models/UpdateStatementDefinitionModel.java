@@ -1,12 +1,25 @@
+/*
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package models;
 
 public class UpdateStatementDefinitionModel {
-  private String tableName ;
-  private String tableAliasName ;
 
-  private FromClauseDefinitionModel fromClauseDefinitionModel;
-  private WhereClauseDefinitionModel whereClauseDefinitionModel;
-  private UpdateSetClauseDefinitionModel updateSetClauseDefinitionModel;
+  private String tableName;
+  private String tableAlias;
+  private String rawContent;
+
+  private FromClauseDefinitionModel fromClause;
+  private WhereClauseDefinitionModel whereClause;
+  private UpdateSetClauseDefinitionModel updateSetClause;
 
   public String getTableName() {
     return tableName;
@@ -16,35 +29,43 @@ public class UpdateStatementDefinitionModel {
     this.tableName = tableName;
   }
 
-  public String getTableAliasName() {
-    return tableAliasName;
+  public String getTableAlias() {
+    return tableAlias;
   }
 
-  public void setTableAliasName(String tableAliasName) {
-    this.tableAliasName = tableAliasName;
+  public void setTableAlias(String tableAlias) {
+    this.tableAlias = tableAlias;
   }
 
-  public FromClauseDefinitionModel getFromClauseDefinitionModel() {
-    return fromClauseDefinitionModel;
+  public String getRawContent() {
+    return rawContent;
   }
 
-  public void setFromClauseDefinitionModel(FromClauseDefinitionModel fromClauseDefinitionModel) {
-    this.fromClauseDefinitionModel = fromClauseDefinitionModel;
+  public void setRawContent(String rawContent) {
+    this.rawContent = rawContent;
   }
 
-  public WhereClauseDefinitionModel getWhereClauseDefinitionModel() {
-    return whereClauseDefinitionModel;
+  public FromClauseDefinitionModel getFromClause() {
+    return fromClause;
   }
 
-  public void setWhereClauseDefinitionModel(WhereClauseDefinitionModel whereClauseDefinitionModel) {
-    this.whereClauseDefinitionModel = whereClauseDefinitionModel;
+  public void setFromClause(FromClauseDefinitionModel fromClause) {
+    this.fromClause = fromClause;
   }
 
-  public UpdateSetClauseDefinitionModel getSetClauseDefinitionModel() {
-    return updateSetClauseDefinitionModel;
+  public WhereClauseDefinitionModel getWhereClause() {
+    return whereClause;
   }
 
-  public void setSetClauseDefinitionModel(UpdateSetClauseDefinitionModel updateSetClauseDefinitionModel) {
-    this.updateSetClauseDefinitionModel = updateSetClauseDefinitionModel;
+  public void setWhereClause(WhereClauseDefinitionModel whereClause) {
+    this.whereClause = whereClause;
+  }
+
+  public UpdateSetClauseDefinitionModel getUpdateSetClause() {
+    return updateSetClause;
+  }
+
+  public void setUpdateSetClause(UpdateSetClauseDefinitionModel updateSetClause) {
+    this.updateSetClause = updateSetClause;
   }
 }

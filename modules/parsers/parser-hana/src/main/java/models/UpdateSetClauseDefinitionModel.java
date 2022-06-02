@@ -1,13 +1,25 @@
+/*
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package models;
 
 public class UpdateSetClauseDefinitionModel {
-    private String clause;
 
-  public String getClause() {
-    return clause;
+  private String rawContent;
+
+  public String getRawContent() {
+    return rawContent;
   }
 
-  public void setClause(String clause) {
-    this.clause = clause;
+  public void setRawContent(String rawContent) {
+    this.rawContent = rawContent;
   }
 }

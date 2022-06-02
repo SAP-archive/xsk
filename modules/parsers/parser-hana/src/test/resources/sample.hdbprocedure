@@ -1,0 +1,28 @@
+CREATE PROCEDURE "TEST"."test_procedure" (
+    IN data "TEST"."test",
+		OUT result NVARCHAR
+	)
+	LANGUAGE SQLSCRIPT
+	SQL SECURITY INVOKER
+	DEFAULT SCHEMA TEST
+AS
+BEGIN
+
+    -- Update from without join
+
+
+    -- Update from with one join without where
+
+
+    -- Update from with one join and where
+
+
+    -- Update from with multiple joins and where
+
+
+    -- Update without from
+
+
+    -- Some other statement
+
+END;

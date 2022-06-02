@@ -19,7 +19,7 @@ function testSingleFileExportUpdate() {
 
   // run generation to update the content and state table and assert content is valid
   const generator = new XSJSLibExportsGenerator(stateTableParams);
-  generator.run(collection);
+  generator.run(collection.getPath());
   assertEquals(expectedContent, resource.getText(), "Unexpected xsjslib content after exports generation.");
 
   // assert state table entries are okay

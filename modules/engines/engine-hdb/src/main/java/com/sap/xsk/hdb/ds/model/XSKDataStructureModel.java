@@ -56,10 +56,6 @@ public class XSKDataStructureModel {
   @Transient
   private transient XSKDBContentType dbContentType;
 
-  /**
-   * @deprecated
-   * Use constructor with builder
-   */
   public XSKDataStructureModel() {
   }
 
@@ -88,8 +84,6 @@ public class XSKDataStructureModel {
    * Sets the location.
    *
    * @param location the new location
-   * @deprecated Setters should not be used.
-   * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
   public void setLocation(String location) {
     this.location = location;
@@ -108,8 +102,6 @@ public class XSKDataStructureModel {
    * Sets the name.
    *
    * @param name the new name
-   * @deprecated Setters should not be used.
-   * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
   public void setName(String name) {
     this.name = name;
@@ -128,8 +120,6 @@ public class XSKDataStructureModel {
    * Sets the type.
    *
    * @param type the new type
-   * @deprecated Setters should not be used.
-   * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
   public void setType(String type) {
     this.type = type;
@@ -148,8 +138,6 @@ public class XSKDataStructureModel {
    * Sets the hash.
    *
    * @param hash the new hash
-   * @deprecated Setters should not be used.
-   * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
   public void setHash(String hash) {
     this.hash = hash;
@@ -177,8 +165,6 @@ public class XSKDataStructureModel {
    * Sets the created by.
    *
    * @param createdBy the new created by
-   * @deprecated Setters should not be used.
-   * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
   public void setCreatedBy(String createdBy) {
     this.createdBy = createdBy;
@@ -200,8 +186,6 @@ public class XSKDataStructureModel {
    * Sets the created at.
    *
    * @param createdAt the new created at
-   * @deprecated Setters should not be used.
-   * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
   public void setCreatedAt(Timestamp createdAt) {
     if (createdAt == null) {
@@ -220,8 +204,6 @@ public class XSKDataStructureModel {
 
   /**
    * @param schema the schema to set
-   * @deprecated Setters should not be used.
-   * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
   public void setSchema(String schema) {
     this.schema = schema;
@@ -240,8 +222,6 @@ public class XSKDataStructureModel {
    * In case the model contains Hana2 version syntax, the rawContent should be set.
    *
    * @param rawContent the new HANA2 syntax content
-   * @deprecated Setters should not be used.
-   * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
   public void setRawContent(String rawContent) {
     this.rawContent = rawContent;
@@ -253,8 +233,6 @@ public class XSKDataStructureModel {
 
   /**
    * @param dbContentType
-   * @deprecated Setters should not be used.
-   * <p> Use {@link XSKDataStructureModelBuilder} instead.
    */
   public void setDbContentType(XSKDBContentType dbContentType) {
     this.dbContentType = dbContentType;

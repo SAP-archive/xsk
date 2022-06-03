@@ -14,17 +14,19 @@ package com.sap.xsk.modificators;
 import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.StringReader;
 
 public class CalculationViewTransformation {
 
-  private static final String CALCULATION_VIEW_DATA_SOURCE_TRANSFORMATION_XSLT = "<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"https://www.w3.org/1999/XSL/Transform\">\n"
+  private static final String CALCULATION_VIEW_DATA_SOURCE_TRANSFORMATION_XSLT = "<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\n"
       + "    <xsl:template match=\"DataSource/@type\" />\n"
       + "    <xsl:template match=\"@*|node()\">\n"
       + "        <xsl:copy>\n"
@@ -42,9 +44,7 @@ public class CalculationViewTransformation {
       + "</xsl:stylesheet>";
 
   public byte[] removeTypeArtifact(byte[] bytes) throws TransformerException {
-    TransformerFactory factory = javax.xml.transform.TransformerFactory.newInstance();
-    factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-    factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+    TransformerFactory factory = TransformerFactory.newInstance();
     Source source = new StreamSource(new StringReader(CALCULATION_VIEW_DATA_SOURCE_TRANSFORMATION_XSLT));
     Transformer transformer = factory.newTransformer(source);
     StreamSource text = new StreamSource(new ByteArrayInputStream(bytes));

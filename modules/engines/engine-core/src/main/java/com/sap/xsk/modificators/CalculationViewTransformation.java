@@ -42,7 +42,6 @@ public class CalculationViewTransformation {
       + "</xsl:stylesheet>";
 
   public byte[] removeTypeArtifact(byte[] bytes) throws TransformerException {
-    System.setProperty("javax.xml.transform.TransformerFactory","com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
     TransformerFactory factory = TransformerFactory.newInstance();
     factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
     factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");

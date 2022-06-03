@@ -21,7 +21,7 @@ exports.getResultSetValueByDataTypeAndRowNumber = function (resultSet, dataType,
             return resultSet.getLong(colNumber);
         case "SMALLDECIMAL":
         case "DECIMAL":
-            return resultSet.getBigDecimal(colNumber);
+            return resultSet.getBigDecimal(colNumber).toPlainString(); // convert to String as in HANA XSJS it is returned as String
         case "REAL":
         case "FLOAT":
             return resultSet.getFloat(colNumber);

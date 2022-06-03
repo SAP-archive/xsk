@@ -11,17 +11,14 @@
  */
 package com.sap.xsk.modificators;
 
-import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.StringReader;
 
 public class CalculationViewTransformation {
@@ -44,6 +41,7 @@ public class CalculationViewTransformation {
       + "</xsl:stylesheet>";
 
   public byte[] removeTypeArtifact(byte[] bytes) throws TransformerException {
+    System.setProperty("javax.xml.transform.TransformerFactory","com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
     TransformerFactory factory = TransformerFactory.newInstance();
     Source source = new StreamSource(new StringReader(CALCULATION_VIEW_DATA_SOURCE_TRANSFORMATION_XSLT));
     Transformer transformer = factory.newTransformer(source);

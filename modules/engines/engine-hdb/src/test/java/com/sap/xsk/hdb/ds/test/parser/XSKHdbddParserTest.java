@@ -32,6 +32,7 @@ import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.junit.Before;
 import org.junit.Test;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class XSKHdbddParserTest extends AbstractDirigibleTest {
@@ -584,5 +585,10 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     XSKDataStructureHDBViewModel viewModel = ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0);
 
     assertEquals(expectedRawContent, viewModel.getRawContent().trim());
+  }
+
+  @Test
+  public void testGlog() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/glog.hdbdd", "");
   }
 }

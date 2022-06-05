@@ -216,7 +216,7 @@ public class HdbddTransformer {
 
       // Check if the join artifact name contains :: to determine if full artifact name is used and build the full name if not
       if (!joinArtifactName.contains(PACKAGE_DELIMITER)) {
-        joinArtifactName = fullTableNameBuilderFromViewSymbol(joinArtifactName, viewSymbol);
+        joinArtifactName = getFullTableName(viewSymbol, joinArtifactName);
       }
 
       // Replace the select from dependant table if anywhere in the join with its full name

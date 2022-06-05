@@ -586,9 +586,4 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
 
     assertEquals(expectedRawContent, viewModel.getRawContent().trim());
   }
-
-  @Test
-  public void testGlog() throws Exception {
-    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/glog.hdbdd", "");
-  }
 }

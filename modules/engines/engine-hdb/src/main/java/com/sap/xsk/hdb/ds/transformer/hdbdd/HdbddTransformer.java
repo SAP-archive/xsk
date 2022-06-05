@@ -236,12 +236,6 @@ public class HdbddTransformer {
     return joinStatements.toString();
   }
 
-  private String fullTableNameBuilderFromViewSymbol(String tableName, ViewSymbol viewSymbol) {
-    StringBuilder fullTableName = new StringBuilder();
-    fullTableName.append(viewSymbol.getPackageId()).append(PACKAGE_DELIMITER).append(viewSymbol.getContext()).append(DOT).append(tableName);
-    return fullTableName.toString();
-  }
-
   private String shortTableNameExtractorFromViewSymbol(String fullTableName, ViewSymbol viewSymbol) {
     return fullTableName.replace(viewSymbol.getPackageId() + PACKAGE_DELIMITER + viewSymbol.getContext() + DOT, "");
   }

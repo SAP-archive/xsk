@@ -386,12 +386,13 @@ public class HdbddTransformer {
   }
 
   private String getFullTableName(ViewSymbol dependingView, String tableName) {
+    // Check if the dependant table name is DUMMY. This is a reserved table name for hana dummy tables. We make sure to make it in uppercase
     if (tableName.equalsIgnoreCase(DUMMY_TABLE)) {
       return tableName.toUpperCase();
     } else {
       Symbol resolvedDependsOnTable = dependingView.getEnclosingScope().resolve(tableName);
       if (resolvedDependsOnTable == null) {
-        throw new CDSRuntimeException(String.format("Could not resolve referenced entity: %s", tableName));
+        throw new CDSRuntimeException("Could not resolve referenced entity: " + tableName);
       }
       return resolvedDependsOnTable.getFullName();
     }

@@ -28,6 +28,7 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.test.module.HdbTestModule;
+import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +49,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
         () -> XSKDataStructureModelFactory.parseHdbdd("gstr2/ITC_EXPIRED_CONFIG.hdbdd", "")
     );
     assertEquals(
-        "Failed to parse file: gstr2/ITC_EXPIRED_CONFIG.hdbdd. Error at line: 6  - Before an entity element declaration only the 'key' keyword is allowed",
+        "com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException: Failed to parse file: gstr2/ITC_EXPIRED_CONFIG.hdbdd. Error at line: 6  - Before an entity element declaration only the 'key' keyword is allowed",
         exception.getMessage());
   }
 
@@ -59,7 +60,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
         () -> XSKDataStructureModelFactory.parseHdbdd("gstr2/ITC_EXPIRED_CONFIG1.hdbdd", "")
     );
     assertEquals(
-        "Wrong format of HDB HDBDD: [gstr2/ITC_EXPIRED_CONFIG1.hdbdd] during parsing. Ensure you are using the correct format for the correct compatibility version.",
+        "com.sap.xsk.exceptions.XSKArtifactParserException: Wrong format of HDB HDBDD: [gstr2/ITC_EXPIRED_CONFIG1.hdbdd] during parsing. Ensure you are using the correct format for the correct compatibility version.",
         exception.getMessage());
   }
 
@@ -473,8 +474,9 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
         XSKDataStructuresException.class,
         () -> XSKDataStructureModelFactory.parseHdbdd("gstr2/NoKeyAnnSample.hdbdd", "")
     );
+
     assertEquals(
-        "Failed to parse file: gstr2/NoKeyAnnSample.hdbdd. Error at line: 10 col: 1. Annotation nokey has been specified for entity with keys.",
+        "com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException: Failed to parse file: gstr2/NoKeyAnnSample.hdbdd. Error at line: 10 col: 1. Annotation nokey has been specified for entity with keys.",
         exception.getMessage());
   }
 

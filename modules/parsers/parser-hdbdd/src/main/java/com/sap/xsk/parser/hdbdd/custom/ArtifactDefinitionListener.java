@@ -500,7 +500,9 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
     }
 
     if (ctx.dependsOnTable != null) {
-      selectSymbol.setDependsOnTable(handleStringLiteral(ctx.dependsOnTable.stream().map(RuleContext::getText).collect(Collectors.joining("."))));
+      String parsedDependsOnTable = ctx.dependsOnTable.stream().map(RuleContext::getText).collect(Collectors.joining("."));
+      String dependsOnTableNoQuotes = handleStringLiteral(parsedDependsOnTable);
+      selectSymbol.setDependsOnTable(dependsOnTableNoQuotes);
     }
 
     if (ctx.dependingTableAlias != null) {

@@ -2,287 +2,287 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://www.xsk.io/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/community/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/db/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/hdb/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/import/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/jobs/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/request/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/response/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/session/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/trace/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/net/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/net/net.Destination/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/net/net.Mail.Part/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/net/net.Mail/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/net/net.SMTPConnection/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/net/http/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/net/http/net.http.Client/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/net/http/net.http.Destination/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/net/http/net.http.Request/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/util/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/util/util.Zip/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/util/util.codec/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/web/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/web/web.Body/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/web/web.EntityList/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/web/web.TupelList/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/web/web.WebEntityRequest/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/api/web/web.WebEntityResponse/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/artifacts/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/artifacts/hdbanalyticprivilege/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/artifacts/hdbdd/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/artifacts/hdbprocedure/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/artifacts/hdbschema/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/artifacts/hdbsequence/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/artifacts/hdbsynonym/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/artifacts/hdbtable/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/artifacts/hdbtablefunction/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/artifacts/hdbview/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/artifacts/xshttpdest/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/artifacts/xsjs/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/artifacts/xsodata/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/cheatsheet/hdi/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/cheatsheet/troubleshooting/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/lifecycle/cicd/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/migration/changes/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/migration/guide/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/setup/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/setup/cloud-foundry/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/setup/helm/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/setup/kyma/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/setup/local/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/setup/configurations/environment-variables/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/setup/configurations/hdi/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/setup/prerequisites/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/setup/prerequisites/database-user/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.xsk.io/setup/prerequisites/delivery-unit/</loc>
-         <lastmod>2022-05-27</lastmod>
+         <lastmod>2022-06-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>

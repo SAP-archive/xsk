@@ -43,8 +43,8 @@ public class CalculationViewTransformation {
 
   public byte[] removeTypeArtifact(byte[] bytes) throws TransformerException {
     TransformerFactory factory = TransformerFactory.newInstance();
-//    factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-//    factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+    factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+    factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
     Source source = new StreamSource(new StringReader(CALCULATION_VIEW_DATA_SOURCE_TRANSFORMATION_XSLT));
     Transformer transformer = factory.newTransformer(source);
     StreamSource text = new StreamSource(new ByteArrayInputStream(bytes));

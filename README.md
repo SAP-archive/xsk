@@ -49,10 +49,9 @@ _**To learn more go to: https://www.xsk.io**_
 
 ## Requirements
 
-- Java suported versions 11 - 13
 - Maven 3.6.2 or later
-- Access to SAP BTP account (optional)
-- Access to SAP HANA Cloud instance (optional)
+- Access to SAP BTP account
+- Access to SAP HANA Cloud instance
 
 ## Download and Installation
 
@@ -91,10 +90,6 @@ mvn clean install
 - Will there be limitations that will not be mitigated?
 
   > You can get the up-to-date list of covered [features](https://github.com/SAP/xsk/wiki/Readiness) as well as the [limitations](https://github.com/SAP/xsk/wiki/Limitations)
-
-- Is the support of PostgreSQL only possible in principle or will this be officially supported?
-
-  > Yes, it is officially supported. Features specific for HANA Cloud like HDI, Calculation Views are not available for PostgreSQL.
 
 ## Cheat Sheet
 

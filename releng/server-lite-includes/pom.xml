@@ -102,6 +102,16 @@
     </dependency>
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-bpm</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-api-facade-http</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-api</artifactId>
       <version>${dirigible.version}</version>
       <scope>compile</scope>
@@ -294,6 +304,18 @@
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-resources</artifactId>
+      <version>${dirigible.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-engine-javascript</artifactId>
+      <version>${dirigible.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-core-scheduler</artifactId>
       <version>${dirigible.version}</version>
       <scope>compile</scope>
     </dependency>

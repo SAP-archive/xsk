@@ -11,9 +11,8 @@
  */
 package com.sap.xsk.hdb.ds.model.hdbscalarfunction;
 
-import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
 
-public class XSKDataStructureHDBScalarFunctionModel extends XSKDataStructureHDBTableFunctionModel {
+public class XSKDataStructureHDBScalarFunctionModel extends XSKDataStructureModel {
 
-  
 }

@@ -23,6 +23,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelBuilder;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.api.v3.problems.ProblemsFacade;
 import org.eclipse.dirigible.commons.config.Configuration;
@@ -87,12 +88,13 @@ public class HDBTableFunctionProcessorTest extends AbstractDirigibleTest {
 			
 			HDBTableFunctionCreateProcessor processorSpy = spy(HDBTableFunctionCreateProcessor.class);
 			String hdbprocedureSample = IOUtils.toString(XSKViewParserTest.class.getResourceAsStream("/OrderTableFunction.hdbtablefunction"), StandardCharsets.UTF_8);
-			
-			XSKDataStructureHDBTableFunctionModel model = new XSKDataStructureHDBTableFunctionModel();
-			model.setContent(hdbprocedureSample);
-			model.setName("\"MYSCHEMA\".\"hdb_view::FUNCTION_NAME\"");
-			model.setSchema("MYSCHEMA");
-			String sql = XSKConstants.XSK_HDBTABLEFUNCTION_CREATE + model.getContent();
+
+      XSKDataStructureModelBuilder builder = new XSKDataStructureModelBuilder()
+          .rawContent(hdbprocedureSample)
+          .withName("\"MYSCHEMA\".\"hdb_view::FUNCTION_NAME\"")
+          .withSchema("MYSCHEMA");
+			XSKDataStructureHDBTableFunctionModel model = new XSKDataStructureHDBTableFunctionModel(builder);
+			String sql = XSKConstants.XSK_HDBTABLEFUNCTION_CREATE + model.getRawContent();
 			sqlFactory.when(() -> SqlFactory.getNative(mockConnection).exists(mockConnection, "MYSCHEMA", XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1], DatabaseArtifactTypes.FUNCTION)).thenReturn(doExist);
 			
 			when(mockConnection.prepareStatement(sql)).thenReturn(mockStatement);
@@ -106,8 +108,9 @@ public class HDBTableFunctionProcessorTest extends AbstractDirigibleTest {
 	public void executeCreateTableFunctionPostgresSQLFailed() throws Exception {
 		HDBTableFunctionCreateProcessor processorSpy = spy(HDBTableFunctionCreateProcessor.class);
 
-		XSKDataStructureHDBTableFunctionModel model = new XSKDataStructureHDBTableFunctionModel();
-		model.setName("\"MYSCHEMA\".\"hdb_view::FUNCTION_NAME\"");
+    XSKDataStructureModelBuilder builder = new XSKDataStructureModelBuilder()
+        .withName("\"MYSCHEMA\".\"hdb_view::FUNCTION_NAME\"");
+		XSKDataStructureHDBTableFunctionModel model = new XSKDataStructureHDBTableFunctionModel(builder);
 
 		try (MockedStatic<SqlFactory> sqlFactory = Mockito.mockStatic(SqlFactory.class);
 				MockedStatic<ProblemsFacade> problemsFacade = Mockito.mockStatic(ProblemsFacade.class)) {
@@ -138,9 +141,10 @@ public class HDBTableFunctionProcessorTest extends AbstractDirigibleTest {
 			configuration.when(() -> Configuration.get(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "false")).thenReturn("true");
 			
 			HDBTableFunctionDropProcessor processorSpy = spy(HDBTableFunctionDropProcessor.class);
-			
-			XSKDataStructureHDBTableFunctionModel model = new XSKDataStructureHDBTableFunctionModel();
-			model.setName("\"MYSCHEMA\".\"hdb_view::FUNCTION_NAME\"");
+
+      XSKDataStructureModelBuilder builder = new XSKDataStructureModelBuilder()
+          .withName("\"MYSCHEMA\".\"hdb_view::FUNCTION_NAME\"");
+			XSKDataStructureHDBTableFunctionModel model = new XSKDataStructureHDBTableFunctionModel(builder);
 			String sql = XSKConstants.XSK_HDBTABLEFUNCTION_DROP + model.getName();
 			sqlFactory.when(() -> SqlFactory.getNative(mockConnection).exists(mockConnection, "MYSCHEMA", XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1], DatabaseArtifactTypes.FUNCTION)).thenReturn(doExist);
 			
@@ -155,8 +159,9 @@ public class HDBTableFunctionProcessorTest extends AbstractDirigibleTest {
 	public void executeDropTableFunctionFailed() throws Exception {
 		HDBTableFunctionDropProcessor processorSpy = spy(HDBTableFunctionDropProcessor.class);
 
-		XSKDataStructureHDBTableFunctionModel model = new XSKDataStructureHDBTableFunctionModel();
-		model.setName("\"MYSCHEMA\".\"hdb_view::FUNCTION_NAME\"");
+    XSKDataStructureModelBuilder builder = new XSKDataStructureModelBuilder()
+        .withName("\"MYSCHEMA\".\"hdb_view::FUNCTION_NAME\"");
+		XSKDataStructureHDBTableFunctionModel model = new XSKDataStructureHDBTableFunctionModel(builder);
 
 		try (MockedStatic<SqlFactory> sqlFactory = Mockito.mockStatic(SqlFactory.class);
 				MockedStatic<ProblemsFacade> problemsFacade = Mockito.mockStatic(ProblemsFacade.class)) {

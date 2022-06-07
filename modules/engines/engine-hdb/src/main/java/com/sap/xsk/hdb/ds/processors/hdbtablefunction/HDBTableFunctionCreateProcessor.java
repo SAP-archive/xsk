@@ -49,7 +49,7 @@ public class HDBTableFunctionCreateProcessor extends AbstractXSKProcessor<XSKDat
         applyArtefactState(hdbTableFunction.getName(),hdbTableFunction.getLocation(),TABLE_FUNCTION_ARTEFACT, ArtefactState.FAILED_CREATE, errorMessage);
         throw new IllegalStateException(errorMessage);
       } else {
-        String sql = XSKConstants.XSK_HDBTABLEFUNCTION_CREATE + hdbTableFunction.getContent();
+        String sql = XSKConstants.XSK_HDBTABLEFUNCTION_CREATE + hdbTableFunction.getRawContent();
         try {
           executeSql(sql, connection);
           String message = String.format("Create table function %s successfully", hdbTableFunction.getName());

@@ -9,14 +9,24 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.model.hdbprocedure;
+package models;
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModelBuilder;
 
-public class XSKDataStructureHDBProcedureModel extends XSKDataStructureModel {
+public class DefinitionModel {
+    private final String schema;
+    private final String name;
 
-  public XSKDataStructureHDBProcedureModel(XSKDataStructureModelBuilder builder) {
-    super(builder);
-  }
+    public DefinitionModel(String schema, String name) {
+        this.schema = schema;
+        this.name = name;
+    }
+
+    public String getSchema() {
+        return schema;
+    }
+
+    public String getName() {
+        return name;
+    }
+
 }

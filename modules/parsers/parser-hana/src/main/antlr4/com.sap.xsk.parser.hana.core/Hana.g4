@@ -32,7 +32,7 @@ CREATE PROCEDURE <proc_name> [(<parameter_clause>)] [LANGUAGE <lang>] [SQL SECUR
   END
 */
 create_procedure_body
-    : CREATE PROCEDURE proc_name
+    : (CREATE)? PROCEDURE proc_name
 	  (parameter_clause)?
 	  (LANGUAGE lang)?
 	  (SQL SECURITY security_mode)?
@@ -41,7 +41,7 @@ create_procedure_body
 	  AS
 	  BEGIN (SEQUENTIAL EXECUTION)?
 		  procedure_body
-	  END ';'
+	  END (';')?
 //	  (body | call_spec | EXTERNAL) ';'
 	;
 

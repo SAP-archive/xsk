@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="2.3" id="SAP_CA_TWEETB" applyPrivilegeType="ANALYTIC_PRIVILEGE" checkAnalyticPrivileges="true" defaultClient="$$client$$" defaultLanguage="$$language$$" hierarchiesSQLEnabled="false" translationRelevant="true" visibility="reportingEnabled" calculationScenarioType="TREE_BASED" dataCategory="CUBE" enforceSqlExecution="false" executionSemantic="UNDEFINED">
+  <descriptions defaultDescription=""/>
+  <localVariables/>
+  <variableMappings/>
+  <informationModelLayout relativeWidthScenario="27"/>
+  <dataSources>
+    <DataSource id="$TA_TWEETSB">
+      <viewAttributes allViewAttributes="true"/>
+      <columnObject schemaName="SUMMIT2015" columnObjectName="$TA_TWEETSB"/>
+    </DataSource>
+  </dataSources>
+  <calculationViews>
+    <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+      <descriptions/>
+      <viewAttributes>
+        <viewAttribute id="Element"/>
+        <viewAttribute id="Type"/>
+        <viewAttribute id="TA_NORMALIZED"/>
+        <viewAttribute id="Id"/>
+        <viewAttribute id="Mentions"/>
+      </viewAttributes>
+      <calculatedViewAttributes/>
+      <input node="#$TA_TWEETSB">
+        <mapping xsi:type="Calculation:AttributeMapping" target="Element" source="TA_TOKEN"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="Type" source="TA_TYPE"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="TA_NORMALIZED" source="TA_NORMALIZED"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="Id" source="Id"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="Mentions" source="TA_COUNTER"/>
+      </input>
+    </calculationView>
+  </calculationViews>
+  <logicalModel id="Projection_1">
+    <descriptions/>
+    <attributes>
+      <attribute id="Element" order="2" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="Element"/>
+        <keyMapping columnObjectName="Projection_1" columnName="Element"/>
+      </attribute>
+      <attribute id="Type" order="3" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="Type"/>
+        <keyMapping columnObjectName="Projection_1" columnName="Type"/>
+      </attribute>
+      <attribute id="TA_NORMALIZED" order="4" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="TA_NORMALIZED"/>
+        <keyMapping columnObjectName="Projection_1" columnName="TA_NORMALIZED"/>
+      </attribute>
+      <attribute id="Id$local">
+        <descriptions/>
+        <keyMapping columnObjectName="Projection_1" columnName="Id"/>
+      </attribute>
+    </attributes>
+    <calculatedAttributes/>
+    <privateDataFoundation>
+      <tableProxies/>
+      <joins/>
+      <layout>
+        <shapes/>
+      </layout>
+    </privateDataFoundation>
+    <baseMeasures>
+      <measure id="Mentions" order="1" aggregationType="sum" measureType="simple">
+        <descriptions defaultDescription="Mentions"/>
+        <measureMapping columnObjectName="Projection_1" columnName="Mentions"/>
+      </measure>
+    </baseMeasures>
+    <calculatedMeasures>
+      <measure id="Impact" hidden="false" order="5" aggregationType="sum" measureType="simple" datatype="INTEGER" expressionLanguage="COLUMN_ENGINE">
+        <descriptions defaultDescription="People Reached"/>
+        <formula>"Followers"</formula>
+      </measure>
+    </calculatedMeasures>
+    <restrictedMeasures/>
+    <localDimensions/>
+    <sharedDimensions>
+      <logicalJoin associatedObjectUri="Summit15.Models::SAP_DIM_TWEETINFOB">
+        <attributes>
+          <attributeRef>#Id$local</attributeRef>
+        </attributes>
+        <associatedAttributeNames>
+          <attributeName>Id</attributeName>
+        </associatedAttributeNames>
+        <properties joinOperator="Equal" joinType="referential"/>
+        <associatedAttributeFeatures/>
+      </logicalJoin>
+      <logicalJoin associatedObjectUri="Summit15.Models::SAP_DIM_LOCATIONB">
+        <attributes>
+          <attributeRef>#Id$local</attributeRef>
+        </attributes>
+        <associatedAttributeNames>
+          <attributeName>Id</attributeName>
+        </associatedAttributeNames>
+        <properties joinOperator="Equal" joinType="fullOuter"/>
+        <associatedAttributeFeatures>
+          <attributeReference alias="SAP_DIM_LOCATIONB_Id" attributeName="Id"/>
+        </associatedAttributeFeatures>
+      </logicalJoin>
+    </sharedDimensions>
+  </logicalModel>
+  <layout>
+    <shapes>
+      <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+        <upperLeftCorner x="40" y="85"/>
+        <rectangleSize height="0" width="0"/>
+      </shape>
+      <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+        <upperLeftCorner x="0" y="270"/>
+        <rectangleSize height="-1" width="-1"/>
+      </shape>
+      <shape modelObjectName="Projection_1" modelObjectNameSpace="StarJoinViewNodeInput" modelObjectType="repository">
+        <upperLeftCorner x="321" y="70"/>
+      </shape>
+      <shape modelObjectName="/Summit15.Models/calculationviews/SAP_DIM_TWEETINFOB" modelObjectNameSpace="StarJoinViewNodeSharedCV" modelObjectType="repository">
+        <upperLeftCorner x="-27" y="169"/>
+      </shape>
+      <shape modelObjectName="/Summit15.Models/calculationviews/SAP_DIM_LOCATIONB" modelObjectNameSpace="StarJoinViewNodeSharedCV" modelObjectType="repository">
+        <upperLeftCorner x="479" y="191"/>
+      </shape>
+    </shapes>
+  </layout>
+</Calculation:scenario>

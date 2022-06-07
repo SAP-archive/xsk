@@ -4,7 +4,7 @@ import { fetchAllEntriesInTable } from '../utils/utils.mjs'
 import { XSJSLibExportsGenerator } from '/exports/XSJSLibExportsGenerator.mjs'
 import { repository } from '@dirigible-v4/platform'
 import { digest } from '@dirigible-v4/utils'
-
+const XSJSLibSynchronizerRegistryEntity = Java.type("com.sap.xsk.synchronizer.XSJSLibSynchronizerRegistryEntity");
 
 function testMultiFileFolderExportGeneration() {
   const stateTableParams = getParams();
@@ -24,7 +24,8 @@ function testMultiFileFolderExportGeneration() {
 
   // run generation and assert content is valid for all resources
   const generator = new XSJSLibExportsGenerator(stateTableParams);
-  generator.run(baseCollection.getPath(), "ExistentFolder");
+  const target = new XSJSLibSynchronizerRegistryEntity(baseCollection.getPath(), repository);
+  generator.run(target);
   assertEquals(baseInput, baseResource.getText(), "Unexpected xsjslib content after exports generation.");
   assertEquals(childInput, childResource.getText(), "Unexpected xsjslib content after exports generation.");
   const baseGeneratedExports = repository.getResource(baseResource.getPath() + ".generated_exports");

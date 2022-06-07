@@ -11,13 +11,13 @@
  */
 package com.sap.xsk.synchronizer;
 
-import com.sap.xsk.exceptions.XSJSLibSynchronizerUnresolvedPathTypeException;
-import com.sap.xsk.synchronizer.XSJSLibSynchronizerPathTypeResolver.ResolvedPathType;
 import com.sap.xsk.utils.XSKCommonsConstants;
+import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.scheduler.api.AbstractSynchronizer;
 import org.eclipse.dirigible.core.scheduler.api.IOrderedSynchronizerContribution;
 import org.eclipse.dirigible.core.scheduler.api.SynchronizationException;
 import org.eclipse.dirigible.engine.js.graalvm.processor.GraalVMJavascriptEngineExecutor;
+import org.eclipse.dirigible.repository.api.IRepository;
 import org.eclipse.dirigible.repository.api.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,19 +34,16 @@ public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrdere
 
   private static final String DONE_SYNCHRONIZING_LOG_MESSAGE = "Done synchronizing XSJSLibs.";
 
-  private final XSJSLibSynchronizerPathTypeResolver resolver = new XSJSLibSynchronizerPathTypeResolver();
+  private static final IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
 
-  private final String targetRegistryPath;
-
-  private final ResolvedPathType targetRegistryPathType;
+  private XSJSLibSynchronizerRegistryEntity synchronizerTarget = null;
 
   public XSJSLibSynchronizer() {
     this(XSKCommonsConstants.XSK_REGISTRY_PUBLIC);
   }
 
   public XSJSLibSynchronizer(String targetRegistryPath) {
-    this.targetRegistryPath = targetRegistryPath;
-    this.targetRegistryPathType = resolver.resolveWithResourceFirst(targetRegistryPath);
+    synchronizerTarget = new XSJSLibSynchronizerRegistryEntity(targetRegistryPath, repository);
   }
 
   public static void forceSynchronization(String targetRegistryPath) {
@@ -62,7 +59,7 @@ public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrdere
   public void synchronizeXSJSLibs() {
     logger.trace("Synchronizing XSJSLibs...");
 
-    if(resolver.isNonSynchronizableType(targetRegistryPathType)) {
+    if(!synchronizerTarget.isSynchronizable()) {
       logger.trace(DONE_SYNCHRONIZING_LOG_MESSAGE);
       return;
     }
@@ -81,16 +78,8 @@ public class XSJSLibSynchronizer extends AbstractSynchronizer implements IOrdere
 
   private Map<Object, Object> buildContext() {
     Map<Object, Object> context = new HashMap<>();
-
-    context.put("targetRegistryPath", targetRegistryPath);
+    context.put("synchronizerTarget", synchronizerTarget);
     context.put("stateTableName", XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME);
-
-    switch(targetRegistryPathType) {
-      case EXISTENT_XSJSLIB_FILE: context.put("targetRegistryPathType", "ExistentXSJSLibFile"); break;
-      case EXISTENT_FOLDER: context.put("targetRegistryPathType", "ExistentFolder"); break;
-      default: throw new XSJSLibSynchronizerUnresolvedPathTypeException("XSJSLibSynchronizer: Unhandled ResolvedPathType.");
-    }
-
     return context;
   }
 

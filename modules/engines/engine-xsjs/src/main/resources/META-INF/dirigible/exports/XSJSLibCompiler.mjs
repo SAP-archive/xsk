@@ -1,6 +1,6 @@
 const acorn = require("acornjs/acorn");
 
-export class XSJSLibParser {
+export class XSJSLibCompiler {
 
   appendExports(content) {
     content += "\n\n";

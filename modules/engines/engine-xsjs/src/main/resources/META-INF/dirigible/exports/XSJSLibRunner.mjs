@@ -17,4 +17,4 @@ const stateTableParams = {
 }
 
 const generator = new XSJSLibExportsGenerator(stateTableParams);
-generator.run(__context.targetRegistryPath, __context.targetRegistryPathType);
+generator.run(__context.synchronizerTarget);

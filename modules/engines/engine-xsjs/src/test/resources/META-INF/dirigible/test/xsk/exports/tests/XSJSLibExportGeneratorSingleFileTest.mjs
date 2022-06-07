@@ -4,6 +4,7 @@ import { fetchAllEntriesInTable } from '../utils/utils.mjs'
 import { XSJSLibExportsGenerator } from '/exports/XSJSLibExportsGenerator.mjs'
 import { repository } from '@dirigible-v4/platform'
 import { digest } from '@dirigible-v4/utils'
+const XSJSLibSynchronizerRegistryEntity = Java.type("com.sap.xsk.synchronizer.XSJSLibSynchronizerRegistryEntity");
 
 function testSingleFileExportGeneration() {
   const stateTableParams = getParams();
@@ -16,7 +17,8 @@ function testSingleFileExportGeneration() {
 
   // run generation and assert content is valid
   const generator = new XSJSLibExportsGenerator(stateTableParams);
-  generator.run(collection.getPath(), "ExistentFolder");
+  const target = new XSJSLibSynchronizerRegistryEntity(collection.getPath(), repository);
+  generator.run(target);
   const generatedExportsResource = repository.getResource(resource.getPath() + ".generated_exports");
   assertEquals(expectedContent, generatedExportsResource.getText(), "Unexpected xsjslib content after exports generation.");
   assertEquals(input, resource.getText(), "Unexpected xsjslib content after exports generation.");

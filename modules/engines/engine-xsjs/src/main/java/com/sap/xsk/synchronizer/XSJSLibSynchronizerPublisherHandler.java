@@ -21,16 +21,11 @@ import javax.sql.DataSource;
 
 public class XSJSLibSynchronizerPublisherHandler extends MetadataPublisherHandler {
   private static final DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE);
-
   private static final IRepository repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
 
-  XSJSLibSynchronizerCleaner dbCleaner = new XSJSLibSynchronizerDBCleaner(dataSource);
-
-  XSJSLibSynchronizerCleaner fileCleaner = new XSJSLibSynchronizerFileCleaner(repository);
-
-  XSJSLibSynchronizerPathTypeResolver resolver = new XSJSLibSynchronizerPathTypeResolver();
-
-  XSJSLibSynchronizerUnpublisher unpublisher = new XSJSLibSynchronizerUnpublisher(resolver, fileCleaner, dbCleaner);
+  private final XSJSLibSynchronizerCleaner dbCleaner = new XSJSLibSynchronizerDBCleaner(dataSource);
+  private final XSJSLibSynchronizerCleaner fileCleaner = new XSJSLibSynchronizerFileCleaner(repository);
+  private final XSJSLibSynchronizerUnpublisher unpublisher = new XSJSLibSynchronizerUnpublisher(fileCleaner, dbCleaner);
 
   @Override
   public void afterPublish(String workspaceLocation, String registryLocation) {
@@ -39,6 +34,7 @@ public class XSJSLibSynchronizerPublisherHandler extends MetadataPublisherHandle
 
   @Override
   public void beforeUnpublish(String location) {
-    unpublisher.unpublish(location);
+    XSJSLibSynchronizerRegistryEntity entity = new XSJSLibSynchronizerRegistryEntity(location, repository, true);
+    unpublisher.unpublish(entity);
   }
 }

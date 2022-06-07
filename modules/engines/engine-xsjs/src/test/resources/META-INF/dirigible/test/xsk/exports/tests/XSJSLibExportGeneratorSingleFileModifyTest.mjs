@@ -4,6 +4,7 @@ import { fetchAllEntriesInTable } from '../utils/utils.mjs'
 import { XSJSLibExportsGenerator } from '/exports/XSJSLibExportsGenerator.mjs'
 import { repository } from '@dirigible-v4/platform'
 import { digest } from '@dirigible-v4/utils'
+const XSJSLibSynchronizerRegistryEntity = Java.type("com.sap.xsk.synchronizer.XSJSLibSynchronizerRegistryEntity");
 
 function testSingleFileModificationAndExportGeneration() {
   const stateTableParams = getParams();
@@ -18,7 +19,8 @@ function testSingleFileModificationAndExportGeneration() {
 
   // run generation and assert content is valid
   const generator = new XSJSLibExportsGenerator(stateTableParams);
-  generator.run(resource.getPath(), "ExistentXSJSLibFile");
+  const targetInitial = new XSJSLibSynchronizerRegistryEntity(resource.getPath(), repository);
+  generator.run(targetInitial);
 
   // New content
   input = "function asd(){ return 'asd'; }";
@@ -29,7 +31,8 @@ function testSingleFileModificationAndExportGeneration() {
   resource.setText(input);
 
   // run generation to update the content and state table and assert content is valid
-  generator.run(resource.getPath(), "ExistentXSJSLibFile");
+  const targetUpdate = new XSJSLibSynchronizerRegistryEntity(resource.getPath(), repository);
+  generator.run(targetUpdate);
   let generatedExports = repository.getResource(resource.getPath() + ".generated_exports");
   assertEquals(input, resource.getText(), "Unexpected xsjslib content after exports generation.");
   assertEquals(expectedContent, generatedExports.getText(), "Unexpected xsjslib content after exports generation.");

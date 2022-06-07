@@ -11,7 +11,6 @@
  */
 package com.sap.xsk.synchronizer;
 
-import com.sap.xsk.synchronizer.XSJSLibSynchronizerPathTypeResolver.ResolvedPathType;
 import com.sap.xsk.synchronizer.cleaners.XSJSLibSynchronizerCleaner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,39 +18,31 @@ import org.slf4j.LoggerFactory;
 public class XSJSLibSynchronizerUnpublisher {
   private static final Logger logger = LoggerFactory.getLogger(XSJSLibSynchronizerUnpublisher.class);
 
-  private final XSJSLibSynchronizerPathTypeResolver resolver;
-
   private final XSJSLibSynchronizerCleaner fileCleaner;
 
   private final XSJSLibSynchronizerCleaner dbCleaner;
 
   XSJSLibSynchronizerUnpublisher(
-      XSJSLibSynchronizerPathTypeResolver resolver,
       XSJSLibSynchronizerCleaner fileCleaner,
       XSJSLibSynchronizerCleaner dbCleaner
   ) {
-    this.resolver = resolver;
     this.fileCleaner = fileCleaner;
     this.dbCleaner = dbCleaner;
   }
 
-  public void unpublish(String targetRegistryPath) {
-      ResolvedPathType type = resolver.resolveWithCollectionFirst(targetRegistryPath);
-
-      switch (type) {
-        case EXISTENT_XSJSLIB_FILE: {
-          dbCleaner.cleanup(targetRegistryPath);
-          fileCleaner.cleanup(targetRegistryPath);
-        }
-        break;
-
-        case EXISTENT_FOLDER:
-          dbCleaner.cleanup(targetRegistryPath);
-          break;
-
-        default:
-          logger.info("XSJSLibSynchronizer: Nothing to cleanup.");
-          break;
+  public void unpublish(XSJSLibSynchronizerRegistryEntity entity) {
+    if(entity.isSynchronizable()) {
+      String registryPath = entity.getEntity().getPath();
+      if(entity.isCollection()) {
+        dbCleaner.cleanup(registryPath);
       }
+      else {
+        dbCleaner.cleanup(registryPath);
+        fileCleaner.cleanup(registryPath);
+      }
+    }
+    else {
+      logger.info("XSJSLibSynchronizer: Nothing to cleanup.");
+    }
   }
 }

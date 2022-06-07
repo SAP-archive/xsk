@@ -1,10 +1,12 @@
-import { XSJSLibParser } from '/exports/XSJSLibParser.mjs'
+import { XSJSLibCompiler } from '/exports/XSJSLibCompiler.mjs'
 import { XSJSLibStateTable } from '/exports/XSJSLibStateTable.mjs'
 import { digest } from '@dirigible-v4/utils'
 import { repository } from '@dirigible-v4/platform'
+import { bytes } from '@dirigible-v4/io'
+
+const ProblemsFacade = Java.type('org.eclipse.dirigible.api.v3.problems.ProblemsFacade');
 
 export class XSJSLibExportsGenerator {
-
   processedArtefactsTable = null;
 
   constructor(stateTableParams) {
@@ -14,28 +16,20 @@ export class XSJSLibExportsGenerator {
     );
   }
 
-  run(targetRegistryPath, targetRegistryPathType) {
-    if(targetRegistryPathType == "ExistentXSJSLibFile") {
-      const targetResource = repository.getResource(targetRegistryPath);
-      this._checkTableAndGenerateExportsIfNeeded(targetResource, false);
-    }
-    else if(targetRegistryPathType == "ExistentFolder") {
-      const targetCollection = repository.getCollection(targetRegistryPath);
-      this._generateExportsRecursively(targetCollection);
+  run(synchronizerTarget) {
+    if(synchronizerTarget.isCollection()) {
+      this._generateExportsRecursively(synchronizerTarget.getEntity(), false);
     }
     else {
-      throw new Error(
-        "XSJSLibExportsGenerator: Unrecognized target path type "
-         + targetRegistryPathType
-         + " for path "
-         + targetRegistryPath
-       );
+      this._checkTableAndGenerateExportsIfNeeded(synchronizerTarget.getEntity(), false);
     }
   }
 
-  _generateExportsRecursively(parentCollection) {
-    if (!parentCollection.exists()) {
-      throw new Error("XSJSLibExportsGenerator: Collection not found: " + parentCollection.getPath()); // TODO: Log warning instead of error?
+  _generateExportsRecursively(parentCollection, isCollectionCheckRequired) {
+    if(isCollectionCheckRequired) {
+      if(!this._validateCollection(parentCollection)) {
+        return;
+      }
     }
     
     const resourceNames = this._toJsArray(parentCollection.getResourcesNames());
@@ -54,7 +48,22 @@ export class XSJSLibExportsGenerator {
 
     collectionNames
       .map(collectionName => parentCollection.getCollection(collectionName))
-      .forEach(collection => this._generateExportsRecursively(collection));
+      .forEach(collection => this._generateExportsRecursively(collection, true));
+  }
+
+  _logProblem(location, message) {
+    ProblemsFacade.save(
+      location,
+      "SYNCHRONIZER",
+      "",
+      "",
+      message,
+      "",
+      "XSJSLIB",
+      "Engine-XSJS",
+      "XSJSLibExportsGenerator.mjs",
+      "SAP XSK"
+    );
   }
 
   _toJsArray(array) {
@@ -65,41 +74,63 @@ export class XSJSLibExportsGenerator {
 
   _checkTableAndGenerateExportsIfNeeded(resource, isResourceCheckRequired = true) {
     if(isResourceCheckRequired) {
-      if(!resource.exists()) {
-        throw new Error("XSJSLibExportsGenerator: Resource not found."); // TODO: Log warning instead of error?
-      }
-
-      if(!resource.getPath().endsWith(".xsjslib")) {
+      if(!this._validateResource(resource)) {
         return;
       }
     }
 
-    if (!this.processedArtefactsTable) {
-      throw new Error("XSJSLibExportsGenerator: State table not found.");
-    }
-
-    const content = resource.getText();
+    const content = bytes.byteArrayToText(resource.getContent());
     const location = resource.getPath();
-    const foundEntry = this.processedArtefactsTable.findEntryByResourceLocation(location);
+    const findEntryByResourceLocation = this.processedArtefactsTable.findEntryByResourceLocation(location);
 
-    if (!foundEntry) {
-      // No entry in state table => generate.
+    if (!findEntryByResourceLocation) {
       this._generateExportsFile(location, content);
       this.processedArtefactsTable.createEntryForResource(location, content);
     }
-    else if (this._isContentChanged(foundEntry, content)) {
-      // Entry in state table found, but content changed => generate.
+    else if (this._isContentChanged(findEntryByResourceLocation, content)) {
       this._generateExportsFile(location, content);
-      this.processedArtefactsTable.updateEntryForResource(foundEntry, location, content);
+      this.processedArtefactsTable.updateEntryForResource(findEntryByResourceLocation, location, content);
     }
     else {
       // No entry in state table and no change in content => do not generate.
     }
   }
 
+  _validateResource(resource) {
+    if(!resource.exists()) {
+      this._logProblem(
+        resource.getPath(),
+        "Requested .xsjslib synchronisation for resource '"
+        + resource.getPath()
+        + "' could not be completed. Resource does not exist in the registry.'"
+      );
+      return false;
+    }
+
+    if(!resource.getPath().endsWith(".xsjslib")) {
+      return false;
+    }
+
+    return true;
+  }
+
+  _validateCollection(collection) {
+    if (!collection.exists()) {
+      this._logProblem(
+        collection.getPath(),
+        "Requested .xsjslib synchronisation for collection '"
+        + collection.getPath()
+        + "' could not be completed. Collection does not exist in the registry.'"
+      );
+      return false;
+    }
+
+    return true;
+  }
+
   _generateExportsFile(location, content) {
-    const parser = new XSJSLibParser();
-    const contentWithExports = parser.appendExports(content);
+    const compiler = new XSJSLibCompiler();
+    const contentWithExports = compiler.appendExports(content);
     const generatedExportsFilePath = location + ".generated_exports";
     const exportsResource = repository.createResource(
       generatedExportsFilePath,

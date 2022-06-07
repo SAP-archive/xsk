@@ -104,7 +104,7 @@ public class XSJSLibSynchronizerTest extends XSJSTest {
       "/test/xsk/exports/tests/XSJSLibStateTableUpdateTest.mjs",
       "/test/xsk/exports/tests/XSJSLibStateTableFindTest.mjs",
       "/test/xsk/exports/tests/XSJSLibExportsGeneratorIsContentChangedTest.mjs",
-      "/test/xsk/exports/tests/XSJSLibParserTest.mjs",
+      "/test/xsk/exports/tests/XSJSLibCompilerTest.mjs",
       "/test/xsk/exports/tests/XSJSLibExportGeneratorSingleFileTest.mjs",
       "/test/xsk/exports/tests/XSJSLibExportGeneratorSingleFileModifyTest.mjs",
       "/test/xsk/exports/tests/XSJSLibExportGeneratorMultiFileTest.mjs",

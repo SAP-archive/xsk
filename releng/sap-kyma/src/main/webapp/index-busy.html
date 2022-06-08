@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
 <html lang="en" ng-app="busy" ng-controller="BusyController as busy">
 	<head>
-		<title>XSK Health status</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta charset="utf-8">
+    <title>SAP XSK &trade; | Busy</title>
 
 		<!-- Twitter Bootstrap with Theme Support -->
 		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
@@ -98,7 +98,7 @@
 			}
 
 			.Running:before {
-			    font-family: 'FontAwesome',sans-serif;				
+			    font-family: 'FontAwesome', sans-serif;
 			    font-size:1.3em;
 			    color: yellow;
 			    content: '\f054';  /* the chevron right icon */
@@ -106,7 +106,7 @@
 			}
 
 			.Succeeded:before {
-			    font-family: 'FontAwesome',sans-serif;
+			    font-family: 'FontAwesome', sans-serif;
 			    font-size:1.3em;
 			    color: green;
 			    content: '\f00c';  /* the check icon */
@@ -114,7 +114,7 @@
 			}
 
 			.Failed:before {
-			    font-family: 'FontAwesome',sans-serif;
+			    font-family: 'FontAwesome', sans-serif;
 			    font-size:1.3em;
 			    color: red;
 			    content: '\f00d';  /* the times icon */
@@ -123,10 +123,8 @@
 
 		</style>
 
-
 		<!-- jQuery -->
 		<script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
-
 		<!-- Twitter Bootstrap with Theme Support -->
 		<script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js" async></script>
 
@@ -143,20 +141,18 @@
 			<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></span></h1>
 
 			<table class="table table-striped">
-				<caption>Status</caption>
-			    <thead>
-			        <tr>
-			            <th>Synchronizer</th>
-						<th>Status</th>
-			        </tr>
-			    </thead>
-			    <tbody>
-			        <tr ng-repeat="job in jobs">
-					   <td>{{job.name}}</td>
-					   <td class="{{job.status}}">{{job.status}}</td>
-					</tr>
-			    </tbody>
-			</table>
+        <caption>Jobs status</caption>
+		        <tr>
+		            <th scope="col">Name</th>
+		            <th scope="col">Status</th>
+		        </tr>
+		    <tbody>
+		        <tr ng-repeat="job in jobs">
+				   <td>{{job.name}}</td>
+				   <td class="{{job.status}}">{{job.status}}</td>
+				</tr>
+		    </tbody>
+		</table>
 
 		</div>
 	</body>
@@ -168,26 +164,26 @@
 
 			setInterval(function() {
 
-        $http({
-          method: 'GET',
-          url: 'services/v4/healthcheck'
-        }).then(function(healthStatus){
-          if (healthStatus.data.status === "Ready") {
-            window.location='home';
-          }
-          var jobs = [];
-          for (const [key, value] of Object.entries(healthStatus.data.jobs.statuses)) {
-            var job = new Object();
-            job.name = key;
-            job.status = value;
-            jobs.push(job);
-          }
-          $scope.jobs = jobs.sort((x, y) => x.name > y.name ? 1 : -1);
+				$http({
+		            method: 'GET',
+		            url: 'services/v4/healthcheck'
+		        }).then(function(healthStatus){
+		        	if (healthStatus.data.status === "Ready") {
+						window.location='home';
+					}
+					var jobs = [];
+					for (const [key, value] of Object.entries(healthStatus.data.jobs.statuses)) {
+						var job = new Object();
+						job.name = key;
+						job.status = value;
+						jobs.push(job);
+					}
+		        	$scope.jobs = jobs.sort((x, y) => x.name > y.name ? 1 : -1);
         }), (function(e){
-          console.error("Error retreiving the health status", e);
-        });
+		            console.error("Error retreiving the health status", e);
+		        });
 
-      }, 1000);
+			}, 1000);
 
 		}]);
 	</script>

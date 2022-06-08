@@ -9,22 +9,11 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package models;
+package exceptions;
 
-import exceptions.TableFunctionMissingPropertyException;
+public class ProcedureMissingPropertyException extends RuntimeException {
 
-public class TableFunctionDefinitionModel extends DefinitionModel {
-
-
-    public TableFunctionDefinitionModel(String schema, String name) {
-        super(schema, name);
+    public ProcedureMissingPropertyException(String message) {
+        super(message);
     }
-
-    public void checkForAllMandatoryFieldsPresence() {
-        if (this.getName() == null) {
-            throw new TableFunctionMissingPropertyException("Missing mandatory field name");
-        }
-
-    }
-
 }

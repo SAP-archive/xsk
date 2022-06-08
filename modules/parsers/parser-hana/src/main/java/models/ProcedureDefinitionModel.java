@@ -11,14 +11,17 @@
  */
 package models;
 
+import exceptions.ProcedureMissingPropertyException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class ProcedureDefinitionModel {
+public class ProcedureDefinitionModel extends DefinitionModel {
 
   private List<UpdateStatementDefinitionModel> updateStatements;
 
-  public ProcedureDefinitionModel() {
+  public ProcedureDefinitionModel(String schema, String name) {
+    super(schema, name);
     this.updateStatements = new ArrayList<>();
   }
 
@@ -28,5 +31,15 @@ public class ProcedureDefinitionModel {
 
   public void addUpdateStatement(UpdateStatementDefinitionModel updateStatement) {
     this.updateStatements.add(updateStatement);
+  }
+
+  public void checkForAllMandatoryFieldsPresence() {
+    checkPresence(this.getName(), "name");
+  }
+
+  private <T> void checkPresence(T field, String fieldName) {
+    if (Objects.isNull(field)) {
+      throw new ProcedureMissingPropertyException("Missing mandatory field " + fieldName);
+    }
   }
 }

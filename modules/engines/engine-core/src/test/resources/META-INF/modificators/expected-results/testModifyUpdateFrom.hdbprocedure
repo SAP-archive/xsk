@@ -1,5 +1,5 @@
-PROCEDURE "TEST"."test_procedure" (
-    IN data "TEST"."test",
+PROCEDURE "TEST"."testProcedure" (
+    IN data "TEST"."testData",
 		OUT result NVARCHAR
 	)
 	LANGUAGE SQLSCRIPT
@@ -9,20 +9,47 @@ AS
 BEGIN
 
     -- Update from without join
-
+    UPDATE "TEST"."EMPLOYEES" AS E
+	SET "ADDRESS" = address, "STATUS" = status
+	WHERE "E"."USER_ID" = :user_id AND "E"."NAME" = :name;
 
     -- Update from with one join without where
-
+    MERGE INTO "TEST"."EMPLOYEES" AS E
+	USING "TEST"."EMPLOYEES" AS E
+	INNER JOIN :byRole R
+        ON E.ID = R.ID AND E.NAME = R.NAME AND E.TIMESTAMP = R.TIMESTAMP
+	WHEN MATCHED THEN UPDATE
+	SET STATUS = 'ACTIVE';
 
     -- Update from with one join and where
-
+    MERGE INTO "TEST"."EMPLOYEES" AS E
+	USING "TEST"."EMPLOYEES" AS E
+	INNER JOIN :byRole R
+        ON E.ID = R.ID AND E.NAME = R.NAME AND E.TIMESTAMP = R.TIMESTAMP
+	WHEN MATCHED THEN UPDATE
+	SET STATUS = 'ACTIVE'
+    WHERE R.NUM <> 1;
 
     -- Update from with multiple joins and where
-
+    MERGE INTO :mails AS M
+	USING :mails AS M
+	INNER JOIN "TEST"."JOBS" as J
+         ON  M.ID = J.ID
+	INNER JOIN "TEST"."EMPLOYEES" as E
+         ON  J.EMPLOYEE_ID = E.ID AND J.TIMESTAMP = E.LAST_JOB_TIMESTAMP
+	WHEN MATCHED AND J.FLAG = 'PROCESS' THEN UPDATE
+	SET FLAG = 'CLOSED', STATUS = CASE WHEN FLAG = 'CLOSED' THEN E.FLAG ELSE E.STATUS END;
 
     -- Update without from
-
+    UPDATE "TEST"."EMPLOYEES"
+    SET STATUS = status, ADDRESS = address
+    WHERE USER_ID = user_id;
 
     -- Some other statement
+    INSERT INTO "TEST"."EMPLOYEES"
+      (USER_ID, NAME, ADDRESS, PHONE)
+    SELECT
+      USER_ID, NAME, ADDRESS, PHONE
+    FROM :current_users WHERE STATUS = 'INSERT';
 
 END;

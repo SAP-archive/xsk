@@ -26,6 +26,7 @@ import models.UpdateStatementDefinitionModel;
 import models.WhereClauseDefinitionModel;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
+import org.apache.commons.lang3.StringUtils;
 
 public class HanaProcedureUpdateStatementListener extends HanaBaseListener {
 
@@ -36,7 +37,21 @@ public class HanaProcedureUpdateStatementListener extends HanaBaseListener {
 
   @Override
   public void enterCreate_procedure_body(Create_procedure_bodyContext ctx) {
-    procedureModel = new ProcedureDefinitionModel();
+    String strippedSchema = null;
+    String strippedName = null;
+
+    if (ctx.proc_name() != null) {
+      if (ctx.proc_name().id_expression() != null) {
+        String maybeQuotedName = ctx.proc_name().id_expression().getText();
+        strippedName = StringUtils.strip(maybeQuotedName, "\"");
+      }
+
+      if (ctx.proc_name().schema_name() != null) {
+        String maybeQuotedSchema = ctx.proc_name().schema_name().getText();
+        strippedSchema = StringUtils.strip(maybeQuotedSchema, "\"");
+      }
+    }
+    procedureModel = new ProcedureDefinitionModel(strippedSchema, strippedName);
   }
 
   @Override

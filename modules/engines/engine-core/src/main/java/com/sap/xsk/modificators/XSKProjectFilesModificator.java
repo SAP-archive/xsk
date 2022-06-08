@@ -255,10 +255,10 @@ public class XSKProjectFilesModificator {
       modifiedUpdateStatement.append("AS").append(" ").append(fromClauseTableAlias).append("\n");
     }
 
-    modifiedUpdateStatement.append("\t\t").append(updateSetClause.getRawContent() + "\n");
+    modifiedUpdateStatement.append("\t").append(updateSetClause.getRawContent() + "\n");
 
     if (whereClause != null) {
-      modifiedUpdateStatement.append("\t\t").append(whereClause.getRawContent());
+      modifiedUpdateStatement.append("\t").append(whereClause.getRawContent());
     }
 
     return modifiedUpdateStatement.toString();
@@ -278,7 +278,7 @@ public class XSKProjectFilesModificator {
       modifiedUpdateStatement.append("AS ").append(fromClauseTableAlias).append("\n");
     }
 
-    modifiedUpdateStatement.append("\t\t").append("USING ");
+    modifiedUpdateStatement.append("\t").append("USING ");
     modifiedUpdateStatement.append(fromClauseTableName).append(" ");
 
     if (fromClauseTableAlias != null) {
@@ -286,17 +286,17 @@ public class XSKProjectFilesModificator {
     }
 
     joinClauses.forEach(joinClause -> {
-      modifiedUpdateStatement.append("\t\t").append(joinClause.getRawContent()).append("\n");
+      modifiedUpdateStatement.append("\t").append(joinClause.getRawContent()).append("\n");
     });
 
-    modifiedUpdateStatement.append("\t\t").append("WHEN MATCHED ");
+    modifiedUpdateStatement.append("\t").append("WHEN MATCHED ");
 
     if (whereClause != null) {
       modifiedUpdateStatement.append("AND").append(whereClause.getRawContent().replace("WHERE", "")).append(" ");
     }
 
     modifiedUpdateStatement.append("THEN UPDATE").append("\n");
-    modifiedUpdateStatement.append("\t\t").append(updateSetClause.getRawContent());
+    modifiedUpdateStatement.append("\t").append(updateSetClause.getRawContent());
 
     return modifiedUpdateStatement.toString();
   }

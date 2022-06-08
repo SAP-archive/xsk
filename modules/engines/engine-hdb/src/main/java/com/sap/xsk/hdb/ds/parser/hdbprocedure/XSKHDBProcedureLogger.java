@@ -9,12 +9,12 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.parser.hdbtablefunction;
+package com.sap.xsk.hdb.ds.parser.hdbprocedure;
 
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 
-public class XSKHDBTableFunctionLogger {
+public class XSKHDBProcedureLogger {
 
   public void logError(String parsedFileLocation, String problemsFacadeMessage, String exceptionMessage) {
     XSKCommonsUtils.logCustomErrors(parsedFileLocation,
@@ -23,7 +23,7 @@ public class XSKHDBTableFunctionLogger {
         "",//column
         exceptionMessage,
         problemsFacadeMessage,
-        XSKCommonsConstants.HDB_TABLE_FUNCTION_PARSER,
+        XSKCommonsConstants.HDB_PROCEDURE_PARSER,
         XSKCommonsConstants.MODULE_PARSERS,
         XSKCommonsConstants.SOURCE_PUBLISH_REQUEST,
         XSKCommonsConstants.PROGRAM_XSK);

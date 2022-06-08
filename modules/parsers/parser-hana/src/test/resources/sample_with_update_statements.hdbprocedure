@@ -1,4 +1,4 @@
-PROCEDURE "TEST"."testProcedure" (
+CREATE PROCEDURE "TEST"."testProcedure" (
     IN data "TEST"."testData",
 		OUT result NVARCHAR
 	)

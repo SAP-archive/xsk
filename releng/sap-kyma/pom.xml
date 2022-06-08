@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>com.sap.xsk</groupId>
@@ -20,58 +20,34 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-        <version>3.3.2</version>
+				<version>3.3.2</version>
 				<configuration>
 					<failOnMissingWebXml>true</failOnMissingWebXml>
 					<webXml>src/main/webapp/WEB-INF/web.xml</webXml>
 					<warName>ROOT</warName>
 				</configuration>
 			</plugin>
-			<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-dynamic-data-source</id>
-						<phase>install</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>target</outputDirectory>
-							<overwrite>true</overwrite>
-							<resources>
-								<resource>
-									<directory>../../modules/basis/basis-datasource/target</directory>
-									<includes>
-										<include>*.jar</include>
-									</includes>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
+	        <resource>
+	          <directory>src/main/resources</directory>
+	          <filtering>true</filtering>
+	        </resource>
+	    </resources>
 	</build>
 
 	<dependencies>
-
 		<!-- XS Classic -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>xsk-modules-all</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>xsk-resources-all</artifactId>
-			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.sap.xsk</groupId>
+					<artifactId>xsk-modules-ide-all</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- Platform -->
@@ -82,16 +58,16 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-core</artifactId>
-			<version>${logback.version}</version>
-			<scope>compile</scope>
+		    <groupId>ch.qos.logback</groupId>
+		    <artifactId>logback-core</artifactId>
+		    <version>${logback.version}</version>
+		    <scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>${logback.version}</version>
-			<scope>compile</scope>
+		    <groupId>ch.qos.logback</groupId>
+		    <artifactId>logback-classic</artifactId>
+		    <version>${logback.version}</version>
+		    <scope>compile</scope>
 		</dependency>
 
 		<!-- Kyma - Base -->
@@ -102,57 +78,18 @@
 			<exclusions>
 				<exclusion>
 					<groupId>org.eclipse.dirigible</groupId>
-					<artifactId>dirigible-ext-elasticsearch</artifactId>
+					<artifactId>dirigible-ide</artifactId>
 				</exclusion>
 				<exclusion>
 					<groupId>org.eclipse.dirigible</groupId>
-					<artifactId>dirigible-ext-etcd</artifactId>
+					<artifactId>dirigible-ext-mongodb</artifactId>
 				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.dirigible</groupId>
-					<artifactId>dirigible-ext-rabbitmq</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.dirigible</groupId>
-					<artifactId>dirigible-ext-redis</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.dirigible</groupId>
-					<artifactId>dirigible-ext-spark</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.dirigible</groupId>
-					<artifactId>dirigible-api-facade-elasticsearch</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.dirigible</groupId>
-					<artifactId>dirigible-api-facade-etcd</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.dirigible</groupId>
-					<artifactId>dirigible-api-facade-rabbitmq</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.dirigible</groupId>
-					<artifactId>dirigible-api-facade-redis</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.dirigible</groupId>
-					<artifactId>dirigible-api-facade-spark</artifactId>
-				</exclusion>
-        <exclusion>
-          <groupId>org.eclipse.dirigible</groupId>
-          <artifactId>dirigible-ide-ui-workspace-menu</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.eclipse.dirigible</groupId>
-          <artifactId>dirigible-ide-ui-jobs-menu</artifactId>
-        </exclusion>
-			</exclusions>
+			</exclusions> 
 		</dependency>
 	</dependencies>
 
 	<properties>
 		<license.header.location>../../licensing-header.txt</license.header.location>
 	</properties>
+
 </project>

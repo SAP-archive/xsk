@@ -15,11 +15,11 @@
 
 	<modules>
 		<module>buildpacks</module>
-		<module>server</module>
+		<module>server-full</module>
 		<module>sap-cf</module>
+		<module>sap-kyma-full</module>
 		<module>sap-kyma</module>
-		<module>sap-kyma-runtime</module>
-    <module>server-lite</module>
+    <module>server</module>
 	</modules>
 
 	<build>

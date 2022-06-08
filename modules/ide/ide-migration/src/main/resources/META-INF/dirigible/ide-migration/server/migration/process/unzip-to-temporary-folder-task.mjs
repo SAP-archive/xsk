@@ -25,56 +25,18 @@ export class UnzipToTemporaryFolder extends MigrationTask {
 		const userData = JSON.parse(userDataJson);
 		let paths = userData.zipPath;
 
-
 		userData["du"] = [];
 
 		for (const path of paths) {
-			let filesDetails = [];
-			let localFiles = []
 			console.log("Processing zip by path : " + path)
-			let resources = repositoryManager.getCollection(path);
-			let zipProjectName = resources.getName();
+			let collection = repositoryManager.getCollection(path);
 
-			getAllFiles(resources);
-
-			function getAllFiles(resources) {
-				getResourcesFromFOlder(resources)
-			}
-
-
-			function getResourcesFromFOlder(dir) {
-				if (!dir.getResourcesNames().isEmpty()) {
-					for (const nameRes of dir.getResourcesNames()) {
-						localFiles.push(dir.getResource(nameRes))
-					}
-				}
-				if (!dir.getCollectionsNames().isEmpty()) {
-					for (const folderName of dir.getCollectionsNames()) {
-						getResourcesFromFOlder(dir.getCollection(folderName))
-					}
-				}
-			}
-
-			for (const localFile of localFiles) {
-				const repositoryPath = localFile.getPath();
-				const runLocation = repositoryPath.split("/").slice(4).join("/");
-				const relativePath = repositoryPath.split("/").slice(5).join("/");
-
-				let fileDetails = {
-					repositoryPath: repositoryPath,
-					relativePath: "/" + relativePath,
-					projectName: zipProjectName,
-					runLocation: "/" + runLocation
-				};
-
-				filesDetails.push(fileDetails)
-			}
-
-			userData.du.push(composeJson(zipProjectName, filesDetails))
+			let zipProjectName = collection.getName();
+			userData.du.push(composeJson(zipProjectName))
 		}
 		process.setVariable(this.execution.getId(), 'userData', JSON.stringify(userData));
 
-		function composeJson(projectName, filesDetails) {
+		function composeJson(projectName) {
 			let duObject = {}
 			duObject.ach = "";
 			duObject.caption = "";
@@ -86,8 +48,9 @@ export class UnzipToTemporaryFolder extends MigrationTask {
 			duObject.version = "";
 			duObject.version_patch = "";
 			duObject.version_sp = "";
-			duObject.name = projectName
-			duObject.locals = filesDetails;
+			duObject.name = projectName;
+			duObject.projectNames = [projectName];
+			duObject.fromZip = true;
 			return duObject;
 		}
 

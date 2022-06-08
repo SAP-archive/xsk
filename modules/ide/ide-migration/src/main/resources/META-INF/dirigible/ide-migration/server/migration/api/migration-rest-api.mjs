@@ -23,12 +23,15 @@ rs.service()
 
 function startProcessFromZip(ctx, req, res) {
     const userDataJson = req.getJSON();
+
     const migrationTableIndex = _trackMigrationStart();
     const processInstanceId = processService.start("migrationProcess", {
         userData: JSON.stringify(userDataJson),
         migrationType: "FROM_LOCAL_ZIP",
         migrationIndex: migrationTableIndex
     });
+
+    _updateProcessInstanceId(migrationTableIndex, processInstanceId);
 
     const response = {
         processInstanceId: processInstanceId
@@ -41,12 +44,15 @@ function startProcess(ctx, req, res) {
     const userDataJson = req.getJSON();
 
     const migrationTableIndex = _trackMigrationStart();
+
     const processInstanceId = processService.start("migrationProcess", {
         migrationType: "FROM_HANA",
         userData: JSON.stringify(userDataJson),
         userJwtToken: userDataJson.userJwtToken,
         migrationIndex: migrationTableIndex
     });
+
+    _updateProcessInstanceId(migrationTableIndex, processInstanceId);
 
     const response = {
         processInstanceId: processInstanceId,
@@ -60,20 +66,25 @@ function _trackMigrationStart() {
     return trackService.getCurrentMigrationIndex();
 }
 
+function _updateProcessInstanceId(migrationTableIndex, processInstanceId) {
+    const trackService = new TrackService();
+    trackService.updateProcessInstanceId(migrationTableIndex, processInstanceId)
+}
+
 function getJwtToken(host, username, password) {
-	const encodedUsername = url.encode(username);
-	const encodedPassword = url.encode(password);
-	const jwtTokenServiceUrl = `https://oauthasservices.${host}/oauth2/api/v1/token?grant_type=password`;
-	const encodedBody = `username=${encodedUsername}&password=${encodedPassword}`;
-	const jwtTokenResponse = httpClient.post(jwtTokenServiceUrl, {
-		text: encodedBody,
-		headers: [
-			{
-				name: "Content-Type",
-				value: "application/x-www-form-urlencoded",
-			},
-		],
-	});
+    const encodedUsername = url.encode(username);
+    const encodedPassword = url.encode(password);
+    const jwtTokenServiceUrl = `https://oauthasservices.${host}/oauth2/api/v1/token?grant_type=password`;
+    const encodedBody = `username=${encodedUsername}&password=${encodedPassword}`;
+    const jwtTokenResponse = httpClient.post(jwtTokenServiceUrl, {
+        text: encodedBody,
+        headers: [
+            {
+                name: "Content-Type",
+                value: "application/x-www-form-urlencoded",
+            },
+        ],
+    });
 
     const jwtTokenResponseJson = JSON.parse(jwtTokenResponse.text);
     return jwtTokenResponseJson;
@@ -118,7 +129,7 @@ function getProcessState(ctx, req, res) {
         response.workspaces = JSON.parse(workspacesJson);
         response.deliveryUnits = JSON.parse(deliveryUnitsJson);
         response.connectionId = connectionId;
-    } else if (migrationState === "MIGRATION_EXECUTED") {
+    } else if (migrationState === "POPULATING_PROJECTS_EXECUTED") {
         const diffViewData = processService.getVariable(processInstanceIdString, "diffViewData");
         response.diffViewData = JSON.parse(diffViewData);
     }
@@ -127,7 +138,7 @@ function getProcessState(ctx, req, res) {
 }
 
 function getMigrations(ctx, request, response) {
-    const connection = database.getConnection("local", "SystemDB");
+    const connection = database.getConnection("local", "DefaultDB");
     let migrationsData = { migrations: "empty" };
     try {
         let statement = connection.prepareStatement("SELECT * FROM XSK_MIGRATIONS");
@@ -139,6 +150,7 @@ function getMigrations(ctx, request, response) {
     } finally {
         connection.close();
     }
+
     response.print(migrationsData.migrations);
 }
 

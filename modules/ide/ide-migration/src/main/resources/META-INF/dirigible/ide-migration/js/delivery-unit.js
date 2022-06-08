@@ -14,11 +14,14 @@ migrationLaunchView.controller("DeliveryUnitViewController", [
     "$http",
     "$messageHub",
     "migrationDataState",
-    function ($scope, $http, $messageHub, migrationDataState) {
+    "migrationViewState",
+    function ($scope, $http, $messageHub, migrationDataState, migrationViewState) {
         $scope.migrationDataState = migrationDataState;
         $scope.showCreateButton = false;
         $scope.showSeparator = false;
-        $scope.isVisible = false;
+        $scope.dataLoaded = function () {
+            return !migrationViewState.getIsDataLoading();
+        }
         $scope.duDropdownDisabled = true;
         $scope.duDropdownInitText = "---Please select---";
         $scope.duDropdownText = $scope.duDropdownInitText;
@@ -27,7 +30,6 @@ migrationLaunchView.controller("DeliveryUnitViewController", [
         $scope.workspacesList = $scope.workspaces;
         $scope.deliveryUnits = [];
         $scope.deliveryUnitList = $scope.deliveryUnits;
-        $scope.dataLoaded = false;
         $scope.selectAllText = "Select all";
         $scope.duSelectedUItext = [];
         let descriptionList = ["Please wait while we get all delivery unit(s)...", "Select the target workspace and delivery unit(s)"];
@@ -69,6 +71,7 @@ migrationLaunchView.controller("DeliveryUnitViewController", [
                                 )
                                 .then(
                                     function (response) {
+                                        migrationViewState.setDataLoading(false);
                                         if (response.data && response.data.failed) {
                                             clearInterval(timer);
                                             $messageHub.announceAlertError(defaultErrorTitle, defaultErrorDesc);
@@ -80,12 +83,12 @@ migrationLaunchView.controller("DeliveryUnitViewController", [
                                             $scope.workspacesList = $scope.workspaces;
                                             $scope.deliveryUnits = response.data.deliveryUnits;
                                             $scope.deliveryUnitList = $scope.deliveryUnits;
-                                            $scope.$parent.setBottomNavEnabled(true);
                                             $scope.descriptionText = descriptionList[1];
-                                            $scope.dataLoaded = true;
+
                                         }
                                     },
                                     function (response) {
+                                        migrationViewState.setDataLoading(false);
                                         clearInterval(timer);
                                         $messageHub.announceAlertError(defaultErrorTitle, defaultErrorDesc);
                                         errorOccurred();
@@ -94,6 +97,7 @@ migrationLaunchView.controller("DeliveryUnitViewController", [
                         }, 1000);
                     },
                     function (response) {
+                        migrationViewState.setDataLoading(false);
                         if (response.data) {
                             if ("error" in response.data) {
                                 if ("message" in response.data.error) {
@@ -186,34 +190,20 @@ migrationLaunchView.controller("DeliveryUnitViewController", [
             $scope.duDropdownText = $scope.duSelectedUItext.length ? $scope.duSelectedUItext.join(", ") : $scope.duDropdownInitText;
             $scope.selectAllText =
                 migrationDataState.selectedDeliveryUnits.length == $scope.deliveryUnitList.length ? "Unselect all" : "Select all";
-            $scope.$parent.setNextEnabled(true);
+            migrationViewState.setNextDisabled(false);
         };
 
         $messageHub.on(
             "migration.delivery-unit",
             function (msg) {
-                if ("isVisible" in msg.data) {
-                    $scope.$apply(function () {
-                        $scope.dataLoaded = false;
-                        $scope.duDropdownDisabled = true;
-                        $scope.duDropdownText = "---Please select---";
-                        $scope.workspacesDropdownText = "---Please select---";
-                        $scope.descriptionText = descriptionList[0];
-                        $scope.isVisible = msg.data.isVisible;
-                        if (msg.data.isVisible) {
-                            $scope.$parent.setFullWidthEnabled(false);
-                            $scope.$parent.setBottomNavEnabled(false);
-                            $scope.$parent.setPreviousVisible(true);
-                            $scope.$parent.setPreviousEnabled(true);
-                            $scope.$parent.setNextEnabled(false);
-                            $scope.$parent.setNextVisible(true);
-                        }
-                    });
-                    if (msg.data.isVisible) {
-                        console.log("DU msg", msg);
-                        getDUData();
-                    }
-                }
+                migrationViewState.setDataLoading(true);
+                $scope.$apply(function () {
+                    $scope.duDropdownDisabled = true;
+                    $scope.duDropdownText = "---Please select---";
+                    $scope.workspacesDropdownText = "---Please select---";
+                    $scope.descriptionText = descriptionList[0];
+                });
+                getDUData();
             }.bind(this)
         );
     },

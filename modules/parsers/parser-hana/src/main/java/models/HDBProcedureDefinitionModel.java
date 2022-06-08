@@ -11,18 +11,24 @@
  */
 package models;
 
-public class TableFunctionDefinitionModel extends DefinitionModel {
 
+import java.util.Objects;
 
-    public TableFunctionDefinitionModel(String schema, String name) {
+public class HDBProcedureDefinitionModel extends DefinitionModel {
+
+    public HDBProcedureDefinitionModel(String schema, String name) {
         super(schema, name);
+
     }
 
     public void checkForAllMandatoryFieldsPresence() {
-        if (this.getName() == null) {
-            throw new TableFunctionMissingPropertyException("Missing mandatory field name");
-        }
-
+        checkPresence(this.getName(), "name");
     }
 
+    private <T> void checkPresence(T field, String fieldName) {
+        if (Objects.isNull(field)) {
+            throw new HDBProcedureMissingPropertyException("Missing mandatory field " + fieldName);
+        }
+    }
 }
+

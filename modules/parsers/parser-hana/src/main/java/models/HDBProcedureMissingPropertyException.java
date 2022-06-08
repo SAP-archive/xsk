@@ -9,14 +9,11 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.model.hdbprocedure;
+package models;
 
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
-import com.sap.xsk.hdb.ds.model.XSKDataStructureModelBuilder;
+public class HDBProcedureMissingPropertyException extends RuntimeException {
 
-public class XSKDataStructureHDBProcedureModel extends XSKDataStructureModel {
-
-  public XSKDataStructureHDBProcedureModel(XSKDataStructureModelBuilder builder) {
-    super(builder);
-  }
+    public HDBProcedureMissingPropertyException(String message) {
+        super(message);
+    }
 }

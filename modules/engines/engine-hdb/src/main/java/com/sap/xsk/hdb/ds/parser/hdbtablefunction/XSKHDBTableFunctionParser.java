@@ -10,30 +10,21 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.sap.xsk.hdb.ds.parser.hdbtablefunction;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.sql.Timestamp;
-
 import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.artefacts.HDBTableFunctionSynchronizationArtefactType;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelBuilder;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer;
-import com.sap.xsk.parser.hana.core.HanaLexer;
-import com.sap.xsk.parser.hana.core.HanaParser;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
+import com.sap.xsk.utils.XSKHDBUtils;
 import custom.HanaTableFunctionListener;
 import models.TableFunctionDefinitionModel;
 import models.TableFunctionMissingPropertyException;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
-
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.hdbtablefunction.XSKDataStructureHDBTableFunctionModel;
@@ -58,24 +49,11 @@ public class XSKHDBTableFunctionParser implements XSKDataStructureParser<XSKData
 
   @Override
   public XSKDataStructureHDBTableFunctionModel parse(XSKDataStructureParametersModel parametersModel)
-      throws IOException, XSKDataStructuresException, XSKArtifactParserException {
+          throws XSKDataStructuresException, XSKArtifactParserException {
 
     String location = parametersModel.getLocation();
 
-    CharStream inputStream;
-    try (ByteArrayInputStream is = new ByteArrayInputStream(parametersModel.getContent().getBytes())) {
-      inputStream = CharStreams.fromStream(is);
-    }
-
-    HanaLexer lexer = new HanaLexer(inputStream);
-    lexer.removeErrorListeners();
-    CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-
-    HanaParser parser = new HanaParser(tokenStream);
-    parser.setBuildParseTree(true);
-    parser.removeErrorListeners();
-
-    ParseTree parseTree = parser.sql_script();
+    ParseTree parseTree = XSKHDBUtils.getParsedThree(parametersModel);
 
     HanaTableFunctionListener listener = new HanaTableFunctionListener();
     ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
@@ -90,18 +68,17 @@ public class XSKHDBTableFunctionParser implements XSKDataStructureParser<XSKData
   private XSKDataStructureHDBTableFunctionModel createModel(TableFunctionDefinitionModel antlrModel,
       XSKDataStructureParametersModel params) {
 
-    XSKDataStructureHDBTableFunctionModel model = new XSKDataStructureHDBTableFunctionModel();
-    model.setSchema(antlrModel.getSchema());
-    model.setName(antlrModel.getName());
-    model.setLocation(params.getLocation());
-    model.setType(getType());
-    model.setHash(DigestUtils.md5Hex(params.getContent())); //NOSONAR
-    model.setCreatedBy(UserFacade.getName());
-    model.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-    model.setContent(params.getContent());
-    model.setRawContent(params.getContent());
+    XSKDataStructureModelBuilder builder = new XSKDataStructureModelBuilder()
+        .withName(antlrModel.getName())
+        .withHash(DigestUtils.md5Hex(params.getContent()))//NOSONAR
+        .createdAt(XSKHDBUtils.getTimestamp())
+        .createdBy(UserFacade.getName())
+        .withLocation(params.getLocation())
+        .withType(getType())
+        .rawContent(params.getContent())
+        .withSchema(antlrModel.getSchema());
 
-    return model;
+    return new XSKDataStructureHDBTableFunctionModel(builder);
   }
 
   private void validateAntlrModel(TableFunctionDefinitionModel antlrModel, String location) throws XSKDataStructuresException {

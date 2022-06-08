@@ -190,7 +190,7 @@ public class XSKProjectFilesModificator {
    * @param projectFile   the file being modified
    */
   private void modifyUpdateFromStatement(String fileExtension, IFile projectFile) {
-    if (fileExtension.equalsIgnoreCase(HDB_PROCEDURE_FILE_EXTENSION)) {
+    if (fileExtension.equalsIgnoreCase(HDB_PROCEDURE_FILE_EXTENSION) && !projectFile.isEmpty()) {
       String hdbprocedureFileContent = new String(projectFile.getContent());
       CharStream inputStream = CharStreams.fromString("CREATE " + hdbprocedureFileContent);
       HanaLexer lexer = new HanaLexer(inputStream);

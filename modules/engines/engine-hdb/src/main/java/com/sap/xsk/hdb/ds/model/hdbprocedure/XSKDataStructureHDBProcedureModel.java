@@ -19,4 +19,8 @@ public class XSKDataStructureHDBProcedureModel extends XSKDataStructureModel {
   public XSKDataStructureHDBProcedureModel(XSKDataStructureModelBuilder builder) {
     super(builder);
   }
+
+  public XSKDataStructureHDBProcedureModel() {
+    super();
+  }
 }

@@ -87,19 +87,20 @@ public class ContextSymbol extends Symbol implements Scope {
   }
 
   private Symbol resolveByFullSymbolName(String[] contexts, Symbol outerContext) {
-    if (outerContext instanceof ContextSymbol) {
-      Symbol resolvedSymbol = outerContext;
-
-      for (int i = 1; i < contexts.length; i++) {
-        resolvedSymbol = ((ContextSymbol) resolvedSymbol).getSymbols().get(contexts[i]);
-        if (resolvedSymbol == null) {
-          return null;
-        }
-      }
-
-      return resolvedSymbol;
+    if (!(outerContext instanceof ContextSymbol)) {
+      return null;
     }
 
-    return null;
+    Symbol resolvedSymbol = outerContext;
+
+    for (int i = 1; i < contexts.length; i++) {
+      resolvedSymbol = ((ContextSymbol) resolvedSymbol).getSymbols().get(contexts[i]);
+      if (resolvedSymbol == null) {
+        return null;
+      }
+    }
+
+    return resolvedSymbol;
+
   }
 }

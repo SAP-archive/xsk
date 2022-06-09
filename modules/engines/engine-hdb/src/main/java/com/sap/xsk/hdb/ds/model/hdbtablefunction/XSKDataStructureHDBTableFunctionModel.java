@@ -12,17 +12,15 @@
 package com.sap.xsk.hdb.ds.model.hdbtablefunction;
 
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelBuilder;
 
 public class XSKDataStructureHDBTableFunctionModel extends XSKDataStructureModel {
 
-  private String content;
-
-  public String getContent() {
-    return content;
+  public XSKDataStructureHDBTableFunctionModel(XSKDataStructureModelBuilder builder) {
+    super(builder);
   }
 
-  public void setContent(String content) {
-    this.content = content;
+  public XSKDataStructureHDBTableFunctionModel() {
+    super();
   }
-
 }

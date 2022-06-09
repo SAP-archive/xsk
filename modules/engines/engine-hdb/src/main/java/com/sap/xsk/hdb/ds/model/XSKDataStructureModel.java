@@ -11,16 +11,15 @@
  */
 package com.sap.xsk.hdb.ds.model;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The basis for all the data structure models.
@@ -56,6 +55,21 @@ public class XSKDataStructureModel {
 
   @Transient
   private transient XSKDBContentType dbContentType;
+
+  public XSKDataStructureModel() {
+  }
+
+  protected XSKDataStructureModel(XSKDataStructureModelBuilder builder) {
+    location = builder.getLocation();
+    name = builder.getName();
+    type = builder.getType();
+    hash = builder.getHash();
+    createdBy = builder.getCreatedBy();
+    createdAt = builder.getCreatedAt();
+    schema = builder.getSchema();
+    rawContent = builder.getRawContent();
+    dbContentType = builder.getDbContentType();
+  }
 
   /**
    * Gets the location.
@@ -217,6 +231,9 @@ public class XSKDataStructureModel {
     return dbContentType;
   }
 
+  /**
+   * @param dbContentType
+   */
   public void setDbContentType(XSKDBContentType dbContentType) {
     this.dbContentType = dbContentType;
   }

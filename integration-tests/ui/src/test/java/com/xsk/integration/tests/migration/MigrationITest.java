@@ -93,7 +93,7 @@ public class MigrationITest {
     webBrowser.waitForPageWithTitle("SAP HANA XS Classic Migration | XSK WebIDE");
     webBrowser.switchToDefaultContent();
     webBrowser.switchToIframe(By.xpath("//iframe[@src='../ide-migration/migration-launch.html']"));
-    webBrowser.clickItem(By.xpath("//*[@ng-click='showMigrationScreen()']"));
+    webBrowser.clickItem(By.xpath("//*[@ng-click='selectLiveMigration()']"));
     webBrowser.log();
   }
 
@@ -103,7 +103,7 @@ public class MigrationITest {
     webBrowser.enterAndAssertField(By.id("neo-username"), credentials.getUsername());
     webBrowser.enterAndAssertField(By.id("neo-password"), credentials.getPassword());
     webBrowser.log();
-    webBrowser.clickItem(By.xpath("//*[@ng-click='nextClicked()']"));
+    webBrowser.clickItem(By.xpath("//*[@ng-click='goForward()']"));
   }
 
   private void enterHanaCredentials() {
@@ -111,7 +111,7 @@ public class MigrationITest {
     webBrowser.enterAndAssertField(By.id("username"), credentials.getHanaUsername());
     webBrowser.enterAndAssertField(By.id("password"), credentials.getHanaPassword());
     webBrowser.log();
-    webBrowser.clickItem(By.xpath("//*[@ng-click='nextClicked()']"));
+    webBrowser.clickItem(By.xpath("//*[@ng-click='goForward()']"));
   }
 
   private void selectDeliveryUnits() {
@@ -119,7 +119,7 @@ public class MigrationITest {
     webBrowser.selectAndAssertDropdown("deliveryUnitList", (item) -> item.equals(expectedContentProvider.getExpectedDeliveryUnitName()));
     webBrowser.clickItem(By.xpath("//*[@ng-disabled=\"duDropdownDisabled\"]"));
     webBrowser.log();
-    webBrowser.clickItem(By.xpath("//*[@ng-click=\"nextClicked()\"]"));
+    webBrowser.clickItem(By.xpath("//*[@ng-click=\"goForward()\"]"));
   }
 
   private void approveChanges() {

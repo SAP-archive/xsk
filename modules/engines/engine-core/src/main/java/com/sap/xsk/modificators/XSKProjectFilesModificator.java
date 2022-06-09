@@ -35,6 +35,7 @@ import custom.HanaProcedureUpdateStatementListener;
 import models.FromClauseDefinitionModel;
 import models.JoinClauseDefinitionModel;
 import models.ProcedureDefinitionModel;
+import models.TableReferenceModel;
 import models.UpdateSetClauseDefinitionModel;
 import models.UpdateStatementDefinitionModel;
 import models.WhereClauseDefinitionModel;
@@ -222,7 +223,7 @@ public class XSKProjectFilesModificator {
           WhereClauseDefinitionModel whereClause = updateStatement.getWhereClause();
 
           if (joinClauses.isEmpty()) {
-            modifiedUpdateStatement = modifyHdbprocedureUpdateFromWithoutJoinClauses(fromClause, updateSetClause, whereClause);
+            modifiedUpdateStatement = modifyHdbprocedureUpdateFromWithoutJoinClauses(updateStatement, fromClause, updateSetClause, whereClause);
           } else {
             modifiedUpdateStatement = modifyHdbprocedureUpdateFromWithJoinClauses(updateStatement, fromClause, joinClauses, updateSetClause,
                 whereClause);
@@ -242,24 +243,66 @@ public class XSKProjectFilesModificator {
     }
   }
 
-  private String modifyHdbprocedureUpdateFromWithoutJoinClauses(FromClauseDefinitionModel fromClause,
+  private String modifyHdbprocedureUpdateFromWithoutJoinClauses(UpdateStatementDefinitionModel updateStatement, FromClauseDefinitionModel fromClause,
       UpdateSetClauseDefinitionModel updateSetClause, WhereClauseDefinitionModel whereClause) {
     StringBuilder modifiedUpdateStatement = new StringBuilder();
 
-    String fromClauseTableName = fromClause.getTableName();
-    String fromClauseTableAlias = fromClause.getTableAlias();
+    List<TableReferenceModel> fromClauseTableReferences = fromClause.getTableReferences();
 
-    modifiedUpdateStatement.append("UPDATE").append(" ");
-    modifiedUpdateStatement.append(fromClauseTableName).append(" ");
+    if (fromClauseTableReferences.size() > 1) {
+      String updatedTableName = updateStatement.getTableName();
 
-    if (fromClauseTableAlias != null) {
-      modifiedUpdateStatement.append("AS").append(" ").append(fromClauseTableAlias).append("\n");
+      TableReferenceModel updatedTableReference = new TableReferenceModel();
+      TableReferenceModel usingTableReference = new TableReferenceModel();
+
+      for (TableReferenceModel tableReferenceModel : fromClauseTableReferences) {
+        if (updatedTableName.equals(tableReferenceModel.getName()) || updatedTableName.equals(tableReferenceModel.getAlias())) {
+          updatedTableReference = tableReferenceModel;
+        }
+        else {
+          usingTableReference = tableReferenceModel;
+        }
+      }
+
+      modifiedUpdateStatement.append("MERGE INTO ").append(updatedTableReference.getName());
+      if (updatedTableReference.getAlias() != null) {
+        modifiedUpdateStatement.append("AS").append(" ").append(updatedTableReference.getAlias()).append("\n");
+      }
+
+      modifiedUpdateStatement.append("\t").append("USING ");
+      modifiedUpdateStatement.append(usingTableReference.getName()).append(" ");
+
+      if (usingTableReference.getAlias() != null) {
+        modifiedUpdateStatement.append("AS ").append(usingTableReference.getAlias()).append("\n");
+      }
+
+      if (whereClause != null) {
+        modifiedUpdateStatement.append("ON").append(whereClause.getRawContent().replaceFirst("(?i)WHERE", "")).append(" ");
+      }
+      else {
+        modifiedUpdateStatement.append("ON (1 = 1)");
+      }
+
+      modifiedUpdateStatement.append("\t").append("WHEN MATCHED THEN UPDATE");
+      modifiedUpdateStatement.append("\t").append(updateSetClause.getRawContent());
     }
+    else {
+      TableReferenceModel fromClauseTableReference = fromClauseTableReferences.get(0);
+      String fromClauseTableName = fromClauseTableReference.getName();
+      String fromClauseTableAlias = fromClauseTableReference.getAlias();
 
-    modifiedUpdateStatement.append("\t").append(updateSetClause.getRawContent() + "\n");
+      modifiedUpdateStatement.append("UPDATE").append(" ");
+      modifiedUpdateStatement.append(fromClauseTableName).append(" ");
 
-    if (whereClause != null) {
-      modifiedUpdateStatement.append("\t").append(whereClause.getRawContent());
+      if (fromClauseTableAlias != null) {
+        modifiedUpdateStatement.append("AS").append(" ").append(fromClauseTableAlias).append("\n");
+      }
+
+      modifiedUpdateStatement.append("\t").append(updateSetClause.getRawContent() + "\n");
+
+      if (whereClause != null) {
+        modifiedUpdateStatement.append("\t").append(whereClause.getRawContent());
+      }
     }
 
     return modifiedUpdateStatement.toString();
@@ -270,8 +313,10 @@ public class XSKProjectFilesModificator {
       List<JoinClauseDefinitionModel> joinClauses, UpdateSetClauseDefinitionModel updateSetClause, WhereClauseDefinitionModel whereClause) {
     StringBuilder modifiedUpdateStatement = new StringBuilder();
 
-    String fromClauseTableName = fromClause.getTableName();
-    String fromClauseTableAlias = fromClause.getTableAlias();
+    List<TableReferenceModel> fromClauseTableReferences = fromClause.getTableReferences();
+    TableReferenceModel fromClauseTableReference = fromClauseTableReferences.get(0);
+    String fromClauseTableName = fromClauseTableReference.getName();
+    String fromClauseTableAlias = fromClauseTableReference.getAlias();
 
     modifiedUpdateStatement.append("MERGE INTO ");
 
@@ -281,7 +326,7 @@ public class XSKProjectFilesModificator {
     StringBuilder joinClausesRawContent = new StringBuilder();
 
     if (updatedTableName.equals(fromClauseTableName) || updatedTableName.equals(fromClauseTableAlias)) {
-      modifiedUpdateStatement.append(fromClause.getTableName()).append(" ");
+      modifiedUpdateStatement.append(fromClauseTableName).append(" ");
 
       if (fromClauseTableAlias != null) {
         modifiedUpdateStatement.append("AS ").append(fromClauseTableAlias).append("\n");
@@ -308,7 +353,7 @@ public class XSKProjectFilesModificator {
       modifiedUpdateStatement.append("\t").append("WHEN MATCHED ");
 
       if (whereClause != null) {
-        modifiedUpdateStatement.append("AND").append(whereClause.getRawContent().replaceAll("(?i)WHERE", "")).append(" ");
+        modifiedUpdateStatement.append("AND").append(whereClause.getRawContent().replaceFirst("(?i)WHERE", "")).append(" ");
       }
 
       modifiedUpdateStatement.append("THEN UPDATE").append("\n");
@@ -343,7 +388,7 @@ public class XSKProjectFilesModificator {
       modifiedUpdateStatement.append("\t").append("WHEN MATCHED ");
 
       if (whereClause != null) {
-        modifiedUpdateStatement.append("AND").append(whereClause.getRawContent().replaceAll("(?i)WHERE", "")).append(" ");
+        modifiedUpdateStatement.append("AND").append(whereClause.getRawContent().replaceFirst("(?i)WHERE", "")).append(" ");
       }
 
       modifiedUpdateStatement.append("THEN UPDATE").append("\n");

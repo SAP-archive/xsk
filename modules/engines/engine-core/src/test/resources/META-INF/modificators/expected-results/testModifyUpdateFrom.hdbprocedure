@@ -45,6 +45,27 @@ BEGIN
 	WHEN MATCHED AND J.FLAG = 'PROCESS' THEN UPDATE
 	SET FLAG = 'CLOSED', STATUS = CASE WHEN FLAG = 'CLOSED' THEN E.FLAG ELSE E.STATUS END;
 
+    -- Update with two tables for from source with where
+    MERGE INTO "TEST"."EMPLOYEES"	USING :emps ON "TEST"."EMPLOYEES"."NAME" = :emps."NAME" 	WHEN MATCHED THEN UPDATE	SET "STATUS" = ACTIVE, "PRIORITY_INDEX" = :emps."PRIORITY_INDEX";
+
+    -- Update with two tables for from source without where
+    MERGE INTO "TEST"."EMPLOYEES"	USING :emps ON (1 = 1)	WHEN MATCHED THEN UPDATE	SET "STATUS" = ACTIVE, "PRIORITY_INDEX" = :emps."PRIORITY_INDEX";
+
+    -- Update with nested statements
+    MERGE INTO "TEST"."EMPLOYEES" AS T
+	USING (
+        SELECT O."OPTION_ID", C."COUNTRY_CODE"
+        FROM "TEST"."OTHERS" O
+        INNER JOIN "TEST"."COUNTRIES" C
+            ON C."DESCRIPTION_EN_US" = O."DESCRIPTION_EN_US"
+        WHERE O.CATEGORY = 'Location_Country'
+            AND C."COUNTRY_CODE" IN('ARE','SAU','EGY','QAT','JOR','OMN','LBY','LBN','BHR','IRQ','KWT','PAK', 'PSE')
+    ) AS FO
+		ON FO."COUNTRY_CODE" = T."Country"
+	WHEN MATCHED AND T."Country" IN('ARE','SAU','EGY','QAT','JOR','OMN','LBY','LBN','BHR','IRQ','KWT','PAK', 'PSE')
+    AND T."STATUS" = -1 THEN UPDATE
+	SET T."NAME" = FO."NAME";
+
     -- Update without from
     UPDATE "TEST"."EMPLOYEES"
     SET STATUS = status, ADDRESS = address

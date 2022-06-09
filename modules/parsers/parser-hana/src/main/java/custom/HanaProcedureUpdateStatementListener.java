@@ -15,12 +15,14 @@ import com.sap.xsk.parser.hana.core.HanaBaseListener;
 import com.sap.xsk.parser.hana.core.HanaParser.Create_procedure_bodyContext;
 import com.sap.xsk.parser.hana.core.HanaParser.From_clauseContext;
 import com.sap.xsk.parser.hana.core.HanaParser.Join_clauseContext;
+import com.sap.xsk.parser.hana.core.HanaParser.Table_refContext;
 import com.sap.xsk.parser.hana.core.HanaParser.Update_set_clauseContext;
 import com.sap.xsk.parser.hana.core.HanaParser.Update_stmtContext;
 import com.sap.xsk.parser.hana.core.HanaParser.Where_clauseContext;
 import models.FromClauseDefinitionModel;
 import models.JoinClauseDefinitionModel;
 import models.ProcedureDefinitionModel;
+import models.TableReferenceModel;
 import models.UpdateSetClauseDefinitionModel;
 import models.UpdateStatementDefinitionModel;
 import models.WhereClauseDefinitionModel;
@@ -82,9 +84,17 @@ public class HanaProcedureUpdateStatementListener extends HanaBaseListener {
 
   @Override
   public void enterJoin_clause(Join_clauseContext ctx) {
-    if (isUpdateStatementScope) {
+    if (isUpdateStatementScope && ctx.parent.parent.parent.parent instanceof Update_stmtContext) {
       JoinClauseDefinitionModel joinClauseModel = new JoinClauseDefinitionModel();
-      String tableName = ctx.table_ref_aux().getChild(0).getText();
+      String tableName = null;
+
+      if (ctx.table_ref_aux().dml_table_expression_clause() != null) {
+        tableName = getStringWithSpaces(ctx.table_ref_aux().dml_table_expression_clause());
+      }
+      else {
+       tableName =  ctx.table_ref_aux().getChild(0).getText();
+      }
+
       String tableAlias = ctx.table_ref_aux().table_alias() != null ? ctx.table_ref_aux().table_alias().getText() : null;
       joinClauseModel.setTableName(tableName);
       joinClauseModel.setTableAlias(tableAlias);
@@ -107,12 +117,16 @@ public class HanaProcedureUpdateStatementListener extends HanaBaseListener {
   public void enterFrom_clause(From_clauseContext ctx) {
     if (isUpdateStatementScope && ctx.parent instanceof Update_stmtContext) {
       fromClauseModel = new FromClauseDefinitionModel();
-      String tableName = ctx.table_ref_list().table_ref(0).table_ref_aux().getChild(0).getText();
-      String tableAlias =
-          ctx.table_ref_list().table_ref(0).table_ref_aux().table_alias() != null ? ctx.table_ref_list().table_ref(0).table_ref_aux()
-              .table_alias().getText() : null;
-      fromClauseModel.setTableName(tableName);
-      fromClauseModel.setTableAlias(tableAlias);
+
+      ctx.table_ref_list().table_ref().forEach(tableRef -> {
+        TableReferenceModel tableReferenceModel = new TableReferenceModel();
+        String tableName = tableRef.table_ref_aux().getChild(0).getText();
+        String tableAlias = tableRef.table_ref_aux().table_alias() != null ? tableRef.table_ref_aux().table_alias().getText() : null;
+        tableReferenceModel.setName(tableName);
+        tableReferenceModel.setAlias(tableAlias);
+        fromClauseModel.addTableReference(tableReferenceModel);
+      });
+
       updateStatementModel.setFromClause(fromClauseModel);
     }
   }

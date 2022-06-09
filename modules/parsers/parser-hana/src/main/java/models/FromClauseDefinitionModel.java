@@ -18,27 +18,10 @@ public class FromClauseDefinitionModel {
 
   private List<JoinClauseDefinitionModel> joinClauses;
 
-  private String tableName;
-  private String tableAlias;
+  private List<TableReferenceModel> tableReferences = new ArrayList<>();
 
   public FromClauseDefinitionModel() {
     this.joinClauses = new ArrayList<>();
-  }
-
-  public String getTableName() {
-    return tableName;
-  }
-
-  public void setTableName(String tableName) {
-    this.tableName = tableName;
-  }
-
-  public String getTableAlias() {
-    return tableAlias;
-  }
-
-  public void setTableAlias(String tableAlias) {
-    this.tableAlias = tableAlias;
   }
 
   public List<JoinClauseDefinitionModel> getJoinClauses() {
@@ -47,5 +30,13 @@ public class FromClauseDefinitionModel {
 
   public void addJoinClause(JoinClauseDefinitionModel joinClause) {
     this.joinClauses.add(joinClause);
+  }
+
+  public List<TableReferenceModel> getTableReferences() {
+    return tableReferences;
+  }
+
+  public void addTableReference(TableReferenceModel tableReference) {
+    this.tableReferences.add(tableReference);
   }
 }

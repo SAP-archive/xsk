@@ -250,7 +250,7 @@ public class XSKProjectFilesModificator {
     List<TableReferenceModel> fromClauseTableReferences = fromClause.getTableReferences();
 
     if (fromClauseTableReferences.size() > 1) {
-      String updatedTableName = updateStatement.getTableName();
+      String updatedTableName = updateStatement.getName();
 
       TableReferenceModel updatedTableReference = new TableReferenceModel();
       TableReferenceModel usingTableReference = new TableReferenceModel();
@@ -320,7 +320,7 @@ public class XSKProjectFilesModificator {
 
     modifiedUpdateStatement.append("MERGE INTO ");
 
-    String updatedTableName = updateStatement.getTableName();
+    String updatedTableName = updateStatement.getName();
 
     JoinClauseDefinitionModel joinClauseForUpdate = new JoinClauseDefinitionModel();
     StringBuilder joinClausesRawContent = new StringBuilder();
@@ -340,10 +340,10 @@ public class XSKProjectFilesModificator {
       }
 
       modifiedUpdateStatement.append("\t").append("USING ");
-      modifiedUpdateStatement.append(joinClauseForUpdate.getTableName()).append(" ");
+      modifiedUpdateStatement.append(joinClauseForUpdate.getName()).append(" ");
 
-      if (joinClauseForUpdate.getTableAlias() != null) {
-        modifiedUpdateStatement.append("AS ").append(joinClauseForUpdate.getTableAlias()).append("\n");
+      if (joinClauseForUpdate.getAlias() != null) {
+        modifiedUpdateStatement.append("AS ").append(joinClauseForUpdate.getAlias()).append("\n");
       }
 
       modifiedUpdateStatement.append("\t").append(joinClausesRawContent);
@@ -361,17 +361,17 @@ public class XSKProjectFilesModificator {
     } else {
 
       for (JoinClauseDefinitionModel joinClause : joinClauses) {
-        if (updatedTableName.equals(joinClause.getTableName()) || updatedTableName.equals(joinClause.getTableAlias())) {
+        if (updatedTableName.equals(joinClause.getName()) || updatedTableName.equals(joinClause.getAlias())) {
           joinClauseForUpdate = joinClause;
         } else {
           joinClausesRawContent.append("\t").append(joinClause.getRawContent());
         }
       }
 
-      modifiedUpdateStatement.append(joinClauseForUpdate.getTableName()).append(" ");
+      modifiedUpdateStatement.append(joinClauseForUpdate.getName()).append(" ");
 
-      if (joinClauseForUpdate.getTableAlias() != null) {
-        modifiedUpdateStatement.append("AS ").append(joinClauseForUpdate.getTableAlias()).append("\n");
+      if (joinClauseForUpdate.getAlias() != null) {
+        modifiedUpdateStatement.append("AS ").append(joinClauseForUpdate.getAlias()).append("\n");
       }
 
       modifiedUpdateStatement.append("\t").append("USING ");

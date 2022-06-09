@@ -11,31 +11,13 @@
  */
 package models;
 
-public class UpdateStatementDefinitionModel {
+public class UpdateStatementDefinitionModel extends TableReferenceModel{
 
-  private String tableName;
-  private String tableAlias;
   private String rawContent;
 
   private FromClauseDefinitionModel fromClause;
   private WhereClauseDefinitionModel whereClause;
   private UpdateSetClauseDefinitionModel updateSetClause;
-
-  public String getTableName() {
-    return tableName;
-  }
-
-  public void setTableName(String tableName) {
-    this.tableName = tableName;
-  }
-
-  public String getTableAlias() {
-    return tableAlias;
-  }
-
-  public void setTableAlias(String tableAlias) {
-    this.tableAlias = tableAlias;
-  }
 
   public String getRawContent() {
     return rawContent;

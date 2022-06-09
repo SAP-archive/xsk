@@ -11,28 +11,10 @@
  */
 package models;
 
-public class JoinClauseDefinitionModel {
+public class JoinClauseDefinitionModel extends TableReferenceModel {
 
-  private String tableName;
-  private String tableAlias;
   private String onPart;
   private String rawContent;
-
-  public String getTableName() {
-    return tableName;
-  }
-
-  public void setTableName(String tableName) {
-    this.tableName = tableName;
-  }
-
-  public String getTableAlias() {
-    return tableAlias;
-  }
-
-  public void setTableAlias(String tableAlias) {
-    this.tableAlias = tableAlias;
-  }
 
   public String getOnPart() {
     return onPart;

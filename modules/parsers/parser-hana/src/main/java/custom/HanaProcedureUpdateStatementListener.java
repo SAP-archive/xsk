@@ -62,8 +62,8 @@ public class HanaProcedureUpdateStatementListener extends HanaBaseListener {
     updateStatementModel = new UpdateStatementDefinitionModel();
     String tableName = ctx.general_table_ref().dml_table_expression_clause().tableview_name().getText();
     String tableAlias = ctx.general_table_ref().table_alias() != null ? ctx.general_table_ref().table_alias().getText() : null;
-    updateStatementModel.setTableName(tableName);
-    updateStatementModel.setTableAlias(tableAlias);
+    updateStatementModel.setName(tableName);
+    updateStatementModel.setAlias(tableAlias);
     updateStatementModel.setRawContent(getStringWithSpaces(ctx));
     procedureModel.addUpdateStatement(updateStatementModel);
   }
@@ -96,8 +96,8 @@ public class HanaProcedureUpdateStatementListener extends HanaBaseListener {
       }
 
       String tableAlias = ctx.table_ref_aux().table_alias() != null ? ctx.table_ref_aux().table_alias().getText() : null;
-      joinClauseModel.setTableName(tableName);
-      joinClauseModel.setTableAlias(tableAlias);
+      joinClauseModel.setName(tableName);
+      joinClauseModel.setAlias(tableAlias);
       joinClauseModel.setOnPart(getStringWithSpaces(ctx.join_on_part(0)));
       joinClauseModel.setRawContent(getStringWithSpaces(ctx));
       fromClauseModel.addJoinClause(joinClauseModel);

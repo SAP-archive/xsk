@@ -73,7 +73,7 @@ public class HanaProcedureUpdateStatementListener extends HanaBaseListener {
 
   @Override
   public void enterUpdate_set_clause(Update_set_clauseContext ctx) {
-    if (isUpdateStatementScope) {
+    if (isUpdateStatementScope && ctx.parent instanceof Update_stmtContext) {
       UpdateSetClauseDefinitionModel updateSetClauseModel = new UpdateSetClauseDefinitionModel();
       updateSetClauseModel.setRawContent(getStringWithSpaces(ctx));
       updateStatementModel.setUpdateSetClause(updateSetClauseModel);
@@ -84,6 +84,11 @@ public class HanaProcedureUpdateStatementListener extends HanaBaseListener {
   public void enterJoin_clause(Join_clauseContext ctx) {
     if (isUpdateStatementScope) {
       JoinClauseDefinitionModel joinClauseModel = new JoinClauseDefinitionModel();
+      String tableName = ctx.table_ref_aux().getChild(0).getText();
+      String tableAlias = ctx.table_ref_aux().table_alias() != null ? ctx.table_ref_aux().table_alias().getText() : null;
+      joinClauseModel.setTableName(tableName);
+      joinClauseModel.setTableAlias(tableAlias);
+      joinClauseModel.setOnPart(getStringWithSpaces(ctx.join_on_part(0)));
       joinClauseModel.setRawContent(getStringWithSpaces(ctx));
       fromClauseModel.addJoinClause(joinClauseModel);
     }
@@ -91,7 +96,7 @@ public class HanaProcedureUpdateStatementListener extends HanaBaseListener {
 
   @Override
   public void enterWhere_clause(Where_clauseContext ctx) {
-    if (isUpdateStatementScope) {
+    if (isUpdateStatementScope && ctx.parent instanceof Update_stmtContext) {
       WhereClauseDefinitionModel whereClauseModel = new WhereClauseDefinitionModel();
       whereClauseModel.setRawContent(getStringWithSpaces(ctx));
       updateStatementModel.setWhereClause(whereClauseModel);
@@ -100,7 +105,7 @@ public class HanaProcedureUpdateStatementListener extends HanaBaseListener {
 
   @Override
   public void enterFrom_clause(From_clauseContext ctx) {
-    if (isUpdateStatementScope) {
+    if (isUpdateStatementScope && ctx.parent instanceof Update_stmtContext) {
       fromClauseModel = new FromClauseDefinitionModel();
       String tableName = ctx.table_ref_list().table_ref(0).table_ref_aux().getChild(0).getText();
       String tableAlias =

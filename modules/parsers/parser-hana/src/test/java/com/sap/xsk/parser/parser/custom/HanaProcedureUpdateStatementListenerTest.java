@@ -62,7 +62,7 @@ public class HanaProcedureUpdateStatementListenerTest {
     model.checkForAllMandatoryFieldsPresence();
     assertEquals("Unexpected schema name. ", expectedSchema, model.getSchema());
     assertEquals("Unexpected procedure name. ", expectedName, model.getName());
-    assertEquals(5, model.getUpdateStatements().size());
+    assertEquals(6, model.getUpdateStatements().size());
   }
 }
 

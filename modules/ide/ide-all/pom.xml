@@ -5,50 +5,50 @@
     <parent>
         <groupId>com.sap.xsk</groupId>
         <artifactId>xsk-modules-ide-parent</artifactId>
-        <version>0.17.0-SNAPSHOT</version>
+        <version>0.17.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <name>XSK - Modules - IDE - All</name>
     <artifactId>xsk-modules-ide-all</artifactId>
-    <version>0.17.0-SNAPSHOT</version>
+    <version>0.17.0</version>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-ide-migration</artifactId>
-            <version>0.17.0-SNAPSHOT</version>
+            <version>0.17.0</version>
         </dependency>
         <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-ide-file-types</artifactId>
-            <version>0.17.0-SNAPSHOT</version>
+            <version>0.17.0</version>
         </dependency>
         <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-ide-hdbti</artifactId>
-            <version>0.17.0-SNAPSHOT</version>
+            <version>0.17.0</version>
         </dependency>
         <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-ide-xsk-workspace-menu</artifactId>
-            <version>0.17.0-SNAPSHOT</version>
+            <version>0.17.0</version>
         </dependency>
         <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-ide-xsk-ide-xsjob</artifactId>
-            <version>0.17.0-SNAPSHOT</version>
+            <version>0.17.0</version>
         </dependency>
         <dependency>
             <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-ide-xsk-ide-hdi</artifactId>
-            <version>0.17.0-SNAPSHOT</version>
+            <version>0.17.0</version>
         </dependency>
         <dependency>
           <groupId>com.sap.xsk</groupId>
           <artifactId>xsk-modules-xsk-ide-xsaccess</artifactId>
-          <version>0.17.0-SNAPSHOT</version>
+          <version>0.17.0</version>
         </dependency>
     </dependencies>
 

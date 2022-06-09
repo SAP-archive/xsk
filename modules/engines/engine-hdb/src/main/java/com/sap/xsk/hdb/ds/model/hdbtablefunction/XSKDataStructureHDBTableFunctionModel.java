@@ -19,4 +19,8 @@ public class XSKDataStructureHDBTableFunctionModel extends XSKDataStructureModel
   public XSKDataStructureHDBTableFunctionModel(XSKDataStructureModelBuilder builder) {
     super(builder);
   }
+
+  public XSKDataStructureHDBTableFunctionModel() {
+    super();
+  }
 }

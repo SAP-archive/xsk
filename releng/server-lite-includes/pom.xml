@@ -94,6 +94,13 @@
 			<scope>compile</scope>
 		</dependency>
 
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-servlets</artifactId>
+      <version>9.4.12.v20180830</version>
+    </dependency>
+
+
 		<!-- Dirigible include -->
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
@@ -103,11 +110,6 @@
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-bpm</artifactId>
-      <version>${dirigible.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.dirigible</groupId>
-      <artifactId>dirigible-api-facade-http</artifactId>
       <version>${dirigible.version}</version>
     </dependency>
     <dependency>
@@ -210,6 +212,7 @@
       <version>${dirigible.version}</version>
       <scope>compile</scope>
     </dependency>
+
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-ide</artifactId>
@@ -292,6 +295,10 @@
           <groupId>org.eclipse.dirigible</groupId>
           <artifactId>dirigible-ide-ui-form-builder-menu</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>org.eclipse.dirigible</groupId>
+          <artifactId>dirigible-ide-ui-security-menu</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <!-- check the one below if really needed -->
@@ -319,6 +326,16 @@
       <version>${dirigible.version}</version>
       <scope>compile</scope>
     </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.eclipse.dirigible</groupId>-->
+<!--      <artifactId>dirigible-ide-ui-core</artifactId>-->
+<!--      <version>${dirigible.version}</version>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>org.eclipse.dirigible</groupId>-->
+<!--      <artifactId>dirigible-ext</artifactId>-->
+<!--      <version>${dirigible.version}</version>-->
+<!--    </dependency>-->
   </dependencies>
 	<properties>
 		<license.header.location>../../licensing-header.txt</license.header.location>

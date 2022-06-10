@@ -210,6 +210,7 @@ public class HdbddTransformer {
       // Check if the dependant table has :: to know whether short or full name is used in the hdbdd view definition. In case it is not we should build the full name
       if (!dependsOnTable.contains(PACKAGE_DELIMITER)) {
         dependsOnTable = getFullTableName(viewSymbol, dependsOnTable);
+        selectColumns = replaceWithQuotes(selectColumns, dependsOnTable, dependsOnTable);
       }
 
       if (unionBol) {

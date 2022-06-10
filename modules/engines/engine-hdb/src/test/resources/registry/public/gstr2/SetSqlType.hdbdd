@@ -1,0 +1,11 @@
+namespace gstr2;
+@Schema: 'ADMIN'
+context SetSqlType {
+  type id     : String(4);
+  type name   : String(12);
+  type phone  : Decimal(5,2);
+  type newType {
+      myName: name;
+      myPhone: phone;
+  };
+};

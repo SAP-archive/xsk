@@ -19,8 +19,8 @@ public class XSKHDBTableFunctionLogger {
   public void logError(String parsedFileLocation, String problemsFacadeMessage, String exceptionMessage) {
     XSKCommonsUtils.logCustomErrors(parsedFileLocation,
         XSKCommonsConstants.PARSER_ERROR,
-        "",
-        "",
+        "",//line
+        "",//column
         exceptionMessage,
         problemsFacadeMessage,
         XSKCommonsConstants.HDB_TABLE_FUNCTION_PARSER,

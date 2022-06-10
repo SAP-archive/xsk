@@ -39,6 +39,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
@@ -52,6 +53,7 @@ public class HdbddTransformer {
   private static final String CATALOG_ANNOTATION = "Catalog";
   private static final String CATALOG_OBJ_TABLE_TYPE = "tableType";
   private static final String SEARCH_INDEX_ANNOTATION = "SearchIndex";
+  private static final String FUZZY_ANNOTATION = "fuzzy";
   private static final String FUZZY_SEARCH_INDEX_ENABLED = "enabled";
   private static final String DUMMY_TABLE = "DUMMY";
   private static final String QUOTE = "\"";
@@ -158,14 +160,33 @@ public class HdbddTransformer {
       }
     }
 
+    handlePossibleSearchIndexAnnotations(entitySymbol, tableModel);
+
+    return tableModel;
+  }
+
+  private void handlePossibleSearchIndexAnnotations(EntitySymbol entitySymbol, XSKDataStructureHDBTableModel tableModel){
     for (int i = 0; i < entitySymbol.getElements().size(); i++) {
       EntityElementSymbol currentElement = entitySymbol.getElements().get(i);
+
       if (currentElement.getAnnotation(SEARCH_INDEX_ANNOTATION) != null) {
-        tableModel.getColumns().get(i).setFuzzySearchIndex(Boolean.parseBoolean(
-            currentElement.getAnnotation(SEARCH_INDEX_ANNOTATION).getKeyValuePairs().get(FUZZY_SEARCH_INDEX_ENABLED).getValue()));
+
+        boolean hasFuzzySearchIndex = false;
+        Map<String, AbstractAnnotationValue> searchIndexAnnotationValueMap = currentElement.getAnnotation(SEARCH_INDEX_ANNOTATION).getKeyValuePairs();
+        AnnotationObj fuzzyIndexAnnotationObject = (AnnotationObj) searchIndexAnnotationValueMap.get(FUZZY_ANNOTATION);
+        AbstractAnnotationValue fuzzyIndexAnnotationValue = searchIndexAnnotationValueMap.get(FUZZY_SEARCH_INDEX_ENABLED);
+        AbstractAnnotationValue fuzzyIndexAnnotationObjectValue = fuzzyIndexAnnotationObject != null ?
+            fuzzyIndexAnnotationObject.getKeyValuePairs().get(FUZZY_SEARCH_INDEX_ENABLED) : null;
+
+        if (fuzzyIndexAnnotationObjectValue != null){
+          hasFuzzySearchIndex = Boolean.parseBoolean(fuzzyIndexAnnotationObjectValue.getValue());
+        }
+        else if (fuzzyIndexAnnotationValue != null){
+          hasFuzzySearchIndex = Boolean.parseBoolean(fuzzyIndexAnnotationValue.getValue());
+        }
+        tableModel.getColumns().get(i).setFuzzySearchIndex(hasFuzzySearchIndex);
       }
     }
-    return tableModel;
   }
 
   public XSKDataStructureHDBViewModel transformViewSymbolToHdbViewModel(ViewSymbol viewSymbol, String location) {
@@ -178,7 +199,7 @@ public class HdbddTransformer {
         .append(DOT).append(QUOTE).append(viewSymbol.getFullName()).append(QUOTE).append(SPACE).append(ISqlKeywords.KEYWORD_AS)
         .append(SPACE);
 
-    String selectStatementSql = traverseSelectStatements(viewSymbol, aliasesForReplacement);
+    String selectStatementSql = traverseSelectStatements(viewSymbol, aliasesForReplacement, viewModel);
     viewStatementSql.append(selectStatementSql);
 
     String finalViewSql = viewStatementSql.toString();
@@ -195,7 +216,8 @@ public class HdbddTransformer {
     return viewModel;
   }
 
-  public String traverseSelectStatements(ViewSymbol viewSymbol, List<String> aliasesForReplacement) {
+  public String traverseSelectStatements(ViewSymbol viewSymbol, List<String> aliasesForReplacement, XSKDataStructureHDBViewModel viewModel) {
+    List<String> dependsOnTableList = new ArrayList<>();
     StringBuilder selectSql = new StringBuilder();
 
     for (Symbol symbol : viewSymbol.getSelectStatements()) {
@@ -212,6 +234,7 @@ public class HdbddTransformer {
         dependsOnTable = getFullTableName(viewSymbol, dependsOnTable);
         selectColumns = replaceWithQuotes(selectColumns, dependsOnTable, dependsOnTable);
       }
+      dependsOnTableList.add(dependsOnTable);
 
       if (unionBol) {
         selectSql.append(ISqlKeywords.KEYWORD_UNION).append(SPACE);
@@ -239,6 +262,7 @@ public class HdbddTransformer {
         selectSql.append(ISqlKeywords.KEYWORD_WHERE).append(SPACE).append(where).append(SPACE);
       }
     }
+    viewModel.setDependsOnTable(dependsOnTableList);
 
     return selectSql.toString();
   }

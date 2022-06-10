@@ -11,33 +11,18 @@
  */
 package models;
 
-import java.util.Objects;
+public class TableFunctionDefinitionModel extends DefinitionModel {
 
-public class TableFunctionDefinitionModel {
 
-  private final String schema;
-  private final String name;
-
-  public TableFunctionDefinitionModel(String schema, String name) {
-    this.schema = schema;
-    this.name = name;
-  }
-
-  public String getSchema() {
-    return schema;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void checkForAllMandatoryFieldsPresence() {
-    checkPresence(name, "name");
-  }
-
-  private <T> void checkPresence(T field, String fieldName) {
-    if (Objects.isNull(field)) {
-      throw new TableFunctionMissingPropertyException("Missing mandatory field " + fieldName);
+    public TableFunctionDefinitionModel(String schema, String name) {
+        super(schema, name);
     }
-  }
+
+    public void checkForAllMandatoryFieldsPresence() {
+        if (this.getName() == null) {
+            throw new TableFunctionMissingPropertyException("Missing mandatory field name");
+        }
+
+    }
+
 }

@@ -27,7 +27,7 @@ public class XSKProjectMigrationInterceptor {
 
   @XSKToolingHook
   public byte[] modify(byte[] fileContent) throws TransformerException {
-    return new CalculationViewDataSourceTransformation().removeTypeArtifact(fileContent);
+    return new CalculationViewTransformation().removeTypeArtifact(fileContent);
   }
 
   @XSKToolingHook

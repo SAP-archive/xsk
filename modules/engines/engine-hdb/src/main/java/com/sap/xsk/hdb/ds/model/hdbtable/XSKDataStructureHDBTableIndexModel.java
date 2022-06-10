@@ -24,6 +24,13 @@ public class XSKDataStructureHDBTableIndexModel {
   public XSKDataStructureHDBTableIndexModel() {
   }
 
+  public XSKDataStructureHDBTableIndexModel(String indexName, String order, Set<String> indexColumns, boolean isUnique) {
+    this.indexName = indexName;
+    this.order = order;
+    this.indexColumns = indexColumns;
+    this.unique = isUnique;
+  }
+
   public String getIndexName() {
     return indexName;
   }

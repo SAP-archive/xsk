@@ -531,7 +531,8 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   @Test
   public void testParseHDBDDWithNoTableTypeAnnotation() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/NoTableType.hdbdd", "");
-    assertEquals(null, ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType());
+    String tableType = ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getTableType();
+    assertNull("No table type should have been defined for this HDBDD, but table type is specified", tableType);
   }
 
   @Test
@@ -572,5 +573,72 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     XSKDataStructureHDBViewModel viewModel = ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0);
 
     assertEquals(expectedRawContent, viewModel.getRawContent().trim());
+  }
+
+  @Test
+  public void testParseHDBDDWithFuzzySearchIndex() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/FuzzySearchIndexEnabled.hdbdd", "");
+    assertFalse("Fuzzy search index is expected to be false, but it is true" ,((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getColumns().get(1).isFuzzySearchIndexEnabled());
+    assertTrue("Fuzzy search index is expected to be true, but it is false",((XSKDataStructureCdsModel) parsedModel).getTableModels().get(1).getColumns().get(1).isFuzzySearchIndexEnabled());
+  }
+
+  @Test
+  public void testParseHDBDDWithFuzzySearchIndexNewSyntax() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/FuzzySearchIndexEnabledNewSyntax.hdbdd", "");
+    assertTrue("Fuzzy search index (new syntax) is expected to be true, but it is false" ,((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getColumns().get(1).isFuzzySearchIndexEnabled());
+    assertFalse("Fuzzy search index (new syntax) is expected to be false, but it is true",((XSKDataStructureCdsModel) parsedModel).getTableModels().get(1).getColumns().get(1).isFuzzySearchIndexEnabled());
+  }
+
+  @Test
+  public void testParseHDBDDWithTraverseSelectStatement() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/TraverseSelectStatement.hdbdd", "");
+    assertEquals("gstr2::TraverseSelectStatement.category", ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0).getDependsOnTable().get(0));
+  }
+
+  @Test
+  public void testParseHDBDDWithTraverseSelectStatementDummyTable() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/TraverseSelectStatementDummyTable.hdbdd", "");
+    assertEquals("DUMMY", ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0).getDependsOnTable().get(0));
+  }
+
+  @Test
+  public void testParseHDBDDWithSelectDistinct() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/SelectDistinct.hdbdd", "");
+    assertTrue("Expected SELECT DISTINCT, but it is not found",((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0).getRawContent().contains("SELECT DISTINCT"));
+  }
+
+  @Test
+  public void testParseHDBDDWithSetSqlType() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/SetSqlType.hdbdd", "");
+    assertEquals("NVARCHAR",((XSKDataStructureCdsModel) parsedModel).getTableTypeModels().get(0).getColumns().get(0).getType());
+    assertEquals("DECIMAL",((XSKDataStructureCdsModel) parsedModel).getTableTypeModels().get(0).getColumns().get(1).getType());
+  }
+
+  @Test
+  public void testParseHDBDDWithSetHanaType() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/SetHanaType.hdbdd", "");
+    assertEquals("NVARCHAR",((XSKDataStructureCdsModel) parsedModel).getTableTypeModels().get(0).getColumns().get(0).getType());
+    assertEquals("SMALLINT",((XSKDataStructureCdsModel) parsedModel).getTableTypeModels().get(0).getColumns().get(1).getType());
+  }
+
+  @Test
+  public void testParseHDBDDWithStructuredDataTypeSymbol() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory. parseHdbdd("gstr2/StructuredDataTypeSymbol.hdbdd", "");
+    assertEquals("gstr2::StructuredDataTypeSymbol.modifiedType",((XSKDataStructureCdsModel) parsedModel).getTableTypeModels().get(0).getName());
+    assertEquals("gstr2::StructuredDataTypeSymbol.newType",((XSKDataStructureCdsModel) parsedModel).getTableTypeModels().get(1).getName());
+  }
+  
+  @Test
+  public void testParseHDBDDWithUniqueCatalogIndex() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/CatalogIndexUnique.hdbdd", "");
+    boolean hasUniqueIndices = ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getConstraints().getUniqueIndices().isEmpty();
+    assertFalse("Expected value for catalog unique index to be true, but it is false", hasUniqueIndices);
+  }
+
+  @Test
+  public void testParseHDBDDWithNoUniqueCatalogIndex() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/CatalogIndexNonUnique.hdbdd", "");
+    boolean hasNoUniqueIndices = ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getIndexes().get(0).isUnique();
+    assertFalse("Expected value for catalog unique index to be false, but it is true", hasNoUniqueIndices);
   }
 }

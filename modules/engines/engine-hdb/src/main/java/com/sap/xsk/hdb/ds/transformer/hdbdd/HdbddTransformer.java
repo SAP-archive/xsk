@@ -15,9 +15,14 @@ import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintPrimaryKeyModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintUniqueModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableIndexModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
+import com.sap.xsk.parser.hdbdd.annotation.metadata.AbstractAnnotationValue;
+import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationArray;
+import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationObj;
 import com.sap.xsk.parser.hdbdd.symbols.Symbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.AssociationSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.entity.EntityElementSymbol;
@@ -31,7 +36,10 @@ import com.sap.xsk.parser.hdbdd.symbols.view.SelectSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
@@ -44,11 +52,17 @@ public class HdbddTransformer {
   private static final String CATALOG_ANNOTATION = "Catalog";
   private static final String CATALOG_OBJ_TABLE_TYPE = "tableType";
   private static final String SEARCH_INDEX_ANNOTATION = "SearchIndex";
+  private static final String FUZZY_ANNOTATION = "fuzzy";
   private static final String FUZZY_SEARCH_INDEX_ENABLED = "enabled";
   private static final String DUMMY_TABLE = "DUMMY";
   private static final String QUOTE = "\"";
   private static final String DOT = ".";
   private static final String PACKAGE_DELIMITER = "::";
+  private static final String INDEX = "index";
+  private static final String UNIQUE = "unique";
+  private static final String NAME = "name";
+  private static final String ORDER = "order";
+  private static final String ELEMENT_NAMES = "elementNames";
 
   public XSKDataStructureHDBTableModel transformEntitySymbolToTableModel(EntitySymbol entitySymbol, String location) {
     XSKDataStructureHDBTableModel tableModel = new XSKDataStructureHDBTableModel();
@@ -114,18 +128,64 @@ public class HdbddTransformer {
 
     tableModel.setColumns(tableColumns);
     tableModel.setLocation(location);
-    if (entitySymbol.getAnnotation(CATALOG_ANNOTATION) != null) {
-      tableModel.setTableType(entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(CATALOG_OBJ_TABLE_TYPE).getValue());
-    }
+    if (entitySymbol.getAnnotation(CATALOG_ANNOTATION) != null){
+      String tableType = entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(CATALOG_OBJ_TABLE_TYPE).getValue();
+      tableModel.setTableType(tableType);
 
-    for (int i = 0; i < entitySymbol.getElements().size(); i++) {
-      EntityElementSymbol currentElement = entitySymbol.getElements().get(i);
-      if (currentElement.getAnnotation(SEARCH_INDEX_ANNOTATION) != null) {
-        tableModel.getColumns().get(i).setFuzzySearchIndex(Boolean.parseBoolean(
-            currentElement.getAnnotation(SEARCH_INDEX_ANNOTATION).getKeyValuePairs().get(FUZZY_SEARCH_INDEX_ENABLED).getValue()));
+      if (entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(INDEX) != null){
+        List<XSKDataStructureHDBTableIndexModel> indexes = new ArrayList<>();
+        List<XSKDataStructureHDBTableConstraintUniqueModel> uniqueIndexes = new ArrayList<>();
+        AnnotationArray catalogIndexAnnotationArray = (AnnotationArray) entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(INDEX);
+
+        for (AbstractAnnotationValue currentAnnotationValue : catalogIndexAnnotationArray.getValues()){
+          AnnotationObj annotationObject = (AnnotationObj) currentAnnotationValue;
+          boolean isUnique = Boolean.parseBoolean(getCatalogAnnotationValue(annotationObject, UNIQUE));
+          String name = getCatalogAnnotationValue(annotationObject, NAME);
+          String order = getCatalogAnnotationValue(annotationObject, ORDER);
+          Set<String> indexColumnSet = new HashSet<>();
+
+          ((AnnotationArray) annotationObject.getValue(ELEMENT_NAMES)).getValues()
+              .forEach(currentElement -> indexColumnSet.add(currentElement.getValue()));
+
+          if (!isUnique){
+            indexes.add(new XSKDataStructureHDBTableIndexModel(name, order, indexColumnSet, false));
+          }
+          else {
+            uniqueIndexes.add(new XSKDataStructureHDBTableConstraintUniqueModel(name, order, indexColumnSet.toArray(String[]::new)));
+          }
+        }
+        tableModel.setIndexes(indexes);
+        tableModel.getConstraints().setUniqueIndices(uniqueIndexes);
       }
     }
+
+    handlePossibleSearchIndexAnnotations(entitySymbol, tableModel);
+
     return tableModel;
+  }
+
+  private void handlePossibleSearchIndexAnnotations(EntitySymbol entitySymbol, XSKDataStructureHDBTableModel tableModel){
+    for (int i = 0; i < entitySymbol.getElements().size(); i++) {
+      EntityElementSymbol currentElement = entitySymbol.getElements().get(i);
+
+      if (currentElement.getAnnotation(SEARCH_INDEX_ANNOTATION) != null) {
+
+        boolean hasFuzzySearchIndex = false;
+        Map<String, AbstractAnnotationValue> searchIndexAnnotationValueMap = currentElement.getAnnotation(SEARCH_INDEX_ANNOTATION).getKeyValuePairs();
+        AnnotationObj fuzzyIndexAnnotationObject = (AnnotationObj) searchIndexAnnotationValueMap.get(FUZZY_ANNOTATION);
+        AbstractAnnotationValue fuzzyIndexAnnotationValue = searchIndexAnnotationValueMap.get(FUZZY_SEARCH_INDEX_ENABLED);
+        AbstractAnnotationValue fuzzyIndexAnnotationObjectValue = fuzzyIndexAnnotationObject != null ?
+            fuzzyIndexAnnotationObject.getKeyValuePairs().get(FUZZY_SEARCH_INDEX_ENABLED) : null;
+
+        if (fuzzyIndexAnnotationObjectValue != null){
+          hasFuzzySearchIndex = Boolean.parseBoolean(fuzzyIndexAnnotationObjectValue.getValue());
+        }
+        else if (fuzzyIndexAnnotationValue != null){
+          hasFuzzySearchIndex = Boolean.parseBoolean(fuzzyIndexAnnotationValue.getValue());
+        }
+        tableModel.getColumns().get(i).setFuzzySearchIndex(hasFuzzySearchIndex);
+      }
+    }
   }
 
   public XSKDataStructureHDBViewModel transformViewSymbolToHdbViewModel(ViewSymbol viewSymbol, String location) {
@@ -138,7 +198,7 @@ public class HdbddTransformer {
         .append(DOT).append(QUOTE).append(viewSymbol.getFullName()).append(QUOTE).append(SPACE).append(ISqlKeywords.KEYWORD_AS)
         .append(SPACE);
 
-    String selectStatementSql = traverseSelectStatements(viewSymbol, aliasesForReplacement);
+    String selectStatementSql = traverseSelectStatements(viewSymbol, aliasesForReplacement, viewModel);
     viewStatementSql.append(selectStatementSql);
 
     String finalViewSql = viewStatementSql.toString();
@@ -155,7 +215,8 @@ public class HdbddTransformer {
     return viewModel;
   }
 
-  public String traverseSelectStatements(ViewSymbol viewSymbol, List<String> aliasesForReplacement) {
+  public String traverseSelectStatements(ViewSymbol viewSymbol, List<String> aliasesForReplacement, XSKDataStructureHDBViewModel viewModel) {
+    List<String> dependsOnTableList = new ArrayList<>();
     StringBuilder selectSql = new StringBuilder();
 
     for (Symbol symbol : viewSymbol.getSelectStatements()) {
@@ -180,6 +241,7 @@ public class HdbddTransformer {
           dependsOnTable = dependsOnTableFullName;
         }
       }
+      dependsOnTableList.add(dependsOnTable);
 
       if (unionBol) {
         selectSql.append(ISqlKeywords.KEYWORD_UNION).append(SPACE);
@@ -207,6 +269,7 @@ public class HdbddTransformer {
         selectSql.append(ISqlKeywords.KEYWORD_WHERE).append(SPACE).append(where).append(SPACE);
       }
     }
+    viewModel.setDependsOnTable(dependsOnTableList);
 
     return selectSql.toString();
   }
@@ -389,5 +452,9 @@ public class HdbddTransformer {
     columnModel.setNullable(!associationSymbol.isNotNull());
 
     return columnModel;
+  }
+
+  private String getCatalogAnnotationValue (AnnotationObj annotationObject, String value){
+    return annotationObject.getValue(value) != null ? annotationObject.getValue(value).getValue() : null;
   }
 }

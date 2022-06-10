@@ -62,6 +62,7 @@ jobs:
     - name: Add XSK helm repo
       run: |
         helm repo add xsk https://www.xsk.io
+        helm repo update
         mkdir ~/.gnupg
         wget https://xsk.io/charts/pubring.gpg -O ~/.gnupg/pubring.gpg
 

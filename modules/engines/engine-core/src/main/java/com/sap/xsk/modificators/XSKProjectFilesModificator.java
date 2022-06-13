@@ -16,11 +16,8 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import javax.persistence.criteria.Join;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -58,14 +55,26 @@ public class XSKProjectFilesModificator {
   private static final String XSLT_RESOURCE_PATH = "META-INF/modificators/xslt/analyticprivilege.xslt";
   private static final String HDB_PROCEDURE_FILE_EXTENSION = "hdbprocedure";
   private static final List<String> REPLACE_SESSION_USER_FILE_EXTENSIONS = List.of("xsjs", "xsjslib", HDB_PROCEDURE_FILE_EXTENSION,
-      "hdbtablefunction",
-      "analyticprivilege", "hdbanalyticprivilege");
+      "hdbtablefunction", "analyticprivilege", "hdbanalyticprivilege");
   private static final List<String> ANALYTIC_PRIVILEGE_FILE_EXTENSIONS = List.of("analyticprivilege", "hdbanalyticprivilege");
   private static final String ROW_DEFINITION = "(?i)\\bin row\\b";
   private static final String ROW_DEFINITION_REPLACEMENT = "IN row1";
   private static final String ROW_VALUE = "(?i)\\:row[^0-9a-z]";
   private static final String ROW_VALUE_REPLACEMENT = ":row1;";
-
+  private static final String MERGE_INTO = "MERGE INTO ";
+  private static final String AS = "AS ";
+  private static final String USING = "USING ";
+  private static final String UPDATE = "UPDATE ";
+  private static final String ON = "ON";
+  private static final String AND = "AND";
+  private static final String ON_TRUE = "ON (1 = 1)";
+  private static final String WHEN_MATCHED_THEN_UPDATE = "WHEN MATCHED THEN UPDATE";
+  private static final String WHEN_MATCHED = "WHEN MATCHED ";
+  private static final String THEN_UPDATE = "THEN UPDATE";
+  private static final String TAB = "\t";
+  private static final String NEW_LINE = "\n";
+  private static final String SPACE = " ";
+  private static final String CASE_INSENSITIVE_WHERE = "(?i)WHERE";
   /**
    * Modify a list of delivery unit project files during the migration process.
    *
@@ -193,32 +202,15 @@ public class XSKProjectFilesModificator {
   private void modifyUpdateFromStatement(String fileExtension, IFile projectFile) {
     if (fileExtension.equalsIgnoreCase(HDB_PROCEDURE_FILE_EXTENSION) && !projectFile.isEmpty()) {
       String hdbprocedureFileContent = new String(projectFile.getContent());
-      CharStream inputStream = CharStreams.fromString(hdbprocedureFileContent);
-      HanaLexer lexer = new HanaLexer(inputStream);
-      lexer.removeErrorListeners();
-      CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-
-      HanaParser parser = new HanaParser(tokenStream);
-      parser.setBuildParseTree(true);
-      parser.removeErrorListeners();
-
-      ParseTree parseTree = parser.sql_script();
-
-      HanaProcedureUpdateStatementListener listener = new HanaProcedureUpdateStatementListener();
-      ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
-      parseTreeWalker.walk(listener, parseTree);
-
-      ProcedureDefinitionModel procedureDefinitionModel = listener.getProcedureModel();
-
-      List<UpdateStatementDefinitionModel> updateStatements = procedureDefinitionModel.getUpdateStatements();
       Map<String, String> modifiedUpdateStatementsMapping = new HashMap<>();
+      ProcedureDefinitionModel procedureDefinitionModel = getProcedureModel(hdbprocedureFileContent);
+      List<UpdateStatementDefinitionModel> updateStatements = procedureDefinitionModel.getUpdateStatements();
 
       for (UpdateStatementDefinitionModel updateStatement : updateStatements) {
         String modifiedUpdateStatement;
         FromClauseDefinitionModel fromClause = updateStatement.getFromClause();
         if (fromClause != null) {
           List<JoinClauseDefinitionModel> joinClauses = fromClause.getJoinClauses();
-
           UpdateSetClauseDefinitionModel updateSetClause = updateStatement.getUpdateSetClause();
           WhereClauseDefinitionModel whereClause = updateStatement.getWhereClause();
 
@@ -228,30 +220,43 @@ public class XSKProjectFilesModificator {
             modifiedUpdateStatement = modifyHdbprocedureUpdateFromWithJoinClauses(updateStatement, fromClause, joinClauses, updateSetClause,
                 whereClause);
           }
-
           modifiedUpdateStatementsMapping.put(updateStatement.getRawContent(), modifiedUpdateStatement);
         }
       }
-
       for (Map.Entry<String, String> mapping : modifiedUpdateStatementsMapping.entrySet()) {
         String originalUpdateFromStatement = mapping.getKey();
         String modifiedUpdateFromStatement = mapping.getValue();
-        hdbprocedureFileContent = hdbprocedureFileContent.replace(originalUpdateFromStatement, modifiedUpdateFromStatement);
+        hdbprocedureFileContent = hdbprocedureFileContent.replace(originalUpdateFromStatement + ";", modifiedUpdateFromStatement + ";");
       }
-
       projectFile.setContent(hdbprocedureFileContent.getBytes());
     }
+  }
+
+  private ProcedureDefinitionModel getProcedureModel(String fileContent){
+    CharStream inputStream = CharStreams.fromString(fileContent);
+    HanaLexer lexer = new HanaLexer(inputStream);
+    lexer.removeErrorListeners();
+    CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+
+    HanaParser parser = new HanaParser(tokenStream);
+    parser.setBuildParseTree(true);
+    parser.removeErrorListeners();
+
+    ParseTree parseTree = parser.sql_script();
+
+    HanaProcedureUpdateStatementListener listener = new HanaProcedureUpdateStatementListener();
+    ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
+    parseTreeWalker.walk(listener, parseTree);
+    return listener.getProcedureModel();
   }
 
   private String modifyHdbprocedureUpdateFromWithoutJoinClauses(UpdateStatementDefinitionModel updateStatement, FromClauseDefinitionModel fromClause,
       UpdateSetClauseDefinitionModel updateSetClause, WhereClauseDefinitionModel whereClause) {
     StringBuilder modifiedUpdateStatement = new StringBuilder();
-
     List<TableReferenceModel> fromClauseTableReferences = fromClause.getTableReferences();
 
     if (fromClauseTableReferences.size() > 1) {
       String updatedTableName = updateStatement.getName();
-
       TableReferenceModel updatedTableReference = new TableReferenceModel();
       TableReferenceModel usingTableReference = new TableReferenceModel();
 
@@ -263,138 +268,109 @@ public class XSKProjectFilesModificator {
           usingTableReference = tableReferenceModel;
         }
       }
+      modifiedUpdateStatement.append(MERGE_INTO).append(updatedTableReference.getName());
 
-      modifiedUpdateStatement.append("MERGE INTO ").append(updatedTableReference.getName());
       if (updatedTableReference.getAlias() != null) {
-        modifiedUpdateStatement.append("AS").append(" ").append(updatedTableReference.getAlias()).append("\n");
+        modifiedUpdateStatement.append(AS).append(updatedTableReference.getAlias()).append(NEW_LINE);
       }
-
-      modifiedUpdateStatement.append("\t").append("USING ");
-      modifiedUpdateStatement.append(usingTableReference.getName()).append(" ");
+      modifiedUpdateStatement.append(TAB).append(USING);
+      modifiedUpdateStatement.append(usingTableReference.getName()).append(SPACE);
 
       if (usingTableReference.getAlias() != null) {
-        modifiedUpdateStatement.append("AS ").append(usingTableReference.getAlias()).append("\n");
+        modifiedUpdateStatement.append(AS).append(usingTableReference.getAlias()).append(NEW_LINE);
       }
 
       if (whereClause != null) {
-        modifiedUpdateStatement.append("ON").append(whereClause.getRawContent().replaceFirst("(?i)WHERE", "")).append(" ");
+        modifiedUpdateStatement.append(ON).append(whereClause.getRawContent().replaceFirst(CASE_INSENSITIVE_WHERE, "")).append(SPACE);
       }
       else {
-        modifiedUpdateStatement.append("ON (1 = 1)");
+        modifiedUpdateStatement.append(ON_TRUE);
       }
-
-      modifiedUpdateStatement.append("\t").append("WHEN MATCHED THEN UPDATE");
-      modifiedUpdateStatement.append("\t").append(updateSetClause.getRawContent());
+      modifiedUpdateStatement.append(TAB).append(WHEN_MATCHED_THEN_UPDATE);
+      modifiedUpdateStatement.append(TAB).append(updateSetClause.getRawContent());
     }
     else {
       TableReferenceModel fromClauseTableReference = fromClauseTableReferences.get(0);
       String fromClauseTableName = fromClauseTableReference.getName();
       String fromClauseTableAlias = fromClauseTableReference.getAlias();
 
-      modifiedUpdateStatement.append("UPDATE").append(" ");
-      modifiedUpdateStatement.append(fromClauseTableName).append(" ");
+      modifiedUpdateStatement.append(UPDATE);
+      modifiedUpdateStatement.append(fromClauseTableName).append(SPACE);
 
       if (fromClauseTableAlias != null) {
-        modifiedUpdateStatement.append("AS").append(" ").append(fromClauseTableAlias).append("\n");
+        modifiedUpdateStatement.append(AS).append(fromClauseTableAlias).append(NEW_LINE);
       }
-
-      modifiedUpdateStatement.append("\t").append(updateSetClause.getRawContent() + "\n");
+      modifiedUpdateStatement.append(TAB).append(updateSetClause.getRawContent()).append(NEW_LINE);
 
       if (whereClause != null) {
-        modifiedUpdateStatement.append("\t").append(whereClause.getRawContent());
+        modifiedUpdateStatement.append(TAB).append(whereClause.getRawContent());
       }
     }
-
     return modifiedUpdateStatement.toString();
   }
 
-  private String modifyHdbprocedureUpdateFromWithJoinClauses(UpdateStatementDefinitionModel updateStatement,
-      FromClauseDefinitionModel fromClause,
+  private String modifyHdbprocedureUpdateFromWithJoinClauses(UpdateStatementDefinitionModel updateStatement, FromClauseDefinitionModel fromClause,
       List<JoinClauseDefinitionModel> joinClauses, UpdateSetClauseDefinitionModel updateSetClause, WhereClauseDefinitionModel whereClause) {
     StringBuilder modifiedUpdateStatement = new StringBuilder();
+    JoinClauseDefinitionModel joinClauseForUpdate = new JoinClauseDefinitionModel();
+    StringBuilder joinClausesRawContent = new StringBuilder();
 
     List<TableReferenceModel> fromClauseTableReferences = fromClause.getTableReferences();
     TableReferenceModel fromClauseTableReference = fromClauseTableReferences.get(0);
     String fromClauseTableName = fromClauseTableReference.getName();
     String fromClauseTableAlias = fromClauseTableReference.getAlias();
-
-    modifiedUpdateStatement.append("MERGE INTO ");
-
     String updatedTableName = updateStatement.getName();
 
-    JoinClauseDefinitionModel joinClauseForUpdate = new JoinClauseDefinitionModel();
-    StringBuilder joinClausesRawContent = new StringBuilder();
-
+    modifiedUpdateStatement.append(MERGE_INTO);
     if (updatedTableName.equals(fromClauseTableName) || updatedTableName.equals(fromClauseTableAlias)) {
-      modifiedUpdateStatement.append(fromClauseTableName).append(" ");
+      modifiedUpdateStatement.append(fromClauseTableName).append(SPACE);
 
       if (fromClauseTableAlias != null) {
-        modifiedUpdateStatement.append("AS ").append(fromClauseTableAlias).append("\n");
+        modifiedUpdateStatement.append(AS).append(fromClauseTableAlias).append(NEW_LINE);
       }
-
       joinClauseForUpdate = joinClauses.get(0);
       joinClauses.remove(joinClauseForUpdate);
 
       for (JoinClauseDefinitionModel joinClause : joinClauses) {
-          joinClausesRawContent.append("\t").append(joinClause.getRawContent()).append("\n");
+          joinClausesRawContent.append(TAB).append(joinClause.getRawContent()).append(NEW_LINE);
       }
-
-      modifiedUpdateStatement.append("\t").append("USING ");
-      modifiedUpdateStatement.append(joinClauseForUpdate.getName()).append(" ");
+      modifiedUpdateStatement.append(TAB).append(USING);
+      modifiedUpdateStatement.append(joinClauseForUpdate.getName()).append(SPACE);
 
       if (joinClauseForUpdate.getAlias() != null) {
-        modifiedUpdateStatement.append("AS ").append(joinClauseForUpdate.getAlias()).append("\n");
+        modifiedUpdateStatement.append(AS).append(joinClauseForUpdate.getAlias()).append(NEW_LINE);
       }
+      modifiedUpdateStatement.append(TAB).append(joinClausesRawContent);
 
-      modifiedUpdateStatement.append("\t").append(joinClausesRawContent);
-
-      modifiedUpdateStatement.append("\t").append(joinClauseForUpdate.getOnPart()).append("\n");
-
-      modifiedUpdateStatement.append("\t").append("WHEN MATCHED ");
-
-      if (whereClause != null) {
-        modifiedUpdateStatement.append("AND").append(whereClause.getRawContent().replaceFirst("(?i)WHERE", "")).append(" ");
-      }
-
-      modifiedUpdateStatement.append("THEN UPDATE").append("\n");
-      modifiedUpdateStatement.append("\t").append(updateSetClause.getRawContent());
     } else {
-
       for (JoinClauseDefinitionModel joinClause : joinClauses) {
         if (updatedTableName.equals(joinClause.getName()) || updatedTableName.equals(joinClause.getAlias())) {
           joinClauseForUpdate = joinClause;
         } else {
-          joinClausesRawContent.append("\t").append(joinClause.getRawContent());
+          joinClausesRawContent.append(TAB).append(joinClause.getRawContent());
         }
       }
-
-      modifiedUpdateStatement.append(joinClauseForUpdate.getName()).append(" ");
+      modifiedUpdateStatement.append(joinClauseForUpdate.getName()).append(SPACE);
 
       if (joinClauseForUpdate.getAlias() != null) {
-        modifiedUpdateStatement.append("AS ").append(joinClauseForUpdate.getAlias()).append("\n");
+        modifiedUpdateStatement.append(AS).append(joinClauseForUpdate.getAlias()).append(NEW_LINE);
       }
-
-      modifiedUpdateStatement.append("\t").append("USING ");
-      modifiedUpdateStatement.append(fromClauseTableName).append(" ");
+      modifiedUpdateStatement.append(TAB).append(USING);
+      modifiedUpdateStatement.append(fromClauseTableName).append(SPACE);
 
       if (fromClauseTableAlias != null) {
-        modifiedUpdateStatement.append("AS ").append(fromClauseTableAlias).append("\n");
+        modifiedUpdateStatement.append(AS).append(fromClauseTableAlias).append(NEW_LINE);
       }
-
-      modifiedUpdateStatement.append("\t").append(joinClausesRawContent).append("\n");
-
-      modifiedUpdateStatement.append("\t").append(joinClauseForUpdate.getOnPart()).append("\n");
-
-      modifiedUpdateStatement.append("\t").append("WHEN MATCHED ");
-
-      if (whereClause != null) {
-        modifiedUpdateStatement.append("AND").append(whereClause.getRawContent().replaceFirst("(?i)WHERE", "")).append(" ");
-      }
-
-      modifiedUpdateStatement.append("THEN UPDATE").append("\n");
-      modifiedUpdateStatement.append("\t").append(updateSetClause.getRawContent());
+      modifiedUpdateStatement.append(TAB).append(joinClausesRawContent).append(NEW_LINE);
     }
+    modifiedUpdateStatement.append(TAB).append(joinClauseForUpdate.getOnPart()).append(NEW_LINE);
+    modifiedUpdateStatement.append(TAB).append(WHEN_MATCHED);
 
+    if (whereClause != null) {
+      modifiedUpdateStatement.append(AND).append(whereClause.getRawContent().replaceFirst(CASE_INSENSITIVE_WHERE, "")).append(SPACE);
+    }
+    modifiedUpdateStatement.append(THEN_UPDATE).append(NEW_LINE);
+    modifiedUpdateStatement.append(TAB).append(updateSetClause.getRawContent());
     return modifiedUpdateStatement.toString();
   }
 }

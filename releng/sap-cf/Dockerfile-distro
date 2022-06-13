@@ -26,8 +26,6 @@ RUN apt-get update && \
     apt-get install wget git -y && \
     apt-get clean
 
-RUN wget --no-check-certificate https://www.dirigible.io/help/conf/tomcat-users.xml -P /usr/local/tomcat/conf/
-
 RUN wget https://repo1.maven.org/maven2/org/postgresql/postgresql/42.1.4/postgresql-42.1.4.jar -P /usr/local/tomcat/lib/
 RUN wget https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.8.12/ngdbc-2.8.12.jar -P /usr/local/tomcat/lib/
 
@@ -55,7 +53,7 @@ ENV JAVA_HOME=/usr/local/jdk
 ENV PATH $PATH:$JAVA_HOME/bin
 
 USER nonroot
-COPY --from=base --chown=nonroot:nonroot $CATALINA_HOME $CATALINA_HOME
+COPY --from=dependencies-base --chown=nonroot:nonroot $CATALINA_HOME $CATALINA_HOME
 WORKDIR $CATALINA_HOME
 
 COPY --from=dependencies-base $JAVA_HOME $JAVA_HOME

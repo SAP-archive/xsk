@@ -1,0 +1,47 @@
+{
+    "xsappname": "xsk-xsuaa",
+    "tenant-mode": "shared",
+    "scopes": [
+       {
+          "name": "$XSAPPNAME.Developer",
+          "description": "Developer scope"
+       },
+       {
+          "name": "$XSAPPNAME.Operator",
+          "description": "Operator scope"
+       }
+    ],
+    "role-templates": [
+       {
+          "name": "Developer",
+          "description": "Developer related roles",
+          "scope-references": [
+             "$XSAPPNAME.Developer"
+          ]
+       },
+       {
+          "name": "Operator",
+          "description": "Operator related roles",
+          "scope-references": [
+             "$XSAPPNAME.Operator"
+          ]
+       }
+    ],
+    "role-collections": [
+       {
+          "name": "XSK-CF-Developer",
+          "description": "XSK Developer",
+          "role-template-references": [
+             "$XSAPPNAME.Developer"
+          ]
+       },
+       {
+          "name": "XSK-CF-Operator",
+          "description": "XSK Operator",
+          "role-template-references": [
+             "$XSAPPNAME.Operator"
+          ]
+       }
+    ]
+ }
+ 

@@ -29,17 +29,14 @@ FROM xsk-${JDK_TYPE} AS dependencies-base
 
 COPY target/ROOT.war $CATALINA_HOME/webapps/
 
-RUN  apt-get update \
-  && apt-get install -y wget
+RUN apt-get update && \
+    apt-get install -y git wget && \
+    apt-get clean
 
 RUN wget https://repo1.maven.org/maven2/org/postgresql/postgresql/42.1.4/postgresql-42.1.4.jar -P /usr/local/tomcat/lib/
 RUN wget https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.8.12/ngdbc-2.8.12.jar -P /usr/local/tomcat/lib/
 
 ENV CATALINA_OPTS="--add-opens java.base/java.lang.reflect=ALL-UNNAMED"
-
-RUN apt-get update && \
-    apt-get install -y git && \
-    apt-get clean
 
 EXPOSE 8080
 

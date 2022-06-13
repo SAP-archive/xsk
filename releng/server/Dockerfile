@@ -53,12 +53,12 @@ ENV DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
 #ENV JPDA_TRANSPORT=dt_socket
 
 USER nonroot
-COPY --from=base --chown=nonroot:nonroot $CATALINA_HOME $CATALINA_HOME
+COPY --from=dependencies-base --chown=nonroot:nonroot $CATALINA_HOME $CATALINA_HOME
 WORKDIR $CATALINA_HOME
 
 COPY --from=dependencies-base $JAVA_HOME $JAVA_HOME
 COPY --from=dependencies-base /lib/x86_64-linux-gnu/libz.so.1 /lib/x86_64-linux-gnu/libz.so.1
-COPY --from=dependencies-base /bin/sh /bin/sh
+
 
 EXPOSE 8080 8081 8000
 

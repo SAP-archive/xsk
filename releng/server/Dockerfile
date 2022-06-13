@@ -58,7 +58,7 @@ WORKDIR $CATALINA_HOME
 
 COPY --from=dependencies-base $JAVA_HOME $JAVA_HOME
 COPY --from=dependencies-base /lib/x86_64-linux-gnu/libz.so.1 /lib/x86_64-linux-gnu/libz.so.1
-
+COPY --from=dependencies-base /bin/sh /bin/sh
 
 EXPOSE 8080 8081 8000
 

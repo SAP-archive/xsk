@@ -135,6 +135,10 @@
 					<groupId>org.eclipse.dirigible</groupId>
 					<artifactId>dirigible-api-facade-spark</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.eclipse.dirigible</groupId>
+					<artifactId>dirigible-ide-ui-branding</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 	</dependencies>

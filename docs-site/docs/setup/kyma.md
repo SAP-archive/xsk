@@ -415,13 +415,6 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
 
 2. Create an Destination service instance (optional)
 
-    === "with Kyma dashboard"
-        - From the Kyma dashboard, go to **Service Management** **&rarr;** **Catalog**.
-        - Find the `Destination` service.
-        - Create a new service instance.
-        - Bind the servce instance to the **`xsk`** application
-          - NOTE: For `Prefix for injected variables` make sure to specify `destination_`
-
     === "with kubectl"
 
          Copy and paste the following content into `destination.yaml`:

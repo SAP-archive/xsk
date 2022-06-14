@@ -1,0 +1,18 @@
+namespace gstr2;
+@Schema: 'ADMIN'
+context SelectDistinct {
+
+Entity employee {
+   		key USER_ID: String(255);
+  };
+
+Entity management {
+   		key MANAGER_ID: String(255);
+  };
+
+define view employee_view as
+  select from employee as e
+  left join management as m
+  ON e."USER_ID" = m."MANAGER_ID"
+  distinct  { e.USER_ID, m.MANAGER_ID};
+};

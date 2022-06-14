@@ -104,6 +104,8 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
                 envFrom:
                 - secretRef:
                     name: hana-cloud-database
+                - secretRef:
+                    name: xsuaa-xsk-binding
                 env:
                 - name: DIRIGIBLE_THEME_DEFAULT
                   value: fiori
@@ -175,6 +177,55 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
             host: xsk.<your-kyma-cluster-host>
             name: xsk
             port: 8080
+        ---
+        apiVersion: services.cloud.sap.com/v1
+        kind: ServiceInstance
+        metadata:
+          name: xsuaa-xsk
+        spec:
+          serviceOfferingName: xsuaa
+          servicePlanName: application
+          externalName: xsk-service-instance
+          parameters:
+            oauth2-configuration:
+              redirect-uris:
+                - 'https://xsk.<your-kyma-cluster-host>'
+              token-validity: 7200
+            role-collections:
+              - description: XSK Developer
+                name: XSK Developer
+                role-template-references:
+                  - $XSAPPNAME.Developer
+              - description: XSK Operator
+                name: XSK Operator
+                role-template-references:
+                  - $XSAPPNAME.Operator
+            role-templates:
+              - description: Developer related roles
+                name: Developer
+                scopeReferences:
+                  - $XSAPPNAME.Developer
+              - description: Operator related roles
+                name: Operator
+                scopeReferences:
+                  - $XSAPPNAME.Operator
+            scopes:
+              - description: Developer scope
+                name: $XSAPPNAME.Developer
+              - description: Operator scope
+                name: $XSAPPNAME.Operator
+            xsappname: test-xsk-xsuaa
+
+        ---
+        apiVersion: services.cloud.sap.com/v1
+        kind: ServiceBinding
+        metadata:
+          name: xsuaa-xsk-binding
+        spec:
+          serviceInstanceName: xsuaa-xsk
+          externalName: xsk-binding-external
+          secretName: xsuaa-xsk-binding
+          parameters: {}
         ```
 
     === "Deployment (Only)"
@@ -287,8 +338,64 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
             port: 8080
         ```
 
+    === "BTP Service Instance and Binding (Only)"
+
+        !!! info
+            Appling this service instance and binding will create `Service Instance`, `Binding` and `Secret` resoures only. To install XSK with single definition file, use the `All in One` section.
+
+        ```yaml
+        apiVersion: services.cloud.sap.com/v1
+        kind: ServiceInstance
+        metadata:
+          name: xsuaa-xsk
+        spec:
+          serviceOfferingName: xsuaa
+          servicePlanName: application
+          externalName: xsk-service-instance
+          parameters:
+            oauth2-configuration:
+              redirect-uris:
+                - 'https://xsk.<your-kyma-cluster-host>'
+              token-validity: 7200
+            role-collections:
+              - description: XSK Developer
+                name: XSK Developer
+                role-template-references:
+                  - $XSAPPNAME.Developer
+              - description: XSK Operator
+                name: XSK Operator
+                role-template-references:
+                  - $XSAPPNAME.Operator
+            role-templates:
+              - description: Developer related roles
+                name: Developer
+                scopeReferences:
+                  - $XSAPPNAME.Developer
+              - description: Operator related roles
+                name: Operator
+                scopeReferences:
+                  - $XSAPPNAME.Operator
+            scopes:
+              - description: Developer scope
+                name: $XSAPPNAME.Developer
+              - description: Operator scope
+                name: $XSAPPNAME.Operator
+            xsappname: test-xsk-xsuaa
+
+        ---
+        apiVersion: services.cloud.sap.com/v1
+        kind: ServiceBinding
+        metadata:
+          name: xsuaa-xsk-binding
+        spec:
+          serviceInstanceName: xsuaa-xsk
+          externalName: xsk-binding-external
+          secretName: xsuaa-xsk-binding
+          parameters: {}
+        ```
+
     !!! Note
-        - Copy the content into YAML file(s) _(e.g. `all.yaml`, `deployment.yaml` or `apirule.yaml`)_.
+        - Copy the content into YAML file(s) _(e.g. `all.yaml`, `deployment.yaml`, `apirule.yaml` or `serviceinstance.yaml`)_.
         - By default deployment strategy type is `Recreate` which will recreate deployment resources when you apply new changes.
         - Replace the placeholders:
             - `<your-kyma-cluster-host>` with your Kyma cluster host _(e.g. `c-xxx.kyma.xxx.ondemand.com`)_.
@@ -301,154 +408,12 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
 
     - Navigate to your Kyma dashboard and select the **`default`** namespace.
 
-    - Click the **Deploy new resource** button and select the `all.yaml`, `deployment.yaml` or `apirule.yaml` file(s).
+    - Click the **Upload YAML** button and select the `all.yaml`, `deployment.yaml` or `apirule.yaml` file(s) or paste the content.
 
         !!! info "Note"
             Alternatively, you can use the `kubectl apply -f <file-name>` to deploy the desired resources _(e.g. `all.yaml`, `deployment.yaml` or `apirule.yaml`)_.
 
-1. Create an XSUAA service instance:
-
-    === "with Kyma dashboard"
-        - From the Kyma dashboard, go to **Service Management** **&rarr;** **Catalog**.
-        - Find the `Authorization & Trust Management` service.
-        - Create a new service instance.
-        - Provide the following additional parameters:
-
-        ```json
-        {
-           "xsappname":"xsk-xsuaa",
-           "oauth2-configuration":{
-              "token-validity":7200,
-              "redirect-uris":[
-                 "https://xsk.<your-kyma-cluster-host>"
-              ]
-           },
-           "scopes":[
-              {
-                 "name":"$XSAPPNAME.Developer",
-                 "description":"Developer scope"
-              },
-              {
-                 "name":"$XSAPPNAME.Operator",
-                 "description":"Operator scope"
-              }
-           ],
-           "role-templates":[
-              {
-                 "name":"Developer",
-                 "description":"Developer related roles",
-                 "scope-references":[
-                    "$XSAPPNAME.Developer"
-                 ]
-              },
-              {
-                 "name":"Operator",
-                 "description":"Operator related roles",
-                 "scope-references":[
-                    "$XSAPPNAME.Operator"
-                 ]
-              }
-           ],
-           "role-collections":[
-              {
-                 "name":"XSK Developer",
-                 "description":"XSK Developer",
-                 "role-template-references":[
-                    "$XSAPPNAME.Developer"
-                 ]
-              },
-              {
-                 "name":"XSK Operator",
-                 "description":"XSK Operator",
-                 "role-template-references":[
-                    "$XSAPPNAME.Operator"
-                 ]
-              }
-           ]
-        }
-        ```
-
-         - Bind the servce instance to the **`xsk`** application.
-
-    === "with kubectl"
-
-         Copy and paste the following content into `xsuaa.yaml`:
-
-         ```yaml
-         apiVersion: servicecatalog.k8s.io/v1beta1
-         kind: ServiceInstance
-         metadata:
-           name: xsuaa-xsk
-           namespace: default
-         spec:
-           clusterServiceClassExternalName: xsuaa
-           clusterServiceClassRef:
-             name: xsuaa
-           clusterServicePlanExternalName: broker
-           parameters:
-             xsappname: xsk-xsuaa
-             oauth2-configuration:
-               redirect-uris:
-               - https://xsk.<your-kyma-host>
-               token-validity: 7200
-             role-collections:
-             - description: XSK Developer
-               name: XSK Developer
-               role-template-references:
-               - $XSAPPNAME.Developer
-             - description: XSK Operator
-               name: XSK Operator
-               role-template-references:
-               - $XSAPPNAME.Operator  
-             role-templates:
-             - description: Developer related roles
-               name: Developer
-               scope-references:
-               - $XSAPPNAME.Developer
-             - description: Operator related roles
-               name: Operator
-               scope-references:
-               - $XSAPPNAME.Operator
-             scopes:
-             - description: Developer scope
-               name: $XSAPPNAME.Developer
-             - description: Operator scope
-               name: $XSAPPNAME.Operator
-         ---
-         apiVersion: servicecatalog.k8s.io/v1beta1
-         kind: ServiceBinding
-         metadata:
-           name: xsuaa-xsk-binding
-           namespace: default
-         spec:
-           instanceRef:
-             name: xsuaa-xsk
-           parameters: {}
-           secretName: xsuaa-xsk-binding
-         ---
-         apiVersion: servicecatalog.kyma-project.io/v1alpha1
-         kind: ServiceBindingUsage
-         metadata:
-           name: xsuaa-xsk-usage
-           namespace: default
-         spec:
-           parameters:
-             envPrefix:
-               name: ""
-           serviceBindingRef:
-             name: xsuaa-xsk-binding
-           usedBy:
-             kind: deployment
-             name: xsk
-         ```
-
-        !!! info "Note"
-            Execute the following command to apply the XSUAA configuration: `kubectl apply -f xsuaa.yaml` or use the **Deploy new resource** functionality.
-
-    !!! Note
-            Replace the **`<your-kyma-cluster-host>`** placeholder with your Kyma cluster host (e.g. **`c-xxxxxxx.kyma.xxx.xxx.xxx.ondemand.com`**).
-
-1. Create an Destination service instance (optional)
+2. Create an Destination service instance (optional)
 
     === "with Kyma dashboard"
         - From the Kyma dashboard, go to **Service Management** **&rarr;** **Catalog**.
@@ -462,49 +427,33 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
          Copy and paste the following content into `destination.yaml`:
 
          ```yaml
-          apiVersion: servicecatalog.k8s.io/v1beta1
+          apiVersion: services.cloud.sap.com/v1
           kind: ServiceInstance
           metadata:
             name: destination-xsk
-            namespace: default
           spec:
-            clusterServiceClassExternalName: destination
-            clusterServiceClassRef:
-              name: destination
-            clusterServicePlanExternalName: lite
-            parameters: {}
+            serviceOfferingName: destination
+            servicePlanName: lite
+            externalName: destination
+            parameters:
+              envPrefix:
+                name: "destination_"                
           ---
-          apiVersion: servicecatalog.k8s.io/v1beta1
+          apiVersion: services.cloud.sap.com/v1
           kind: ServiceBinding
           metadata:
             name: destination-xsk-binding
-            namespace: default
           spec:
-            instanceRef:
-              name: destination-xsk
-            parameters: {}
+            serviceInstanceName: destination-xsk
+            externalName: destination-xsk-binding
             secretName: destination-xsk-binding
-          ---
-          apiVersion: servicecatalog.kyma-project.io/v1alpha1
-          kind: ServiceBindingUsage
-          metadata:
-            name: destination-xsk-usage
-            namespace: default
-          spec:
-            parameters:
-              envPrefix:
-                name: "destination_"
-            serviceBindingRef:
-              name: destination-xsk-binding
-            usedBy:
-              kind: deployment
-              name: xsk
+            parameters: {}
          ```
 
         !!! info "Note"
-            Execute the following command to apply the Destination configuration: `kubectl apply -f destination.yaml` or use the **Deploy new resource** functionality.
+            Execute the following command to apply the Destination configuration: `kubectl apply -f destination.yaml` or use the **Deploy new resource** functionality. You need to patch your deployment to use your destination `kubectl patch deployment xsk -p '{"spec": {"template": {"spec": {"containers": [{"name":"xsk", "envFrom": [{"secretRef":{"name":"destination-xsk-binding"}},{"secretRef":{"name":"xsuaa-xsk-binding"}},{"secretRef":{"name":"hana-cloud-database"}}] }] }}}}'` or 
 
-1. Assign the `Developer` and `Operator` roles.
+3. Assign the `Developer` and `Operator` roles.
 
     - Navigate to the SAP BTP Cockpit.
     - Log in to your subaccount.
@@ -514,7 +463,7 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
     - From the list of roles, select the `XSK Developer` and `XSK Operator` roles.
     - Choose **Assign Role Collection** to update the assigned role collections.
 
-1. Log in.
+4. Log in.
 
     - Go to `https://xsk.<your-kyma-cluster-host>` or navigate to **Configurations** **&rarr;** **APIRules** section from the Kyma dashboard.
 

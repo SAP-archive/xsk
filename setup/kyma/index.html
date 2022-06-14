@@ -2165,17 +2165,8 @@ sudo mv kubelogin /usr/bin/kubectl-oidc_login
 </li>
 <li>
 <p>Create an Destination service instance (optional)</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">with Kyma dashboard</label><label for="__tabbed_2_2">with kubectl</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">with kubectl</label></div>
 <div class="tabbed-content">
-<div class="tabbed-block">
-<ul>
-<li>From the Kyma dashboard, go to <strong>Service Management</strong> <strong>&rarr;</strong> <strong>Catalog</strong>.</li>
-<li>Find the <code>Destination</code> service.</li>
-<li>Create a new service instance.</li>
-<li>Bind the servce instance to the <strong><code>xsk</code></strong> application</li>
-<li>NOTE: For <code>Prefix for injected variables</code> make sure to specify <code>destination_</code></li>
-</ul>
-</div>
 <div class="tabbed-block">
 <p>Copy and paste the following content into <code>destination.yaml</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">services.cloud.sap.com/v1</span><span class="w"></span>

@@ -2193,7 +2193,7 @@ sudo mv kubelogin /usr/bin/kubectl-oidc_login
 </code></pre></div>
 <div class="admonition info">
 <p class="admonition-title">Note</p>
-<p>Execute the following command to apply the Destination configuration: <code>kubectl apply -f destination.yaml</code> or use the <strong>Deploy new resource</strong> functionality. You need to patch your deployment to use your destination <code>kubectl patch deployment xsk -p '{"spec": {"template": {"spec": {"containers": [{"name":"xsk", "envFrom": [{"secretRef":{"name":"destination-xsk-binding"}},{"secretRef":{"name":"xsuaa-xsk-binding"}},{"secretRef":{"name":"hana-cloud-database"}}] }] }}}}'</code> or </p>
+<p>Execute the following command to apply the Destination configuration: <code>kubectl apply -f destination.yaml</code> or use the <strong>Deploy new resource</strong> functionality. You need to patch your deployment to use your destination <code>kubectl patch deployment xsk -p '{"spec": {"template": {"spec": {"containers": [{"name":"xsk", "envFrom": [{"secretRef":{"name":"destination-xsk-binding"}},{"secretRef":{"name":"xsuaa-xsk-binding"}},{"secretRef":{"name":"hana-cloud-database"}}] }] }}}}'</code> </p>
 </div>
 </div>
 </div>

@@ -100,6 +100,12 @@
 			<artifactId>dirigible-sap-kyma-base</artifactId>
 			<version>${dirigible.version}</version>
 			<exclusions>
+				<!-- Temporary disables the Wiki engine-->
+				<exclusion>
+					<groupId>org.eclipse.dirigible</groupId>
+					<artifactId>dirigible-engine-wiki</artifactId>
+				</exclusion>
+
 				<exclusion>
 					<groupId>org.eclipse.dirigible</groupId>
 					<artifactId>dirigible-ext-elasticsearch</artifactId>

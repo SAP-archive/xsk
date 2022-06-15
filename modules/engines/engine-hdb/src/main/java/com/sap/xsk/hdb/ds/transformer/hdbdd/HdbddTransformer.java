@@ -12,7 +12,9 @@
 package com.sap.xsk.hdb.ds.transformer.hdbdd;
 
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableCalculatedColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableCommonColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintPrimaryKeyModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintUniqueModel;
@@ -78,17 +80,20 @@ public class HdbddTransformer {
     primaryKey.setName("PK_" + tableModel.getName());
     tableModel.getConstraints().setPrimaryKey(primaryKey);
 
+    List<XSKDataStructureHDBTableCalculatedColumnModel> calculatedColumns = new ArrayList<>();
     List<XSKDataStructureHDBTableColumnModel> tableColumns = new ArrayList<>();
-    entitySymbol.getElements().forEach(currentElement -> {
+    for(EntityElementSymbol currentElement: entitySymbol.getElements()) {
       if (currentElement.getType() instanceof StructuredDataTypeSymbol) {
         List<EntityElementSymbol> subElements = getStructuredTypeSubElements(currentElement);
         subElements.forEach(subE -> {
           tableColumns.add(transformFieldSymbolToColumnModel(subE, true));
         });
+      } else if(currentElement.isCalculatedColumn()) {
+        calculatedColumns.add(transformFieldSymbolToCalculatedColumnModel(currentElement));
       } else {
         tableColumns.add(transformFieldSymbolToColumnModel(currentElement, true));
       }
-    });
+    }
 
     entitySymbol.getAssociations().forEach(associationSymbol -> {
       List<XSKDataStructureHDBTableColumnModel> associationColumns = transformAssociationToColumnModels(associationSymbol);
@@ -128,6 +133,7 @@ public class HdbddTransformer {
     });
 
     tableModel.setColumns(tableColumns);
+    tableModel.setCalculatedColumns(calculatedColumns);
     tableModel.setLocation(location);
     if (entitySymbol.getAnnotation(CATALOG_ANNOTATION) != null) {
       String tableType = entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(CATALOG_OBJ_TABLE_TYPE).getValue();
@@ -377,6 +383,41 @@ public class HdbddTransformer {
     return columnModel;
   }
 
+  /**
+   * @param fieldSymbol: fieldSymbol
+   */
+  private XSKDataStructureHDBTableCalculatedColumnModel transformFieldSymbolToCalculatedColumnModel(FieldSymbol fieldSymbol) {
+    XSKDataStructureHDBTableCalculatedColumnModel calculatedColumnModel = new XSKDataStructureHDBTableCalculatedColumnModel();
+
+    calculatedColumnModel.setColumnName(fieldSymbol.getName());
+
+    if (fieldSymbol instanceof EntityElementSymbol) {
+      EntityElementSymbol elementSymbol = (EntityElementSymbol) fieldSymbol;
+      calculatedColumnModel.setStatement(elementSymbol.getStatement());
+    }
+
+    if (fieldSymbol.getType() instanceof BuiltInTypeSymbol) {
+      BuiltInTypeSymbol builtInTypeSymbol = (BuiltInTypeSymbol) fieldSymbol.getType();
+      if (builtInTypeSymbol.isHanaType()) {
+        setHanaType(calculatedColumnModel, builtInTypeSymbol);
+      } else {
+        setSqlType(calculatedColumnModel, builtInTypeSymbol);
+      }
+    } else if (fieldSymbol.getType() instanceof DataTypeSymbol) {
+      DataTypeSymbol dataType = (DataTypeSymbol) fieldSymbol.getType();
+      if (!(dataType.getType() instanceof StructuredDataTypeSymbol)) {
+        BuiltInTypeSymbol builtInType = (BuiltInTypeSymbol) dataType.getType();
+        setSqlType(calculatedColumnModel, builtInType);
+      } else {
+        StructuredDataTypeSymbol structuredDataTypeSymbol = (StructuredDataTypeSymbol) dataType.getType();
+        transformStructuredDataTypeToHdbTableType(structuredDataTypeSymbol);
+      }
+    }
+
+    return calculatedColumnModel;
+  }
+
+
   private List<XSKDataStructureHDBTableColumnModel> transformAssociationToColumnModels(AssociationSymbol associationSymbol) {
     List<XSKDataStructureHDBTableColumnModel> tableColumns = new ArrayList<>();
     associationSymbol.getForeignKeys().forEach(fk -> {
@@ -391,7 +432,7 @@ public class HdbddTransformer {
     return tableColumns;
   }
 
-  private void setSqlType(XSKDataStructureHDBTableColumnModel columnModel, BuiltInTypeSymbol builtInTypeSymbol) {
+  private void setSqlType(XSKDataStructureHDBTableCommonColumnModel columnModel, BuiltInTypeSymbol builtInTypeSymbol) {
     String typeName = builtInTypeSymbol.getName();
     CdsTypeEnum cdsTypeEnum = CdsTypeEnum.valueOf(typeName);
 
@@ -405,7 +446,7 @@ public class HdbddTransformer {
     columnModel.setType(cdsTypeEnum.getSqlType());
   }
 
-  private void setHanaType(XSKDataStructureHDBTableColumnModel columnModel, BuiltInTypeSymbol builtInTypeSymbol) {
+  private void setHanaType(XSKDataStructureHDBTableCommonColumnModel columnModel, BuiltInTypeSymbol builtInTypeSymbol) {
     String typeName = builtInTypeSymbol.getName();
     CdsHanaTypeEnum cdsHanaTypeEnum = CdsHanaTypeEnum.valueOf(typeName);
 

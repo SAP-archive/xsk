@@ -26,6 +26,8 @@ public class XSKDataStructureHDBTableModel extends XSKDataStructureModel {
 
   private List<XSKDataStructureHDBTableColumnModel> columns = new ArrayList<XSKDataStructureHDBTableColumnModel>();
 
+  private List<XSKDataStructureHDBTableCalculatedColumnModel> calculatedColumns = new ArrayList<XSKDataStructureHDBTableCalculatedColumnModel>();
+
   private XSKDataStructureHDBTableConstraintsModel constraints = new XSKDataStructureHDBTableConstraintsModel();
 
   private List<XSKDataStructureHDBTableIndexModel> indexes = new ArrayList<>();
@@ -50,6 +52,14 @@ public class XSKDataStructureHDBTableModel extends XSKDataStructureModel {
    */
   public void setColumns(List<XSKDataStructureHDBTableColumnModel> columns) {
     this.columns = columns;
+  }
+
+  public List<XSKDataStructureHDBTableCalculatedColumnModel> getCalculatedColumns() {
+    return calculatedColumns;
+  }
+
+  public void setCalculatedColumns(List<XSKDataStructureHDBTableCalculatedColumnModel> calculatedColumns) {
+    this.calculatedColumns = calculatedColumns;
   }
 
   /**

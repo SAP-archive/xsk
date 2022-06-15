@@ -655,4 +655,11 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     boolean hasNoUniqueIndices = ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getIndexes().get(0).isUnique();
     assertFalse("Expected value for catalog unique index to be false, but it is true", hasNoUniqueIndices);
   }
+
+  @Test
+  public void testParseHDBDDWithCalculatedColumns() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/CalculatedColumns.hdbdd", "");
+    //TODO assert calculatedColumnsArray
+    System.out.println(parsedModel);
+  }
 }

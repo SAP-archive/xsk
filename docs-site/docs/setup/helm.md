@@ -100,7 +100,7 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
     === "Kyma with custom roles"
 
         ```
-        helm install xsk xsk \            
+        helm install xsk xsk/xsk \            
         --set kyma.enabled=true \
         --set kyma.host=<kyma-apirule-host> \
         --set kyma.addRoles=true \

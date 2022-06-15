@@ -89,6 +89,12 @@
 			<artifactId>dirigible-server-all</artifactId>
 			<version>${dirigible.version}</version>
 			<exclusions>
+				<!-- Temporary disables the Wiki engine-->
+				<exclusion>
+					<groupId>org.eclipse.dirigible</groupId>
+					<artifactId>dirigible-engine-wiki</artifactId>
+				</exclusion>
+
 				<exclusion>
 					<groupId>org.eclipse.dirigible</groupId>
 					<artifactId>dirigible-ext-elasticsearch</artifactId>
@@ -128,6 +134,10 @@
 				<exclusion>
 					<groupId>org.eclipse.dirigible</groupId>
 					<artifactId>dirigible-api-facade-spark</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.eclipse.dirigible</groupId>
+					<artifactId>dirigible-ide-ui-branding</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>

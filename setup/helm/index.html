@@ -1761,7 +1761,7 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 <p>This will install additionally an <code>ApiRule</code>, XSUAA <code>ServiceInstance</code>, <code>ServiceBinding</code> with SAP BTP Service Operator and HANA instance. The appropriate roles should be assigned to the user.</p>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>helm install xsk xsk \            
+<div class="highlight"><pre><span></span><code>helm install xsk xsk/xsk \            
 --set kyma.enabled=true \
 --set kyma.host=&lt;kyma-apirule-host&gt; \
 --set kyma.addRoles=true \

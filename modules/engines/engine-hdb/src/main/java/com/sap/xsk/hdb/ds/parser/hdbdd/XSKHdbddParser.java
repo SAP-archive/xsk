@@ -84,15 +84,21 @@ public class XSKHdbddParser implements XSKDataStructureParser {
         this.symbolTable.clearSymbolsByFullName();
         this.symbolTable.clearEntityGraph();
         this.symbolTable.clearViewGraph();
-        throw new XSKDataStructuresException(e.getMessage());
+        throw new XSKDataStructuresException(e);
       }
     }
 
-    XSKDataStructureCdsModel cdsModel = populateXSKDataStructureCdsModel(parametersModel.getLocation(), parametersModel.getContent());
-    this.symbolTable.clearSymbolsByFullName();
-    this.symbolTable.clearEntityGraph();
-    this.symbolTable.clearViewGraph();
-    parsedNodes.clear();
+    XSKDataStructureCdsModel cdsModel;
+    try {
+      cdsModel = populateXSKDataStructureCdsModel(parametersModel.getLocation(), parametersModel.getContent());
+    } catch (CDSRuntimeException e) {
+      throw new XSKDataStructuresException("Failed to populate CDS model of file: " + parametersModel.getLocation(), e);
+    } finally {
+      this.symbolTable.clearSymbolsByFullName();
+      this.symbolTable.clearEntityGraph();
+      this.symbolTable.clearViewGraph();
+      parsedNodes.clear();
+    }
 
     return cdsModel;
   }

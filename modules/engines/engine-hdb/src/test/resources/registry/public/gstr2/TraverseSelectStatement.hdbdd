@@ -7,4 +7,13 @@ define view DistinctItemsFromFac as
   left join  "product" as P
   On C."ITEM_ID" = P."ITEM_ID"
   distinct  { F.ITEM_ID, H.ITEM_NAME};
+
+entity category {
+  ITEM_ID: String(32);
+}
+
+entity product {
+  ITEM_ID: String(32);
+}
+
 };

@@ -51,7 +51,7 @@ jobs:
         run: docker build -t dirigiblelabs/xsk-selenium-build /home/runner/work/xsk/xsk/releng/server/.
 
       - name: Docker Run XSK
-        run: docker run -d --name dirigible --rm -e JPDA_ADDRESS=0.0.0.0:8000 -e JPDA_TRANSPORT=dt_socket -p 8000:8000 -p 8080:8080 -p 8081:8081 -p 9229:9229 dirigiblelabs/xsk-selenium-build
+        run: docker run -d --name dirigible -p 8080:8080 dirigiblelabs/xsk-selenium-build
 
       # Wait for XSK to Startup
       - name: Wait XSK Startup

@@ -39,6 +39,7 @@ import java.nio.file.Paths;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,7 @@ public class MigrationITest {
   private WebBrowser webBrowser;
   private MigrationCredentials credentials;
   private Map<String, List<ExpectedContent>> expectedContentList;
+  private final Map<String, Boolean> contentComparisons = new HashMap<>();
 
   @Test
   @Parameters({"Chrome", "Firefox"})
@@ -65,6 +67,7 @@ public class MigrationITest {
     approveChanges();
     goToWorkspace();
     validateProjectFIles();
+    assertComparisonResultsTrue();
   }
 
   private void setup(String param) {
@@ -257,17 +260,19 @@ public class MigrationITest {
     var migratedImage = getImageFileContent(file.getFilePath(), imageTabIframe);
     var expectedFileContent = file.getContent();
 
-    System.out.println(
-        "[MigrationITest] Asserting image file equals: "
+    boolean comparisonResult = Arrays.equals(expectedFileContent, migratedImage);
+    contentComparisons.put(file.getFilePath(), comparisonResult);
+    if(!comparisonResult) {
+      System.out.println(
+              "\n"
+            + "[MigrationITest] Unexpected image file content! "
             + file.getFilePath()
             + "\n Expected Byte Length: \n"
             + expectedFileContent.length
             + "\n Actual Byte Length: \n"
-            + migratedImage.length
-    );
-
-    assertArrayEquals("Images after migration must match expected content",
-        expectedFileContent, migratedImage);
+            + migratedImage.length + "\n"
+      );
+    }
   }
 
   void assertMonacoTextFileEquals(WebElement monacoTabIframe, ExpectedContent file) {
@@ -276,17 +281,19 @@ public class MigrationITest {
     var expectedTextFile = new String(file.getContent(), StandardCharsets.UTF_8)
         .replaceAll("\\s", "");
 
-    System.out.println(
-        "[MigrationITest] Asserting text file equals: "
-            + file.getFilePath()
-            + "\n Expected: \n"
-            + expectedTextFile
-            + "\n Actual: \n"
-            + migratedTextFile
-    );
-
-    assertEquals("Text files after migration must match expected content ",
-        expectedTextFile, migratedTextFile);
+    boolean comparisonResult = expectedTextFile.equals(migratedTextFile);
+    contentComparisons.put(file.getFilePath(), comparisonResult);
+    if(!comparisonResult) {
+      System.out.println(
+            "\n"
+          + "[MigrationITest]  Unexpected text file content! "
+          + file.getFilePath()
+          + "\n Expected: \n"
+          + expectedTextFile
+          + "\n Actual: \n"
+          + migratedTextFile + "\n"
+      );
+    }
   }
 
   private byte[] getImageFileContent(String filePath, WebElement imageTabIframe) throws IOException {
@@ -338,6 +345,25 @@ public class MigrationITest {
     }
 
     return list.stream().anyMatch(x -> x.endsWith(endingWith));
+  }
+
+  private void assertComparisonResultsTrue() {
+    boolean finalResult = true;
+    for(var fileResult : contentComparisons.entrySet()) {
+      if(!fileResult.getValue()) {
+        finalResult = false;
+        System.out.println(
+            "SELENIUM CONTENT VALIDATION ERROR: '"
+            + fileResult.getKey()
+            + "' MIGRATED WITH WRONG CONTENT!");
+      }
+    }
+
+    if(finalResult) {
+      System.out.println("Selenium Migration was successful!");
+    } else {
+      throw new RuntimeException("Selenium Migration FAILED due to unexpected content!");
+    }
   }
 
   @After

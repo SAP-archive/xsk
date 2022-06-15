@@ -428,9 +428,7 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
             serviceOfferingName: destination
             servicePlanName: lite
             externalName: destination
-            parameters:
-              envPrefix:
-                name: "destination_"                
+            parameters: {}
           ---
           apiVersion: services.cloud.sap.com/v1
           kind: ServiceBinding
@@ -444,7 +442,7 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
          ```
 
         !!! info "Note"
-            Execute the following command to apply the Destination configuration: `kubectl apply -f destination.yaml` or use the **Deploy new resource** functionality. You need to patch your deployment to use your destination `kubectl patch deployment xsk -p '{"spec": {"template": {"spec": {"containers": [{"name":"xsk", "envFrom": [{"secretRef":{"name":"destination-xsk-binding"}},{"secretRef":{"name":"xsuaa-xsk-binding"}},{"secretRef":{"name":"hana-cloud-database"}}] }] }}}}'` 
+            Execute the following command to apply the Destination configuration: `kubectl apply -f destination.yaml` or use the **Deploy new resource** functionality. You need to patch your deployment to use your destination `kubectl patch deployment xsk -p '{"spec": {"template": {"spec": {"containers": [{"name":"xsk","envFrom": [{"prefix":"destination_","secretRef":{"name":"destination-xsk-binding"}},{"secretRef":{"name":"xsuaa-xsk-binding"}},{"secretRef":{"name":"hana-cloud-database"}}]}]}}}}'` 
 
 3. Assign the `Developer` and `Operator` roles.
 

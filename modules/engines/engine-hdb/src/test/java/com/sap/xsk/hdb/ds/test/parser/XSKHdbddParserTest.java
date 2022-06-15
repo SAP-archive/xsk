@@ -28,9 +28,11 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.test.module.HdbTestModule;
+import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.junit.Before;
 import org.junit.Test;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class XSKHdbddParserTest extends AbstractDirigibleTest {
@@ -48,7 +50,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
         () -> XSKDataStructureModelFactory.parseHdbdd("gstr2/ITC_EXPIRED_CONFIG.hdbdd", "")
     );
     assertEquals(
-        "Failed to parse file: gstr2/ITC_EXPIRED_CONFIG.hdbdd. Error at line: 6  - Before an entity element declaration only the 'key' keyword is allowed",
+        "com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException: Failed to parse file: gstr2/ITC_EXPIRED_CONFIG.hdbdd. Error at line: 6  - Before an entity element declaration only the 'key' keyword is allowed",
         exception.getMessage());
   }
 
@@ -59,7 +61,7 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
         () -> XSKDataStructureModelFactory.parseHdbdd("gstr2/ITC_EXPIRED_CONFIG1.hdbdd", "")
     );
     assertEquals(
-        "Wrong format of HDB HDBDD: [gstr2/ITC_EXPIRED_CONFIG1.hdbdd] during parsing. Ensure you are using the correct format for the correct compatibility version.",
+        "com.sap.xsk.exceptions.XSKArtifactParserException: Wrong format of HDB HDBDD: [gstr2/ITC_EXPIRED_CONFIG1.hdbdd] during parsing. Ensure you are using the correct format for the correct compatibility version.",
         exception.getMessage());
   }
 
@@ -473,8 +475,9 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
         XSKDataStructuresException.class,
         () -> XSKDataStructureModelFactory.parseHdbdd("gstr2/NoKeyAnnSample.hdbdd", "")
     );
+
     assertEquals(
-        "Failed to parse file: gstr2/NoKeyAnnSample.hdbdd. Error at line: 10 col: 1. Annotation nokey has been specified for entity with keys.",
+        "com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException: Failed to parse file: gstr2/NoKeyAnnSample.hdbdd. Error at line: 10 col: 1. Annotation nokey has been specified for entity with keys.",
         exception.getMessage());
   }
 
@@ -576,9 +579,73 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
   }
 
   @Test
+  public void testParseHDBDDWithNestedViewDefinition() throws Exception {
+    String expectedRawContent = org.apache.commons.io.IOUtils
+        .toString(XSKHdbddParserTest.class.getResourceAsStream("/expected-results/ViewDefinitionNested.sql"), StandardCharsets.UTF_8);
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/ViewDefinitionNested.hdbdd", "");
+    XSKDataStructureHDBViewModel viewModel = ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0);
+
+    assertEquals(expectedRawContent, viewModel.getRawContent().trim());
+  }
+
+  @Test
+  public void testParseHDBDDWithFuzzySearchIndex() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/FuzzySearchIndexEnabled.hdbdd", "");
+    assertFalse("Fuzzy search index is expected to be false, but it is true" ,((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getColumns().get(1).isFuzzySearchIndexEnabled());
+    assertTrue("Fuzzy search index is expected to be true, but it is false",((XSKDataStructureCdsModel) parsedModel).getTableModels().get(1).getColumns().get(1).isFuzzySearchIndexEnabled());
+  }
+
+  @Test
+  public void testParseHDBDDWithFuzzySearchIndexNewSyntax() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/FuzzySearchIndexEnabledNewSyntax.hdbdd", "");
+    assertTrue("Fuzzy search index (new syntax) is expected to be true, but it is false" ,((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getColumns().get(1).isFuzzySearchIndexEnabled());
+    assertFalse("Fuzzy search index (new syntax) is expected to be false, but it is true",((XSKDataStructureCdsModel) parsedModel).getTableModels().get(1).getColumns().get(1).isFuzzySearchIndexEnabled());
+  }
+
+  @Test
+  public void testParseHDBDDWithTraverseSelectStatement() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/TraverseSelectStatement.hdbdd", "");
+    assertEquals("gstr2::TraverseSelectStatement.category", ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0).getDependsOnTable().get(0));
+  }
+
+  @Test
+  public void testParseHDBDDWithTraverseSelectStatementDummyTable() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/TraverseSelectStatementDummyTable.hdbdd", "");
+    assertEquals("DUMMY", ((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0).getDependsOnTable().get(0));
+  }
+
+  @Test
+  public void testParseHDBDDWithSelectDistinct() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/SelectDistinct.hdbdd", "");
+    assertTrue("Expected SELECT DISTINCT, but it is not found",((XSKDataStructureCdsModel) parsedModel).getViewModels().get(0).getRawContent().contains("SELECT DISTINCT"));
+  }
+
+  @Test
+  public void testParseHDBDDWithSetSqlType() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/SetSqlType.hdbdd", "");
+    assertEquals("NVARCHAR",((XSKDataStructureCdsModel) parsedModel).getTableTypeModels().get(0).getColumns().get(0).getType());
+    assertEquals("DECIMAL",((XSKDataStructureCdsModel) parsedModel).getTableTypeModels().get(0).getColumns().get(1).getType());
+  }
+
+  @Test
+  public void testParseHDBDDWithSetHanaType() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/SetHanaType.hdbdd", "");
+    assertEquals("NVARCHAR",((XSKDataStructureCdsModel) parsedModel).getTableTypeModels().get(0).getColumns().get(0).getType());
+    assertEquals("SMALLINT",((XSKDataStructureCdsModel) parsedModel).getTableTypeModels().get(0).getColumns().get(1).getType());
+  }
+
+  @Test
+  public void testParseHDBDDWithStructuredDataTypeSymbol() throws Exception {
+    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory. parseHdbdd("gstr2/StructuredDataTypeSymbol.hdbdd", "");
+    assertEquals("gstr2::StructuredDataTypeSymbol.modifiedType",((XSKDataStructureCdsModel) parsedModel).getTableTypeModels().get(0).getName());
+    assertEquals("gstr2::StructuredDataTypeSymbol.newType",((XSKDataStructureCdsModel) parsedModel).getTableTypeModels().get(1).getName());
+  }
+  
+  @Test
   public void testParseHDBDDWithUniqueCatalogIndex() throws Exception {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/CatalogIndexUnique.hdbdd", "");
-    boolean hasUniqueIndices = ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getConstraints().getUniqueIndices().isEmpty();
+    boolean hasUniqueIndices = ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getConstraints().getUniqueIndices()
+        .isEmpty();
     assertFalse("Expected value for catalog unique index to be true, but it is false", hasUniqueIndices);
   }
 
@@ -588,5 +655,4 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     boolean hasNoUniqueIndices = ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getIndexes().get(0).isUnique();
     assertFalse("Expected value for catalog unique index to be false, but it is true", hasNoUniqueIndices);
   }
-
 }

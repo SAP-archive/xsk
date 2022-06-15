@@ -24,8 +24,6 @@ import org.junit.After;
 import org.junit.Test;
 
 import static com.xsk.integration.tests.migration.DirigibleConnectionProperties.LOCALHOST_URI;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
 
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
@@ -132,7 +130,7 @@ public class MigrationITest {
 
   private void goToWorkspace() {
     webBrowser.clickItem(By.xpath("//*[@ng-click=\"goToWorkspace()\"]"));
-    webBrowser.waitForPageWithTitle("Workspace | XSK WebIDE");
+    webBrowser.waitForPageWithTitle("Workbench | XSK");
     webBrowser.switchToDefaultContent();
     webBrowser.log();
   }
@@ -159,7 +157,7 @@ public class MigrationITest {
 
   private void switchToWorkspaceFrame() {
     webBrowser.switchToDefaultContent();
-    webBrowser.switchToIframe(By.xpath("//iframe[@src='../ide-workspace/workspace.html']"));
+    webBrowser.switchToIframe(By.xpath("//iframe[@src='../ide-projects/projects.html']"));
     webBrowser.waitForVisibilityOfElement(By.id("j1_1_anchor"));
   }
 
@@ -184,10 +182,23 @@ public class MigrationITest {
 
     // Open the file by clicking on the jstree node or via context menu.
     if (isNonTextEditorFile(file.getFilePath())) {
+      webBrowser.scrollIntoView(fileAnchor);
       webBrowser.contextClick(fileAnchor);
-      webBrowser.clickItem(By.xpath("//*[text()='Open with...']"));
-      webBrowser.clickItem(By.xpath("//*[text()='Code Editor']"));
+      webBrowser.switchToDefaultContent();
+
+      String openWithMenuItemXpath = "//*[text()='Open With']";
+      String codeEditorMenuItemXpath = "//*[text()='Code Editor']";
+
+      webBrowser.moveTo(By.xpath(openWithMenuItemXpath));
+      webBrowser.clickItem(By.xpath(openWithMenuItemXpath));
+
+      webBrowser.moveTo(By.xpath(codeEditorMenuItemXpath));
+      webBrowser.clickItem(By.xpath(codeEditorMenuItemXpath));
+
+      webBrowser.switchToIframe(By.xpath("//iframe[@src='../ide-projects/projects.html']"));
+      webBrowser.waitForVisibilityOfElement(By.id("j1_1_anchor"));
     } else {
+      webBrowser.scrollIntoView(fileAnchor);
       webBrowser.doubleClickItem(fileAnchor);
     }
   }

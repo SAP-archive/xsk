@@ -93,7 +93,11 @@ class WebBrowser {
   }
 
   void clickItem(By by) {
-    browserWait.until(ExpectedConditions.visibilityOfElementLocated(by)).click();
+    WebElement target = browser.findElement(by);
+    browserWait.until(ExpectedConditions.visibilityOf(target));
+    browserWait.until(ExpectedConditions.elementToBeClickable(target));
+    scrollIntoView(target);
+    target.click();
   }
 
   void doubleClickItem(WebElement element) {
@@ -118,8 +122,20 @@ class WebBrowser {
     browserWait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(iframe));
   }
 
+  void scrollIntoView(WebElement element) {
+    browserWait.until(ExpectedConditions.visibilityOf(element));
+    jsExecutor.executeScript("arguments[0].scrollIntoView();", element);
+  }
+
+  void moveTo(By by) {
+    browserWait.until(ExpectedConditions.visibilityOfElementLocated(by));
+    WebElement target = browser.findElement(by);
+    browserActions.moveToElement(target).perform();
+  }
+
   void enterAndAssertField(By by, String value) {
     var field = browser.findElement(by);
+    browserWait.until(ExpectedConditions.elementToBeClickable(field));
     browserActions.doubleClick(field).build().perform();
     field.sendKeys(value);
     assertEquals("Input field value doesn't match sent keys.",

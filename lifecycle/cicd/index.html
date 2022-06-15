@@ -1854,6 +1854,7 @@
 <span class="w">          </span><span class="no">echo &quot;KYMA_HOST=${KYMA_API_SERVER:12}&quot; &gt;&gt; $GITHUB_ENV</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Helm Upgrade Application Instance</span><span class="w"></span>
 <span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">          </span><span class="no">chmod go-r $HOME/.kube/config</span><span class="w"></span>
 <span class="w">          </span><span class="no">helm repo add xsk https://www.xsk.io</span><span class="w"></span>
 <span class="w">          </span><span class="no">helm repo update</span><span class="w"></span>
 <span class="w">          </span><span class="no">helm upgrade --install xsk xsk/xsk \</span><span class="w"></span>

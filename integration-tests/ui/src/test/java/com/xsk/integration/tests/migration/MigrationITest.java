@@ -24,8 +24,6 @@ import org.junit.After;
 import org.junit.Test;
 
 import static com.xsk.integration.tests.migration.DirigibleConnectionProperties.LOCALHOST_URI;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
 
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
@@ -39,6 +37,7 @@ import java.nio.file.Paths;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +51,7 @@ public class MigrationITest {
   private WebBrowser webBrowser;
   private MigrationCredentials credentials;
   private Map<String, List<ExpectedContent>> expectedContentList;
+  private final Map<String, Boolean> contentComparisons = new HashMap<>();
 
   @Test
   @Parameters({"Chrome", "Firefox"})
@@ -65,6 +65,7 @@ public class MigrationITest {
     approveChanges();
     goToWorkspace();
     validateProjectFIles();
+    assertComparisonResultsTrue();
   }
 
   private void setup(String param) {
@@ -124,12 +125,12 @@ public class MigrationITest {
 
   private void approveChanges() {
     webBrowser.log();
-    webBrowser.clickItem(By.xpath("//*[@ng-click=\"startMigration()\"]"));
+    webBrowser.clickItem(By.xpath("//*[@ng-click=\"continueMigration()\"]"));
   }
 
   private void goToWorkspace() {
     webBrowser.clickItem(By.xpath("//*[@ng-click=\"goToWorkspace()\"]"));
-    webBrowser.waitForPageWithTitle("Workspace | XSK WebIDE");
+    webBrowser.waitForPageWithTitle("Workbench | XSK");
     webBrowser.switchToDefaultContent();
     webBrowser.log();
   }
@@ -156,7 +157,7 @@ public class MigrationITest {
 
   private void switchToWorkspaceFrame() {
     webBrowser.switchToDefaultContent();
-    webBrowser.switchToIframe(By.xpath("//iframe[@src='../ide-workspace/workspace.html']"));
+    webBrowser.switchToIframe(By.xpath("//iframe[@src='../ide-projects/projects.html']"));
     webBrowser.waitForVisibilityOfElement(By.id("j1_1_anchor"));
   }
 
@@ -181,10 +182,23 @@ public class MigrationITest {
 
     // Open the file by clicking on the jstree node or via context menu.
     if (isNonTextEditorFile(file.getFilePath())) {
+      webBrowser.scrollIntoView(fileAnchor);
       webBrowser.contextClick(fileAnchor);
-      webBrowser.clickItem(By.xpath("//*[text()='Open with...']"));
-      webBrowser.clickItem(By.xpath("//*[text()='Code Editor']"));
+      webBrowser.switchToDefaultContent();
+
+      String openWithMenuItemXpath = "//*[text()='Open With']";
+      String codeEditorMenuItemXpath = "//*[text()='Code Editor']";
+
+      webBrowser.moveTo(By.xpath(openWithMenuItemXpath));
+      webBrowser.clickItem(By.xpath(openWithMenuItemXpath));
+
+      webBrowser.moveTo(By.xpath(codeEditorMenuItemXpath));
+      webBrowser.clickItem(By.xpath(codeEditorMenuItemXpath));
+
+      webBrowser.switchToIframe(By.xpath("//iframe[@src='../ide-projects/projects.html']"));
+      webBrowser.waitForVisibilityOfElement(By.id("j1_1_anchor"));
     } else {
+      webBrowser.scrollIntoView(fileAnchor);
       webBrowser.doubleClickItem(fileAnchor);
     }
   }
@@ -257,17 +271,19 @@ public class MigrationITest {
     var migratedImage = getImageFileContent(file.getFilePath(), imageTabIframe);
     var expectedFileContent = file.getContent();
 
-    System.out.println(
-        "[MigrationITest] Asserting image file equals: "
+    boolean comparisonResult = Arrays.equals(expectedFileContent, migratedImage);
+    contentComparisons.put(file.getFilePath(), comparisonResult);
+    if(!comparisonResult) {
+      System.out.println(
+              "\n"
+            + "[MigrationITest] Unexpected image file content! "
             + file.getFilePath()
             + "\n Expected Byte Length: \n"
             + expectedFileContent.length
             + "\n Actual Byte Length: \n"
-            + migratedImage.length
-    );
-
-    assertArrayEquals("Images after migration must match expected content",
-        expectedFileContent, migratedImage);
+            + migratedImage.length + "\n"
+      );
+    }
   }
 
   void assertMonacoTextFileEquals(WebElement monacoTabIframe, ExpectedContent file) {
@@ -276,17 +292,19 @@ public class MigrationITest {
     var expectedTextFile = new String(file.getContent(), StandardCharsets.UTF_8)
         .replaceAll("\\s", "");
 
-    System.out.println(
-        "[MigrationITest] Asserting text file equals: "
-            + file.getFilePath()
-            + "\n Expected: \n"
-            + expectedTextFile
-            + "\n Actual: \n"
-            + migratedTextFile
-    );
-
-    assertEquals("Text files after migration must match expected content ",
-        expectedTextFile, migratedTextFile);
+    boolean comparisonResult = expectedTextFile.equals(migratedTextFile);
+    contentComparisons.put(file.getFilePath(), comparisonResult);
+    if(!comparisonResult) {
+      System.out.println(
+            "\n"
+          + "[MigrationITest]  Unexpected text file content! "
+          + file.getFilePath()
+          + "\n Expected: \n"
+          + expectedTextFile
+          + "\n Actual: \n"
+          + migratedTextFile + "\n"
+      );
+    }
   }
 
   private byte[] getImageFileContent(String filePath, WebElement imageTabIframe) throws IOException {
@@ -338,6 +356,25 @@ public class MigrationITest {
     }
 
     return list.stream().anyMatch(x -> x.endsWith(endingWith));
+  }
+
+  private void assertComparisonResultsTrue() {
+    boolean finalResult = true;
+    for(var fileResult : contentComparisons.entrySet()) {
+      if(!fileResult.getValue()) {
+        finalResult = false;
+        System.out.println(
+            "SELENIUM CONTENT VALIDATION ERROR: '"
+            + fileResult.getKey()
+            + "' MIGRATED WITH WRONG CONTENT!");
+      }
+    }
+
+    if(finalResult) {
+      System.out.println("Selenium Migration was successful!");
+    } else {
+      throw new RuntimeException("Selenium Migration FAILED due to unexpected content!");
+    }
   }
 
   @After

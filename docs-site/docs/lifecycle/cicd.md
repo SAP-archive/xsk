@@ -193,6 +193,7 @@ The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeli
               echo "KYMA_HOST=${KYMA_API_SERVER:12}" >> $GITHUB_ENV
           - name: Helm Upgrade Application Instance
             run: |
+              chmod go-r $HOME/.kube/config
               helm repo add xsk https://www.xsk.io
               helm repo update
               helm upgrade --install xsk xsk/xsk \

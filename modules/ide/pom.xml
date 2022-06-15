@@ -21,6 +21,7 @@
         <module>ide-file-types</module>
         <module>ide-hdbti</module>
         <module>xsk-workspace-menu</module>
+        <module>xsk-ide-branding</module>
         <module>xsk-ide-xsjob</module>
         <module>xsk-ide-hdi</module>
         <module>xsk-ide-xsaccess</module>

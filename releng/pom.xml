@@ -15,7 +15,6 @@
 
 	<modules>
 		<module>buildpacks</module>
-		<module>developer</module>
 		<module>server</module>
 		<module>sap-cf</module>
 		<module>sap-kyma</module>

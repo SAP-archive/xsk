@@ -11,18 +11,14 @@
  */
 package com.sap.xsk.engine.api.test;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
@@ -31,13 +27,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.sap.cloud.sdk.cloudplatform.connectivity.DestinationAccessor;
 import com.sap.cloud.sdk.testutil.MockDestination;
 import com.sap.cloud.sdk.testutil.MockUtil;
+import com.sap.xsk.XSJSTest;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 import org.apache.cxf.helpers.IOUtils;
 import org.eclipse.dirigible.commons.api.context.ContextException;
 import org.eclipse.dirigible.commons.api.context.ThreadContextFacade;
 import org.eclipse.dirigible.commons.api.scripting.ScriptingException;
+import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.extensions.api.ExtensionsException;
 import org.eclipse.dirigible.core.extensions.api.IExtensionsCoreService;
@@ -49,114 +48,94 @@ import org.eclipse.dirigible.repository.api.IRepositoryStructure;
 import org.eclipse.dirigible.repository.api.RepositoryWriteException;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
 import com.sap.xsk.engine.XSKJavascriptEngineExecutor;
 
-public class XSKApiSuiteTest extends AbstractDirigibleTest {
-
-  private static final List<String> TEST_MODULES = new ArrayList<>();
+@RunWith(JUnitParamsRunner.class)
+public class XSKApiSuiteTest extends XSJSTest {
 
   private IExtensionsCoreService extensionsCoreService;
 
   private IRepository repository;
 
-  /**
-   * The rhino javascript engine executor.
-   */
   private XSKJavascriptEngineExecutor graaljsJavascriptEngineExecutor;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     this.extensionsCoreService = new ExtensionsCoreService();
     this.repository = (IRepository) StaticObjects.get(StaticObjects.REPOSITORY);
     this.graaljsJavascriptEngineExecutor = new XSKJavascriptEngineExecutor();
   }
 
-  @Before
-  public void registerModules()
-  {
-    // DB tests
-    TEST_MODULES.add("test/xsk/db/api/db.xsjs");
-    TEST_MODULES.add("test/xsk/db/api/connection.xsjs");
-    TEST_MODULES.add("test/xsk/db/api/parameter-metadata.xsjs");
-    TEST_MODULES.add("test/xsk/db/api/callable-statement.xsjs");
-    TEST_MODULES.add("test/xsk/db/api/prepared-statement.xsjs");
-    TEST_MODULES.add("test/xsk/db/api/result-set.xsjs");
-    TEST_MODULES.add("test/xsk/db/api/resultset-metadata.xsjs");
-
-    TEST_MODULES.add("test/xsk/response/response.xsjs");
-    TEST_MODULES.add("test/xsk/session/session.xsjs");
-    TEST_MODULES.add("test/xsk/trace/trace.xsjs");
-    TEST_MODULES.add("test/xsk/import/import.xsjs");
-    TEST_MODULES.add("test/xsk/util/util.xsjs");
-    TEST_MODULES.add("test/xsk/util/codec/codec.xsjs");
-    TEST_MODULES.add("test/xsk/http/http.xsjs");
-    TEST_MODULES.add("test/xsk/net/net.xsjs");
-
-    // HDB tests
-    TEST_MODULES.add("test/xsk/hdb/column-metadata.xsjs");
-    TEST_MODULES.add("test/xsk/hdb/connection-execute-query.xsjs");
-    TEST_MODULES.add("test/xsk/hdb/connection-execute-update.xsjs");
-    TEST_MODULES.add("test/xsk/hdb/result-set.xsjs");
-    TEST_MODULES.add("test/xsk/hdb/resultset-metadata.xsjs");
-  }
-
-  /**
-   * Runs suite.
-   *
-   * @throws RepositoryWriteException the repository write exception
-   * @throws IOException              Signals that an I/O exception has occurred.
-   * @throws ScriptingException       the scripting exception
-   * @throws ContextException         the context exception
-   * @throws ExtensionsException      the extensions exception
-   */
   @Test
-  public void runSuite()
-      throws RepositoryWriteException, IOException, ScriptingException, ContextException, ExtensionsException {
-    runSuite(this.graaljsJavascriptEngineExecutor, repository);
+  @Parameters({
+      "test/xsk/db/api/db.xsjs",
+      "test/xsk/db/api/connection.xsjs",
+      "test/xsk/db/api/parameter-metadata.xsjs",
+      "test/xsk/db/api/callable-statement.xsjs",
+      "test/xsk/db/api/prepared-statement.xsjs",
+      "test/xsk/db/api/result-set.xsjs",
+      "test/xsk/db/api/resultset-metadata.xsjs",
+      "test/xsk/response/response.xsjs",
+      "test/xsk/session/session.xsjs",
+      "test/xsk/trace/trace.xsjs",
+      "test/xsk/util/util.xsjs",
+      "test/xsk/util/codec/codec.xsjs",
+      "test/xsk/http/http.xsjs",
+      "test/xsk/net/net.xsjs",
+      "test/xsk/hdb/column-metadata.xsjs",
+      "test/xsk/hdb/connection-execute-query.xsjs",
+      "test/xsk/hdb/connection-execute-update.xsjs",
+      "test/xsk/hdb/result-set.xsjs",
+      "test/xsk/hdb/resultset-metadata.xsjs",
+  })
+  public void runXSKApiTest(String testModule) throws IOException, ContextException, ExtensionsException {
+    runXSKApiTest(graaljsJavascriptEngineExecutor, repository, testModule);
   }
 
-  private void runSuite(IJavascriptEngineExecutor executor, IRepository repository)
+  private void runXSKApiTest(IJavascriptEngineExecutor executor, IRepository repository, String testModule)
       throws RepositoryWriteException, IOException, ScriptingException, ContextException, ExtensionsException {
     mockDestination();
 
-    for (String testModule : TEST_MODULES) {
+    try {
+      HttpServletRequest mockedRequest = Mockito.mock(HttpServletRequest.class);
+      HttpServletResponse mockedResponse = Mockito.mock(HttpServletResponse.class);
+      HttpSession mockedSession = Mockito.mock(HttpSession.class);
+      mockRequest(mockedRequest, mockedSession);
+      mockResponse(mockedResponse);
+
+      ThreadContextFacade.setUp();
       try {
-        HttpServletRequest mockedRequest = Mockito.mock(HttpServletRequest.class);
-        HttpServletResponse mockedResponse = Mockito.mock(HttpServletResponse.class);
-        HttpSession mockedSession = Mockito.mock(HttpSession.class);
-        mockRequest(mockedRequest, mockedSession);
-        mockResponse(mockedResponse);
+        ThreadContextFacade.set(HttpServletRequest.class.getCanonicalName(), mockedRequest);
+        ThreadContextFacade.set(HttpServletResponse.class.getCanonicalName(), mockedResponse);
+        extensionsCoreService.createExtensionPoint("/test_extpoint1", "test_extpoint1", "Test");
+        extensionsCoreService.createExtension("/test_ext1", "/test_ext_module1", "test_extpoint1", "Test");
 
-        ThreadContextFacade.setUp();
-        try {
-          ThreadContextFacade.set(HttpServletRequest.class.getCanonicalName(), mockedRequest);
-          ThreadContextFacade.set(HttpServletResponse.class.getCanonicalName(), mockedResponse);
-          extensionsCoreService.createExtensionPoint("/test_extpoint1", "test_extpoint1", "Test");
-          extensionsCoreService.createExtension("/test_ext1", "/test_ext_module1", "test_extpoint1", "Test");
+        Object error = runTest(executor, repository, testModule);
 
-          Object error = runTest(executor, repository, testModule);
+        assertNull("API test failed: " + testModule, error);
 
-          assertNull("API test failed: " + testModule, error);
-
-        } finally {
-          extensionsCoreService.removeExtension("/test_ext1");
-          extensionsCoreService.removeExtensionPoint("/test_extpoint1");
-        }
       } finally {
-        ThreadContextFacade.tearDown();
+        extensionsCoreService.removeExtension("/test_ext1");
+        extensionsCoreService.removeExtensionPoint("/test_extpoint1");
       }
+    } finally {
+      ThreadContextFacade.tearDown();
     }
+
   }
 
   private void mockRequest(HttpServletRequest mockedRequest, HttpSession httpSession) {
     when(mockedRequest.getMethod()).thenReturn("GET");
     when(mockedRequest.getRemoteUser()).thenReturn("TestUser");
-    when(mockedRequest.getHeaderNames()).thenReturn(Collections.enumeration(Arrays.asList("TestHeader1", "TestHeader2", "Accept-Language")));
-    when(mockedRequest.getHeaders("TestHeader1")).thenReturn(Collections.enumeration(Arrays.asList("TestValue")));
-    when(mockedRequest.getHeaders("TestHeader2")).thenReturn(Collections.enumeration(Arrays.asList("TestValue")));
-    when(mockedRequest.getHeaders("Accept-Language")).thenReturn(Collections.enumeration(Arrays.asList("en-US,en;q=0.9,bg;q=0.8,nb;q=0.7")));
+    when(mockedRequest.getHeaderNames())
+        .thenReturn(Collections.enumeration(Arrays.asList("TestHeader1", "TestHeader2", "Accept-Language")));
+    when(mockedRequest.getHeaders("TestHeader1")).thenReturn(Collections.enumeration(Collections.singletonList("TestValue")));
+    when(mockedRequest.getHeaders("TestHeader2")).thenReturn(Collections.enumeration(Collections.singletonList("TestValue")));
+    when(mockedRequest.getHeaders("Accept-Language"))
+        .thenReturn(Collections.enumeration(Collections.singletonList("en-US,en;q=0.9,bg;q=0.8,nb;q=0.7")));
     when(mockedRequest.getCookies()).thenReturn(new Cookie[]{new Cookie("SESSIONID", "D7B319C3D55AC4CD126181F01E4C1DC7")});
     when(mockedRequest.getRequestURI()).thenReturn("/services/v4/xsk/test/test.xsjs");
     when(mockedRequest.getSession(true)).thenReturn(httpSession);
@@ -201,7 +180,7 @@ public class XSKApiSuiteTest extends AbstractDirigibleTest {
     mockUtil.mockDestination(destination);
   }
 
-  private class StubServletOutputStream extends ServletOutputStream {
+  private static class StubServletOutputStream extends ServletOutputStream {
 
     public void write(int i) {
       System.out.write(i);

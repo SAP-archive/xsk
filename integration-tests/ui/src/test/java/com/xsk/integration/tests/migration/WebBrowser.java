@@ -13,6 +13,8 @@ package com.xsk.integration.tests.migration;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -33,6 +35,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 
 class WebBrowser {
+
   private WebDriver browser;
   private WebDriverWait browserWait;
   private Actions browserActions;
@@ -74,7 +77,6 @@ class WebBrowser {
     FirefoxOptions options = new FirefoxOptions();
     options.setHeadless(isHeadless);
     options.addArguments("--height=1080", "--width=1920", "-private");
-
     setupBrowserCommon(new FirefoxDriver(options));
   }
 
@@ -83,6 +85,7 @@ class WebBrowser {
     browser.navigate().to(baseUrl);
     browser.manage().window().maximize();
     browser.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+    browser.manage().window().setSize(new Dimension(1920,1080));
 
     jsExecutor = (JavascriptExecutor) (browser);
     browserWait = new WebDriverWait(browser, Duration.ofSeconds(120));
@@ -91,6 +94,20 @@ class WebBrowser {
 
   void clickItem(By by) {
     browserWait.until(ExpectedConditions.visibilityOfElementLocated(by)).click();
+  }
+
+  void doubleClickItem(WebElement element) {
+    browserActions.doubleClick(element).perform();
+  }
+
+  void submitForm(By by) {
+    var found = findElementsBy(by);
+    if (found.size() == 1) {
+      found.get(0).submit();
+    } else {
+      throw new RuntimeException("Selenium test submitForm() error:"
+          + " Form not found or multiple forms with same locator.");
+    }
   }
 
   void switchToIframe(By by) {
@@ -103,6 +120,7 @@ class WebBrowser {
 
   void enterAndAssertField(By by, String value) {
     var field = browser.findElement(by);
+    browserActions.doubleClick(field).build().perform();
     field.sendKeys(value);
     assertEquals("Input field value doesn't match sent keys.",
         value, field.getAttribute("value"));
@@ -110,9 +128,13 @@ class WebBrowser {
 
   void selectAndAssertDropdown(String listName, Predicate<String> dropDownItemMatcher) {
     var dropdownList = browserWait.until(
-        ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@ng-repeat=\"option in " + listName + "\"]")));
+        ExpectedConditions.presenceOfAllElementsLocatedBy(
+            By.xpath("//*[@ng-repeat=\"option in " + listName + "\"]")
+        )
+    );
     WebElement dropdownButton = dropdownList.get(0).findElement(By.xpath("./../../button"));
     browserWait.until(ExpectedConditions.elementToBeClickable(dropdownButton)).click();
+
     var selection = dropdownList
         .stream()
         .filter((WebElement it) -> {
@@ -141,13 +163,51 @@ class WebBrowser {
     return (String) jsExecutor.executeScript(javascript);
   }
 
-  void doubleClickVisibleElementBy(By by) {
-    var anchor = browserWait.until(ExpectedConditions.visibilityOfElementLocated(by));
-    browserActions.doubleClick(anchor).perform();
+  List<WebElement> findAllVisibleWebElements(By by) {
+    return browserWait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(by));
+  }
+
+  void contextClick(WebElement element) {
+    browserActions.contextClick(element).perform();
   }
 
   List<WebElement> findElementsBy(By by) {
     return browser.findElements(by);
+  }
+
+  String retryJavascriptWithTimeout(String javascript, int timeoutMs, int retries) {
+    int intervalMs = timeoutMs / retries, initialRetries = retries;
+    do {
+      try {
+        System.out.println(
+            "[Selenium - Retry Javascript With Timeout] Running Attempt "
+            + (initialRetries - retries + 1) + " for call '" + javascript +"'"
+        );
+
+        String result = this.executeJavascript(javascript);
+
+        System.out.println(
+            "[Selenium - Retry Javascript With Timeout] Success at attempt "
+            + (initialRetries - retries + 1) + " for call '" + javascript + "'"
+        );
+
+        return result;
+      } catch(JavascriptException exception) {
+        System.out.println(
+            "[Selenium - Retry Javascript With Timeout] Attempt Failed "
+            + (initialRetries - retries + 1) + " for call '" + javascript
+            + "' sleeping for " + intervalMs + " ms."
+        );
+
+        retries--;
+        this.sleep(intervalMs);
+      }
+    } while(retries > 0);
+
+    throw new RuntimeException(
+        "Retry WebBrowser::JavascriptWithTimeout(String, int, int) failed after timeout was reached. "
+        + "Arguments were: \n javascript:" + javascript + "\n timeout: " + timeoutMs + "\n retries: " + initialRetries
+    );
   }
 
   void sleep(long millis) throws RuntimeException {

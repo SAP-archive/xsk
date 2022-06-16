@@ -9,9 +9,8 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-// Generated from com/sap/xsk/parser/hdbview/core/Hdbview.g4 by ANTLR 4.3
+// Generated from com/sap/xsk/parser/hdbview/core/Hdbview.g4 by ANTLR 4.10.1
 package com.sap.xsk.parser.hdbview.core;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -29,61 +28,54 @@ public class HdbviewBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitQueryProp(@NotNull HdbviewParser.QueryPropContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitHdbviewDefinition(HdbviewParser.HdbviewDefinitionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDependsOnProp(@NotNull HdbviewParser.DependsOnPropContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitProperty(HdbviewParser.PropertyContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitSchemaProp(@NotNull HdbviewParser.SchemaPropContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitSchemaProp(HdbviewParser.SchemaPropContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDependsOnView(@NotNull HdbviewParser.DependsOnViewContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitPublicProp(HdbviewParser.PublicPropContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitProperty(@NotNull HdbviewParser.PropertyContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitQueryProp(HdbviewParser.QueryPropContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitHdbviewDefinition(@NotNull HdbviewParser.HdbviewDefinitionContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitDependsOnProp(HdbviewParser.DependsOnPropContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPublicProp(@NotNull HdbviewParser.PublicPropContext ctx) { return visitChildren(ctx); }
-
+	@Override public T visitDependsOnTable(HdbviewParser.DependsOnTableContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDependsOnTable(@NotNull HdbviewParser.DependsOnTableContext ctx) { return visitChildren(ctx); }
+	@Override public T visitDependsOnView(HdbviewParser.DependsOnViewContext ctx) { return visitChildren(ctx); }
 }

@@ -1,0 +1,8 @@
+namespace gstr2;
+@Schema: 'ADMIN'
+context SetHanaType {
+  type newType {
+      number: hana.VARCHAR(12);
+      myPhone: hana.SMALLINT;
+  };
+};

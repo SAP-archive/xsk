@@ -28,4 +28,6 @@ class ExpectedContent {
   byte[] getContent() {
     return content;
   }
+
+  String getProject() { return filePath.split("/")[1]; }
 }

@@ -1,0 +1,12 @@
+# Buildpack API version
+api = "0.5"
+
+# Buildpack ID and metadata
+[buildpack]
+id = "dirigiblelabs/buildpacks-xsk-kyma-runtime"
+version = "#{XSKVersion}#"
+name = "XSK Kyma Buildpack"
+
+# Stacks that the buildpack will work with
+[[stacks]]
+id = "com.sap.kneo.xsk"

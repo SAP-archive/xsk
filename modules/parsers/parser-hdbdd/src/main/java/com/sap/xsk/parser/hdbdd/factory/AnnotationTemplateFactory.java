@@ -88,6 +88,8 @@ public class AnnotationTemplateFactory {
     searchIndexObj.setAllowedForSymbols(Collections.singletonList(EntityElementSymbol.class));
     AnnotationSimpleValue booleanValue = new AnnotationSimpleValue(CDSLiteralEnum.BOOLEAN.getLiteralType());
     searchIndexObj.define("enabled", booleanValue);
+    searchIndexObj.define("fuzzy", new AnnotationObj());
+    searchIndexObj.define("text", new AnnotationObj());
 
     return searchIndexObj;
   }

@@ -3,21 +3,23 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
+  <parent>
 		<groupId>com.sap.xsk</groupId>
 		<artifactId>xsk-parent</artifactId>
-		<version>0.16.0-SNAPSHOT</version>
+		<version>0.18.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>XSK - Integration Tests - Parent</name>
 	<artifactId>xsk-integration-tests-parent</artifactId>
-	<version>0.16.0-SNAPSHOT</version>
+	<version>0.18.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
 		<module>engine-hdb</module>
 		<module>ui</module>
+    <module>applications</module>
+    <module>integration-tests-core</module>
   </modules>
 
 	<properties>

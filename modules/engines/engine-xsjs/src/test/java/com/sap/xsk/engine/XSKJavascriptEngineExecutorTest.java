@@ -11,7 +11,9 @@
  */
 package com.sap.xsk.engine;
 
+import com.sap.xsk.XSJSTest;
 import org.apache.commons.io.IOUtils;
+import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.eclipse.dirigible.repository.api.IRepository;
@@ -23,7 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class XSKJavascriptEngineExecutorTest extends AbstractDirigibleTest {
+public class XSKJavascriptEngineExecutorTest extends XSJSTest {
 
   @Before
   public void setup() {

@@ -30,6 +30,7 @@ jobs:
           architecture: x64
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
+        if: ${{ env.SONAR_TOKEN != '' }}
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
@@ -38,7 +39,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn clean install -B sonar:sonar -Dsonar.projectKey=SAP_xsk
+        run: |
+          [ "$SONAR_TOKEN" ] && SONAR_ARG="-B sonar:sonar -Dsonar.projectKey=SAP_xsk"
+          mvn clean install $SONAR_ARG
       - name: Docker Build XSK
         run: |
           cd releng/server
@@ -56,6 +59,13 @@ jobs:
           cd releng/sap-kyma
           cp -r "${JAVA_HOME}" jdk
           docker build -t dirigiblelabs/xsk-kyma --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
+          cd ../../
+      - name: Push XSK for SAP Kyma Runtime
+        run: |
+          cd releng/sap-kyma-runtime
+          docker build -t dirigiblelabs/xsk-kyma-runtime-base -f Dockerfile-base .
+          docker build -t dirigiblelabs/xsk-kyma-runtime .
+          docker build -t dirigiblelabs/xsk-kyma-runtime-distro -f Dockerfile-distro .
           cd ../../
       - uses: buildpacks/github-actions/setup-pack@v4.1.0
       - name: XSK Buildpack
@@ -79,6 +89,17 @@ jobs:
           find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/latest/g'' {} \;
           pack buildpack package dirigiblelabs/buildpacks-xsk-kyma --config ./package.toml
           pack builder create dirigiblelabs/buildpacks-builder-xsk-kyma --config ./builder.toml
+          cd ../../../../
+      - name: XSK Kyma Runtime Buildpack
+        run: |
+          cd releng/buildpacks/xsk-kyma-runtime/
+          docker build -t dirigiblelabs/buildpacks-stack-base-xsk-kyma-runtime . --target base
+          docker build -t dirigiblelabs/buildpacks-stack-run-xsk-kyma-runtime . --target run
+          docker build -t dirigiblelabs/buildpacks-stack-build-xsk-kyma-runtime . --target build
+          cd buildpack/
+          find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/latest/g'' {} \;
+          pack buildpack package dirigiblelabs/buildpacks-xsk-kyma-runtime --config ./package.toml
+          pack builder create dirigiblelabs/buildpacks-builder-xsk-kyma-runtime --config ./builder.toml
           cd ../../../../
       - name: XSK Cloud Foundry Buildpack
         run: |

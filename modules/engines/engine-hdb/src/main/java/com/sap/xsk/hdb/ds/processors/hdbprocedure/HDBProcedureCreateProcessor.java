@@ -48,7 +48,7 @@ public class HDBProcedureCreateProcessor extends AbstractXSKProcessor<XSKDataStr
         applyArtefactState(hdbProcedure.getName(), hdbProcedure.getLocation(), PROCEDURE_ARTEFACT, ArtefactState.FAILED_CREATE, errorMessage);
         throw new IllegalStateException(errorMessage);
       } else {
-        String sql = XSKConstants.XSK_HDBPROCEDURE_CREATE + hdbProcedure.getContent();
+        String sql = XSKConstants.XSK_HDBPROCEDURE_CREATE + hdbProcedure.getRawContent();
         try {
           String message = String.format("Create procedure %s successfully", hdbProcedure.getName());
           executeSql(sql, connection);

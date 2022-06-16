@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="page">
+
+  <head>
+    <title>.XSACCESS form-based editor</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" sizes="any" href="data:;base64,iVBORw0KGgo=" />
+
+    <link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css" />
+
+    <!-- Custom IDE Styles -->
+    <link type="text/css" rel="stylesheet" href="/services/v4/js/theme/resources.js/ide.css" />
+
+    <script type="text/javascript" src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/webjars/angularjs/1.8.2/angular.min.js"></script>
+    <script type="text/javascript" src="/webjars/angularjs/1.8.2/angular-resource.min.js"></script>
+    <script type="text/javascript" src="/services/v4/web/ide-core/ui/message-hub.js"></script>
+  </head>
+
+  <body ng-controller="PageController">
+    <div class="container">
+      <div class="page-header">
+        <h1>XS Access Description: {{file}}</h1>
+      </div>
+      <form>
+        <div class="form-group page-header">
+          <h2>Exposed</h2>
+          <div>
+            <input type="radio" class="form-group" ng-model="data.exposed" ng-value="false"
+              id="dataExposedFalseRadioInput" />
+            <label for=" dataExposedFalseRadioInput"> false</label>
+            <input type="radio" class="form-group" ng-model="data.exposed" ng-value="true"
+              id="dataExposedTrueRadioInput" />
+            <label for="dataExposedTrueRadioInput"> true</label>
+          </div>
+        </div>
+        <div class="form-group page-header">
+          <h2>Authentication method</h2>
+          <input type="text" class="form-control" placeholder="Default value: Form"
+            ng-model="data.authentication.method" />
+        </div>
+
+        <div class="form-group page-header">
+          <h2>Authorization</h2>
+          <div class="form-group" ng-repeat="auth in data.authorization track by $index">
+            <div class="row">
+              <div class="col-sm-11">
+                <input type="text" class="form-control input col-sm-11" ng-model="data.authorization[$index]" />
+              </div>
+              <div class="col-sm-1">
+                <em class="close fa fa-2x fa-remove pull-right col-sm-1"
+                  ng-click="deleteInList('authorization', $index)"></em>
+              </div>
+            </div>
+          </div>
+          <button type="button" ng-click="addInList('authorization', '')" class="btn btn-lg">
+            <em class="fa fa-plus" aria-hidden="false"> Add authorization level</em>
+          </button>
+        </div>
+
+        <div class="form-group page-header">
+          <h2>Anonymous connection</h2>
+          <div>
+            <input type="radio" class="form-group" ng-model="anonymousConnectionAllowed" ng-value="false"
+              id="anonymousConnectionDisabledRadioInput" />
+            <label for="anonymousConnectionDisabledRadioInput"> disabled</label>
+            <input type="radio" class="form-group" ng-model="anonymousConnectionAllowed" ng-value="true"
+              id="anonymousConnectionEnabledRadioInput" />
+            <label for="anonymousConnectionEnabledRadioInput"> enabled (be carefull!)</label>
+          </div>
+          <input type="text" class="form-control" ng-show="anonymousConnectionAllowed"
+            placeholder="Example: sap.hana.sqlcon::AnonConn" ng-model=" data.anonymous_connection" />
+        </div>
+
+        <div class="form-group page-header">
+          <h2>Default connection</h2>
+          <input type="text" class="form-control" placeholder="" ng-model="data.default_connection" />
+        </div>
+
+        <div class="form-group page-header">
+          <h2>Cache control</h2>
+          <input type="text" class="form-control" placeholder="" ng-model="data.cache_control" />
+        </div>
+
+        <div class="form-group page-header">
+          <h2>CORS</h2>
+          <div>
+            <input type="radio" class="form-group" ng-model="data.cors.enabled" ng-value="false"
+              id="corsDisabledRadioInput" />
+            <label for="corsDisabledRadioInput"> disabled</label>
+            <input type="radio" class="form-group" ng-model="data.cors.enabled" ng-value="true"
+              id="corsEnabledRadioInput" />
+            <label for="corsEnabledRadioInput"> enabled</label>
+          </div>
+          <div ng-show="data.cors.enabled">
+            <div class="row">
+              <label>Allowed methods</label>
+            </div>
+            <div class="row">
+              <span ng-repeat="method in allAllowedMethods" style="padding-right: 15px">
+                <input type="checkbox" ng-click="triggerCorsMethod(method)" value="{{method}}"
+                  ng-checked="data.cors.allowMethods.includes(method)" id="corsMethod{{method}}" />
+                <label for="corsMethod{{method}}">{{method}}</label>
+              </span>
+            </div>
+
+            <div class="row">
+              <label>Allowed origin</label>
+            </div>
+            <div ng-repeat="origin in data.cors.allowOrigin track by $index" class="form-group">
+              <div class="row">
+                <div class="col-sm-11">
+                  <input type="text" class="form-control input col-sm-11" ng-model="data.cors.allowOrigin[$index]" />
+                </div>
+                <div class="col-sm-1">
+                  <em class="close fa fa-2x fa-remove pull-right col-sm-1"
+                    ng-click="deleteInList('cors.allowOrigin', $index)"></em>
+                </div>
+              </div>
+            </div>
+            <button type="button" ng-click="addInList('cors.allowOrigin', '')" class="btn btn-lg">
+              <em class="fa fa-plus" aria-hidden="false"> Add allowed origin</em>
+            </button>
+
+            <div class="row">
+              <label>Max age in seconds</label>
+            </div>
+            <div class="row">
+              <input type="text" class="form-control" ng-model="data.cors.maxAge" placeholder="Default value: 3600" />
+            </div>
+
+            <div class="row">
+              <label>Allowed headers</label>
+            </div>
+            <div ng-repeat="header in data.cors.allowHeaders track by $index" class="form-group">
+              <div class="row">
+                <div class="col-sm-11">
+                  <input type="text" class="form-control input col-sm-11" ng-model="data.cors.allowHeaders[$index]" />
+                </div>
+                <div class="col-sm-1">
+                  <em class="close fa fa-2x fa-remove pull-right col-sm-1"
+                    ng-click="deleteInList('cors.allowHeaders', $index)"></em>
+                </div>
+              </div>
+            </div>
+            <button type="button" ng-click="addInList('cors.allowHeaders', '')" class="btn btn-lg">
+              <em class="fa fa-plus" aria-hidden="false"> Add allowed header</em>
+            </button>
+
+            <div class="row">
+              <label>Exposed headers</label>
+            </div>
+            <div ng-repeat="exposed in data.cors.exposeHeaders track by $index" class="form-group">
+              <div class="row">
+                <div class="col-sm-11">
+                  <input type="text" class="form-control input col-sm-11" ng-model="data.cors.exposeHeaders[$index]" />
+                </div>
+                <div class="col-sm-1">
+                  <em class="close fa fa-2x fa-remove pull-right col-sm-1"
+                    ng-click="deleteInList('cors.exposeHeaders', $index)"></em>
+                </div>
+              </div>
+            </div>
+            <button type="button" ng-click="addInList('cors.exposeHeaders', '')" class="btn btn-lg">
+              <em class="fa fa-plus" aria-hidden="false"> Add exposed header</em>
+            </button>
+          </div>
+        </div>
+
+        <div class="row page-header">
+          <h2>Default file</h2>
+
+          <input type="text" class="form-control" ng-model="data.default_file"
+            placeholder="index.html will be used if no value is set" />
+        </div>
+
+        <div class="form-group page-header">
+          <h2>Entity tags (etags)</h2>
+          <div>
+            <input type="radio" class="form-group" ng-model="data.enable_etags" ng-value="false"
+              id="etagsDisabledRadioInput" />
+            <label for="etagsDisabledRadioInput"> disabled</label>
+            <input type="radio" class="form-group" ng-model="data.enable_etags" ng-value="true"
+              id="etagsEnabledRadioInput" />
+            <label for="etagsEnabledRadioInput"> enabled</label>
+          </div>
+        </div>
+
+        <div class="form-group page-header">
+          <h2>Forse SSL</h2>
+          <div>
+            <input type="radio" class="form-group" ng-model="data.force_ssl" ng-value="false"
+              id="forceSSLDisabledRadioInput" />
+            <label for="forceSSLDisabledRadioInput"> disabled</label>
+            <input type="radio" class="form-group" ng-model="data.force_ssl" ng-value="true"
+              id="forceSSLEnabledRadioInput" />
+            <label for="forceSSLEnabledRadioInput"> enabled</label>
+          </div>
+        </div>
+
+        <div class="form-group page-header">
+          <h2>MIME Types Mapping</h2>
+          <div ng-repeat="mapping in data.mime_mapping track by $index" class="form-group">
+            <div class="row">
+              <div class="col-sm-1">Extension:</div>
+              <div class="col-sm-4">
+                <input type="text" class="form-control input col-sm-11"
+                  ng-model="data.mime_mapping[$index].extension" />
+              </div>
+              <div class="col-sm-1">MIME type:</div>
+              <div class="col-sm-5">
+                <input type="text" class="form-control input col-sm-11" ng-model="data.mime_mapping[$index].mimetype" />
+              </div>
+              <div class="col-sm-1">
+                <em class="close fa fa-2x fa-remove pull-right col-sm-1"
+                  ng-click="deleteInList('mime_mapping', $index)"></em>
+              </div>
+            </div>
+          </div>
+          <button type="button" ng-click="addInList('mime_mapping', {extension: '', mimetype: ''})" class="btn btn-lg">
+            <em class="fa fa-plus" aria-hidden="false"> Add MIME type mapping</em>
+          </button>
+        </div>
+
+        <div class="form-group page-header">
+          <h2>Cross-site request-forgery (XSRF) attacks protection</h2>
+          <div>
+            <input type="radio" class="form-group" ng-model="data.prevent_xsrf" ng-value="false"
+              id="xsrfProtectionDisabledRadioInput" />
+            <label for="xsrfProtectionDisabledRadioInput"> disabled</label>
+            <input type="radio" class="form-group" ng-model="data.prevent_xsrf" ng-value="true"
+              id="xsrfProtectionEnabledRadioInput" />
+            <label for="xsrfProtectionEnabledRadioInput"> enabled</label>
+          </div>
+        </div>
+
+        <div class="form-group page-header">
+          <h2>Rewrite rules</h2>
+          <div ng-repeat="ruses in data.rewrite_rules track by $index" class="form-group">
+            <div class="row">
+              <div class="col-sm-1">Source:</div>
+              <div class="col-sm-4">
+                <input type="text" class="form-control input col-sm-11" ng-model="data.rewrite_rules[$index].source" />
+              </div>
+              <div class="col-sm-1">Target:</div>
+              <div class="col-sm-5">
+                <input type="text" class="form-control input col-sm-11" ng-model="data.rewrite_rules[$index].target" />
+              </div>
+              <div class="col-sm-1">
+                <em class="close fa fa-2x fa-remove pull-right col-sm-1"
+                  ng-click="deleteInList('rewrite_rules', $index)"></em>
+              </div>
+            </div>
+          </div>
+          <button type="button" ng-click="addInList('rewrite_rules', {source: '', target: ''})" class="btn btn-lg">
+            <em class="fa fa-plus" aria-hidden="false"> Add rewrite rule</em>
+          </button>
+        </div>
+
+        <div class="form-group page-header">
+          <h2>Support for the X-Frame-Options HTTP header field</h2>
+          <div>
+            <input type="radio" class="form-group" ng-model="data.headers.enabled" ng-value="false"
+              id="xFrameHeaderDisabledInputRadio" />
+            <label for="xFrameHeaderDisabledInputRadio"> disabled</label>
+            <input type="radio" class="form-group" ng-model="data.headers.enabled" ng-value="true"
+              id="xFrameHeaderEnabledInputRadio" />
+            <label for="xFrameHeaderEnabledInputRadio"> enabled</label>
+          </div>
+          <div ng-show="data.headers.enabled">
+            <div class="row">
+              <label>Custom headers</label>
+            </div>
+            <div ng-repeat="customheaders in data.headers.customHeaders track by $index" class="form-group">
+              <div class="row">
+                <div class="col-sm-1">Name:</div>
+                <div class="col-sm-3">
+                  <input type="text" class="form-control input col-sm-11"
+                    ng-model="data.headers.customHeaders[$index].name" />
+                </div>
+                <div class="col-sm-1">Value:</div>
+                <div class="col-sm-3">
+                  <input type="radio" class="form-group" ng-model="data.headers.customHeaders[$index].thevalue"
+                    value="DENY" id="customHeadersDeny{{$index}}" />
+                  <label for="customHeadersDeny{{$index}}"> DENY</label>
+
+                  <input type="radio" class="form-group" ng-model="data.headers.customHeaders[$index].thevalue"
+                    value="SAMEORIGIN" id="customHeadersSameOrigin{{$index}}" />
+                  <label for="customHeadersSameOrigin{{$index}}"> SAMEORIGIN</label>
+
+                  <input type="radio" class="form-group" ng-model="data.headers.customHeaders[$index].thevalue"
+                    value="ALLOW-FROM" id="customHeadersAllow{{$index}}" />
+                  <label for="customHeadersAllow{{$index}}"> ALLOW-FROM</label>
+                </div>
+                <div class="col-sm-1">
+                  <span ng-show="data.headers.customHeaders[$index].thevalue == 'ALLOW-FROM'">URL:</span>
+                </div>
+                <div class="col-sm-2">
+                  <span ng-show="data.headers.customHeaders[$index].thevalue == 'ALLOW-FROM'">
+                    <input type="text" class="form-control input col-sm-11"
+                      ng-model="data.headers.customHeaders[$index].url" /></span>
+                </div>
+                <div class="col-sm-1">
+                  <em class="close fa fa-2x fa-remove pull-right col-sm-1"
+                    ng-click="deleteInList('headers.customHeaders', $index)"></em>
+                </div>
+              </div>
+            </div>
+            <button type="button"
+              ng-click="addInList('headers.customHeaders', {name: '', value: 'SAMEORIGIN', thevalue: 'SAMEORIGIN', url: ''})"
+              class="btn btn-lg">
+              <em class="fa fa-plus" aria-hidden="false"> Add header</em>
+            </button>
+          </div>
+        </div>
+
+        <div class="row page-footer">
+          <p>
+            <button type="button" class="btn btn-secondary mr-2 mb-5" ng-click="previewJson()" ng-show="true"
+              data-toggle="modal" data-target="#previewJSON">
+              Preview JSON
+            </button>
+            <button type="button" class="btn btn-primary mb-5" ng-click="save()">Save</button>
+          </p>
+        </div>
+      </form>
+    </div>
+
+    <div class="dirigible-modal modal fade" id="previewJSON" tabindex="-1" role="dialog"
+      aria-labelledby="previewJSONlabel" aria-hidden="false">
+      <div class="modal-header">
+        <h4>Preview of {{file}}</h4>
+        <label class="col-xs-3 col-form-label">Preview is based on settings currently selected, not on saved in file
+          JSON content!</label>
+        <button class="btn btn-default pull-right" data-dismiss="modal">Close preview</button>
+      </div>
+      <div class="modal-body">
+        <pre>
+        {{formToJSON}}
+        </pre>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">Close preview</button>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="editor.js"></script>
+  </body>
+
+</html>

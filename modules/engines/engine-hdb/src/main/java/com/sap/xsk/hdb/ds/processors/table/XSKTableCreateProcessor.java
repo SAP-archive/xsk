@@ -17,6 +17,7 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import com.sap.xsk.hdb.ds.service.manager.XSKTableManagerService;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKConstants;
@@ -79,6 +80,7 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
 
     boolean success = processStatements(connection, tableModel, indicesStatements, tableCreateStatement);
     processSynonym(connection, tableModel, tableNameWithoutSchema, tableNameWithSchema);
+    processAlter(connection, tableModel, tableNameWithSchema);
     return success;
   }
 
@@ -89,6 +91,18 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
     if (shouldCreatePublicSynonym) {
       XSKHDBUtils.createPublicSynonymForArtifact(managerServices
           .get(IXSKDataStructureModel.TYPE_HDB_SYNONYM), tableNameWithoutSchema, tableModel.getSchema(), connection);
+    }
+  }
+
+  private void processAlter(Connection connection, XSKDataStructureHDBTableModel tableModel, String tableNameWithSchema)
+      throws SQLException {
+    boolean existsTable = SqlFactory.getNative(connection)
+        .exists(connection, tableNameWithSchema, DatabaseArtifactTypes.TABLE);
+    boolean hasCalculatedColumns = !tableModel.getCalculatedColumns().isEmpty();
+    boolean shouldCreatePublicSynonym = existsTable && hasCalculatedColumns;
+    if (shouldCreatePublicSynonym) {
+      XSKHDBUtils.alterTableModel((XSKTableManagerService) managerServices
+          .get(IXSKDataStructureModel.TYPE_HDB_TABLE), connection, tableModel);
     }
   }
 

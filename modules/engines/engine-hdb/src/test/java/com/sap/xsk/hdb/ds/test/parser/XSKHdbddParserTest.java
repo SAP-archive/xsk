@@ -28,11 +28,9 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.test.module.HdbTestModule;
-import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.junit.Before;
 import org.junit.Test;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class XSKHdbddParserTest extends AbstractDirigibleTest {
@@ -658,8 +656,9 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
 
   @Test
   public void testParseHDBDDWithCalculatedColumns() throws Exception {
-    XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/CalculatedColumns.hdbdd", "");
-    //TODO assert calculatedColumnsArray
-    System.out.println(parsedModel);
+    XSKDataStructureCdsModel parsedModel = (XSKDataStructureCdsModel) XSKDataStructureModelFactory.parseHdbdd("gstr2/CalculatedColumns.hdbdd", "");
+    String expectedCalculatedColumn = "\"firstName\" || \u0027 \u0027 || \"lastName\"";
+    assertEquals(expectedCalculatedColumn,
+        parsedModel.getTableModels().get(0).getCalculatedColumns().get(0).getStatement());
   }
 }

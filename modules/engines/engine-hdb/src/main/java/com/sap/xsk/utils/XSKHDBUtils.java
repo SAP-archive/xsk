@@ -25,12 +25,14 @@ import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKHDBSYNONYMDefinitionModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import com.sap.xsk.hdb.ds.service.manager.XSKTableManagerService;
 import com.sap.xsk.parser.hana.core.HanaLexer;
 import com.sap.xsk.parser.hana.core.HanaParser;
 import org.antlr.v4.runtime.CharStream;
@@ -112,6 +114,13 @@ public class XSKHDBUtils {
       String artifactName, String artifactSchema, Connection connection)
       throws SQLException {
     xskSynonymManagerService.createDataStructure(connection, assemblePublicSynonym(artifactName, artifactSchema));
+  }
+
+  // Make first argument generic IXSKDataStructureManager<XSKDataStructureModel>
+  // when all processors have alter logic
+  public static void alterTableModel(XSKTableManagerService xskTableManagerService, Connection connection, XSKDataStructureHDBTableModel tableModel)
+      throws SQLException {
+    xskTableManagerService.updateDataStructure(connection, tableModel);
   }
 
   public static void dropPublicSynonymForArtifact(IXSKDataStructureManager<XSKDataStructureModel> xskSynonymManagerService,

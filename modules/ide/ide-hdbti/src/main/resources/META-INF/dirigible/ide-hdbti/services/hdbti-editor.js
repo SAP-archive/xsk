@@ -17,7 +17,6 @@ exports.getEditor = function () {
 		"region": "center-top",
 		"label": "HTBDI Editor",
 		"link": "../ide-hdbti/editor.html",
-		"defaultEditor": true,
 		"contentTypes": ["application/hdbti"]
 	};
 }

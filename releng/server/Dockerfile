@@ -6,7 +6,7 @@ ARG JDK_TYPE=default-jdk
 
 FROM sapmachine:17.0.2 as jdk
 
-FROM tomcat:9.0.56-jre17-temurin  AS base
+FROM tomcat:9.0.64-jre17-temurin AS base
 
 RUN rm -fr /opt/java/openjdk
 RUN rm /usr/local/tomcat/conf/tomcat-users.xml
@@ -35,7 +35,6 @@ ENV JRE_HOME=/usr/local/jdk
 FROM base AS xsk-default-jdk
 RUN echo "The default OpenJDK will be used"
 
-RUN mkdir -p /usr/local/jdk
 COPY --from=jdk /usr/lib/jvm/sapmachine-17/ /usr/local/jdk
 
 FROM xsk-${JDK_TYPE} AS dependencies-base
@@ -58,7 +57,7 @@ WORKDIR $CATALINA_HOME
 
 COPY --from=dependencies-base $JAVA_HOME $JAVA_HOME
 COPY --from=dependencies-base /lib/x86_64-linux-gnu/libz.so.1 /lib/x86_64-linux-gnu/libz.so.1
-COPY --from=dependencies-base /bin/sh /bin/sh
+
 
 EXPOSE 8080 8081 8000
 

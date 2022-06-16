@@ -308,7 +308,7 @@
         <license-maven-plugin.version>4.2.rc3</license-maven-plugin.version>
         <antlr4-runtime.version>4.10.1</antlr4-runtime.version>
         <antlr4-maven-plugin.version>4.10.1</antlr4-maven-plugin.version>
-        <selenium.version>4.2.1</selenium.version>
+        <selenium.version>4.2.2</selenium.version>
         <selenium.webdriver.manager.version>5.2.0</selenium.webdriver.manager.version>
         <neo-java-web-sdk.version>4.8.9</neo-java-web-sdk.version>
         <neo-java-web-sdk.javax.activation.version>1.2.0</neo-java-web-sdk.javax.activation.version>

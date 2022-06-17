@@ -11,6 +11,7 @@
  */
 package com.sap.xsk.hdb.ds.processors.table;
 
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableCalculatedColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintCheckModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
@@ -28,6 +29,7 @@ import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.Table;
 import org.eclipse.dirigible.database.sql.builders.table.AbstractTableBuilder;
+import org.eclipse.dirigible.database.sql.dialects.hana.HanaAlterTableBuilder;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaCreateTableBuilder;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 
@@ -48,6 +50,16 @@ public class TableBuilder {
     return sqlTableBuilder.buildTable();
   }
 
+  public String buildAlterCalculatedColumns(String tableName, XSKDataStructureHDBTableCalculatedColumnModel calculatedColumnModel) {
+
+    HanaAlterTableBuilder sqlTableBuilder = alterTableBuilder(tableName);
+    String calculatedColumnStatement = buildCalculatedColumnStatement(calculatedColumnModel);
+    sqlTableBuilder.add().column(calculatedColumnModel.getColumnName(), calculatedColumnModel.getType(), false, true,
+          false, calculatedColumnStatement);
+
+    return sqlTableBuilder.build();
+  }
+
   private HanaCreateTableBuilder createTableBuilder(String tableName, String tableType) {
     HanaSqlDialect dialect = new HanaSqlDialect();
     if (null != tableType) {
@@ -60,6 +72,12 @@ public class TableBuilder {
     }
 
     return SqlFactory.getNative(dialect).create().table(tableName);
+  }
+
+  private HanaAlterTableBuilder alterTableBuilder(String tableName) {
+    HanaSqlDialect dialect = new HanaSqlDialect();
+
+    return SqlFactory.getNative(dialect).alter().table(tableName);
   }
 
   private void addTableIndicesToBuilder(HanaCreateTableBuilder sqlTableBuilder, XSKDataStructureHDBTableModel tableModel) {
@@ -196,6 +214,12 @@ public class TableBuilder {
         builder.unique(uniqueIndexName, uniqueIndexColumns, indexType, indexOrder);
       }
     }
+  }
+
+  private String buildCalculatedColumnStatement(XSKDataStructureHDBTableCalculatedColumnModel calculatedColumnModel) {
+    StringBuilder statement = new StringBuilder();
+    statement.append("(").append(calculatedColumnModel.getLength()).append(") AS ").append(calculatedColumnModel.getStatement());
+    return statement.toString();
   }
 }
 

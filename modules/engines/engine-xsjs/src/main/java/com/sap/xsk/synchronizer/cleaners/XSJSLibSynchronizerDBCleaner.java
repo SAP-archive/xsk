@@ -9,29 +9,32 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.synchronizer;
+package com.sap.xsk.synchronizer.cleaners;
 
-import com.sap.xsk.exceptions.XSJSLibArtefactCleanerSQLException;
-import org.eclipse.dirigible.commons.config.StaticObjects;
+import com.sap.xsk.exceptions.XSJSLibSynchronizerDBCleanerSQLException;
+import com.sap.xsk.synchronizer.XSJSLibSynchronizer;
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class XSJSLibSynchronizerArtefactsCleaner {
+public class XSJSLibSynchronizerDBCleaner implements XSJSLibSynchronizerCleaner {
+  private final DataSource dataSource;
 
-  private final DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.SYSTEM_DATASOURCE);
+  public XSJSLibSynchronizerDBCleaner(DataSource dataSource) {
+    this.dataSource = dataSource;
+  }
 
-  public void cleanup(String targetLocation) {
+  public void cleanup(String registryPath) {
     try (PreparedStatement deleteStatement =
         dataSource.getConnection().prepareStatement(
             "DELETE FROM \""
                 + XSJSLibSynchronizer.XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME
                 + "\" WHERE \"LOCATION\" LIKE ?")
     ) {
-      deleteStatement.setString(1, targetLocation + "%");
+      deleteStatement.setString(1, registryPath + "%");
       deleteStatement.executeUpdate();
     } catch (SQLException e) {
-      throw new XSJSLibArtefactCleanerSQLException("Could not cleanup xsjslib synchronizer entries. ", e);
+      throw new XSJSLibSynchronizerDBCleanerSQLException("Could not cleanup xsjslib synchronizer entries. ", e);
     }
   }
 }

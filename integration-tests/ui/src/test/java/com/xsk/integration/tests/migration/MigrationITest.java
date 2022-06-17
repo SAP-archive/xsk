@@ -123,6 +123,7 @@ public class MigrationITest {
   }
 
   private void approveChanges() {
+    webBrowser.log();
     webBrowser.clickItem(By.xpath("//*[@ng-click=\"startMigration()\"]"));
   }
 
@@ -201,7 +202,7 @@ public class MigrationITest {
 
       if (collectionHasElementEndingWith(fileQueryParameter, filePath)) {
         if (isImageFile(filePath)) {
-          assertImageFileEquals(file);
+          assertImageFileEquals(iframe, file);
         } else {
           assertMonacoTextFileEquals(iframe, file);
         }
@@ -252,8 +253,8 @@ public class MigrationITest {
         || filePath.toLowerCase().endsWith(".hdi");
   }
 
-  void assertImageFileEquals(ExpectedContent file) throws IOException {
-    var migratedImage = getImageFileContent(file.getFilePath());
+  void assertImageFileEquals(WebElement imageTabIframe, ExpectedContent file) throws IOException {
+    var migratedImage = getImageFileContent(file.getFilePath(), imageTabIframe);
     var expectedFileContent = file.getContent();
 
     System.out.println(
@@ -288,7 +289,9 @@ public class MigrationITest {
         expectedTextFile, migratedTextFile);
   }
 
-  private byte[] getImageFileContent(String filePath) throws IOException {
+  private byte[] getImageFileContent(String filePath, WebElement imageTabIframe) throws IOException {
+    webBrowser.switchToDefaultContent();
+    webBrowser.switchToIframe(imageTabIframe);
     var imageUrl = new URL(
         "http://"
             + DirigibleConnectionProperties.HOST
@@ -303,7 +306,14 @@ public class MigrationITest {
       HttpUriRequest request = RequestBuilder.get(imageUrl.toURI()).build();
       var response = client.executeRequestAsync(request).get();
       HttpEntity entity = response.getEntity();
-      webBrowser.sleep(3000); // This sleep lets the image load in the editor so it is visible in the next .log() call
+      webBrowser.retryJavascriptWithTimeout(
+          "var image = document.getElementById('image-view');\n"
+          + "var isLoaded = image.complete && image.naturalHeight !== 0; \n"
+              + "isLoaded ? true : new Error(\"Image is not loaded.\");",
+          10000,
+          100
+      );
+      webBrowser.switchToDefaultContent();
       return EntityUtils.toByteArray(entity);
     } catch (URISyntaxException | InterruptedException | ExecutionException e) {
       throw new RuntimeException(e);
@@ -313,8 +323,11 @@ public class MigrationITest {
   String getTextFileContent(WebElement monacoTabIframe) {
     webBrowser.switchToDefaultContent();
     webBrowser.switchToIframe(monacoTabIframe);
-    webBrowser.sleep(3000); // This sleep is required, otherwise monaco on js execution in next line is undefined.
-    var migratedText = webBrowser.executeJavascript("return monaco.editor.getModels().at(0).getValue();");
+    String migratedText = webBrowser.retryJavascriptWithTimeout(
+        "return monaco.editor.getModels().at(0).getValue()",
+        10000,
+        100
+    );
     webBrowser.switchToDefaultContent();
     return migratedText;
   }

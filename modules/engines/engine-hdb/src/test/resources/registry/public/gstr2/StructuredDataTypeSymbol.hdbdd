@@ -1,0 +1,21 @@
+namespace gstr2;
+@Schema: 'ADMIN'
+context StructuredDataTypeSymbol {
+  type id     : UTCTimestamp;
+  type name   : hana.VARCHAR(12);
+  type newType {
+      myName: name;
+      number: hana.SMALLINT;
+  };
+
+  type modifiedType {
+      myType: newType;
+  };
+
+  Entity employee {
+     	key USER_ID: newType;
+     	name: String(4);
+     	Description: modifiedType;
+     	Description1: type of employee.name;
+  };
+};

@@ -17,4 +17,11 @@ context ViewDefinitionWithJoin {
           "ES"."AMOUNT" as "EmployeeSalary"
         };
 
+    entity employee_roles {
+        ID : String(32);
+    }
+
+    entity employee_salaries {
+        ID : String(32);
+    }
 }

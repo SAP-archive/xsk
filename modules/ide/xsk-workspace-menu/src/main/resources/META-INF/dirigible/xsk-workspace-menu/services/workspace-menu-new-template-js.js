@@ -15,6 +15,6 @@ exports.getTemplate = function () {
 		"label": "XSJS Service",
 		"extension": "xsjs",
 		"data": '$.response.setBody("Hello World!");',
-		"order": 0
+		"order": 2
 	};
 };

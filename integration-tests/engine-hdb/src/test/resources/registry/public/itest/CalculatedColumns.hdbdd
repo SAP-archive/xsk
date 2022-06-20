@@ -10,4 +10,5 @@ context CalculatedColumns {
     "UserID": String(25);
     "UserID_UPPER": String(25) = upper("UserID");
     "fullName": String(301) = "firstName" || ' ' || "lastName";
-    }
+  }
+}

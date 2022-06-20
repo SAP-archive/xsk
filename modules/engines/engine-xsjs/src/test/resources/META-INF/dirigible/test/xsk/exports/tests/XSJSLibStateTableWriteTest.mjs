@@ -1,13 +1,13 @@
-import { assertEquals } from './utils/utils.mjs'
-import { XSJSLibArtefactStateTable } from '/exports/XSJSLibArtefactStateTable.mjs'
+import { assertEquals } from '../utils/utils.mjs'
+import { getParams } from '../utils/stateTableParamsProvider.mjs'
+import { fetchAllEntriesInTable } from '../utils/utils.mjs'
+import { XSJSLibStateTable } from '/exports/XSJSLibStateTable.mjs'
 import { digest } from '@dirigible-v4/utils'
-import { getParams } from './utils/stateTableParamsProvider.mjs'
-import { fetchAllEntriesInTable } from './utils/utils.mjs'
 
 function writeTableTest() {
   // create new state table
   const stateTableParams = getParams();
-  const table = new XSJSLibArtefactStateTable(
+  const table = new XSJSLibStateTable(
     stateTableParams.name,
     stateTableParams.schema
   );

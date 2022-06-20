@@ -9,11 +9,8 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.exceptions;
+package com.sap.xsk.synchronizer.cleaners;
 
-public class XSJSLibArtefactCleanerSQLException extends RuntimeException {
-
-  public XSJSLibArtefactCleanerSQLException(String message, Throwable cause) {
-    super(message, cause);
-  }
+public interface XSJSLibSynchronizerCleaner {
+  void cleanup(String registryPath);
 }

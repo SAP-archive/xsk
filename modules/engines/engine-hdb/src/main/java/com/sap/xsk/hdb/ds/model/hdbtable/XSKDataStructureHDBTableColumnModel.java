@@ -22,10 +22,6 @@ public class XSKDataStructureHDBTableColumnModel extends XSKDataStructureHDBTabl
 
   private boolean primaryKey;
 
-  private String defaultValue;
-
-  private boolean isDefaultValueDateTimeFunction;
-
   private boolean unique;
 
   private String comment;
@@ -56,12 +52,10 @@ public class XSKDataStructureHDBTableColumnModel extends XSKDataStructureHDBTabl
    */
   public XSKDataStructureHDBTableColumnModel(String name, String type, String length, boolean nullable, boolean primaryKey,
       String defaultValue, boolean isDefaultValueDateTimeFunction, String precision, String scale, boolean unique, String alias) {
-    super(length, precision, scale, type);
+    super(length, precision, scale, type, defaultValue, isDefaultValueDateTimeFunction);
     this.name = name;
     this.nullable = nullable;
     this.primaryKey = primaryKey;
-    this.defaultValue = defaultValue;
-    this.isDefaultValueDateTimeFunction = isDefaultValueDateTimeFunction;
     this.unique = unique;
     this.alias = alias;
   }
@@ -118,42 +112,6 @@ public class XSKDataStructureHDBTableColumnModel extends XSKDataStructureHDBTabl
    */
   public void setPrimaryKey(boolean primaryKey) {
     this.primaryKey = primaryKey;
-  }
-
-  /**
-   * Getter for the default value.
-   *
-   * @return the default value
-   */
-  public String getDefaultValue() {
-    return defaultValue;
-  }
-
-  /**
-   * Setter for the default value.
-   *
-   * @param defaultValue the default value
-   */
-  public void setDefaultValue(String defaultValue) {
-    this.defaultValue = defaultValue;
-  }
-
-  /**
-   * Check if default value is a datetime function.
-   *
-   * @return true if the default value is a datetime function
-   */
-  public boolean isDefaultValueDateTimeFunction() {
-    return isDefaultValueDateTimeFunction;
-  }
-
-  /**
-   * Setter for the default value if datetime function.
-   *
-   * @param isDefaultValueDateTimeFunction whether the default value is a datetime function
-   */
-  public void setDefaultValueDateTimeFunction(boolean isDefaultValueDateTimeFunction) {
-    this.isDefaultValueDateTimeFunction = isDefaultValueDateTimeFunction;
   }
 
   /**

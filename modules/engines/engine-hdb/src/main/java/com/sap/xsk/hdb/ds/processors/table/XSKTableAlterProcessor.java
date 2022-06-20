@@ -12,12 +12,10 @@
 package com.sap.xsk.hdb.ds.processors.table;
 
 import com.sap.xsk.hdb.ds.artefacts.HDBTableSynchronizationArtefactType;
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableCalculatedColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.processors.AbstractXSKProcessor;
 import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
-import com.sap.xsk.utils.XSKHDBUtils;
 import org.eclipse.dirigible.core.scheduler.api.ISynchronizerArtefactType.ArtefactState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,15 +36,6 @@ public class XSKTableAlterProcessor extends AbstractXSKProcessor<XSKDataStructur
    */
   @Override
   public boolean execute(Connection connection, XSKDataStructureHDBTableModel tableModel) throws SQLException {
-
-    for(XSKDataStructureHDBTableCalculatedColumnModel columnModel: tableModel.getCalculatedColumns()) {
-      String tableName = XSKHDBUtils.escapeArtifactName(tableModel.getName(), tableModel.getSchema());
-      String tableAlterStatement = new TableBuilder().buildAlterCalculatedColumns(tableName, columnModel);
-      boolean success = processStatement(connection, tableModel, tableAlterStatement);
-      if(!success) {
-        return false;
-      }
-    }
 
     XSKTableAlterHandler handler = createTableAlterHandler(connection, tableModel);
     handler.addColumns(connection);

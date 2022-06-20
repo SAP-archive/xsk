@@ -80,7 +80,6 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
 
     boolean success = processStatements(connection, tableModel, indicesStatements, tableCreateStatement);
     processSynonym(connection, tableModel, tableNameWithoutSchema, tableNameWithSchema);
-    processAlter(connection, tableModel, tableNameWithSchema);
     return success;
   }
 
@@ -91,18 +90,6 @@ public class XSKTableCreateProcessor extends AbstractXSKProcessor<XSKDataStructu
     if (shouldCreatePublicSynonym) {
       XSKHDBUtils.createPublicSynonymForArtifact(managerServices
           .get(IXSKDataStructureModel.TYPE_HDB_SYNONYM), tableNameWithoutSchema, tableModel.getSchema(), connection);
-    }
-  }
-
-  private void processAlter(Connection connection, XSKDataStructureHDBTableModel tableModel, String tableNameWithSchema)
-      throws SQLException {
-    boolean existsTable = SqlFactory.getNative(connection)
-        .exists(connection, tableNameWithSchema, DatabaseArtifactTypes.TABLE);
-    boolean hasCalculatedColumns = !tableModel.getCalculatedColumns().isEmpty();
-    boolean shouldCreatePublicSynonym = existsTable && hasCalculatedColumns;
-    if (shouldCreatePublicSynonym) {
-      XSKHDBUtils.alterTableModel((XSKTableManagerService) managerServices
-          .get(IXSKDataStructureModel.TYPE_HDB_TABLE), connection, tableModel);
     }
   }
 

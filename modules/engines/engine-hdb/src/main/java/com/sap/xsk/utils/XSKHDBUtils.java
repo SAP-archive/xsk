@@ -116,13 +116,6 @@ public class XSKHDBUtils {
     xskSynonymManagerService.createDataStructure(connection, assemblePublicSynonym(artifactName, artifactSchema));
   }
 
-  // Make first argument generic IXSKDataStructureManager<XSKDataStructureModel>
-  // when all processors have alter logic
-  public static void alterTableModel(XSKTableManagerService xskTableManagerService, Connection connection, XSKDataStructureHDBTableModel tableModel)
-      throws SQLException {
-    xskTableManagerService.updateDataStructure(connection, tableModel);
-  }
-
   public static void dropPublicSynonymForArtifact(IXSKDataStructureManager<XSKDataStructureModel> xskSynonymManagerService,
       String artifactName, String artifactSchema, Connection connection)
       throws SQLException {

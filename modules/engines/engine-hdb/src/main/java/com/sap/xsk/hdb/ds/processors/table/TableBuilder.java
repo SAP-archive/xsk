@@ -13,6 +13,7 @@ package com.sap.xsk.hdb.ds.processors.table;
 
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableCalculatedColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
+import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableCommonColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintCheckModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintUniqueModel;
@@ -50,16 +51,6 @@ public class TableBuilder {
     return sqlTableBuilder.buildTable();
   }
 
-  public String buildAlterCalculatedColumns(String tableName, XSKDataStructureHDBTableCalculatedColumnModel calculatedColumnModel) {
-
-    HanaAlterTableBuilder sqlTableBuilder = alterTableBuilder(tableName);
-    String calculatedColumnStatement = buildCalculatedColumnStatement(calculatedColumnModel);
-    sqlTableBuilder.add().column(calculatedColumnModel.getColumnName(), calculatedColumnModel.getType(), false, true,
-          false, calculatedColumnStatement);
-
-    return sqlTableBuilder.build();
-  }
-
   private HanaCreateTableBuilder createTableBuilder(String tableName, String tableType) {
     HanaSqlDialect dialect = new HanaSqlDialect();
     if (null != tableType) {
@@ -72,12 +63,6 @@ public class TableBuilder {
     }
 
     return SqlFactory.getNative(dialect).create().table(tableName);
-  }
-
-  private HanaAlterTableBuilder alterTableBuilder(String tableName) {
-    HanaSqlDialect dialect = new HanaSqlDialect();
-
-    return SqlFactory.getNative(dialect).alter().table(tableName);
   }
 
   private void addTableIndicesToBuilder(HanaCreateTableBuilder sqlTableBuilder, XSKDataStructureHDBTableModel tableModel) {
@@ -107,6 +92,12 @@ public class TableBuilder {
         sqlTableBuilder.column(name, type, columnModel.isPrimaryKey(), columnModel.isNullable(), columnModel.isUnique(), true, getColumnModelArgs(columnModel));
       }
     }
+
+    for(XSKDataStructureHDBTableCalculatedColumnModel calculatedColumnModel: tableModel.getCalculatedColumns()) {
+      String calculatedColumnStatement = buildCalculatedColumnStatement(calculatedColumnModel);
+      sqlTableBuilder.column(calculatedColumnModel.getColumnName(), calculatedColumnModel.getType(), false, true,
+          false, calculatedColumnStatement);
+    }
   }
 
   private void addTableConstraintsToBuilder(HanaCreateTableBuilder sqlTableBuilder, XSKDataStructureHDBTableModel tableModel) {
@@ -135,7 +126,7 @@ public class TableBuilder {
     }
   }
 
-  private String getColumnModelArgs(XSKDataStructureHDBTableColumnModel columnModel) {
+  private String getColumnModelArgs(XSKDataStructureHDBTableCommonColumnModel columnModel) {
     DataType type = DataType.valueOf(columnModel.getType());
     String args = "";
     if (columnModel.getLength() != null) {
@@ -218,7 +209,7 @@ public class TableBuilder {
 
   private String buildCalculatedColumnStatement(XSKDataStructureHDBTableCalculatedColumnModel calculatedColumnModel) {
     StringBuilder statement = new StringBuilder();
-    statement.append("(").append(calculatedColumnModel.getLength()).append(") AS ").append(calculatedColumnModel.getStatement());
+    statement.append(getColumnModelArgs(calculatedColumnModel)).append(" AS ").append(calculatedColumnModel.getStatement());
     return statement.toString();
   }
 }

@@ -263,4 +263,31 @@ public class XSKHDBDDHanaITTest extends AbstractXSKHDBITTest {
     }
   }
 
+  @Test
+  public void testHDBDDWithDateTimeFunctionDefaultValue()
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+    try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
+      try {
+        HanaITestUtils.createSchema(stmt, TEST_SCHEMA);
+
+        LocalResource resource = XSKHDBTestModule.getResources( //
+            "/usr/local/target/dirigible/repository/root", //
+            "/registry/public/itest/CalculatedColumns.hdbdd"
+        );
+
+        facade.handleResourceSynchronization(resource);
+        facade.updateEntities();
+
+        String tableName = "itest::CalculatedColumns.Employee";
+        String columnUpperCaseName = "itest::CalculatedColumns.Employee.UserID_UPPER";
+        String columnFullName = "itest::CalculatedColumns.Employee.fullName";
+
+        assertTrue("Expected calculated column not found", HanaTestUtils.checkCalculatedColumns(connection, tableName, TEST_SCHEMA, columnUpperCaseName));
+        assertTrue("Expected calculated column not found", HanaTestUtils.checkCalculatedColumns(connection, tableName, TEST_SCHEMA, columnFullName));
+
+      } finally {
+        HanaITestUtils.dropSchema(stmt, TEST_SCHEMA);
+      }
+    }
+  }
 }

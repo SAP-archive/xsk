@@ -44,7 +44,7 @@ public class HanaITestUtils {
         return rs.next();
     }
 
-    public static boolean checkExistOfView(Connection connection, String tableName, String tableSchema) throws SQLException {
+    public static boolean checkExistOfView(Connection connection, =String tableName, String tableSchema) throws SQLException {
         DatabaseMetaData metaData = connection.getMetaData();
         ResultSet rs = metaData.getTables(null, tableSchema, tableName, new String[]{ISqlKeywords.KEYWORD_VIEW});
         return rs.next();
@@ -154,4 +154,15 @@ public class HanaITestUtils {
         stmt.executeUpdate(String.format("create table \"%s\".\"%s\"(Id INTEGER,Name NVARCHAR)",
             tableSchema, tableName));
     }
+
+  public static void createEmptyTable(Statement stmt, String tableName, String tableSchema) throws SQLException {
+    stmt.executeUpdate(String.format("create table \"%s\".\"%s\"(Id INTEGER,Name NVARCHAR)",
+        tableSchema, tableName));
+  }
+
+  public static boolean checkCalculatedColumns(Connection connection, String tableName, String tableSchema, String columnName) throws SQLException {
+    DatabaseMetaData metaData = connection.getMetaData();
+    ResultSet rs = metaData.getColumns(null, tableSchema, tableName, columnName);
+    return rs.next();
+  }
 }

@@ -335,12 +335,4 @@ public class XSKHDBTableParserHanaITTest extends AbstractXSKHDBITTest {
         stmt.addBatch(insertThird);
         stmt.executeBatch();
     }
-
-    @Test
-    @Ignore
-    public void testHDBTableAlterWithCalculatedColumns() throws Exception {
-      try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
-        // TODO
-      }
-    }
 }

@@ -11,9 +11,7 @@
  */
 package com.sap.xsk.hdb.ds.processors.table;
 
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableCalculatedColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableColumnModel;
-import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableCommonColumnModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintCheckModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintForeignKeyModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableConstraintUniqueModel;
@@ -30,7 +28,6 @@ import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.Table;
 import org.eclipse.dirigible.database.sql.builders.table.AbstractTableBuilder;
-import org.eclipse.dirigible.database.sql.dialects.hana.HanaAlterTableBuilder;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaCreateTableBuilder;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
 
@@ -92,12 +89,6 @@ public class TableBuilder {
         sqlTableBuilder.column(name, type, columnModel.isPrimaryKey(), columnModel.isNullable(), columnModel.isUnique(), true, getColumnModelArgs(columnModel));
       }
     }
-
-    for(XSKDataStructureHDBTableCalculatedColumnModel calculatedColumnModel: tableModel.getCalculatedColumns()) {
-      String calculatedColumnStatement = buildCalculatedColumnStatement(calculatedColumnModel);
-      sqlTableBuilder.column(calculatedColumnModel.getColumnName(), calculatedColumnModel.getType(), false, true,
-          false, calculatedColumnStatement);
-    }
   }
 
   private void addTableConstraintsToBuilder(HanaCreateTableBuilder sqlTableBuilder, XSKDataStructureHDBTableModel tableModel) {
@@ -126,7 +117,7 @@ public class TableBuilder {
     }
   }
 
-  private String getColumnModelArgs(XSKDataStructureHDBTableCommonColumnModel columnModel) {
+  private String getColumnModelArgs(XSKDataStructureHDBTableColumnModel columnModel) {
     DataType type = DataType.valueOf(columnModel.getType());
     String args = "";
     if (columnModel.getLength() != null) {
@@ -152,6 +143,9 @@ public class TableBuilder {
         args += " DEFAULT " + columnModel.getDefaultValue() + " ";
       }
 
+    }
+    if(columnModel.isCalculatedColumn()) {
+      args += " AS " + columnModel.getStatement();
     }
     return args;
   }
@@ -205,12 +199,6 @@ public class TableBuilder {
         builder.unique(uniqueIndexName, uniqueIndexColumns, indexType, indexOrder);
       }
     }
-  }
-
-  private String buildCalculatedColumnStatement(XSKDataStructureHDBTableCalculatedColumnModel calculatedColumnModel) {
-    StringBuilder statement = new StringBuilder();
-    statement.append(getColumnModelArgs(calculatedColumnModel)).append(" AS ").append(calculatedColumnModel.getStatement());
-    return statement.toString();
   }
 }
 

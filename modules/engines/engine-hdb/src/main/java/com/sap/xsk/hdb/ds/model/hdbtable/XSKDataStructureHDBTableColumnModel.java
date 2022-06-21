@@ -14,13 +14,25 @@ package com.sap.xsk.hdb.ds.model.hdbtable;
 /**
  * The column element of the table model.
  */
-public class XSKDataStructureHDBTableColumnModel extends XSKDataStructureHDBTableCommonColumnModel {
+public class XSKDataStructureHDBTableColumnModel {
 
   private String name;
+
+  private String sqlType;
+
+  private String length;
 
   private boolean nullable;
 
   private boolean primaryKey;
+
+  private String defaultValue;
+
+  private boolean isDefaultValueDateTimeFunction;
+
+  private String precision;
+
+  private String scale;
 
   private boolean unique;
 
@@ -29,6 +41,10 @@ public class XSKDataStructureHDBTableColumnModel extends XSKDataStructureHDBTabl
   private String alias;
 
   private boolean fuzzySearchIndex;
+
+  private String statement;
+
+  private boolean isCalculatedColumn;
 
   /**
    * The default constructor.
@@ -52,10 +68,16 @@ public class XSKDataStructureHDBTableColumnModel extends XSKDataStructureHDBTabl
    */
   public XSKDataStructureHDBTableColumnModel(String name, String type, String length, boolean nullable, boolean primaryKey,
       String defaultValue, boolean isDefaultValueDateTimeFunction, String precision, String scale, boolean unique, String alias) {
-    super(length, precision, scale, type, defaultValue, isDefaultValueDateTimeFunction);
+    super();
     this.name = name;
+    this.sqlType = type;
+    this.length = length;
     this.nullable = nullable;
     this.primaryKey = primaryKey;
+    this.defaultValue = defaultValue;
+    this.isDefaultValueDateTimeFunction = isDefaultValueDateTimeFunction;
+    this.precision = precision;
+    this.scale = scale;
     this.unique = unique;
     this.alias = alias;
   }
@@ -76,6 +98,42 @@ public class XSKDataStructureHDBTableColumnModel extends XSKDataStructureHDBTabl
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Getter for the type.
+   *
+   * @return the type
+   */
+  public String getType() {
+    return sqlType;
+  }
+
+  /**
+   * Setter for the type.
+   *
+   * @param sqlType the type
+   */
+  public void setType(String sqlType) {
+    this.sqlType = sqlType;
+  }
+
+  /**
+   * Getter for the length.
+   *
+   * @return the length
+   */
+  public String getLength() {
+    return length;
+  }
+
+  /**
+   * Setter for the length.
+   *
+   * @param length the length
+   */
+  public void setLength(String length) {
+    this.length = length;
   }
 
   /**
@@ -112,6 +170,78 @@ public class XSKDataStructureHDBTableColumnModel extends XSKDataStructureHDBTabl
    */
   public void setPrimaryKey(boolean primaryKey) {
     this.primaryKey = primaryKey;
+  }
+
+  /**
+   * Getter for the default value.
+   *
+   * @return the default value
+   */
+  public String getDefaultValue() {
+    return defaultValue;
+  }
+
+  /**
+   * Setter for the default value.
+   *
+   * @param defaultValue the default value
+   */
+  public void setDefaultValue(String defaultValue) {
+    this.defaultValue = defaultValue;
+  }
+
+  /**
+   * Check if default value is a datetime function.
+   *
+   * @return true if the default value is a datetime function
+   */
+  public boolean isDefaultValueDateTimeFunction() {
+    return isDefaultValueDateTimeFunction;
+  }
+
+  /**
+   * Setter for the default value if datetime function.
+   *
+   * @param isDefaultValueDateTimeFunction whether the default value is a datetime function
+   */
+  public void setDefaultValueDateTimeFunction(boolean isDefaultValueDateTimeFunction) {
+    this.isDefaultValueDateTimeFunction = isDefaultValueDateTimeFunction;
+  }
+
+  /**
+   * Getter for the precision value.
+   *
+   * @return the precision value
+   */
+  public String getPrecision() {
+    return precision;
+  }
+
+  /**
+   * Setter for the precision value.
+   *
+   * @param precision the precision value
+   */
+  public void setPrecision(String precision) {
+    this.precision = precision;
+  }
+
+  /**
+   * Getter for the scale value.
+   *
+   * @return the scale value
+   */
+  public String getScale() {
+    return scale;
+  }
+
+  /**
+   * Setter for the scale value.
+   *
+   * @param scale the scale value
+   */
+  public void setScale(String scale) {
+    this.scale = scale;
   }
 
   /**
@@ -169,5 +299,21 @@ public class XSKDataStructureHDBTableColumnModel extends XSKDataStructureHDBTabl
    */
   public void setFuzzySearchIndex(boolean fuzzySearchIndex) {
     this.fuzzySearchIndex = fuzzySearchIndex;
+  }
+
+  public String getStatement() {
+    return statement;
+  }
+
+  public void setStatement(String statement) {
+    this.statement = statement;
+  }
+
+  public boolean isCalculatedColumn() {
+    return isCalculatedColumn;
+  }
+
+  public void setCalculatedColumn(boolean calculatedColumn) {
+    isCalculatedColumn = calculatedColumn;
   }
 }

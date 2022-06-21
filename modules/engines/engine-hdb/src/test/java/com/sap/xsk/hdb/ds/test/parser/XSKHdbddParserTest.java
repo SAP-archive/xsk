@@ -659,6 +659,6 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     XSKDataStructureCdsModel parsedModel = (XSKDataStructureCdsModel) XSKDataStructureModelFactory.parseHdbdd("gstr2/CalculatedColumns.hdbdd", "");
     String expectedCalculatedColumn = "\"firstName\" || \u0027 \u0027 || \"lastName\"";
     assertEquals(expectedCalculatedColumn,
-        parsedModel.getTableModels().get(0).getCalculatedColumns().get(0).getStatement());
+        parsedModel.getTableModels().get(0).getColumns().get(2).getStatement());
   }
 }

@@ -111,8 +111,13 @@ angular.module('page', [])
 					}
 				};
 				xhr.send(text);
-				messageHub.post({data: $scope.file}, 'editor.file.saved');
-				messageHub.post({data: 'File [' + $scope.file + '] saved.'}, 'status.message');
+				messageHub.post({
+					name: $scope.file.substring($scope.file.lastIndexOf('/') + 1),
+					path: $scope.file.substring($scope.file.indexOf('/', 1)),
+					contentType: 'application/json+hdi', // TODO: Take this from data-parameters
+					workspace: $scope.file.substring(1, $scope.file.indexOf('/', 1)),
+				}, 'ide.file.saved');
+				messageHub.post({ message: `File '${$scope.file}' saved` }, 'ide.status.message');
 			} else {
 				console.error('file parameter is not present in the request');
 			}
@@ -128,10 +133,31 @@ angular.module('page', [])
 			saveContents(contents);
 		};
 
+		messageHub.subscribe(
+			function () {
+				if (isFileChanged) {
+					$scope.save();
+				}
+			},
+			"editor.file.save.all",
+		);
+
+		messageHub.subscribe(
+			function (msg) {
+				let file = msg.data && typeof msg.data === 'object' && msg.data.file;
+				let hdi = angular.toJson($scope.hdi);
+				if (file && file === $scope.file && contents !== hdi)
+					$scope.save();
+			},
+			"editor.file.save",
+		);
+
 		$scope.$watch(function () {
 			let hdi = angular.toJson($scope.hdi);
 			if (contents !== hdi) {
-				messageHub.post({data: $scope.file}, 'editor.file.dirty');
+				messageHub.post({ resourcePath: $scope.file, isDirty: true }, 'ide-core.setEditorDirty');
+			} else {
+				messageHub.post({ resourcePath: $scope.file, isDirty: false }, 'ide-core.setEditorDirty');
 			}
 		});
 	});

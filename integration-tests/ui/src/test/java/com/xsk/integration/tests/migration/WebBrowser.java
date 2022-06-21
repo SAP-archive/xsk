@@ -14,6 +14,7 @@ package com.xsk.integration.tests.migration;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -172,6 +173,41 @@ class WebBrowser {
 
   List<WebElement> findElementsBy(By by) {
     return browser.findElements(by);
+  }
+
+  String retryJavascriptWithTimeout(String javascript, int timeoutMs, int retries) {
+    int intervalMs = timeoutMs / retries, initialRetries = retries;
+    do {
+      try {
+        System.out.println(
+            "[Selenium - Retry Javascript With Timeout] Running Attempt "
+            + (initialRetries - retries + 1) + " for call '" + javascript +"'"
+        );
+
+        String result = this.executeJavascript(javascript);
+
+        System.out.println(
+            "[Selenium - Retry Javascript With Timeout] Success at attempt "
+            + (initialRetries - retries + 1) + " for call '" + javascript + "'"
+        );
+
+        return result;
+      } catch(JavascriptException exception) {
+        System.out.println(
+            "[Selenium - Retry Javascript With Timeout] Attempt Failed "
+            + (initialRetries - retries + 1) + " for call '" + javascript
+            + "' sleeping for " + intervalMs + " ms."
+        );
+
+        retries--;
+        this.sleep(intervalMs);
+      }
+    } while(retries > 0);
+
+    throw new RuntimeException(
+        "Retry WebBrowser::JavascriptWithTimeout(String, int, int) failed after timeout was reached. "
+        + "Arguments were: \n javascript:" + javascript + "\n timeout: " + timeoutMs + "\n retries: " + initialRetries
+    );
   }
 
   void sleep(long millis) throws RuntimeException {

@@ -20,6 +20,7 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableIndexModel;
 import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
+import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import com.sap.xsk.parser.hdbdd.annotation.metadata.AbstractAnnotationValue;
 import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationArray;
 import com.sap.xsk.parser.hdbdd.annotation.metadata.AnnotationObj;
@@ -128,16 +129,17 @@ public class HdbddTransformer {
 
     tableModel.setColumns(tableColumns);
     tableModel.setLocation(location);
-    if (entitySymbol.getAnnotation(CATALOG_ANNOTATION) != null){
+    if (entitySymbol.getAnnotation(CATALOG_ANNOTATION) != null) {
       String tableType = entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(CATALOG_OBJ_TABLE_TYPE).getValue();
       tableModel.setTableType(tableType);
 
-      if (entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(INDEX) != null){
+      if (entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(INDEX) != null) {
         List<XSKDataStructureHDBTableIndexModel> indexes = new ArrayList<>();
         List<XSKDataStructureHDBTableConstraintUniqueModel> uniqueIndexes = new ArrayList<>();
-        AnnotationArray catalogIndexAnnotationArray = (AnnotationArray) entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs().get(INDEX);
+        AnnotationArray catalogIndexAnnotationArray = (AnnotationArray) entitySymbol.getAnnotation(CATALOG_ANNOTATION).getKeyValuePairs()
+            .get(INDEX);
 
-        for (AbstractAnnotationValue currentAnnotationValue : catalogIndexAnnotationArray.getValues()){
+        for (AbstractAnnotationValue currentAnnotationValue : catalogIndexAnnotationArray.getValues()) {
           AnnotationObj annotationObject = (AnnotationObj) currentAnnotationValue;
           boolean isUnique = Boolean.parseBoolean(getCatalogAnnotationValue(annotationObject, UNIQUE));
           String name = getCatalogAnnotationValue(annotationObject, NAME);
@@ -147,10 +149,9 @@ public class HdbddTransformer {
           ((AnnotationArray) annotationObject.getValue(ELEMENT_NAMES)).getValues()
               .forEach(currentElement -> indexColumnSet.add(currentElement.getValue()));
 
-          if (!isUnique){
+          if (!isUnique) {
             indexes.add(new XSKDataStructureHDBTableIndexModel(name, order, indexColumnSet, false));
-          }
-          else {
+          } else {
             uniqueIndexes.add(new XSKDataStructureHDBTableConstraintUniqueModel(name, order, indexColumnSet.toArray(String[]::new)));
           }
         }
@@ -230,16 +231,8 @@ public class HdbddTransformer {
 
       // Check if the dependant table has :: to know whether short or full name is used in the hdbdd view definition. In case it is not we should build the full name
       if (!dependsOnTable.contains(PACKAGE_DELIMITER)) {
-        // Check if the dependant table name is DUMMY. This is a reserved table name for hana dummy tables. We make sure to make it in uppercase
-        if (dependsOnTable.equalsIgnoreCase(DUMMY_TABLE)) {
-          dependsOnTable = dependsOnTable.toUpperCase();
-        } else {
-          String dependsOnTableFullName = fullTableNameBuilderFromViewSymbol(dependsOnTable, viewSymbol);
-          // Replace the short name in the select columns with the full name
-          selectColumns = replaceWithQuotes(selectColumns, dependsOnTable, dependsOnTableFullName);
-          // Set the dependant table to be with the full name
-          dependsOnTable = dependsOnTableFullName;
-        }
+        dependsOnTable = getFullTableName(viewSymbol, dependsOnTable);
+        selectColumns = replaceWithQuotes(selectColumns, dependsOnTable, dependsOnTable);
       }
       dependsOnTableList.add(dependsOnTable);
 
@@ -274,7 +267,8 @@ public class HdbddTransformer {
     return selectSql.toString();
   }
 
-  public String traverseJoinStatements(SelectSymbol selectSymbol, ViewSymbol viewSymbol, String dependsOnTable, List<String> aliasesForReplacement) {
+  public String traverseJoinStatements(SelectSymbol selectSymbol, ViewSymbol viewSymbol, String dependsOnTable,
+      List<String> aliasesForReplacement) {
     StringBuilder joinStatements = new StringBuilder();
 
     for (Symbol symbol : selectSymbol.getJoinStatements()) {
@@ -286,7 +280,7 @@ public class HdbddTransformer {
 
       // Check if the join artifact name contains :: to determine if full artifact name is used and build the full name if not
       if (!joinArtifactName.contains(PACKAGE_DELIMITER)) {
-        joinArtifactName = fullTableNameBuilderFromViewSymbol(joinArtifactName, viewSymbol);
+        joinArtifactName = getFullTableName(viewSymbol, joinArtifactName);
       }
 
       // Replace the select from dependant table if anywhere in the join with its full name
@@ -304,12 +298,6 @@ public class HdbddTransformer {
     }
 
     return joinStatements.toString();
-  }
-
-  private String fullTableNameBuilderFromViewSymbol(String tableName, ViewSymbol viewSymbol) {
-    StringBuilder fullTableName = new StringBuilder();
-    fullTableName.append(viewSymbol.getPackageId()).append(PACKAGE_DELIMITER).append(viewSymbol.getContext()).append(DOT).append(tableName);
-    return fullTableName.toString();
   }
 
   private String shortTableNameExtractorFromViewSymbol(String fullTableName, ViewSymbol viewSymbol) {
@@ -446,7 +434,8 @@ public class HdbddTransformer {
     return subElements;
   }
 
-  private XSKDataStructureHDBTableColumnModel getAssociationForeignKeyColumn(AssociationSymbol associationSymbol, EntityElementSymbol foreignKey){
+  private XSKDataStructureHDBTableColumnModel getAssociationForeignKeyColumn(AssociationSymbol associationSymbol,
+      EntityElementSymbol foreignKey) {
     XSKDataStructureHDBTableColumnModel columnModel = transformFieldSymbolToColumnModel(foreignKey, false);
     columnModel.setPrimaryKey(associationSymbol.isKey());
     columnModel.setNullable(!associationSymbol.isNotNull());
@@ -454,7 +443,20 @@ public class HdbddTransformer {
     return columnModel;
   }
 
-  private String getCatalogAnnotationValue (AnnotationObj annotationObject, String value){
+  private String getFullTableName(ViewSymbol dependingView, String tableName) {
+    // Check if the dependant table name is DUMMY. This is a reserved table name for hana dummy tables. We make sure to make it in uppercase
+    if (tableName.equalsIgnoreCase(DUMMY_TABLE)) {
+      return tableName.toUpperCase();
+    } else {
+      Symbol resolvedDependsOnTable = dependingView.getEnclosingScope().resolve(tableName);
+      if (resolvedDependsOnTable == null) {
+        throw new CDSRuntimeException("Could not resolve referenced entity: " + tableName);
+      }
+      return resolvedDependsOnTable.getFullName();
+    }
+  }
+
+  private String getCatalogAnnotationValue(AnnotationObj annotationObject, String value) {
     return annotationObject.getValue(value) != null ? annotationObject.getValue(value).getValue() : null;
   }
 }

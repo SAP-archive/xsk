@@ -123,8 +123,13 @@ angular.module('page', [])
         const xhr = new XMLHttpRequest();
         xhr.open('PUT', '/services/v4/ide/workspaces' + $scope.file);
         xhr.send(contentToSave);
-        messageHub.post({ data: $scope.file }, 'editor.file.saved');
-        messageHub.post({ data: 'Requested file [' + $scope.file + '] saved.' }, 'status.message');
+        messageHub.post({
+          name: $scope.file.substring($scope.file.lastIndexOf('/') + 1),
+          path: $scope.file.substring($scope.file.indexOf('/', 1)),
+          contentType: 'application/json+xsaccess', // TODO: Take this from data-parameters
+          workspace: $scope.file.substring(1, $scope.file.indexOf('/', 1)),
+        }, 'ide.file.saved');
+        messageHub.post({ message: `File '${$scope.file}' saved` }, 'ide.status.message');
       }
     }
 
@@ -159,6 +164,21 @@ angular.module('page', [])
       saveContents(content);
     };
 
+    messageHub.subscribe(
+      function () {
+        $scope.save();
+      },
+      "editor.file.save.all",
+    );
+
+    messageHub.subscribe(
+      function (msg) {
+        let file = msg.data && typeof msg.data === 'object' && msg.data.file;
+        if (file && file === $scope.file)
+          $scope.save();
+      },
+      "editor.file.save",
+    );
 
     $(function () {
       $('[data-toggle="tooltip"]').tooltip()

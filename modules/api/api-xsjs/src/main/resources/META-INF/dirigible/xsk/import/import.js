@@ -42,8 +42,12 @@ var Require = (function (modulePath) {
     if (moduleInfo) {
       return moduleInfo;
     }
-    code = SourceProvider.loadSource(path);
 
+    try {
+      code = SourceProvider.loadSource(path);
+    } catch(e) {
+      throw new Error('Error loading module ' + path + ' : ' + e.message, e);
+    }
     moduleInfo = {
       loaded: false,
       id: path,

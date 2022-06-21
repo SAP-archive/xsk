@@ -1,14 +1,8 @@
 const acorn = require("acornjs/acorn");
 
-export class XSJSLibContentModifier {
+export class XSJSLibCompiler {
 
-  writeExportsToResource(resource, content) {
-    const contentWithExports = this._getXSJSLibContentWithExports(content);
-    resource.setText(contentWithExports);
-    return contentWithExports;
-  }
-
-  _getXSJSLibContentWithExports(content) {
+  appendExports(content) {
     content += "\n\n";
     this._getExports(content).forEach(e => content += "exports." + e + " = " + e + ";\n");
     return content;

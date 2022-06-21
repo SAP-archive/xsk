@@ -11,256 +11,161 @@
  */
 package com.sap.xsk.integration.tests.applications;
 
-import com.sap.xsk.integration.tests.applications.deployment.XSKProjectApplicationType;
 import com.sap.xsk.integration.tests.applications.deployment.XSKProjectDeploymentRule;
-import com.sap.xsk.integration.tests.applications.deployment.XSKProjectDeploymentType;
-import com.sap.xsk.integration.tests.applications.hdb.AbstractXSKHDBITTest;
+import com.sap.xsk.integration.tests.applications.status.XSKProjectHealthCheckRule;
+import com.sap.xsk.integration.tests.applications.status.XSKProjectHttpCheck;
+import com.sap.xsk.integration.tests.applications.status.XSKProjectSqlCheck;
+import com.sap.xsk.integration.tests.applications.utils.XSKProjectHanaDataSourceBuilder;
+import com.sap.xsk.integration.tests.applications.utils.XSKProjectHttpClientBuilder;
 import com.sap.xsk.integration.tests.core.client.http.XSKHttpClient;
-import com.sap.xsk.integration.tests.core.client.http.local.LocalXSKHttpClient;
 import com.sap.xsk.integration.tests.core.hdb.utils.HanaITestUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
-import org.eclipse.dirigible.commons.config.Configuration;
-import org.eclipse.dirigible.database.ds.model.IDataStructureModel;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
-import java.io.BufferedReader;
+import org.junit.rules.RuleChain;
+import org.junit.rules.TestRule;
+import javax.sql.DataSource;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import static com.sap.xsk.integration.tests.applications.deployment.XSKProjectApplicationType.SAMPLE;
+import static com.sap.xsk.integration.tests.applications.deployment.XSKProjectDeploymentType.LOCAL;
 import static com.sap.xsk.integration.tests.applications.deployment.XSKProjectDeploymentConstants.PROJECT_BASE_URI;
-import static org.junit.Assert.assertTrue;
 
-public class XSKHdbHdbtiSimpleSampleTest extends AbstractXSKHDBITTest {
+import static org.junit.Assert.assertEquals;
 
-  private static Integer MAX_RETRY_INDEX = 10;
-  private static Integer DURATION_BEFORE_RETRY = 5000;
+public class XSKHdbHdbtiSimpleSampleTest {
 
-  private static String XSJS_URI_PATH = "/services/v4/xsk/hdb-hdbti-simple/getProductsOrders.xsjs";
-  private static String XSODATA_URI_PATH = "/services/v4/web/hdb-hdbti-simple/Service.xsodata/ProductsOrders?$format=json";
+  private static DataSource dataSource;
+
+  private static final String APPLICATION_NAME = "hdb-hdbti-simple";
+  private static final String APPLICATION_SCHEMA = "XSK_SAMPLES_HDB_HDBTI_SIMPLE";
+
+  private static final String ORDERS_TABLE = "hdb-hdbti-simple::Products.Orders";
+
+  private static final String XSJS_SERVICE_PATH = "/services/v4/xsk/hdb-hdbti-simple/Service.xsjs";
+  private static final String XSODATA_SERVICE_PATH = "/services/v4/web/hdb-hdbti-simple/Service.xsodata";
+
+  private static final String XSJS_PRODUCTS_ORDERS_PATH = XSJS_SERVICE_PATH + "/productsOrders";
+  private static final String XSODATA_PRODUCTS_ORDERS_PATH = XSODATA_SERVICE_PATH + "/ProductsOrders?$format=json";
+
+  private static final List<XSKProjectHttpCheck> HTTP_CHECKS = Arrays.asList(
+      new XSKProjectHttpCheck(XSJS_SERVICE_PATH + "/status", 200, "OK"),
+      new XSKProjectHttpCheck(XSODATA_SERVICE_PATH + "/ProductsOrders", 200));
+
+  private static final List<XSKProjectSqlCheck> SQL_CHECKS = Arrays.asList(new XSKProjectSqlCheck(APPLICATION_SCHEMA, ORDERS_TABLE));
+
+  public static final XSKProjectDeploymentRule xskProjectDeploymentRule = new XSKProjectDeploymentRule(APPLICATION_NAME, SAMPLE, LOCAL);
+
+  public static final XSKProjectHealthCheckRule xskProjectHealthCheckRule = new XSKProjectHealthCheckRule(HTTP_CHECKS, SQL_CHECKS, LOCAL);
 
   @ClassRule
-  public static XSKProjectDeploymentRule xskProjectDeploymentRule = new XSKProjectDeploymentRule("hdb-hdbti-simple",
-      XSKProjectApplicationType.SAMPLE, XSKProjectDeploymentType.LOCAL);
+  public static TestRule chain = RuleChain.outerRule(xskProjectDeploymentRule).around(xskProjectHealthCheckRule);
 
-  @Before
-  public void setUpBeforeTest() throws SQLException {
-    HanaITestUtils.clearDataFromXSKDataStructure(systemDatasource, Arrays.asList(
-        "'/hdb-hdbti-simple/Products.hdbdd'",
-        "'/hdb-hdbti-simple/Products.hdbti'",
-        "'/hdb-hdbti-simple/XSK_SAMPLES_HDB_HDBTI_SIMPLE.hdbschema'"
-    ));
-    Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
-    facade.clearCache();
+  @BeforeClass
+  public static void setDataSource() {
+    dataSource = XSKProjectHanaDataSourceBuilder.createXSKHanaDataSource();
   }
-
-//  @Test
-//  public void testHdbtiSimple() throws IOException, URISyntaxException, SQLException {
-//    try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
-//      try {
-//        URL xsjsUrl = new URL(PROJECT_BASE_URI + "/services/v4/xsk/hdb-hdbti-simple/getProductsOrders.xsjs");
-//        URL xsodataUrl = new URL(PROJECT_BASE_URI + "/services/v4/web/hdb-hdbti-simple/Service.xsodata/ProductsOrders?$format=json");
-//        URL xskUrl = new URL(PROJECT_BASE_URI);
-//
-//        StringBuilder xsjsResult = new StringBuilder();
-//        StringBuilder xsodataResult = new StringBuilder();
-//
-//        XSKHttpClient client = LocalXSKHttpClient.create(xskUrl.toURI());
-//
-//        HttpUriRequest xsjsRequest = RequestBuilder.get(xsjsUrl.toURI()).build();
-//        HttpUriRequest xsodataRequest = RequestBuilder.get(xsodataUrl.toURI()).build();
-//
-//        CloseableHttpResponse xsjsResponse = client.executeRequest(xsjsRequest);
-//        CloseableHttpResponse xsodataResponse = client.executeRequest(xsodataRequest);
-//
-//        HttpEntity xsjsEntity = xsjsResponse.getEntity();
-//        HttpEntity xsodataEntity = xsodataResponse.getEntity();
-//
-//        try (BufferedReader reader = new BufferedReader(
-//            new InputStreamReader(xsjsEntity.getContent()))) {
-//          for (String line; (line = reader.readLine()) != null; ) {
-//            xsjsResult.append(line);
-//          }
-//        }
-//
-//        xsjsResponse.close();
-//
-//        try (BufferedReader reader = new BufferedReader(
-//            new InputStreamReader(xsodataEntity.getContent()))) {
-//          for (String line; (line = reader.readLine()) != null; ) {
-//            xsodataResult.append(line);
-//          }
-//        }
-//
-//        xsodataResponse.close();
-//
-//        assertEquals(
-//            "[{\"Id\":\"1\","
-//                + "\"CustomerName\":\"John\","
-//                + "\"CustomerSurname\":\"Smith\","
-//                + "\"Status\":\"In Progress\","
-//                + "\"CreatedAt\":\"2020-01-01T12:25:10.000Z\","
-//                + "\"CreatedBy\":\"Mike Baker\","
-//                + "\"Description\":\"Migration of XS Classic application from Neo to Kubernetes\","
-//                + "\"Address\":\"Montreux Switzerland\","
-//                + "\"Phone\":\"-\",\"Email\":\"mike.baker@example.com\"},"
-//                + "{\"Id\":\"2\","
-//                + "\"CustomerName\":\"Claudia\","
-//                + "\"CustomerSurname\":\"Davis\","
-//                + "\"Status\":\"In Progress\","
-//                + "\"CreatedAt\":\"2020-01-01T12:27:33.000Z\","
-//                + "\"CreatedBy\":\"Josh Patel\","
-//                + "\"Description\":\"Migration of XS Classic application from Neo to Kubernetes\","
-//                + "\"Address\":\"Waldorf Germany\","
-//                + "\"Phone\":\"-\","
-//                + "\"Email\":\"josh.patel@example.com\"}]",
-//            xsjsResult.toString());
-//
-//        assertEquals(
-//            "{\"d\":{\"results\":"
-//                + "[{\"__metadata\":{\"id\":\"http://localhost:8080/odata/v2/ProductsOrders('1')\","
-//                + "\"uri\":\"http://localhost:8080/odata/v2/ProductsOrders('1')\","
-//                + "\"type\":\"hdb-hdbti-simple.Service.ProductsOrdersType\"},"
-//                + "\"Id\":\"1\","
-//                + "\"CustomerName\":\"John\","
-//                + "\"CustomerSurname\":\"Smith\","
-//                + "\"Status\":\"In Progress\","
-//                + "\"CreatedAt\":\"\\/Date(1577881510000)\\/\","
-//                + "\"CreatedBy\":\"Mike Baker\","
-//                + "\"Description\":\"Migration of XS Classic application from Neo to Kubernetes\","
-//                + "\"Address\":\"Montreux Switzerland\","
-//                + "\"Phone\":\"-\","
-//                + "\"Email\":\"mike.baker@example.com\"},"
-//                + "{\"__metadata\":{\"id\":\"http://localhost:8080/odata/v2/ProductsOrders('2')\","
-//                + "\"uri\":\"http://localhost:8080/odata/v2/ProductsOrders('2')\","
-//                + "\"type\":\"hdb-hdbti-simple.Service.ProductsOrdersType\"},"
-//                + "\"Id\":\"2\","
-//                + "\"CustomerName\":\"Claudia\","
-//                + "\"CustomerSurname\":\"Davis\","
-//                + "\"Status\":\"In Progress\","
-//                + "\"CreatedAt\":\"\\/Date(1577881653000)\\/\","
-//                + "\"CreatedBy\":\"Josh Patel\","
-//                + "\"Description\":\"Migration of XS Classic application from Neo to Kubernetes\","
-//                + "\"Address\":\"Waldorf Germany\","
-//                + "\"Phone\":\"-\","
-//                + "\"Email\":\"josh.patel@example.com\"}]}}",
-//            xsodataResult.toString());
-//      } finally {
-//        HanaITestUtils.dropSchema(stmt, "XSK_SAMPLES_HDB_HDBTI_SIMPLE");
-//      }
-//    }
-//  }
 
   @Test
-  public void testHdbtiSimple() throws IOException, URISyntaxException, SQLException, InterruptedException {
-    try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
-      try {
-        URL xsjsUrl = new URL(PROJECT_BASE_URI + XSJS_URI_PATH);
-        URL xsodataUrl = new URL(PROJECT_BASE_URI + XSODATA_URI_PATH);
-        URL xskUrl = new URL(PROJECT_BASE_URI);
+  public void testHdbtiSimpleSampleXsjs() throws IOException, URISyntaxException, ExecutionException, InterruptedException {
 
-        XSKHttpClient client = LocalXSKHttpClient.create(xskUrl.toURI());
+    URL xsjsUrl = new URL(PROJECT_BASE_URI + XSJS_PRODUCTS_ORDERS_PATH);
 
-        HttpUriRequest xsjsRequest = RequestBuilder.get(xsjsUrl.toURI()).build();
-        HttpUriRequest xsodataRequest = RequestBuilder.get(xsodataUrl.toURI()).build();
+    XSKHttpClient xskHttpClient = XSKProjectHttpClientBuilder.createXSKHttpClient(LOCAL);
 
-        final String expectedXsjsResult = "[{\"Id\":\"1\","
-            + "\"CustomerName\":\"John\","
-            + "\"CustomerSurname\":\"Smith\","
-            + "\"Status\":\"In Progress\","
-            + "\"CreatedAt\":\"2020-01-01T12:25:10.000Z\","
-            + "\"CreatedBy\":\"Mike Baker\","
-            + "\"Description\":\"Migration of XS Classic application from Neo to Kubernetes\","
-            + "\"Address\":\"Montreux Switzerland\","
-            + "\"Phone\":\"-\",\"Email\":\"mike.baker@example.com\"},"
-            + "{\"Id\":\"2\","
-            + "\"CustomerName\":\"Claudia\","
-            + "\"CustomerSurname\":\"Davis\","
-            + "\"Status\":\"In Progress\","
-            + "\"CreatedAt\":\"2020-01-01T12:27:33.000Z\","
-            + "\"CreatedBy\":\"Josh Patel\","
-            + "\"Description\":\"Migration of XS Classic application from Neo to Kubernetes\","
-            + "\"Address\":\"Waldorf Germany\","
-            + "\"Phone\":\"-\","
-            + "\"Email\":\"josh.patel@example.com\"}]";
+    HttpUriRequest xsjsRequest = RequestBuilder.get(xsjsUrl.toURI()).build();
 
-        final String expectedXsodataResult = "{\"d\":{\"results\":"
-            + "[{\"__metadata\":{\"id\":\"http://localhost:8080/odata/v2/ProductsOrders('1')\","
-            + "\"uri\":\"http://localhost:8080/odata/v2/ProductsOrders('1')\","
-            + "\"type\":\"hdb-hdbti-simple.Service.ProductsOrdersType\"},"
-            + "\"Id\":\"1\","
-            + "\"CustomerName\":\"John\","
-            + "\"CustomerSurname\":\"Smith\","
-            + "\"Status\":\"In Progress\","
-            + "\"CreatedAt\":\"\\/Date(1577881510000)\\/\","
-            + "\"CreatedBy\":\"Mike Baker\","
-            + "\"Description\":\"Migration of XS Classic application from Neo to Kubernetes\","
-            + "\"Address\":\"Montreux Switzerland\","
-            + "\"Phone\":\"-\","
-            + "\"Email\":\"mike.baker@example.com\"},"
-            + "{\"__metadata\":{\"id\":\"http://localhost:8080/odata/v2/ProductsOrders('2')\","
-            + "\"uri\":\"http://localhost:8080/odata/v2/ProductsOrders('2')\","
-            + "\"type\":\"hdb-hdbti-simple.Service.ProductsOrdersType\"},"
-            + "\"Id\":\"2\","
-            + "\"CustomerName\":\"Claudia\","
-            + "\"CustomerSurname\":\"Davis\","
-            + "\"Status\":\"In Progress\","
-            + "\"CreatedAt\":\"\\/Date(1577881653000)\\/\","
-            + "\"CreatedBy\":\"Josh Patel\","
-            + "\"Description\":\"Migration of XS Classic application from Neo to Kubernetes\","
-            + "\"Address\":\"Waldorf Germany\","
-            + "\"Phone\":\"-\","
-            + "\"Email\":\"josh.patel@example.com\"}]}}";
+    HttpResponse xsjsHttpResponse = xskHttpClient.executeRequestAsync(xsjsRequest).get();
+    HttpEntity xsjsEntity = xsjsHttpResponse.getEntity();
+    String xsjsResult = IOUtils.toString(xsjsEntity.getContent(), StandardCharsets.UTF_8);
 
-        assertTrue("The xsjs request response did not match the expected result!",
-            requestWithRetry(client, xsjsRequest, 1, expectedXsjsResult));
-        assertTrue("The xsodata request response did not match the expected result!",
-            requestWithRetry(client, xsodataRequest, 1, expectedXsodataResult));
+    final String expectedXsjsResult = "[{\"Id\":\"1\","
+        + "\"CustomerName\":\"John\","
+        + "\"CustomerSurname\":\"Smith\","
+        + "\"Status\":\"In Progress\","
+        + "\"CreatedAt\":\"2020-01-01T12:25:10.000Z\","
+        + "\"CreatedBy\":\"Mike Baker\","
+        + "\"Description\":\"Migration of XS Classic application from Neo to Kubernetes\","
+        + "\"Address\":\"Montreux Switzerland\","
+        + "\"Phone\":\"-\",\"Email\":\"mike.baker@example.com\"},"
+        + "{\"Id\":\"2\","
+        + "\"CustomerName\":\"Claudia\","
+        + "\"CustomerSurname\":\"Davis\","
+        + "\"Status\":\"In Progress\","
+        + "\"CreatedAt\":\"2020-01-01T12:27:33.000Z\","
+        + "\"CreatedBy\":\"Josh Patel\","
+        + "\"Description\":\"Migration of XS Classic application from Neo to Kubernetes\","
+        + "\"Address\":\"Waldorf Germany\","
+        + "\"Phone\":\"-\","
+        + "\"Email\":\"josh.patel@example.com\"}]";
 
-      } finally {
-        HanaITestUtils.dropSchema(stmt, "XSK_SAMPLES_HDB_HDBTI_SIMPLE");
-      }
-    }
+    assertEquals("The xsjs request response did not match the expected result!", expectedXsjsResult, xsjsResult);
   }
 
-  private boolean requestWithRetry(XSKHttpClient httpAsyncClient, HttpUriRequest httpUriRequest, Integer currentRetryIndex,
-      String expectedResult) throws InterruptedException {
+  @Test
+  public void testHdbHdbtiSimpleSampleXsodata() throws IOException, URISyntaxException, ExecutionException, InterruptedException {
 
-    if (currentRetryIndex > MAX_RETRY_INDEX) {
-      return false;
-    }
+    URL xsodataUrl = new URL(PROJECT_BASE_URI + XSODATA_PRODUCTS_ORDERS_PATH);
 
-    try {
-      HttpResponse closeableHttpResponse = httpAsyncClient.executeRequestAsync(httpUriRequest).get();
-      HttpEntity entity = closeableHttpResponse.getEntity();
-      StringBuilder result = new StringBuilder();
+    XSKHttpClient xskHttpClient = XSKProjectHttpClientBuilder.createXSKHttpClient(LOCAL);
 
-      BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()));
+    HttpUriRequest xsodataRequest = RequestBuilder.get(xsodataUrl.toURI()).build();
 
-      for (String line; (line = reader.readLine()) != null; ) {
-        result.append(line);
-      }
+    HttpResponse xsodataHttpResponse = xskHttpClient.executeRequestAsync(xsodataRequest).get();
+    HttpEntity xsodataEntity = xsodataHttpResponse.getEntity();
+    String xsodataResult = IOUtils.toString(xsodataEntity.getContent(), StandardCharsets.UTF_8);
 
-      if (!expectedResult.equals(result.toString())) {
-        throw new IOException();
-      } else {
-        return true;
-      }
-    } catch (ExecutionException | IOException e) {
-      Thread.sleep(DURATION_BEFORE_RETRY);
+    final String expectedXsodataResult = "{\"d\":{\"results\":"
+        + "[{\"__metadata\":{\"id\":\"http://localhost:8080/odata/v2/ProductsOrders('1')\","
+        + "\"uri\":\"http://localhost:8080/odata/v2/ProductsOrders('1')\","
+        + "\"type\":\"hdb-hdbti-simple.Service.ProductsOrdersType\"},"
+        + "\"Id\":\"1\","
+        + "\"CustomerName\":\"John\","
+        + "\"CustomerSurname\":\"Smith\","
+        + "\"Status\":\"In Progress\","
+        + "\"CreatedAt\":\"\\/Date(1577881510000)\\/\","
+        + "\"CreatedBy\":\"Mike Baker\","
+        + "\"Description\":\"Migration of XS Classic application from Neo to Kubernetes\","
+        + "\"Address\":\"Montreux Switzerland\","
+        + "\"Phone\":\"-\","
+        + "\"Email\":\"mike.baker@example.com\"},"
+        + "{\"__metadata\":{\"id\":\"http://localhost:8080/odata/v2/ProductsOrders('2')\","
+        + "\"uri\":\"http://localhost:8080/odata/v2/ProductsOrders('2')\","
+        + "\"type\":\"hdb-hdbti-simple.Service.ProductsOrdersType\"},"
+        + "\"Id\":\"2\","
+        + "\"CustomerName\":\"Claudia\","
+        + "\"CustomerSurname\":\"Davis\","
+        + "\"Status\":\"In Progress\","
+        + "\"CreatedAt\":\"\\/Date(1577881653000)\\/\","
+        + "\"CreatedBy\":\"Josh Patel\","
+        + "\"Description\":\"Migration of XS Classic application from Neo to Kubernetes\","
+        + "\"Address\":\"Waldorf Germany\","
+        + "\"Phone\":\"-\","
+        + "\"Email\":\"josh.patel@example.com\"}]}}";
 
-      return requestWithRetry(httpAsyncClient, httpUriRequest, currentRetryIndex + 1, expectedResult);
+    assertEquals("The xsodata request response did not match the expected result!", expectedXsodataResult, xsodataResult);
+  }
+
+  @AfterClass
+  public static void deleteSchema() throws SQLException {
+    try (Connection connection = dataSource.getConnection(); Statement statement = connection.createStatement()) {
+      HanaITestUtils.dropSchema(statement, APPLICATION_SCHEMA);
     }
   }
 }

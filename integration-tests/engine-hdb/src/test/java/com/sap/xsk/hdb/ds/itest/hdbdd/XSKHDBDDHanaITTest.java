@@ -27,7 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
-import com.sap.xsk.hdb.ds.itest.AbstractXSKHDBITTest;
+import com.sap.xsk.hdb.ds.AbstractXSKHDBITTest;
 import com.sap.xsk.integration.tests.core.hdb.module.XSKHDBTestModule;
 import com.sap.xsk.integration.tests.core.hdb.utils.HanaITestUtils;
 

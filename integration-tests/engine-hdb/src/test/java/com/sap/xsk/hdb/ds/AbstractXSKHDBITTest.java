@@ -9,23 +9,29 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.integration.tests.applications.hdb;
+package com.sap.xsk.hdb.ds;
 
-import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreSynchronizationFacade;
-import com.sap.xsk.hdb.ds.facade.XSKHDBCoreSynchronizationFacade;
-import com.sap.xsk.integration.tests.core.hdb.model.JDBCModel;
-import com.sap.xsk.integration.tests.core.hdb.module.XSKHDBTestModule;
-import com.sap.xsk.integration.tests.core.hdb.utils.HanaITestUtils;
-import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import static com.sap.xsk.integration.tests.core.hdb.utils.TestConstants.HANA_DRIVER;
+import static com.sap.xsk.integration.tests.core.hdb.utils.TestConstants.HANA_PASSWORD;
+import static com.sap.xsk.integration.tests.core.hdb.utils.TestConstants.HANA_URL;
+import static com.sap.xsk.integration.tests.core.hdb.utils.TestConstants.HANA_USERNAME;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static com.sap.xsk.integration.tests.core.hdb.utils.TestConstants.*;
+import javax.sql.DataSource;
+
+import org.eclipse.dirigible.commons.config.StaticObjects;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+
+import com.sap.xsk.hdb.ds.facade.IXSKHDBCoreSynchronizationFacade;
+import com.sap.xsk.hdb.ds.facade.XSKHDBCoreSynchronizationFacade;
+
+import com.sap.xsk.integration.tests.core.hdb.utils.HanaITestUtils;
+import com.sap.xsk.integration.tests.core.hdb.model.JDBCModel;
+import com.sap.xsk.integration.tests.core.hdb.module.XSKHDBTestModule;
 
 public abstract class AbstractXSKHDBITTest {
 

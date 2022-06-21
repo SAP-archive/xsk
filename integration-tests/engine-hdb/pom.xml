@@ -30,30 +30,6 @@
     </dependency>
 
     <dependency>
-      <groupId>org.eclipse.dirigible</groupId>
-      <artifactId>dirigible-commons-test</artifactId>
-      <version>${dirigible.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.dirigible</groupId>
-      <artifactId>dirigible-database-custom</artifactId>
-      <version>${dirigible.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.dirigible</groupId>
-      <artifactId>dirigible-database-h2</artifactId>
-      <version>${dirigible.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.dirigible</groupId>
-      <artifactId>dirigible-repository-local</artifactId>
-      <version>${dirigible.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>${junit.version}</version>

@@ -44,6 +44,9 @@
 
         <!-- Project-specific stuff -->
         <script type="text/javascript" src="js/migration-launch.js"></script>
+        <script type="text/javascript" src="js/migration-view-state.js"></script>
+        <script type="text/javascript" src="js/migration-flow.js"></script>
+        <script type="text/javascript" src="js/step-factory.js"></script>
         <script type="text/javascript" src="js/migration-statistic.js"></script>
         <script type="text/javascript" src="js/delivery-unit.js"></script>
         <script type="text/javascript" src="js/neo-credentials.js"></script>
@@ -58,52 +61,52 @@
     <body ng-app="migration-launch" ng-controller="MigrationLaunchViewController" class="view migration-launch-body">
         <div class="migration-title">
             <span class="pull-left"> SAP HANA XS Classic Migration </span>
-            <button type="button" class="btn btn-primary btn-big pull-right" ng-click="showMigrationScreen()"
-                ng-show="onStatisticsPage">
+            <button type="button" class="btn btn-primary btn-big pull-right" ng-click="selectLiveMigration()"
+                ng-show="onStatisticsPage()">
                 Migrate live project(s)
             </button>
             <button type="button" class="btn btn-secondary btn-big pull-right" ng-click="selectZipMigration()"
-                ng-show="onStatisticsPage">
+                ng-show="onStatisticsPage()">
                 Migrate project(s) from ZIP
             </button>
         </div>
 
-        <div ng-include="'partials/migration-statistic.html'" ng-show="onStatisticsPage"></div>
+        <div ng-include="'partials/migration-statistic.html'" ng-show="onStatisticsPage()"></div>
 
-        <div class="flex-container" ng-hide="onStatisticsPage">
+        <div class="flex-container" ng-hide="onStatisticsPage()">
             <div class="migration-nav">
                 <div class="nav-progress">
                     <div class="nav-progress-line"></div>
-                    <div class="nav-item" ng-repeat="step in steps" ng-class="isStepActive(step.id)"
-                        ng-hide="migrationFromZip">
+                    <div class="nav-item" ng-repeat="step in getSteps()" ng-class="getStepStatus(step.id)"
+                        ng-hide="isMigrationFromZip()">
                         <div class="nav-item-indicator"></div>
                         <div class="nav-item-label">{{step.name}}</div>
                     </div>
-                    <div class="nav-item" ng-repeat="step in zipsteps" ng-class="isZipStepActive(step.id)"
-                        ng-show="migrationFromZip">
+                    <div class="nav-item" ng-repeat="step in getSteps()" ng-class="getStepStatus(step.id)"
+                        ng-show="isMigrationFromZip()">
                         <div class="nav-item-indicator"></div>
                         <div class="nav-item-label">{{step.name}}</div>
                     </div>
                 </div>
             </div>
             <div class="migration-main">
-                <div class="steps-container" ng-style="fullWidthEnabled && {'max-width': '100%'}">
-                    <div ng-include="'partials/zip-migration.html'" ng-show="migrationFromZip"></div>
+                <div class="steps-container" ng-style="fullWidthEnabled() && {'max-width': '100%'}">
+                    <div ng-include="'partials/zip-migration.html'" ng-show="isMigrationFromZip()"></div>
                     <div ng-include="'partials/delivery-unit.html'"></div>
                     <div ng-include="'partials/neo-credentials.html'"></div>
                     <div ng-include="'partials/hana-credentials.html'"></div>
                     <div ng-include="'partials/changes.html'"></div>
                     <div ng-include="'partials/start-migration.html'"></div>
 
-                    <div class="bottom-nav margin-top-bottom-lg" ng-hide="bottomNavHidden">
-                        <button type="button" class="btn btn-default btn-big pull-left" ng-click="backToChoice()"
-                            ng-hide="previousVisible">Previous</button>
+                    <div class="bottom-nav margin-top-bottom-lg" ng-hide="bottomNavHidden()">
+                        <button type="button" class="btn btn-default btn-big pull-left" ng-click="goBack()"
+                            ng-hide="previousVisible()">Previous</button>
                         <button type="button" class="btn btn-default btn-big pull-left" ng-click="previousClicked()"
-                            ng-disabled="previousDisabled" ng-show="previousVisible">Previous</button>
-                        <button type="button" class="btn btn-primary btn-big pull-right" ng-click="nextClicked()"
-                            ng-disabled="nextDisabled" ng-show="nextVisible">Next</button>
+                            ng-disabled="previousDisabled()" ng-show="previousVisible()">Previous</button>
+                        <button type="button" class="btn btn-primary btn-big pull-right" ng-click="goForward()"
+                            ng-disabled="nextDisabled()" ng-show="nextVisible()">Next</button>
                         <button type="button" class="btn btn-primary btn-big pull-right" ng-click="finishClicked()"
-                            ng-disabled="finishDisabled" ng-show="finishVisible">Finish</button>
+                            ng-disabled="finishDisabled()" ng-show="finishVisible()">Finish</button>
                     </div>
                 </div>
             </div>

@@ -335,4 +335,5 @@ public class XSKHDBTableParserHanaITTest extends AbstractXSKHDBITTest {
         stmt.addBatch(insertThird);
         stmt.executeBatch();
     }
+
 }

@@ -79,7 +79,7 @@ public class HdbddTransformer {
     tableModel.getConstraints().setPrimaryKey(primaryKey);
 
     List<XSKDataStructureHDBTableColumnModel> tableColumns = new ArrayList<>();
-    for(EntityElementSymbol currentElement: entitySymbol.getElements()) {
+    entitySymbol.getElements().forEach(currentElement -> {
       if (currentElement.getType() instanceof StructuredDataTypeSymbol) {
         List<EntityElementSymbol> subElements = getStructuredTypeSubElements(currentElement);
         subElements.forEach(subE -> {
@@ -88,7 +88,7 @@ public class HdbddTransformer {
       } else {
         tableColumns.add(transformFieldSymbolToColumnModel(currentElement, true));
       }
-    }
+    });
 
     entitySymbol.getAssociations().forEach(associationSymbol -> {
       List<XSKDataStructureHDBTableColumnModel> associationColumns = transformAssociationToColumnModels(associationSymbol);

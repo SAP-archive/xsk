@@ -62,16 +62,15 @@ public class XSKProjectHealthChecker {
         URL requestUrl = new URL(PROJECT_BASE_URI + endpointToCall);
         HttpUriRequest httpUriRequest = RequestBuilder.get(requestUrl.toURI()).build();
 
-        boolean healthCheckStatus;
-
-        healthCheckStatus = makeRequestWithRetry(xskHttpClient, httpUriRequest, expectedStatusCode, expectedBodyMessage,
+        boolean httpCheckStatus;
+        httpCheckStatus = makeRequestWithRetry(xskHttpClient, httpUriRequest, expectedStatusCode, expectedBodyMessage,
             INITIAL_RETRY_INDEX);
 
-        if (!healthCheckStatus) {
-          throw new IOException();
+        if (!httpCheckStatus) {
+          throw new IOException("Expected status coded or body message did not match!");
         }
       } catch (InterruptedException | URISyntaxException | IOException e) {
-        String errorMessage = "Health check for endpoint " + endpointToCall + " failed!";
+        String errorMessage = "Health check for endpoint " + endpointToCall + " failed! " + e.getMessage();
         throw new XSKProjectHealthCheckException(errorMessage, e);
       }
     });
@@ -89,22 +88,15 @@ public class XSKProjectHealthChecker {
       HttpEntity httpEntity = httpResponse.getEntity();
       String responseBodyMessage = IOUtils.toString(httpEntity.getContent(), StandardCharsets.UTF_8);
 
-      boolean statusCodeOkay = true;
-      boolean bodyMessageOkay = true;
-
       if (!expectedStatusCode.equals(httpResponse.getStatusLine().getStatusCode())) {
-        statusCodeOkay = false;
+        throw new IOException("Expected status code did not match!");
       }
 
       if (expectedBodyMessage != null && !expectedBodyMessage.equals(responseBodyMessage)) {
-        bodyMessageOkay = false;
+        throw new IOException("Expected body message did not match!");
       }
 
-      if (statusCodeOkay && bodyMessageOkay) {
-        return true;
-      } else {
-        throw new IOException("Expected status code or body message did not match!");
-      }
+      return true;
 
     } catch (ExecutionException | IOException e) {
       Thread.sleep(RETRY_INTERVAL);
@@ -119,22 +111,22 @@ public class XSKProjectHealthChecker {
 
       try (Connection connection = dataSource.getConnection()) {
 
-        boolean tableExists;
-        tableExists = checkIfTableExists(connection, schemaName, tableName);
+        boolean tableExistsStatus;
+        tableExistsStatus = checkIfTableExists(connection, schemaName, tableName);
 
-        if (!tableExists) {
-          throw new IOException();
+        if (!tableExistsStatus) {
+          throw new IOException("Table does not exist!");
         }
 
-        boolean tableHasRecords;
-        tableHasRecords = checkIfTableHasRecords(connection, schemaName, tableName);
+        boolean tableHasRecordsStatus;
+        tableHasRecordsStatus = checkIfTableHasRecords(connection, schemaName, tableName);
 
-        if (!tableHasRecords) {
-          throw new IOException();
+        if (!tableHasRecordsStatus) {
+          throw new IOException("Table has no records!");
         }
 
       } catch (IOException | SQLException | InterruptedException e) {
-        String errorMessage = "Health check for table " + tableName + " failed!";
+        String errorMessage = "Health check for table " + tableName + " failed! " + e.getMessage();
         throw new XSKProjectHealthCheckException(errorMessage, e);
       }
     });
@@ -165,11 +157,12 @@ public class XSKProjectHealthChecker {
     try {
       ResultSet queryResult = statement.executeQuery();
 
-      if (queryResult.next()) {
-        return true;
-      } else {
+      if (!queryResult.next()) {
         throw new IOException("Table does not exist!");
       }
+
+      return true;
+
     } catch (Exception e) {
       Thread.sleep(RETRY_INTERVAL);
       return executeQueryWithRetryToCheckIfTableHasRecords(statement, currentRetryIndex + 1);
@@ -186,15 +179,15 @@ public class XSKProjectHealthChecker {
     try {
       ResultSet queryResult = statement.executeQuery();
 
-      if (queryResult.next() && queryResult.getInt("RECORD_COUNT") > 0) {
-        return true;
-      } else {
+      if (!queryResult.next() || queryResult.getInt("RECORD_COUNT") == 0) {
         throw new IOException("Table has no records!");
       }
+
+      return true;
+
     } catch (Exception e) {
       Thread.sleep(RETRY_INTERVAL);
       return executeQueryWithRetryToCheckIfTableHasRecords(statement, currentRetryIndex + 1);
     }
   }
-
 }

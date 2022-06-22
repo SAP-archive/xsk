@@ -40,8 +40,6 @@ public class XSKProjectDeploymentRule extends ExternalResource {
 
     Path resourcePath = null;
 
-    // TODO: Check if samples path could be set with ClassLoader
-
     switch (xskProjectApplicationType) {
       case SAMPLE:
         resourcePath = Path.of(Paths.get("").toAbsolutePath().getParent().getParent() + SAMPLES_DIR_NAME + applicationName);

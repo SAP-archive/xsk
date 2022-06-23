@@ -345,19 +345,6 @@ public class XSKProcedureOData2EventHandler extends ScriptingOData2EventHandler 
     }
   }
 
-  public DataSource getDataSource() {
-    if(dataSource == null) {
-      dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
-      return dataSource;
-    }
-
-    return dataSource;
-  }
-
-  public void setDataSource(DataSource dataSource) {
-    this.dataSource = dataSource;
-  }
-
   ResultSet callProcedure(Connection connection, String schema, String procedureName, String newTableParam) throws SQLException {
     PreparedStatement statement = XSKOData2EventHandlerUtils.prepareStatement(connection,
         String.format("CALL \"%s\".\"%s\" (\"%s\", ?)", schema, procedureName, newTableParam));

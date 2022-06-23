@@ -14,11 +14,13 @@ migrationLaunchView.controller("HanaCredentialsViewController", [
     "$http",
     "$messageHub",
     "migrationDataState",
-    function ($scope, $http, $messageHub, migrationDataState) {
+    "migrationViewState",
+    function ($scope, $http, $messageHub, migrationDataState, migrationViewState) {
         $scope.migrationDataState = migrationDataState;
-        $scope.isVisible = false;
         $scope.passwordVisible = false;
-        $scope.areDatabasesLoaded = false;
+        $scope.dataLoaded = function () {
+            return !migrationViewState.getIsDataLoading();
+        }
         $scope.databasesDropdownText = "---Please select---";
         $scope.databases = [];
         $scope.databasesList = $scope.databases;
@@ -52,14 +54,9 @@ migrationLaunchView.controller("HanaCredentialsViewController", [
                         body.databases = response.data.databases;
                         migrationDataState.userJwtToken = response.data.userJwtToken;
 
-                        $scope.areDatabasesLoaded = true;
+                        migrationViewState.setDataLoading(false);
                         $scope.descriptionText = descriptionList[1];
                         $scope.userInput();
-                        $scope.$parent.setPreviousVisible(true);
-                        $scope.$parent.setPreviousEnabled(true);
-                        $scope.$parent.setNextVisible(true);
-                        $scope.$parent.setNextEnabled(true);
-                        $scope.$parent.setFinishVisible(false);
 
                         $scope.databasesDropdownText = "---Please select---";
                         $scope.databases = response.data.databases;
@@ -67,6 +64,7 @@ migrationLaunchView.controller("HanaCredentialsViewController", [
                     }
                 })
                 .catch(function (err) {
+                    migrationViewState.setDataLoading(false);
                     $messageHub.announceAlertError(defaultErrorTitle, err.message ?? defaultErrorDesc);
                     errorOccurred();
                 });
@@ -74,7 +72,6 @@ migrationLaunchView.controller("HanaCredentialsViewController", [
 
         function errorOccurred() {
             $scope.$parent.previousClicked();
-            $scope.$parent.setBottomNavEnabled(true);
         }
 
         $scope.userInput = function () {
@@ -82,7 +79,7 @@ migrationLaunchView.controller("HanaCredentialsViewController", [
                 migrationDataState.schemaName &&
                 migrationDataState.dbUsername &&
                 migrationDataState.dbPassword &&
-                $scope.areDatabasesLoaded
+                !migrationViewState.getIsDataLoading()
             ) {
                 $scope.$parent.setNextEnabled(true);
             } else {
@@ -114,22 +111,12 @@ migrationLaunchView.controller("HanaCredentialsViewController", [
             $scope.userInput();
         };
 
+
         $messageHub.on(
-            "migration.hana-credentials",
-            function (msg) {
-                if ("isVisible" in msg.data) {
-                    $scope.$apply(function () {
-                        $scope.areDatabasesLoaded = false;
-                        $scope.isVisible = msg.data.isVisible;
-                        $scope.$parent.setPreviousVisible(false);
-                        $scope.$parent.setPreviousEnabled(false);
-                        $scope.$parent.setNextVisible(false);
-                        $scope.$parent.setNextEnabled(false);
-                        if (msg.data.isVisible) {
-                            getAvailableHanaDatabases();
-                        }
-                    });
-                }
+            "migration.get-databases",
+            function () {
+                migrationViewState.setDataLoading(true);
+                getAvailableHanaDatabases();
             }.bind(this)
         );
     },

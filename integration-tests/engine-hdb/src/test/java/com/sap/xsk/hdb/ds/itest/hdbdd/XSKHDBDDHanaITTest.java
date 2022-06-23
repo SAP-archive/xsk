@@ -247,6 +247,16 @@ public class XSKHDBDDHanaITTest extends AbstractXSKHDBITTest {
         assertTrue("Expected synonym was not found!",
             HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.employees_view_with_union"));
 
+        assertTrue("Expected view was not found!",
+            HanaITestUtils.checkExistOfView(connection, "itest::EmployeesWithViewDefinitions.embedded_context.embedded_view", TEST_SCHEMA));
+        assertTrue("Expected synonym was not found!",
+            HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.embedded_context.embedded_view"));
+
+        assertTrue("Expected view was not found!",
+            HanaITestUtils.checkExistOfView(connection, "itest::EmployeesWithViewDefinitions.outer_view", TEST_SCHEMA));
+        assertTrue("Expected synonym was not found!",
+            HanaITestUtils.checkExistOfPublicSynonym(connection, "itest::EmployeesWithViewDefinitions.outer_view"));
+
       } finally {
         HanaITestUtils.dropSchema(stmt, TEST_SCHEMA);
       }

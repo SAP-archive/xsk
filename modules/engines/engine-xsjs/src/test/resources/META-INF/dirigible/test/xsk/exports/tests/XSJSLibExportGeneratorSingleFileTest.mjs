@@ -1,9 +1,10 @@
-import { assertEquals } from './utils/utils.mjs'
+import { assertEquals } from '../utils/utils.mjs'
+import { getParams } from '../utils/stateTableParamsProvider.mjs'
+import { fetchAllEntriesInTable } from '../utils/utils.mjs'
 import { XSJSLibExportsGenerator } from '/exports/XSJSLibExportsGenerator.mjs'
 import { repository } from '@dirigible-v4/platform'
 import { digest } from '@dirigible-v4/utils'
-import { getParams } from './utils/stateTableParamsProvider.mjs'
-import { fetchAllEntriesInTable } from './utils/utils.mjs'
+const XSJSLibSynchronizerRegistryEntity = Java.type("com.sap.xsk.synchronizer.XSJSLibSynchronizerRegistryEntity");
 
 function testSingleFileExportGeneration() {
   const stateTableParams = getParams();
@@ -16,12 +17,15 @@ function testSingleFileExportGeneration() {
 
   // run generation and assert content is valid
   const generator = new XSJSLibExportsGenerator(stateTableParams);
-  generator.run(collection.getPath());
-  assertEquals(expectedContent, resource.getText(), "Unexpected xsjslib content after exports generation.");
+  const target = new XSJSLibSynchronizerRegistryEntity(collection.getPath(), repository);
+  generator.run(target);
+  const generatedExportsResource = repository.getResource(resource.getPath() + ".generated_exports");
+  assertEquals(expectedContent, generatedExportsResource.getText(), "Unexpected xsjslib content after exports generation.");
+  assertEquals(input, resource.getText(), "Unexpected xsjslib content after exports generation.");
 
   // assert state table entries are okay
   const entries = fetchAllEntriesInTable(stateTableParams);
-  const expected = {"ID":0, "LOCATION":"/asd/asd.xsjslib", "HASH": digest.md5Hex(expectedContent)};
+  const expected = {"ID":0, "LOCATION":"/asd/asd.xsjslib", "HASH": digest.md5Hex(input)};
 
   assertEquals(1, entries.length, "Unexpected count of entries in DB.");
   const actual = entries.shift();

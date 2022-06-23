@@ -253,7 +253,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 
-        <dirigible.version>6.2.34</dirigible.version>
+        <dirigible.version>6.3.3</dirigible.version>
 
 
         <!-- Sonar Cloud -->
@@ -285,7 +285,7 @@
         <slf4j.version>1.7.36</slf4j.version>
         <slf4j.simple.version>1.7.12</slf4j.simple.version>
         <logback.version>1.2.11</logback.version>
-        <com.h2database.version>2.1.212</com.h2database.version>
+        <com.h2database.version>2.1.214</com.h2database.version>
         <derby.version>10.12.1.1</derby.version>
         <activemq.version>5.14.5</activemq.version>
         <jsr250-api.version>1.0</jsr250-api.version>
@@ -308,7 +308,7 @@
         <license-maven-plugin.version>4.2.rc3</license-maven-plugin.version>
         <antlr4-runtime.version>4.10.1</antlr4-runtime.version>
         <antlr4-maven-plugin.version>4.10.1</antlr4-maven-plugin.version>
-        <selenium.version>4.2.1</selenium.version>
+        <selenium.version>4.2.2</selenium.version>
         <selenium.webdriver.manager.version>5.2.0</selenium.webdriver.manager.version>
         <neo-java-web-sdk.version>4.8.9</neo-java-web-sdk.version>
         <neo-java-web-sdk.javax.activation.version>1.2.0</neo-java-web-sdk.javax.activation.version>
@@ -321,6 +321,7 @@
         <javax.websocket-api.version>1.1</javax.websocket-api.version>
         <jacoco.version>0.8.8</jacoco.version>
         <hakky.logcaptor.version>2.7.10</hakky.logcaptor.version>
+        <jetbrains.annotations.version>23.0.0</jetbrains.annotations.version>
 
         <profile.content.phase>none</profile.content.phase>
 

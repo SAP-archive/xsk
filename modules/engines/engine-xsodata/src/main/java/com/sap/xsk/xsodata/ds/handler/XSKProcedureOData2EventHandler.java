@@ -103,6 +103,7 @@ public class XSKProcedureOData2EventHandler extends ScriptingOData2EventHandler 
     String newTableParam = null;
     try {
       connection = dataSource.getConnection();
+
       if (context.containsKey(ON_CREATE_ENTITY_TABLE_NAME)) {
         newTableParam = (String) context.get(ON_CREATE_ENTITY_TABLE_NAME);
       } else {
@@ -344,20 +345,33 @@ public class XSKProcedureOData2EventHandler extends ScriptingOData2EventHandler 
     }
   }
 
-  private ResultSet callProcedure(Connection connection, String schema, String procedureName, String newTableParam) throws SQLException {
+  public DataSource getDataSource() {
+    if(dataSource == null) {
+      dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+      return dataSource;
+    }
+
+    return dataSource;
+  }
+
+  public void setDataSource(DataSource dataSource) {
+    this.dataSource = dataSource;
+  }
+
+  ResultSet callProcedure(Connection connection, String schema, String procedureName, String newTableParam) throws SQLException {
     PreparedStatement statement = XSKOData2EventHandlerUtils.prepareStatement(connection,
         String.format("CALL \"%s\".\"%s\" (\"%s\", ?)", schema, procedureName, newTableParam));
     return statement.executeQuery();
   }
 
-  private ResultSet callProcedure(Connection connection, String schema, String procedureName, String oldTableParam, String newTableParam)
+  ResultSet callProcedure(Connection connection, String schema, String procedureName, String oldTableParam, String newTableParam)
       throws SQLException {
     PreparedStatement statement = XSKOData2EventHandlerUtils.prepareStatement(connection,
         String.format("CALL \"%s\".\"%s\" (\"%s\", \"%s\", ?)", schema, procedureName, newTableParam, oldTableParam));
     return statement.executeQuery();
   }
 
-  private String getODataArtifactTypeSchema(String tableName) throws SQLException {
+  String getODataArtifactTypeSchema(String tableName) throws SQLException {
     String normalizedTableName = DBMetadataUtil.normalizeTableName(tableName);
     XSKTableMetadataProvider tableMetadataProvider = new XSKTableMetadataProvider();
     PersistenceTableModel persistenceTableModel = tableMetadataProvider.getPersistenceTableModel(normalizedTableName);

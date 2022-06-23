@@ -34,9 +34,21 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
 
   private static final String HANDLER = "handler";
 
-  private final ODataCoreService odataCoreService = new ODataCoreService();
-  private final XSKScriptingOData2EventHandler xskScriptingOData2EventHandler = new XSKScriptingOData2EventHandler();
-  private final XSKProcedureOData2EventHandler xskProcedureOData2EventHandler = new XSKProcedureOData2EventHandler();
+  private ODataCoreService odataCoreService;
+  private XSKProcedureOData2EventHandler procedureHandler;
+  private XSKScriptingOData2EventHandler scriptingHandler;
+
+  public XSKOData2EventHandler() {
+    this.odataCoreService = new ODataCoreService();
+    this.procedureHandler = new XSKProcedureOData2EventHandler();
+    this.scriptingHandler = new XSKScriptingOData2EventHandler();
+  }
+
+  public XSKOData2EventHandler(ODataCoreService odataCoreService, XSKProcedureOData2EventHandler procedureHandler, XSKScriptingOData2EventHandler scriptingHandler) {
+    this.odataCoreService = odataCoreService;
+    this.procedureHandler = procedureHandler;
+    this.scriptingHandler = scriptingHandler;
+  }
 
   @Override
   public void beforeCreateEntity(PostUriInfo uriInfo, String requestContentType, String contentType, ODataEntry entry,
@@ -71,7 +83,7 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
       if(handlers.size() > 0) {
         OData2EventHandler eventHandler = determineEventHandler(handlers.get(0));
         context.put(HANDLER, handlers.get(0));
-        eventHandler.beforeCreateEntity(uriInfo, requestContentType, contentType, entry, context);
+        eventHandler.afterCreateEntity(uriInfo, requestContentType, contentType, entry, context);
       }
     } catch (EdmException e) {
       e.printStackTrace();
@@ -222,9 +234,9 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
 
   private OData2EventHandler determineEventHandler(ODataHandlerDefinition handler) {
     if(handler.getHandler().contains(".xsjslib::")) {
-      return xskScriptingOData2EventHandler;
+      return scriptingHandler;
     } else {
-      return xskProcedureOData2EventHandler;
+      return procedureHandler;
     }
   }
 }

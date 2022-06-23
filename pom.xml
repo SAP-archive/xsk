@@ -316,7 +316,7 @@
         <content.output.directory>${basedir}/src/main/resources/META-INF/dirigible/${content.project.name}</content.output.directory>
 
 
-        <license.header.location>licensing-header.txt</license.header.location>
+        <license.header.location>${maven.multiModuleProjectDirectory}/licensing-header.txt</license.header.location>
         <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
 
 

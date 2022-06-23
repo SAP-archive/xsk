@@ -16,9 +16,6 @@
 	<modules>
 		<module>buildpacks</module>
 		<module>server</module>
-		<module>sap-cf</module>
-		<module>sap-kyma</module>
-		<module>sap-kyma-runtime</module>
 	</modules>
 
 	<build>
@@ -40,7 +37,6 @@
 	</build>
 
 	<properties>
-		<license.header.location>../licensing-header.txt</license.header.location>
 		<git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
 	</properties>
 </project>

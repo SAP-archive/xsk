@@ -9,7 +9,7 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <name>XSK - Releng - Buildpacks - XSK Kyma</name>
+  <name>XSK - Releng - Buildpacks - XSK Kyma - Runtime</name>
   <artifactId>xsk-releng-buildpacks-xsk-kyma-runtime</artifactId>
   <version>0.18.0-SNAPSHOT</version>
 
@@ -24,7 +24,4 @@
     </resources>
   </build>
 
-  <properties>
-    <license.header.location>../../../licensing-header.txt</license.header.location>
-  </properties>
 </project>

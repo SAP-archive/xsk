@@ -83,7 +83,7 @@ public class HdbHdbtiSimpleSampleTest {
   }
 
   @Test
-  public void testHdbtiSimpleSampleXsjs() throws IOException, URISyntaxException, ExecutionException, InterruptedException {
+  public void testHdbHdbtiSimpleSampleXsjsService() throws IOException, URISyntaxException, ExecutionException, InterruptedException {
 
     URL xsjsUrl = new URL(PROJECT_BASE_URI + XSJS_PRODUCTS_ORDERS_PATH);
 
@@ -119,7 +119,7 @@ public class HdbHdbtiSimpleSampleTest {
   }
 
   @Test
-  public void testHdbHdbtiSimpleSampleXsodata() throws IOException, URISyntaxException, ExecutionException, InterruptedException {
+  public void testHdbHdbtiSimpleSampleXsodataService() throws IOException, URISyntaxException, ExecutionException, InterruptedException {
 
     URL xsodataUrl = new URL(PROJECT_BASE_URI + XSODATA_PRODUCTS_ORDERS_PATH);
 

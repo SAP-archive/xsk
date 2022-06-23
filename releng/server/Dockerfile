@@ -11,8 +11,11 @@ FROM tomcat:9.0.64-jre17-temurin AS base
 RUN rm -fr /opt/java/openjdk
 RUN rm /usr/local/tomcat/conf/tomcat-users.xml
 
+RUN mkdir -p /usr/local/tomcat/target/dirigible/repository/root/registry/public/
+COPY target/ROOT.war $CATALINA_HOME/webapps/
+
 RUN apt-get update && \
-    apt-get install wget git gosu -y && \
+    apt-get install wget git -y && \
     apt-get clean
 
 RUN wget --no-check-certificate https://www.dirigible.io/help/conf/tomcat-users.xml -P /usr/local/tomcat/conf/
@@ -35,26 +38,34 @@ COPY --from=jdk /usr/lib/jvm/sapmachine-17/ /usr/local/jdk
 
 FROM xsk-${JDK_TYPE} AS dependencies-base
 
-COPY target/ROOT.war $CATALINA_HOME/webapps/
+FROM gcr.io/distroless/base-debian11:debug
 
 ENV CATALINA_HOME=/usr/local/tomcat
 
 ENV JAVA_HOME=/usr/local/jdk
 ENV PATH $PATH:$JAVA_HOME/bin
+ENV CATALINA_OPTS="--add-opens java.base/java.lang.reflect=ALL-UNNAMED"
 
+ENV DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
 #Activate DEBUG mode
 #ENV JPDA_ADDRESS=0.0.0.0:8000
 #ENV JPDA_TRANSPORT=dt_socket
 
-ENV DIRIGIBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
-ENV CATALINA_OPTS="--add-opens java.base/java.lang.reflect=ALL-UNNAMED"
+USER nonroot
+COPY --from=dependencies-base --chown=nonroot:nonroot $CATALINA_HOME $CATALINA_HOME
+WORKDIR $CATALINA_HOME
+
+COPY --from=dependencies-base $JAVA_HOME $JAVA_HOME
+COPY --from=dependencies-base /lib/x86_64-linux-gnu/libz.so.1 /lib/x86_64-linux-gnu/libz.so.1
+COPY --from=dependencies-base /lib/x86_64-linux-gnu/libpcre2-8.so.0 /lib/x86_64-linux-gnu/libpcre2-8.so.0
+COPY --from=dependencies-base /lib/x86_64-linux-gnu/libtinfo.so.6 /lib/x86_64-linux-gnu/libtinfo.so.6
+COPY --from=dependencies-base --chown=nonroot:nonroot /bin/sh /bin/sh
+COPY --from=dependencies-base --chown=nonroot:nonroot /usr/bin/git /usr/bin/git
+COPY --from=dependencies-base --chown=nonroot:nonroot /bin/bash /bin/bash
 
 EXPOSE 8080 8081 8000
 
-ADD entrypoint.sh /entrypoint.sh
+ENTRYPOINT [ ]
 
-RUN useradd -rm -d $CATALINA_HOME -s /bin/bash -u 1001 xsk
+CMD [ "/bin/sh","/usr/local/tomcat/bin/catalina.sh","jpda","run" ]
 
-ENTRYPOINT ["/entrypoint.sh"]
-
-CMD ["/usr/local/tomcat/bin/catalina.sh","jpda","run"]

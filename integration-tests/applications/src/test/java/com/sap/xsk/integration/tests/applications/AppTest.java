@@ -11,14 +11,15 @@
  */
 package com.sap.xsk.integration.tests.applications;
 
-import com.sap.xsk.integration.tests.applications.deployment.XSKProjectApplicationType;
-import com.sap.xsk.integration.tests.applications.deployment.XSKProjectDeploymentRule;
-import com.sap.xsk.integration.tests.applications.deployment.XSKProjectDeploymentType;
+import com.sap.xsk.integration.tests.applications.deployment.ProjectType;
+import com.sap.xsk.integration.tests.applications.deployment.ProjectDeploymentRule;
+import com.sap.xsk.integration.tests.applications.deployment.ProjectDeploymentType;
 import org.junit.ClassRule;
 
 public class AppTest {
 
-    @ClassRule
-    public static XSKProjectDeploymentRule xskProjectDeploymentRule = new XSKProjectDeploymentRule("simple", XSKProjectApplicationType.CUSTOM, XSKProjectDeploymentType.LOCAL);
+  @ClassRule
+  public static ProjectDeploymentRule projectDeploymentRule = new ProjectDeploymentRule("simple", ProjectType.CUSTOM,
+      ProjectDeploymentType.LOCAL);
 
 }

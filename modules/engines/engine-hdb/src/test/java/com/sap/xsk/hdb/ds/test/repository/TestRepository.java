@@ -19,9 +19,9 @@ import org.slf4j.LoggerFactory;
 
 public class TestRepository extends AbstractTestRepository {
 
-  private static final Logger logger = LoggerFactory.getLogger(TestRepository.class);
+    private static final Logger logger = LoggerFactory.getLogger(TestRepository.class);
 
-  @Override
+    @Override
     public IResource getResource(String s) {
         try {
             byte[] content = TestRepository.class.getResourceAsStream(s).readAllBytes();
@@ -35,8 +35,12 @@ public class TestRepository extends AbstractTestRepository {
         return null;
     }
 
-  @Override
-  public boolean hasResource(String s) throws RepositoryReadException {
-    return false;
-  }
+    @Override
+    public boolean hasResource(String s) throws RepositoryReadException {
+        return false;
+    }
+
+    @Override
+    public void deleteLinkedPath(String s) {
+    }
 }

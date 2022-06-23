@@ -9,13 +9,13 @@ namespaceRule: NAMESPACE members+=identifier ('.' members+=identifier)* SEMICOLU
 usingRule: USING pack+=identifier ('.' pack+=identifier)* '::' members+=identifier ('.' members+=identifier)* (AS alias=identifier)?  SEMICOLUMN;
 topLevelSymbol: dataTypeRule* | contextRule? | structuredTypeRule? | entityRule? | viewRule? ;
 
-dataTypeRule: annotationRule* artifactType=TYPE artifactName=identifier ':' typeAssignRule ';';
+dataTypeRule: annotationRule* artifactType=TYPE artifactName=identifier ':' typeAssignRule SEMICOLUMN;
 contextRule: annotationRule* artifactType=CONTEXT artifactName=identifier '{' (contextRule | dataTypeRule | structuredTypeRule | entityRule | viewRule)* '}' SEMICOLUMN?;
 structuredTypeRule: annotationRule* artifactType=TYPE artifactName=identifier '{' (fieldDeclRule | association)* '}' SEMICOLUMN?;
 entityRule: annotationRule* artifactType=ENTITY artifactName=identifier '{' ( elementDeclRule | association)* '}' SEMICOLUMN?;
 viewRule: annotationRule* DEFINE? artifactType=VIEW artifactName=identifier AS selectRule*;
 
-fieldDeclRule: (identifier | '"' identifier '"') ':' typeAssignRule ';';
+fieldDeclRule: (identifier | '"' identifier '"') ':' typeAssignRule SEMICOLUMN;
 typeAssignRule: ref=identifier '(' args+=INTEGER (',' args+=INTEGER)* ')'                 # AssignBuiltInTypeWithArgs
                 | HANA '.' hanaType=identifier                                            # AssignHanaType
                 | HANA '.' hanaType=identifier '(' args+=INTEGER (',' args+=INTEGER)* ')' # AssignHanaTypeWithArgs
@@ -50,7 +50,7 @@ arrRule: '[' annValue (',' annValue)* ']';
 obj: '{' keyValue (',' keyValue)* '}';
 keyValue: identifier ':' annValue;
 
-selectRule: isUnion=UNION? SELECT FROM dependsOnTable=identifier ((AS dependingTableAlias=identifier) | dependingTableAlias=identifier)? joinRule* isDistinct=DISTINCT? '{' selectedColumnsRule '}' SEMICOLUMN? (WHERE whereRule SEMICOLUMN?)?;
+selectRule: isUnion=UNION? SELECT FROM dependsOnTable+=identifier ('.' dependsOnTable+=identifier)* ((AS dependingTableAlias=identifier) | dependingTableAlias=identifier)? joinRule* isDistinct=DISTINCT? '{' selectedColumnsRule '}' SEMICOLUMN? (WHERE whereRule SEMICOLUMN?)?;
 joinRule: joinType=JOIN_TYPES joinArtifactName=identifier ((AS joinTableAlias=identifier) | joinTableAlias=identifier)? joinFields;
 joinFields: .*?;
 selectedColumnsRule: .*?;

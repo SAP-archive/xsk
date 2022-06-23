@@ -21,7 +21,7 @@ exports.getResultSetValueByDataTypeAndRowNumber = function (resultSet, dataType,
             return resultSet.getLong(colNumber);
         case "SMALLDECIMAL":
         case "DECIMAL":
-            return resultSet.getBigDecimal(colNumber);
+            return resultSet.getBigDecimal(colNumber).toPlainString(); // convert to String as in HANA XSJS it is returned as String
         case "REAL":
         case "FLOAT":
             return resultSet.getFloat(colNumber);
@@ -81,7 +81,7 @@ exports.setParamByType = function (preparedStatement, paramType, paramValue, par
             break;
         case "SMALLDECIMAL":
         case "DECIMAL":
-            preparedStatement.setBigDecimal(paramIndex, paramValue);
+            preparedStatement.setBigDecimal(paramIndex, tryConvertNumberToBigDecimal(paramValue));
             break;
         case "REAL":
         case "FLOAT":
@@ -138,3 +138,11 @@ exports.setParamByType = function (preparedStatement, paramType, paramValue, par
             throw new Error(`The '${paramType}' data type in the preparedStatement is not supported`);
     }
 };
+
+function tryConvertNumberToBigDecimal(maybeNumber) {
+    if (typeof maybeNumber === 'number') {
+        const BigDecimal = Java.type("java.math.BigDecimal");
+        return BigDecimal.valueOf(maybeNumber);
+    }
+    return maybeNumber;
+}

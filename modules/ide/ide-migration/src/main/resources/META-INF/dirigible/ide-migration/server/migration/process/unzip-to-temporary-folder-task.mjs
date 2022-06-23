@@ -12,6 +12,7 @@
 import { process } from "@dirigible/bpm"
 import { repository as repositoryManager } from "@dirigible/platform"
 import { MigrationTask } from "./task.mjs";
+import { MigrationService } from "../api/migration-service.mjs";
 
 export class UnzipToTemporaryFolder extends MigrationTask {
 	execution = process.getExecutionContext();
@@ -25,56 +26,34 @@ export class UnzipToTemporaryFolder extends MigrationTask {
 		const userData = JSON.parse(userDataJson);
 		let paths = userData.zipPath;
 
-
 		userData["du"] = [];
 
 		for (const path of paths) {
-			let filesDetails = [];
-			let localFiles = []
 			console.log("Processing zip by path : " + path)
-			let resources = repositoryManager.getCollection(path);
-			let zipProjectName = resources.getName();
+			let collection = repositoryManager.getCollection(path);
 
-			getAllFiles(resources);
+			let zipProjectName = collection.getName();
 
-			function getAllFiles(resources) {
-				getResourcesFromFOlder(resources)
+			const duObject = composeJson(zipProjectName);
+
+			const workspaceName = userData.workspace;
+
+			const migrationService = new MigrationService();
+			try {
+				const { projectNames, synonyms } = migrationService.generateSynonymsForProject(workspaceName, zipProjectName);
+				duObject.projectNames = projectNames;
+				duObject.synonyms = synonyms;
+			} catch (err) {
+				console.log(`Error generating synonyms for zip: ${err.message}`);
+				console.log(err.stack)
 			}
 
 
-			function getResourcesFromFOlder(dir) {
-				if (!dir.getResourcesNames().isEmpty()) {
-					for (const nameRes of dir.getResourcesNames()) {
-						localFiles.push(dir.getResource(nameRes))
-					}
-				}
-				if (!dir.getCollectionsNames().isEmpty()) {
-					for (const folderName of dir.getCollectionsNames()) {
-						getResourcesFromFOlder(dir.getCollection(folderName))
-					}
-				}
-			}
-
-			for (const localFile of localFiles) {
-				const repositoryPath = localFile.getPath();
-				const runLocation = repositoryPath.split("/").slice(4).join("/");
-				const relativePath = repositoryPath.split("/").slice(5).join("/");
-
-				let fileDetails = {
-					repositoryPath: repositoryPath,
-					relativePath: "/" + relativePath,
-					projectName: zipProjectName,
-					runLocation: "/" + runLocation
-				};
-
-				filesDetails.push(fileDetails)
-			}
-
-			userData.du.push(composeJson(zipProjectName, filesDetails))
+			userData.du.push(duObject);
 		}
 		process.setVariable(this.execution.getId(), 'userData', JSON.stringify(userData));
 
-		function composeJson(projectName, filesDetails) {
+		function composeJson(projectName) {
 			let duObject = {}
 			duObject.ach = "";
 			duObject.caption = "";
@@ -86,8 +65,10 @@ export class UnzipToTemporaryFolder extends MigrationTask {
 			duObject.version = "";
 			duObject.version_patch = "";
 			duObject.version_sp = "";
-			duObject.name = projectName
-			duObject.locals = filesDetails;
+			duObject.name = projectName;
+			duObject.projectNames = [projectName];
+			duObject.fromZip = true;
+			duObject.synonyms = [];
 			return duObject;
 		}
 

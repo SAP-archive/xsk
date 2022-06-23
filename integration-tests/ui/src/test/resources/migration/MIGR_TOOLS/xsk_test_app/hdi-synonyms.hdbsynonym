@@ -1,8 +1,8 @@
 {
-    "\"XSK_TEST_APP_COPY\".\"xsk_test_app::usersProcedure\"": {
+    "xsk_test_app::usersProcedure": {
         "target": {
-            "object": "\"XSK_TEST_APP_COPY\".\"xsk_test_app::usersProcedure\"",
-            "schema": null
+            "object": "xsk_test_app::usersProcedure",
+            "schema": "XSK_TEST_APP"
         }
     },
     "xsk_test_app::usersTable": {

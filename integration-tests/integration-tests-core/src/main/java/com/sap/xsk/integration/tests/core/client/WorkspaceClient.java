@@ -67,7 +67,7 @@ public class WorkspaceClient {
         try {
             var uri = workspaceServiceUri.resolve(workspaceName);
             HttpUriRequest request = RequestBuilder.post(uri).build();
-            return xskHttpClient.executeRequestAsync(request);
+            return xskHttpClient.executeRequestAsyncWithCallbackFuture(request);
         } catch (XSKHttpClientException e) {
             String errorMessage = "Error when creating workspace " + workspaceName;
             throw new XSKClientException(errorMessage, e);
@@ -87,7 +87,7 @@ public class WorkspaceClient {
             HttpUriRequest multipartRequest = RequestBuilder.post(uri)
                     .setEntity(multiPartHttpEntity)
                     .build();
-            return xskHttpClient.executeRequestAsync(multipartRequest);
+            return xskHttpClient.executeRequestAsyncWithCallbackFuture(multipartRequest);
         } catch (XSKHttpClientException e) {
             String errorMessage = "Cannot import project " + projectName + " to workspace " + workspaceName;
             throw new XSKClientException(errorMessage, e);
@@ -99,7 +99,7 @@ public class WorkspaceClient {
         try {
             var uri = workspaceServiceUri.resolve(workspace);
             HttpUriRequest request = RequestBuilder.delete(uri).build();
-            return xskHttpClient.executeRequestAsync(request);
+            return xskHttpClient.executeRequestAsyncWithCallbackFuture(request);
         } catch (XSKHttpClientException e) {
             String errorMessage = "Error deleting workspace " + workspace;
             throw new XSKClientException(errorMessage, e);

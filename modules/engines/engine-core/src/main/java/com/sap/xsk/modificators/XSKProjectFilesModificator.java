@@ -211,14 +211,10 @@ public class XSKProjectFilesModificator {
         FromClauseDefinitionModel fromClause = updateStatement.getFromClause();
         if (fromClause != null) {
           List<JoinClauseDefinitionModel> joinClauses = fromClause.getJoinClauses();
-          UpdateSetClauseDefinitionModel updateSetClause = updateStatement.getUpdateSetClause();
-          WhereClauseDefinitionModel whereClause = updateStatement.getWhereClause();
-
           if (joinClauses.isEmpty()) {
-            modifiedUpdateStatement = modifyHdbprocedureUpdateFromWithoutJoinClauses(updateStatement, fromClause, updateSetClause, whereClause);
+            modifiedUpdateStatement = modifyHdbprocedureUpdateFromWithoutJoinClauses(updateStatement, fromClause);
           } else {
-            modifiedUpdateStatement = modifyHdbprocedureUpdateFromWithJoinClauses(updateStatement, fromClause, joinClauses, updateSetClause,
-                whereClause);
+            modifiedUpdateStatement = modifyHdbprocedureUpdateFromWithJoinClauses(updateStatement, fromClause, joinClauses);
           }
           modifiedUpdateStatementsMapping.put(updateStatement.getRawContent(), modifiedUpdateStatement);
         }
@@ -232,6 +228,11 @@ public class XSKProjectFilesModificator {
     }
   }
 
+  /**
+   * Parses the procedure model from the given file content.
+   *
+   * @param fileContent the content of the file being modified
+   */
   private ProcedureDefinitionModel getProcedureModel(String fileContent){
     CharStream inputStream = CharStreams.fromString(fileContent);
     HanaLexer lexer = new HanaLexer(inputStream);
@@ -250,127 +251,167 @@ public class XSKProjectFilesModificator {
     return listener.getProcedureModel();
   }
 
-  private String modifyHdbprocedureUpdateFromWithoutJoinClauses(UpdateStatementDefinitionModel updateStatement, FromClauseDefinitionModel fromClause,
-      UpdateSetClauseDefinitionModel updateSetClause, WhereClauseDefinitionModel whereClause) {
+  /**
+   * Modifies the update from statement in hdbprocedure files which are missing join clauses.
+   *
+   * @param updateStatement the content of update from statement
+   * @param fromClause the from clause of the update statement
+   */
+  private String modifyHdbprocedureUpdateFromWithoutJoinClauses(UpdateStatementDefinitionModel updateStatement, FromClauseDefinitionModel fromClause) {
     StringBuilder modifiedUpdateStatement = new StringBuilder();
+    UpdateSetClauseDefinitionModel updateSetClause = updateStatement.getUpdateSetClause();
+    String updateSetClauseRawContent = updateSetClause.getRawContent();
+    WhereClauseDefinitionModel whereClause = updateStatement.getWhereClause();
     List<TableReferenceModel> fromClauseTableReferences = fromClause.getTableReferences();
 
     if (fromClauseTableReferences.size() > 1) {
-      String updatedTableName = updateStatement.getName();
-      TableReferenceModel updatedTableReference = new TableReferenceModel();
-      TableReferenceModel usingTableReference = new TableReferenceModel();
-
-      for (TableReferenceModel tableReferenceModel : fromClauseTableReferences) {
-        if (updatedTableName.equals(tableReferenceModel.getName()) || updatedTableName.equals(tableReferenceModel.getAlias())) {
-          updatedTableReference = tableReferenceModel;
-        }
-        else {
-          usingTableReference = tableReferenceModel;
-        }
-      }
-      modifiedUpdateStatement.append(MERGE_INTO).append(updatedTableReference.getName());
-
-      if (updatedTableReference.getAlias() != null) {
-        modifiedUpdateStatement.append(AS).append(updatedTableReference.getAlias()).append(NEW_LINE);
-      }
-      modifiedUpdateStatement.append(TAB).append(USING);
-      modifiedUpdateStatement.append(usingTableReference.getName()).append(SPACE);
-
-      if (usingTableReference.getAlias() != null) {
-        modifiedUpdateStatement.append(AS).append(usingTableReference.getAlias()).append(NEW_LINE);
-      }
-
-      if (whereClause != null) {
-        modifiedUpdateStatement.append(ON).append(whereClause.getRawContent().replaceFirst(CASE_INSENSITIVE_WHERE, "")).append(SPACE);
-      }
-      else {
-        modifiedUpdateStatement.append(ON_TRUE);
-      }
-      modifiedUpdateStatement.append(TAB).append(WHEN_MATCHED_THEN_UPDATE);
-      modifiedUpdateStatement.append(TAB).append(updateSetClause.getRawContent());
+      TableReferenceModel usingTableReference = getUsingTableReferenceModel(updateStatement.getName(), fromClauseTableReferences);
+      TableReferenceModel updatedTableReference = getUpdatedTableReferenceModel(updateStatement.getName(), fromClauseTableReferences);
+      mergeIntoWithoutJoinWith2FromStatements(modifiedUpdateStatement, whereClause, updatedTableReference, usingTableReference, updateSetClauseRawContent);
     }
     else {
-      TableReferenceModel fromClauseTableReference = fromClauseTableReferences.get(0);
-      String fromClauseTableName = fromClauseTableReference.getName();
-      String fromClauseTableAlias = fromClauseTableReference.getAlias();
-
-      modifiedUpdateStatement.append(UPDATE);
-      modifiedUpdateStatement.append(fromClauseTableName).append(SPACE);
-
-      if (fromClauseTableAlias != null) {
-        modifiedUpdateStatement.append(AS).append(fromClauseTableAlias).append(NEW_LINE);
-      }
-      modifiedUpdateStatement.append(TAB).append(updateSetClause.getRawContent()).append(NEW_LINE);
-
-      if (whereClause != null) {
-        modifiedUpdateStatement.append(TAB).append(whereClause.getRawContent());
-      }
+      mergeIntoWithoutJoin(modifiedUpdateStatement, fromClauseTableReferences.get(0), whereClause, updateSetClauseRawContent);
     }
     return modifiedUpdateStatement.toString();
   }
 
+  /**
+   * Modifies the update from statement in hdbprocedure files which have a join clause.
+   *
+   * @param updateStatement the content of update from statement
+   * @param fromClause the from clause of the update statement
+   * @param joinClauses the join clause of the update statement
+   */
   private String modifyHdbprocedureUpdateFromWithJoinClauses(UpdateStatementDefinitionModel updateStatement, FromClauseDefinitionModel fromClause,
-      List<JoinClauseDefinitionModel> joinClauses, UpdateSetClauseDefinitionModel updateSetClause, WhereClauseDefinitionModel whereClause) {
+      List<JoinClauseDefinitionModel> joinClauses) {
     StringBuilder modifiedUpdateStatement = new StringBuilder();
-    JoinClauseDefinitionModel joinClauseForUpdate = new JoinClauseDefinitionModel();
-    StringBuilder joinClausesRawContent = new StringBuilder();
-
-    List<TableReferenceModel> fromClauseTableReferences = fromClause.getTableReferences();
-    TableReferenceModel fromClauseTableReference = fromClauseTableReferences.get(0);
+    WhereClauseDefinitionModel whereClause = updateStatement.getWhereClause();
+    TableReferenceModel fromClauseTableReference = fromClause.getTableReferences().get(0);
     String fromClauseTableName = fromClauseTableReference.getName();
     String fromClauseTableAlias = fromClauseTableReference.getAlias();
     String updatedTableName = updateStatement.getName();
+    String updateSetClauseRawContent = updateStatement.getUpdateSetClause().getRawContent();
 
     modifiedUpdateStatement.append(MERGE_INTO);
     if (updatedTableName.equals(fromClauseTableName) || updatedTableName.equals(fromClauseTableAlias)) {
-      modifiedUpdateStatement.append(fromClauseTableName).append(SPACE);
-
-      if (fromClauseTableAlias != null) {
-        modifiedUpdateStatement.append(AS).append(fromClauseTableAlias).append(NEW_LINE);
-      }
-      joinClauseForUpdate = joinClauses.get(0);
-      joinClauses.remove(joinClauseForUpdate);
-
-      for (JoinClauseDefinitionModel joinClause : joinClauses) {
-          joinClausesRawContent.append(TAB).append(joinClause.getRawContent()).append(NEW_LINE);
-      }
-      modifiedUpdateStatement.append(TAB).append(USING);
-      modifiedUpdateStatement.append(joinClauseForUpdate.getName()).append(SPACE);
-
-      if (joinClauseForUpdate.getAlias() != null) {
-        modifiedUpdateStatement.append(AS).append(joinClauseForUpdate.getAlias()).append(NEW_LINE);
-      }
-      modifiedUpdateStatement.append(TAB).append(joinClausesRawContent);
-
-    } else {
-      for (JoinClauseDefinitionModel joinClause : joinClauses) {
-        if (updatedTableName.equals(joinClause.getName()) || updatedTableName.equals(joinClause.getAlias())) {
-          joinClauseForUpdate = joinClause;
-        } else {
-          joinClausesRawContent.append(TAB).append(joinClause.getRawContent());
-        }
-      }
-      modifiedUpdateStatement.append(joinClauseForUpdate.getName()).append(SPACE);
-
-      if (joinClauseForUpdate.getAlias() != null) {
-        modifiedUpdateStatement.append(AS).append(joinClauseForUpdate.getAlias()).append(NEW_LINE);
-      }
-      modifiedUpdateStatement.append(TAB).append(USING);
-      modifiedUpdateStatement.append(fromClauseTableName).append(SPACE);
-
-      if (fromClauseTableAlias != null) {
-        modifiedUpdateStatement.append(AS).append(fromClauseTableAlias).append(NEW_LINE);
-      }
-      modifiedUpdateStatement.append(TAB).append(joinClausesRawContent).append(NEW_LINE);
+      mergeIntoWithUpdateTableName(modifiedUpdateStatement, fromClauseTableReference, joinClauses);
     }
-    modifiedUpdateStatement.append(TAB).append(joinClauseForUpdate.getOnPart()).append(NEW_LINE);
-    modifiedUpdateStatement.append(TAB).append(WHEN_MATCHED);
-
-    if (whereClause != null) {
-      modifiedUpdateStatement.append(AND).append(whereClause.getRawContent().replaceFirst(CASE_INSENSITIVE_WHERE, "")).append(SPACE);
+    else {
+      String joinClausesRawContent = getJoinClauseRawContentWithoutTableName(updatedTableName, joinClauses);
+      JoinClauseDefinitionModel joinClauseForUpdate = getJoinClauseDefinitionModel(updatedTableName, joinClauses);
+      mergeIntoWithoutUpdateTableName(modifiedUpdateStatement, fromClauseTableReference, joinClauseForUpdate, joinClausesRawContent);
     }
-    modifiedUpdateStatement.append(THEN_UPDATE).append(NEW_LINE);
-    modifiedUpdateStatement.append(TAB).append(updateSetClause.getRawContent());
+    modifiedUpdateStatement.append(TAB + WHEN_MATCHED);
+    modifiedUpdateStatement.append(whereClause != null ? AND + whereClause.getRawContent().replaceFirst(CASE_INSENSITIVE_WHERE, "") + SPACE : "" );
+    modifiedUpdateStatement.append(THEN_UPDATE + NEW_LINE);
+    modifiedUpdateStatement.append(TAB).append(updateSetClauseRawContent);
     return modifiedUpdateStatement.toString();
+  }
+
+  private void mergeIntoWithUpdateTableName(StringBuilder modifiedUpdateStatement, TableReferenceModel fromClauseTableReference, List<JoinClauseDefinitionModel> joinClauses){
+    String fromClauseTableName = fromClauseTableReference.getName();
+    String fromClauseTableAlias = fromClauseTableReference.getAlias();
+    JoinClauseDefinitionModel joinClauseForUpdate = joinClauses.get(0);
+    joinClauses.remove(joinClauseForUpdate);
+
+    modifiedUpdateStatement.append(fromClauseTableName).append(SPACE);
+    modifiedUpdateStatement.append(addAsTableName(fromClauseTableAlias));
+    modifiedUpdateStatement.append(TAB + USING);
+    modifiedUpdateStatement.append(joinClauseForUpdate.getName()).append(SPACE);
+    modifiedUpdateStatement.append(addAsTableName(joinClauseForUpdate.getAlias()));
+    modifiedUpdateStatement.append(TAB).append(getJoinClauseRawContent(joinClauses));
+    modifiedUpdateStatement.append(TAB).append(joinClauseForUpdate.getOnPart()).append(NEW_LINE);
+  }
+
+  private void mergeIntoWithoutUpdateTableName(StringBuilder modifiedUpdateStatement, TableReferenceModel fromClauseTableReference,
+      JoinClauseDefinitionModel joinClauseForUpdate, String joinClausesRawContent){
+    String fromClauseTableName = fromClauseTableReference.getName();
+    String fromClauseTableAlias = fromClauseTableReference.getAlias();
+
+    modifiedUpdateStatement.append(joinClauseForUpdate.getName()).append(SPACE);
+    modifiedUpdateStatement.append(addAsTableName(joinClauseForUpdate.getAlias()));
+    modifiedUpdateStatement.append(TAB + USING);
+    modifiedUpdateStatement.append(fromClauseTableName).append(SPACE);
+    modifiedUpdateStatement.append(addAsTableName(fromClauseTableAlias));
+    modifiedUpdateStatement.append(TAB).append(joinClausesRawContent).append(NEW_LINE);
+    modifiedUpdateStatement.append(TAB).append(joinClauseForUpdate.getOnPart()).append(NEW_LINE);
+  }
+
+  private void mergeIntoWithoutJoinWith2FromStatements(StringBuilder modifiedUpdateStatement, WhereClauseDefinitionModel whereClause,
+      TableReferenceModel updatedTableReference, TableReferenceModel usingTableReference, String updateSetClauseRawContent ){
+    modifiedUpdateStatement.append(MERGE_INTO).append(updatedTableReference.getName());
+    modifiedUpdateStatement.append(addAsTableName(updatedTableReference.getAlias()));
+    modifiedUpdateStatement.append(TAB + USING);
+    modifiedUpdateStatement.append(usingTableReference.getName()).append(SPACE);
+    modifiedUpdateStatement.append(addAsTableName(usingTableReference.getAlias()));
+    modifiedUpdateStatement.append(getWhereClause(whereClause));
+    modifiedUpdateStatement.append(TAB + WHEN_MATCHED_THEN_UPDATE);
+    modifiedUpdateStatement.append(TAB).append(updateSetClauseRawContent);
+  }
+
+  private void mergeIntoWithoutJoin(StringBuilder modifiedUpdateStatement, TableReferenceModel fromClauseTableReference,
+    WhereClauseDefinitionModel whereClause, String updateSetClauseRawContent ){
+    String fromClauseTableName = fromClauseTableReference.getName();
+    String fromClauseTableAlias = fromClauseTableReference.getAlias();
+
+    modifiedUpdateStatement.append(UPDATE);
+    modifiedUpdateStatement.append(fromClauseTableName).append(SPACE);
+    modifiedUpdateStatement.append(addAsTableName(fromClauseTableAlias));
+    modifiedUpdateStatement.append(TAB).append(updateSetClauseRawContent).append(NEW_LINE);
+    modifiedUpdateStatement.append(whereClause != null ? TAB + whereClause.getRawContent() : "");
+  }
+
+  private String addAsTableName(String tableName){
+    return tableName != null ? AS + tableName + NEW_LINE : "";
+  }
+
+  private String getWhereClause(WhereClauseDefinitionModel whereClause){
+    return whereClause != null ? ON + whereClause.getRawContent().replaceFirst(CASE_INSENSITIVE_WHERE, "") + SPACE : ON_TRUE;
+  }
+
+  private TableReferenceModel getUpdatedTableReferenceModel(String updatedTableName, List<TableReferenceModel> fromClauseTableReferences){
+    TableReferenceModel updatedTableReference = new TableReferenceModel();
+    for (TableReferenceModel tableReferenceModel : fromClauseTableReferences) {
+      if (updatedTableName.equals(tableReferenceModel.getName()) || updatedTableName.equals(tableReferenceModel.getAlias())) {
+        updatedTableReference = tableReferenceModel;
+      }
+    }
+    return updatedTableReference;
+  }
+
+  private TableReferenceModel getUsingTableReferenceModel(String updatedTableName, List<TableReferenceModel> fromClauseTableReferences){
+    TableReferenceModel usingTableReference = new TableReferenceModel();
+    for (TableReferenceModel tableReferenceModel : fromClauseTableReferences) {
+      if (!updatedTableName.equals(tableReferenceModel.getName()) && !updatedTableName.equals(tableReferenceModel.getAlias())) {
+        usingTableReference = tableReferenceModel;
+      }
+    }
+    return usingTableReference;
+  }
+
+  private JoinClauseDefinitionModel getJoinClauseDefinitionModel(String updatedTableName, List<JoinClauseDefinitionModel> joinClauses){
+    JoinClauseDefinitionModel updatedJoinClauseModel = new JoinClauseDefinitionModel();
+    for (JoinClauseDefinitionModel joinClauseDefinitionModel : joinClauses) {
+      if (updatedTableName.equals(joinClauseDefinitionModel.getName()) || updatedTableName.equals(joinClauseDefinitionModel.getAlias())) {
+        updatedJoinClauseModel = joinClauseDefinitionModel;
+      }
+    }
+    return updatedJoinClauseModel;
+  }
+
+  private String getJoinClauseRawContentWithoutTableName(String updatedTableName, List<JoinClauseDefinitionModel> joinClauses){
+    StringBuilder updatedJoinClauseRawContent = new StringBuilder();
+    joinClauses.forEach(joinClauseDefinitionModel -> {
+      if (!updatedTableName.equals(joinClauseDefinitionModel.getName()) && !updatedTableName.equals(joinClauseDefinitionModel.getAlias())) {
+        updatedJoinClauseRawContent.append(TAB).append(joinClauseDefinitionModel.getRawContent());
+      }
+    });
+    return updatedJoinClauseRawContent.toString();
+  }
+
+  private String getJoinClauseRawContent(List<JoinClauseDefinitionModel> joinClauses){
+    StringBuilder joinClausesRawContent = new StringBuilder();
+    joinClauses.forEach(joinClause -> { joinClausesRawContent.append(TAB).append(joinClause.getRawContent()).append(NEW_LINE);});
+    return joinClausesRawContent.toString();
   }
 }

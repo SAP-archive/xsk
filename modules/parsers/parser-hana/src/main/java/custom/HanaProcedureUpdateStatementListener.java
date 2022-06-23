@@ -15,7 +15,6 @@ import com.sap.xsk.parser.hana.core.HanaBaseListener;
 import com.sap.xsk.parser.hana.core.HanaParser.Create_procedure_bodyContext;
 import com.sap.xsk.parser.hana.core.HanaParser.From_clauseContext;
 import com.sap.xsk.parser.hana.core.HanaParser.Join_clauseContext;
-import com.sap.xsk.parser.hana.core.HanaParser.Table_refContext;
 import com.sap.xsk.parser.hana.core.HanaParser.Update_set_clauseContext;
 import com.sap.xsk.parser.hana.core.HanaParser.Update_stmtContext;
 import com.sap.xsk.parser.hana.core.HanaParser.Where_clauseContext;
@@ -27,6 +26,7 @@ import models.UpdateSetClauseDefinitionModel;
 import models.UpdateStatementDefinitionModel;
 import models.WhereClauseDefinitionModel;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.misc.Interval;
 import org.apache.commons.lang3.StringUtils;
 
@@ -84,9 +84,10 @@ public class HanaProcedureUpdateStatementListener extends HanaBaseListener {
 
   @Override
   public void enterJoin_clause(Join_clauseContext ctx) {
-    if (isUpdateStatementScope && ctx.parent.parent.parent.parent instanceof Update_stmtContext) {
+    RuleContext ruleContext = ctx.parent.parent.parent.parent;
+    if (isUpdateStatementScope && ruleContext instanceof Update_stmtContext) {
       JoinClauseDefinitionModel joinClauseModel = new JoinClauseDefinitionModel();
-      String tableName = null;
+      String tableName;
 
       if (ctx.table_ref_aux().dml_table_expression_clause() != null) {
         tableName = getStringWithSpaces(ctx.table_ref_aux().dml_table_expression_clause());

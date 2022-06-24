@@ -120,18 +120,7 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer implements 
     }
   }
 
-  /**
-   * Force synchronization.
-   */
-  public static final void forceSynchronization() {
-    XSKTableImportSynchronizer synchronizer = new XSKTableImportSynchronizer();
-    synchronizer.setForcedSynchronization(true);
-    try {
-      synchronizer.synchronize();
-    } finally {
-      synchronizer.setForcedSynchronization(false);
-    }
-  }
+
 
   @Override
   protected void synchronizeResource(IResource resource) throws SynchronizationException {

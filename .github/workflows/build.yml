@@ -53,35 +53,42 @@ jobs:
         run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}} ${{secrets.DOCKER_REGISTRY}}
       - name: Push XSK
         run: |
-          cd releng/server
+          cd releng/server/standalone
           cp -r "${JAVA_HOME}" jdk
           docker build --load -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
           docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk
-          cd ../../
+          cd ../../../
+      - name: Push XSK
+        run: |
+          cd releng/server/standalone-runtime
+          cp -r "${JAVA_HOME}" jdk
+          docker build --load -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
+          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-runtime
+          cd ../../../
       - name: Push XSK for SAP Cloud Foundry
         run: |
-          cd releng/sap-cf
+          cd releng/server/sap-cf
           cp -r "${JAVA_HOME}" jdk
           docker build --load -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-cf --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
           docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-cf
-          cd ../../
+          cd ../../../
       - name: Push XSK for SAP Kyma
         run: |
-          cd releng/sap-kyma
+          cd releng/server/sap-kyma
           cp -r "${JAVA_HOME}" jdk
           docker build --load -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-kyma --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
           docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-kyma
-          cd ../../
+          cd ../../../
       - name: Push XSK for SAP Kyma Runtime
         run: |
-          cd releng/sap-kyma-runtime
+          cd releng/server/sap-kyma-runtime
           docker build --load -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-kyma-runtime-base -f Dockerfile-base .
           docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-kyma-runtime-base
           docker build --load -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-kyma-runtime .
           docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-kyma-runtime
           docker build --load -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-kyma-runtime-distro -f Dockerfile-distro .
           docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-kyma-runtime-distro
-          cd ../../
+          cd ../../../
       - uses: buildpacks/github-actions/setup-pack@v4.1.0
       - name: XSK Buildpack
         run: |

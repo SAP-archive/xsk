@@ -28,11 +28,9 @@ import com.sap.xsk.hdb.ds.model.hdbtable.XSKDataStructureHDBTableModel;
 import com.sap.xsk.hdb.ds.model.hdbtabletype.XSKDataStructureHDBTableTypeModel;
 import com.sap.xsk.hdb.ds.model.hdbview.XSKDataStructureHDBViewModel;
 import com.sap.xsk.hdb.ds.test.module.HdbTestModule;
-import com.sap.xsk.parser.hdbdd.exception.CDSRuntimeException;
 import org.eclipse.dirigible.core.test.AbstractDirigibleTest;
 import org.junit.Before;
 import org.junit.Test;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class XSKHdbddParserTest extends AbstractDirigibleTest {
@@ -654,5 +652,13 @@ public class XSKHdbddParserTest extends AbstractDirigibleTest {
     XSKDataStructureModel parsedModel = XSKDataStructureModelFactory.parseHdbdd("gstr2/CatalogIndexNonUnique.hdbdd", "");
     boolean hasNoUniqueIndices = ((XSKDataStructureCdsModel) parsedModel).getTableModels().get(0).getIndexes().get(0).isUnique();
     assertFalse("Expected value for catalog unique index to be false, but it is true", hasNoUniqueIndices);
+  }
+
+  @Test
+  public void testParseHDBDDWithCalculatedColumns() throws Exception {
+    XSKDataStructureCdsModel parsedModel = (XSKDataStructureCdsModel) XSKDataStructureModelFactory.parseHdbdd("gstr2/CalculatedColumns.hdbdd", "");
+    String expectedCalculatedColumn = "\"firstName\" || \u0027 \u0027 || \"lastName\"";
+    assertEquals(expectedCalculatedColumn,
+        parsedModel.getTableModels().get(0).getColumns().get(2).getStatement());
   }
 }

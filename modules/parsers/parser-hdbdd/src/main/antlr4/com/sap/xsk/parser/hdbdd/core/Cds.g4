@@ -12,7 +12,7 @@ topLevelSymbol: dataTypeRule* | contextRule? | structuredTypeRule? | entityRule?
 dataTypeRule: annotationRule* artifactType=TYPE artifactName=identifier ':' typeAssignRule ';';
 contextRule: annotationRule* artifactType=CONTEXT artifactName=identifier '{' (contextRule | dataTypeRule | structuredTypeRule | entityRule | viewRule)* '}' ';'?;
 structuredTypeRule: annotationRule* artifactType=TYPE artifactName=identifier '{' (fieldDeclRule | association)* '}' ';'?;
-entityRule: annotationRule* artifactType=ENTITY artifactName=identifier '{' ( elementDeclRule | association)* '}' ';'?;
+entityRule: annotationRule* artifactType=ENTITY artifactName=identifier '{' ( elementDeclRule | association | calculatedAssociation)* '}' ';'?;
 viewRule: annotationRule* DEFINE? artifactType=VIEW artifactName=identifier AS selectRule*;
 
 fieldDeclRule: (identifier | '"' identifier '"') ':' typeAssignRule ';';
@@ -28,6 +28,8 @@ associationConstraints: constraints;
 constraints: 'null' | 'not null' | 'NULL' | 'NOT NULL';
 
 association: (key=identifier)? ascId=identifier ':' ASSOCIATION cardinality? TO associationTarget (managedForeignKeys | unmanagedForeignKey)* associationConstraints? ';';
+calculatedAssociation: ascId=identifier ':' typeAssignRule elementDetails* '=' statement ';';
+statement: .*?;
 associationTarget: pathSubMembers+=identifier ('.' pathSubMembers+=identifier)*;
 unmanagedForeignKey: ON pathSubMembers+=identifier ('.' pathSubMembers+=identifier)* '=' source=identifier;
 managedForeignKeys: '{' foreignKey (',' foreignKey)* '}';

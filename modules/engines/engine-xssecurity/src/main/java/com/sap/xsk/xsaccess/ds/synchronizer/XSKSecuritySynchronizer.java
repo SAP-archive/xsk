@@ -66,18 +66,6 @@ public class XSKSecuritySynchronizer extends AbstractSynchronizer {
 
     private final XSKPrivilegeCoreService xskPrivilegeCoreService = new XSKPrivilegeCoreService();
 
-    /**
-     * Force synchronization.
-     */
-    public static final void forceSynchronization() {
-        SecuritySynchronizer synchronizer = new SecuritySynchronizer();
-        synchronizer.setForcedSynchronization(true);
-        try {
-            synchronizer.synchronize();
-        } finally {
-            synchronizer.setForcedSynchronization(false);
-        }
-    }
 
     /*
      * (non-Javadoc)

@@ -144,6 +144,9 @@ public class TableBuilder {
       }
 
     }
+    if(columnModel.isCalculatedColumn()) {
+      args += " AS " + columnModel.getStatement();
+    }
     return args;
   }
 

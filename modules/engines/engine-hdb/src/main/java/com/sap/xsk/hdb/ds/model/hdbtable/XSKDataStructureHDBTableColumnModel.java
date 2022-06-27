@@ -42,6 +42,10 @@ public class XSKDataStructureHDBTableColumnModel {
 
   private boolean fuzzySearchIndex;
 
+  private String statement;
+
+  private boolean isCalculatedColumn;
+
   /**
    * The default constructor.
    */
@@ -295,5 +299,21 @@ public class XSKDataStructureHDBTableColumnModel {
    */
   public void setFuzzySearchIndex(boolean fuzzySearchIndex) {
     this.fuzzySearchIndex = fuzzySearchIndex;
+  }
+
+  public String getStatement() {
+    return statement;
+  }
+
+  public void setStatement(String statement) {
+    this.statement = statement;
+  }
+
+  public boolean isCalculatedColumn() {
+    return isCalculatedColumn;
+  }
+
+  public void setCalculatedColumn(boolean calculatedColumn) {
+    isCalculatedColumn = calculatedColumn;
   }
 }

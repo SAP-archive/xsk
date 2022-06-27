@@ -29,6 +29,7 @@ import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignHanaTypeWithArgsContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignTypeContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssociationConstraintsContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssociationContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.CalculatedAssociationContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.ContextRuleContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.DataTypeRuleContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.ElementConstraintsContext;
@@ -147,6 +148,20 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
     this.currentScope = this.currentScope.getEnclosingScope(); // pop com.sap.xsk.parser.hdbdd.symbols.scope
     validateTopLevelSymbol(this.symbolsByParseTreeContext.get(ctx));
     fullSymbolNames.removeLast();
+  }
+
+  @Override
+  public void enterCalculatedAssociation(CalculatedAssociationContext ctx) {
+    EntityElementSymbol elementSymbol = this.symbolFactory.getCalculatedColumnSymbol(ctx, currentScope);
+    this.entityElements.put(ctx, elementSymbol);
+    this.symbolsByParseTreeContext.put(ctx, elementSymbol);
+    this.typeables.put(ctx, elementSymbol);
+  }
+
+  @Override
+  public void exitCalculatedAssociation(CalculatedAssociationContext ctx) {
+    EntityElementSymbol elementSymbol = this.entityElements.get(ctx);
+    this.currentScope.define(elementSymbol);
   }
 
   @Override

@@ -41,7 +41,8 @@ public class XSKHDBDDHanaITTest extends AbstractXSKHDBITTest {
         "'/itest/ProductsWithManagedAssWithUsingItest.hdbdd'",
         "'/itest/DefaultValueWithDateTimeFunction.hdbdd'",
         "'/itest/CatalogTableTypes.hdbdd'",
-        "'/itest/EmployeesWithViewDefinitions.hdbdd'"
+        "'/itest/EmployeesWithViewDefinitions.hdbdd'",
+        "'/itest/CalculatedColumns.hdbdd'"
     ));
     Configuration.set(IDataStructureModel.DIRIGIBLE_DATABASE_NAMES_CASE_SENSITIVE, "true");
     facade.clearCache();
@@ -263,4 +264,32 @@ public class XSKHDBDDHanaITTest extends AbstractXSKHDBITTest {
     }
   }
 
+  @Test
+  public void testHDBDDWithCalculatedColumns()
+      throws XSKDataStructuresException, SynchronizationException, IOException, SQLException {
+    try (Connection connection = datasource.getConnection(); Statement stmt = connection.createStatement()) {
+      try {
+        HanaITestUtils.createSchema(stmt, TEST_SCHEMA);
+
+        LocalResource resource = XSKHDBTestModule.getResources( //
+            "/usr/local/target/dirigible/repository/root", //
+            "/registry/public/itest/CalculatedColumns.hdbdd", //
+            "/registry/public/itest/CalculatedColumns.hdbdd" //
+        );
+
+        facade.handleResourceSynchronization(resource);
+        facade.updateEntities();
+
+        String tableName = "itest::CalculatedColumns.Employee";
+        String columnUpperCaseName = "UserID_UPPER";
+        String columnFullName = "fullName";
+
+        assertTrue("Expected calculated column not found", HanaITestUtils.checkCalculatedColumns(connection, tableName, TEST_SCHEMA, columnUpperCaseName));
+        assertTrue("Expected calculated column not found", HanaITestUtils.checkCalculatedColumns(connection, tableName, TEST_SCHEMA, columnFullName));
+
+      } finally {
+        HanaITestUtils.dropSchema(stmt, TEST_SCHEMA);
+      }
+    }
+  }
 }

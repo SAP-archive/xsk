@@ -227,6 +227,26 @@ public interface CdsListener extends ParseTreeListener {
 	 */
 	void exitAssociation(CdsParser.AssociationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CdsParser#calculatedAssociation}.
+	 * @param ctx the parse tree
+	 */
+	void enterCalculatedAssociation(CdsParser.CalculatedAssociationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#calculatedAssociation}.
+	 * @param ctx the parse tree
+	 */
+	void exitCalculatedAssociation(CdsParser.CalculatedAssociationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CdsParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterStatement(CdsParser.StatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CdsParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitStatement(CdsParser.StatementContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CdsParser#associationTarget}.
 	 * @param ctx the parse tree
 	 */

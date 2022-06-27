@@ -27,7 +27,7 @@ ENV JRE_HOME=/usr/local/jdk
 FROM base AS xsk-default-jdk
 RUN echo "The default OpenJDK will be used"
 
-COPY --from=base /usr/local/jdk /usr/local/jdk
+COPY --from=base /usr/lib/jvm/sapmachine-17/ /usr/local/jdk
 
 FROM xsk-${JDK_TYPE} AS dependencies-base
 

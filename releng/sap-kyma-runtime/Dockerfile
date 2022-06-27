@@ -19,7 +19,7 @@ ENV CATALINA_HOME=/usr/local/tomcat
 
 USER nonroot
 COPY --from=base --chown=nonroot:nonroot $CATALINA_HOME $CATALINA_HOME
-COPY --from=base --chown=nonroot:nonroot /usr/local/jdk /usr/local/jdk
+COPY --from=base --chown=nonroot:nonroot /usr/lib/jvm/sapmachine-17/ /usr/local/jdk
 COPY --from=base --chown=nonroot:nonroot /bin/bash /bin/bash
 COPY --from=base --chown=nonroot:nonroot /bin/mkdir /bin/mkdir
 COPY --from=base --chown=nonroot:nonroot /bin/cp /bin/cp

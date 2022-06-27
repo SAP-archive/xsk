@@ -264,7 +264,15 @@ public class XSKProjectFilesModificator {
     WhereClauseDefinitionModel whereClause = updateStatement.getWhereClause();
     List<TableReferenceModel> fromClauseTableReferences = fromClause.getTableReferences();
 
-    if (fromClauseTableReferences.size() > 1) {
+    if (fromClauseTableReferences.size() > 2){
+      String errorMessage = "In a HDBProcedures UPDATE FROM statement, we do not support automatic migration of more than two table references inside the FROM clause";
+      logger.error(errorMessage);
+      XSKCommonsUtils.logCustomErrors("", XSKCommonsConstants.MIGRATION_ERROR, "", "",
+          errorMessage, "", XSKCommonsConstants.HDB_PROCEDURE_PARSER, XSKCommonsConstants.MODULE_PARSERS,
+          XSKCommonsConstants.SOURCE_DELIVERY_UNIT_MIGRATION, XSKCommonsConstants.PROGRAM_XSK);
+      modifiedUpdateStatement.append(updateStatement.getRawContent());
+    }
+    else if (fromClauseTableReferences.size() == 2) {
       TableReferenceModel usingTableReference = getUsingTableReferenceModel(updateStatement.getName(), fromClauseTableReferences);
       TableReferenceModel updatedTableReference = getUpdatedTableReferenceModel(updateStatement.getName(), fromClauseTableReferences);
       mergeIntoWithoutJoinWith2FromStatements(modifiedUpdateStatement, whereClause, updatedTableReference, usingTableReference, updateSetClauseRawContent);

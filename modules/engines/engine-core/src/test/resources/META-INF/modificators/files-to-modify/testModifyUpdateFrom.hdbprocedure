@@ -55,6 +55,12 @@ BEGIN
     FROM "TEST"."EMPLOYEES", :emps
     WHERE "TEST"."EMPLOYEES"."NAME" = :emps."NAME";
 
+    -- Update with three tables for from source with where
+    UPDATE "TEST"."EMPLOYEES"
+    SET "STATUS" = ACTIVE, "PRIORITY_INDEX" = :emps."PRIORITY_INDEX"
+    FROM "TEST"."EMPLOYEES", :emps, :employee
+    WHERE "TEST"."EMPLOYEES"."NAME" = :emps."NAME";
+
     -- Update with two tables for from source without where
     UPDATE "TEST"."EMPLOYEES"
     SET "STATUS" = ACTIVE, "PRIORITY_INDEX" = :emps."PRIORITY_INDEX"

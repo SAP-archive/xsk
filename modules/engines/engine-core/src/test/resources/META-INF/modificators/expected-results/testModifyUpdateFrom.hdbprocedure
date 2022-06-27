@@ -48,6 +48,12 @@ BEGIN
     -- Update with two tables for from source with where
     MERGE INTO "TEST"."EMPLOYEES"	USING :emps ON "TEST"."EMPLOYEES"."NAME" = :emps."NAME" 	WHEN MATCHED THEN UPDATE	SET "STATUS" = ACTIVE, "PRIORITY_INDEX" = :emps."PRIORITY_INDEX";
 
+    -- Update with three tables for from source with where
+    UPDATE "TEST"."EMPLOYEES"
+    SET "STATUS" = ACTIVE, "PRIORITY_INDEX" = :emps."PRIORITY_INDEX"
+    FROM "TEST"."EMPLOYEES", :emps, :employee
+    WHERE "TEST"."EMPLOYEES"."NAME" = :emps."NAME";
+
     -- Update with two tables for from source without where
     MERGE INTO "TEST"."EMPLOYEES"	USING :emps ON (1 = 1)	WHEN MATCHED THEN UPDATE	SET "STATUS" = ACTIVE, "PRIORITY_INDEX" = :emps."PRIORITY_INDEX";
 

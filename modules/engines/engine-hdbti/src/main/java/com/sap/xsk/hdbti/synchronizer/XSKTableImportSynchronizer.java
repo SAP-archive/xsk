@@ -67,10 +67,10 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer implements 
   private static final Logger logger = LoggerFactory.getLogger(XSKTableImportSynchronizer.class);
 
   private static final Map<String, XSKTableImportArtifact> HDBTI_PREDELIVERED = Collections
-      .synchronizedMap(new HashMap<>()); //ones which already exist in the JAR
+          .synchronizedMap(new HashMap<>()); //ones which already exist in the JAR
 
   private static final List<String> HDBTI_SYNCHRONIZED = Collections
-      .synchronizedList(new ArrayList<>()); // used for leaving only the correct files after the sync
+          .synchronizedList(new ArrayList<>()); // used for leaving only the correct files after the sync
 
   private static final Map<String, XSKTableImportArtifact> HDBTI_MODELS = new LinkedHashMap<>(); // used for collecting all created/updated models and later for the actual execution of the query ( import/ alter etc)
 
@@ -90,7 +90,7 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer implements 
         logger.trace("Synchronizing HDBTI files ...");
         try {
           if (isSynchronizerSuccessful("org.eclipse.dirigible.database.ds.synchronizer.DataStructuresSynchronizer")
-              && isSynchronizerSuccessful("com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer")) {
+                  && isSynchronizerSuccessful("com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer")) {
             startSynchronization(SYNCHRONIZER_NAME);
             clearCache();
             synchronizePredelivered();
@@ -103,8 +103,8 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer implements 
             successfulSynchronization(SYNCHRONIZER_NAME, format("Immutable: {0}, Mutable: {1}", immutableCount, mutableCount));
           } else {
             failedSynchronization(SYNCHRONIZER_NAME,
-                "Skipped due to dependencies: org.eclipse.dirigible.database.ds.synchronizer.DataStructuresSynchronizer, "
-                    + "com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer");
+                    "Skipped due to dependencies: org.eclipse.dirigible.database.ds.synchronizer.DataStructuresSynchronizer, "
+                            + "com.sap.xsk.hdb.ds.synchronizer.XSKDataStructuresSynchronizer");
           }
         } catch (Exception e) {
           logger.error("Error during HDBTI synchronization", e);
@@ -119,7 +119,6 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer implements 
       }
     }
   }
-
 
 
   @Override
@@ -143,7 +142,7 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer implements 
       }
     } else if (resourceName.endsWith(IXSKTableImportModel.FILE_EXTENSION_CSV)) {
       List<XSKTableImportToCsvRelation> affectedHdbtiToCsvRelations = xskCsvToHdbtiRelationDao
-          .getAffectedHdbtiToCsvRelations(getRegistryPath(resource));
+              .getAffectedHdbtiToCsvRelations(getRegistryPath(resource));
       if (!affectedHdbtiToCsvRelations.isEmpty()) {
         if (xskCsvToHdbtiRelationDao.hasCsvChanged(affectedHdbtiToCsvRelations.get(0), contentAsString)) {
           affectedHdbtiToCsvRelations.forEach(relation -> reimportAffectedHdbtiFiles(relation.getHdbti()));
@@ -156,7 +155,7 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer implements 
     IResource hdbtiResource = getRepository().getResource(XSKUtils.convertToFullPath(hdbtiFilePath));
     try (Connection connection = dataSource.getConnection()) {
       XSKTableImportArtifact xskTableImportArtifact = xskTableImportParser
-          .parseTableImportArtifact(hdbtiFilePath, getContentFromResource(hdbtiResource));
+              .parseTableImportArtifact(hdbtiFilePath, getContentFromResource(hdbtiResource));
       executeTableImport(xskTableImportArtifact, connection);
     } catch (IOException | SynchronizationException | SQLException e) {
       logger.error("Error during the force reimport of an HDBTI file due to a linked csv file change", e);
@@ -174,7 +173,7 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer implements 
 
     try {
       contentAsString = IOUtils
-          .toString(new InputStreamReader(new ByteArrayInputStream(content), StandardCharsets.UTF_8));
+              .toString(new InputStreamReader(new ByteArrayInputStream(content), StandardCharsets.UTF_8));
     } catch (IOException e) {
       throw new SynchronizationException(e);
     }
@@ -187,16 +186,16 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer implements 
         xskTableImportArtifactDao.createTableImportArtifact(xskTableImportArtifact);
         HDBTI_MODELS.put(xskTableImportArtifact.getName(), xskTableImportArtifact);
         logger
-            .info("Synchronized a new HDBTI file [{}] from location: {}", xskTableImportArtifact.getName(),
-                xskTableImportArtifact.getLocation());
+                .info("Synchronized a new HDBTI file [{}] from location: {}", xskTableImportArtifact.getName(),
+                        xskTableImportArtifact.getLocation());
       } else {
         XSKDataStructureModel existing = xskTableImportArtifactDao.getTableImportArtifact(xskTableImportArtifact.getLocation());
         if (!xskTableImportArtifact.equals(existing)) {
           xskTableImportArtifactDao.updateTableImportArtifact(xskTableImportArtifact);
           HDBTI_MODELS.put(xskTableImportArtifact.getName(), xskTableImportArtifact);
           logger
-              .info("Synchronized a modified HDBTI file [{}] from location: {}",
-                  xskTableImportArtifact.getName(), xskTableImportArtifact.getLocation());
+                  .info("Synchronized a modified HDBTI file [{}] from location: {}",
+                          xskTableImportArtifact.getName(), xskTableImportArtifact.getLocation());
         }
       }
       if (!HDBTI_SYNCHRONIZED.contains(xskTableImportArtifact.getLocation())) {
@@ -270,8 +269,8 @@ public class XSKTableImportSynchronizer extends AbstractSynchronizer implements 
     }
   }
 
-	@Override
-	public int getPriority() {
-		return 450;
-	}
+  @Override
+  public int getPriority() {
+    return 450;
+  }
 }

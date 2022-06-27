@@ -59,18 +59,7 @@ public class XSKJobSynchronizer extends AbstractSynchronizer {
 
   private XSKJobToXSKJobDefinitionTransformer xskJobToXSKJobDefinitionTransformer = new XSKJobToXSKJobDefinitionTransformer();
 
-  /**
-   * Force synchronization.
-   */
-  public static final void forceSynchronization() {
-    XSKJobSynchronizer synchronizer = new XSKJobSynchronizer();
-    synchronizer.setForcedSynchronization(true);
-    try {
-      synchronizer.synchronize();
-    } finally {
-      synchronizer.setForcedSynchronization(false);
-    }
-  }
+
 
   /*
    * (non-Javadoc)

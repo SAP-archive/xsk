@@ -350,6 +350,8 @@ public class HdbddTransformer {
         columnModel.setPrimaryKey(elementSymbol.isKey());
       }
 
+      columnModel.setCalculatedColumn(elementSymbol.isCalculatedColumn());
+      columnModel.setStatement(elementSymbol.getStatement());
       columnModel.setNullable(!elementSymbol.isNotNull());
       columnModel.setDefaultValue(elementSymbol.getDefaultValue());
       columnModel.setDefaultValueDateTimeFunction(elementSymbol.isDefaultValueDateTimeFunction());

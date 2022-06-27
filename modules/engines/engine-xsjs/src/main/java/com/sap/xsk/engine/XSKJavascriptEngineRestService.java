@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HEAD;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -61,9 +62,8 @@ public class XSKJavascriptEngineRestService extends AbstractRestService {
   @Path("/{path:.*}")
   @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
   @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response executeServiceGet(@PathParam("path") String path) {
-    processor.executeService(path);
-    return Response.ok().build();
+  public Response get(@PathParam("path") String path) {
+    return executeJS(path);
   }
 
   /**
@@ -76,13 +76,17 @@ public class XSKJavascriptEngineRestService extends AbstractRestService {
   @Path("/{path:.*}")
   @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
   @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response executeServicePost(
+  public Response post(
       @Context HttpServletRequest httpServletRequest,
       @PathParam("path") String path
   ) throws ContextException {
     ThreadContextFacade.setUp();
-    ThreadContextFacade.set(HttpServletRequest.class.getCanonicalName(), httpServletRequest);
-    return executeServiceGet(path);
+    try {
+      ThreadContextFacade.set(HttpServletRequest.class.getCanonicalName(), httpServletRequest);
+      return executeJS(path);
+    } finally {
+      ThreadContextFacade.tearDown();
+    }
   }
 
   /**
@@ -95,8 +99,8 @@ public class XSKJavascriptEngineRestService extends AbstractRestService {
   @Path("/{path:.*}")
   @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
   @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response executeServicePut(@PathParam("path") String path) {
-    return executeServiceGet(path);
+  public Response put(@PathParam("path") String path) {
+    return executeJS(path);
   }
 
   /**
@@ -109,8 +113,8 @@ public class XSKJavascriptEngineRestService extends AbstractRestService {
   @Path("/{path:.*}")
   @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
   @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response executeServiceDelete(@PathParam("path") String path) {
-    return executeServiceGet(path);
+  public Response delete(@PathParam("path") String path) {
+    return executeJS(path);
   }
 
   /**
@@ -123,8 +127,27 @@ public class XSKJavascriptEngineRestService extends AbstractRestService {
   @Path("/{path:.*}")
   @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
   @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response executeServiceHead(@PathParam("path") String path) {
-    return executeServiceGet(path);
+  public Response head(@PathParam("path") String path) {
+    return executeJS(path);
+  }
+
+  /**
+   * Execute service patch.
+   *
+   * @param path the path
+   * @return result of the execution of the service
+   */
+  @PATCH
+  @Path("/{path:.*}")
+  @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
+  @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
+  public Response patch(@PathParam("path") String path) {
+    return executeJS(path);
+  }
+
+  private Response executeJS(String path) {
+    processor.executeService(path);
+    return Response.ok().build();
   }
 
   /*

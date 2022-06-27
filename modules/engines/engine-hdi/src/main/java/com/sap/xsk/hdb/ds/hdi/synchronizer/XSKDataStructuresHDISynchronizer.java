@@ -72,18 +72,7 @@ public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer imple
   private XSKHDIContainerCreateProcessor xskhdiContainerCreateProcessor = new XSKHDIContainerCreateProcessor();
   private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
-  /**
-   * Force synchronization.
-   */
-  public static final void forceSynchronization() {
-    XSKDataStructuresHDISynchronizer synchronizer = new XSKDataStructuresHDISynchronizer();
-    synchronizer.setForcedSynchronization(true);
-    try {
-      synchronizer.synchronize();
-    } finally {
-      synchronizer.setForcedSynchronization(false);
-    }
-  }
+
 
   /**
    * Concatenate list of strings.

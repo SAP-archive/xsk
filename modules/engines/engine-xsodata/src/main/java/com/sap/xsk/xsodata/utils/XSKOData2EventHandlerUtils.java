@@ -110,17 +110,9 @@ public class XSKOData2EventHandlerUtils {
     XSKTableMetadataProvider tableMetadataProvider = new XSKTableMetadataProvider();
     PersistenceTableModel persistenceTableModel = tableMetadataProvider.getPersistenceTableModel(normalizedTableName);
     String odataArtifactTypeSchema = persistenceTableModel.getSchemaName();
-    String artefactType = persistenceTableModel.getTableType();
-    String sql;
-    if (artefactType.equals(ISqlKeywords.METADATA_TABLE)) {
-      sql = SqlFactory.getNative(connection).create().temporaryTable(temporaryTableName)
-          .setLikeTable(odataArtifactTypeSchema + "." + likeTableName).build();
-    } else {
-      String selectWildcardFromViewSQL = SqlFactory.getNative(connection).select().column("*")
-          .from(odataArtifactTypeSchema + "." + normalizedTableName).build();
-      sql = SqlFactory.getNative(connection).create().temporaryTable(temporaryTableName)
-          .setAsSelectQuery(selectWildcardFromViewSQL).setSelectWithNoData(true).build();
-    }
+    String artifactType = persistenceTableModel.getTableType();
+    String sql = buildCreateTemporaryTableLikeTableSql(connection, artifactType, odataArtifactTypeSchema, temporaryTableName,
+        likeTableName);
 
     try (PreparedStatement preparedStatement = prepareStatement(connection, sql)) {
       preparedStatement.execute();
@@ -129,13 +121,35 @@ public class XSKOData2EventHandlerUtils {
 
   public static void createTemporaryTableAsSelect(Connection connection, String temporaryTableName, SQLSelectBuilder selectBuilder,
       SQLContext sqlContext) throws SQLException, ODataException {
-    String sql = SqlFactory.getNative(connection).create().temporaryTable(temporaryTableName)
-        .setAsSelectQuery(selectBuilder.buildSelect(sqlContext)).build();
-    String sqlWithoutAliases = sql.replaceAll("_T[0-9]+\"", "\"");
-    String sqlWithParameters = replaceSqlParameters(sqlWithoutAliases, selectBuilder.getStatementParams());
-    try (PreparedStatement preparedStatement = prepareStatement(connection, sqlWithParameters)) {
+    String sql = buildCreateTemporaryTableAsSelect(connection, temporaryTableName, selectBuilder.buildSelect(sqlContext), selectBuilder.getStatementParams());
+    try (PreparedStatement preparedStatement = prepareStatement(connection, sql)) {
       preparedStatement.execute();
     }
+  }
+
+  public static String buildCreateTemporaryTableLikeTableSql(Connection connection, String artifactType, String odataArtifactTypeSchema,
+      String temporaryTableName, String likeTableName) {
+    String sql;
+    if (artifactType.equals(ISqlKeywords.METADATA_TABLE)) {
+      sql = SqlFactory.getNative(connection).create().temporaryTable(temporaryTableName)
+          .setLikeTable(odataArtifactTypeSchema + "." + likeTableName).build();
+    } else {
+      String normalizedTableName = DBMetadataUtil.normalizeTableName(likeTableName);
+      String selectWildcardFromViewSQL = SqlFactory.getNative(connection).select().column("*")
+          .from(odataArtifactTypeSchema + "." + normalizedTableName).build();
+      sql = SqlFactory.getNative(connection).create().temporaryTable(temporaryTableName)
+          .setAsSelectQuery(selectWildcardFromViewSQL).setSelectWithNoData(true).build();
+    }
+
+    return sql;
+  }
+
+  public static String buildCreateTemporaryTableAsSelect(Connection connection, String temporaryTableName, String asSelectQuery,
+      List<SQLStatementParam> parameters) {
+    String sql = SqlFactory.getNative(connection).create().temporaryTable(temporaryTableName)
+        .setAsSelectQuery(asSelectQuery).build();
+    String sqlWithoutAliases = sql.replaceAll("_T[0-9]+\"", "\"");
+    return replaceSqlParameters(sqlWithoutAliases, parameters);
   }
 
   public static String replaceSqlParameters(String sql, List<SQLStatementParam> parameters) {

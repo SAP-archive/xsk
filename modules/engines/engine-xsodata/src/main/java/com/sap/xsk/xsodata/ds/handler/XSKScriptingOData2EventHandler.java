@@ -14,6 +14,7 @@ package com.sap.xsk.xsodata.ds.handler;
 import com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils;
 import org.apache.olingo.odata2.api.ep.entry.ODataEntry;
 import org.apache.olingo.odata2.api.exception.ODataException;
+import org.apache.olingo.odata2.api.processor.ODataRequest;
 import org.apache.olingo.odata2.api.processor.ODataResponse;
 import org.apache.olingo.odata2.api.uri.info.DeleteUriInfo;
 import org.apache.olingo.odata2.api.uri.info.PostUriInfo;
@@ -76,7 +77,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(CONNECTION, connectionParam);
       context.put(AFTER_TABLE_NAME, afterTableName);
 
-      super.beforeCreateEntity(uriInfo, requestContentType, contentType, entry, context);
+      callSuperBeforeCreateEntity(uriInfo, requestContentType, contentType, entry, context);
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
       throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_BEFORE_CREATE_ENTITY_EVENT, e);
     } finally {
@@ -106,7 +107,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(CONNECTION, connectionParam);
       context.put(AFTER_TABLE_NAME, afterTableName);
 
-      super.afterCreateEntity(uriInfo, requestContentType, contentType, entry, context);
+      callSuperAfterCreateEntity(uriInfo, requestContentType, contentType, entry, context);
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
       throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_AFTER_CREATE_ENTITY_EVENT, e);
     } finally {
@@ -135,7 +136,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(AFTER_TABLE_NAME, afterTableName);
       context.put(ON_CREATE_ENTITY_TABLE_NAME, afterTableName);
 
-      ODataResponse response = super.onCreateEntity(uriInfo, content, requestContentType, contentType, context);
+      ODataResponse response = callSuperOnCreateEntity(uriInfo, content, requestContentType, contentType, context);
 
       context.put(ENTRY_MAP, XSKOData2EventHandlerUtils.readEntryMap(connectionParam, afterTableName));
       return response;
@@ -171,7 +172,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(AFTER_TABLE_NAME, afterTableName);
       context.put(BEFORE_UPDATE_ENTITY_TABLE_NAME, beforeUpdateEntityTableName);
 
-      super.beforeUpdateEntity(uriInfo, requestContentType, merge, contentType, entry, context);
+      callSuperBeforeUpdateEntity(uriInfo, requestContentType, merge, contentType, entry, context);
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
       throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_BEFORE_UPDATE_ENTITY_EVENT, e);
     } finally {
@@ -197,7 +198,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(BEFORE_TABLE_NAME, context.get(BEFORE_UPDATE_ENTITY_TABLE_NAME));
       context.put(AFTER_TABLE_NAME, afterTableName);
 
-      super.afterUpdateEntity(uriInfo, requestContentType, merge, contentType, entry, context);
+      callSuperAfterUpdateEntity(uriInfo, requestContentType, merge, contentType, entry, context);
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
       throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_AFTER_UPDATE_ENTITY_EVENT, e);
     } finally {
@@ -228,7 +229,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(BEFORE_TABLE_NAME, beforeTableName);
       context.put(AFTER_TABLE_NAME, afterTableName);
 
-      return super.onUpdateEntity(uriInfo, content, requestContentType, merge, contentType, context);
+      return callSuperOnUpdateEntity(uriInfo, content, requestContentType, merge, contentType, context);
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
       throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_ON_UPDATE_ENTITY_EVENT, e);
     } finally {
@@ -256,7 +257,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(BEFORE_TABLE_NAME, beforeTableName);
       context.put(BEFORE_DELETE_ENTITY_TABLE_NAME, beforeDeleteEntityTableName);
 
-      super.beforeDeleteEntity(uriInfo, contentType, context);
+      callSuperBeforeDeleteEntity(uriInfo, contentType, context);
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
       throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_BEFORE_DELETE_ENTITY_EVENT, e);
     } finally {
@@ -274,7 +275,7 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(CONNECTION, connectionParam);
       context.put(BEFORE_TABLE_NAME, context.get(BEFORE_DELETE_ENTITY_TABLE_NAME));
 
-      super.afterDeleteEntity(uriInfo, contentType, context);
+      callSuperAfterDeleteEntity(uriInfo, contentType, context);
     } catch (org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
       throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_AFTER_DELETE_ENTITY_EVENT, e);
     } finally {
@@ -298,12 +299,57 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       context.put(CONNECTION, connectionParam);
       context.put(BEFORE_TABLE_NAME, beforeTableName);
 
-      return super.onDeleteEntity(uriInfo, contentType, context);
+      return callSuperOnDeleteEntity(uriInfo, contentType, context);
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
       throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_ON_DELETE_ENTITY_EVENT, e);
     } finally {
       XSKOData2EventHandlerUtils.closeConnection(connectionParam);
       XSKOData2EventHandlerUtils.batchDropTemporaryTables((String) context.get(BEFORE_TABLE_NAME));
     }
+  }
+
+  void callSuperBeforeCreateEntity(PostUriInfo uriInfo, String requestContentType, String contentType, ODataEntry entry,
+      Map<Object, Object> context) throws org.eclipse.dirigible.engine.odata2.api.ODataException {
+    super.beforeCreateEntity(uriInfo, requestContentType, contentType, entry, context);
+  }
+
+  void callSuperAfterCreateEntity(PostUriInfo uriInfo, String requestContentType, String contentType, ODataEntry entry,
+      Map<Object, Object> context) throws org.eclipse.dirigible.engine.odata2.api.ODataException {
+    super.afterCreateEntity(uriInfo, requestContentType, contentType, entry, context);
+  }
+
+  ODataResponse callSuperOnCreateEntity(PostUriInfo uriInfo, InputStream content, String requestContentType, String contentType,
+      Map<Object, Object> context) throws org.eclipse.dirigible.engine.odata2.api.ODataException {
+    return super.onCreateEntity(uriInfo, content, requestContentType, contentType, context);
+  }
+
+  void callSuperBeforeUpdateEntity(PutMergePatchUriInfo uriInfo, String requestContentType, boolean merge, String contentType,
+      ODataEntry entry, Map<Object, Object> context) throws org.eclipse.dirigible.engine.odata2.api.ODataException {
+    super.beforeUpdateEntity(uriInfo, requestContentType, merge, contentType, entry, context);
+  }
+
+  void callSuperAfterUpdateEntity(PutMergePatchUriInfo uriInfo, String requestContentType, boolean merge, String contentType,
+      ODataEntry entry, Map<Object, Object> context) throws org.eclipse.dirigible.engine.odata2.api.ODataException {
+    super.afterUpdateEntity(uriInfo, requestContentType, merge, contentType, entry, context);
+  }
+
+  ODataResponse callSuperOnUpdateEntity(PutMergePatchUriInfo uriInfo, InputStream content, String requestContentType, boolean merge,
+      String contentType, Map<Object, Object> context) throws org.eclipse.dirigible.engine.odata2.api.ODataException {
+    return super.onUpdateEntity(uriInfo, content, requestContentType, merge, contentType, context);
+  }
+
+  void callSuperBeforeDeleteEntity(DeleteUriInfo uriInfo, String contentType, Map<Object, Object> context)
+      throws org.eclipse.dirigible.engine.odata2.api.ODataException {
+    super.beforeDeleteEntity(uriInfo, contentType, context);
+  }
+
+  void callSuperAfterDeleteEntity(DeleteUriInfo uriInfo, String contentType, Map<Object, Object> context)
+      throws org.eclipse.dirigible.engine.odata2.api.ODataException {
+    super.afterDeleteEntity(uriInfo, contentType, context);
+  }
+
+  ODataResponse callSuperOnDeleteEntity(DeleteUriInfo uriInfo, String contentType, Map<Object, Object> context)
+      throws org.eclipse.dirigible.engine.odata2.api.ODataException {
+    return super.onDeleteEntity(uriInfo, contentType, context);
   }
 }

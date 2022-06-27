@@ -52,26 +52,17 @@ public class XSKJavascriptEngineRestService extends AbstractRestService {
     this.processor = processor;
   }
 
-  /**
-   * Execute service.
-   *
-   * @param path the path
-   * @return result of the execution of the service
-   */
   @GET
   @Path("/{path:.*}")
   @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
   @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response get(@PathParam("path") String path) {
-    return executeJS(path);
+  public Response get(
+      @Context HttpServletRequest httpServletRequest,
+      @PathParam("path") String path
+  ) throws ContextException {
+    return executeJS(httpServletRequest, path);
   }
 
-  /**
-   * Execute service post.
-   *
-   * @param path the path
-   * @return result of the execution of the service
-   */
   @POST
   @Path("/{path:.*}")
   @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
@@ -80,74 +71,62 @@ public class XSKJavascriptEngineRestService extends AbstractRestService {
       @Context HttpServletRequest httpServletRequest,
       @PathParam("path") String path
   ) throws ContextException {
-    ThreadContextFacade.setUp();
-    try {
-      ThreadContextFacade.set(HttpServletRequest.class.getCanonicalName(), httpServletRequest);
-      return executeJS(path);
-    } finally {
-      ThreadContextFacade.tearDown();
-    }
+    return executeJS(httpServletRequest, path);
   }
 
-  /**
-   * Execute service put.
-   *
-   * @param path the path
-   * @return result of the execution of the service
-   */
   @PUT
   @Path("/{path:.*}")
   @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
   @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response put(@PathParam("path") String path) {
-    return executeJS(path);
+  public Response put(
+      @Context HttpServletRequest httpServletRequest,
+      @PathParam("path") String path
+  ) throws ContextException {
+    return executeJS(httpServletRequest, path);
   }
 
-  /**
-   * Execute service delete.
-   *
-   * @param path the path
-   * @return result of the execution of the service
-   */
   @DELETE
   @Path("/{path:.*}")
   @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
   @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response delete(@PathParam("path") String path) {
-    return executeJS(path);
+  public Response delete(
+      @Context HttpServletRequest httpServletRequest,
+      @PathParam("path") String path
+  ) throws ContextException {
+    return executeJS(httpServletRequest, path);
   }
 
-  /**
-   * Execute service head.
-   *
-   * @param path the path
-   * @return result of the execution of the service
-   */
   @HEAD
   @Path("/{path:.*}")
   @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
   @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response head(@PathParam("path") String path) {
-    return executeJS(path);
+  public Response head(
+      @Context HttpServletRequest httpServletRequest,
+      @PathParam("path") String path
+  ) throws ContextException {
+    return executeJS(httpServletRequest, path);
   }
 
-  /**
-   * Execute service patch.
-   *
-   * @param path the path
-   * @return result of the execution of the service
-   */
   @PATCH
   @Path("/{path:.*}")
   @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
   @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response patch(@PathParam("path") String path) {
-    return executeJS(path);
+  public Response patch(
+      @Context HttpServletRequest httpServletRequest,
+      @PathParam("path") String path
+  ) throws ContextException {
+    return executeJS(httpServletRequest, path);
   }
 
-  private Response executeJS(String path) {
-    processor.executeService(path);
-    return Response.ok().build();
+  private Response executeJS(HttpServletRequest httpServletRequest, String path) throws ContextException {
+    ThreadContextFacade.setUp();
+    try {
+      ThreadContextFacade.set(HttpServletRequest.class.getCanonicalName(), httpServletRequest);
+      processor.executeService(path);
+      return Response.ok().build();
+    } finally {
+      ThreadContextFacade.tearDown();
+    }
   }
 
   /*

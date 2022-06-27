@@ -47,7 +47,7 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(JUnitParamsRunner.class)
 public class XSKJavascriptEngineRestServiceTest {
-  
+
   private static final String TEST_RESOURCE_NAME = "/test.js";
 
   @Test
@@ -62,53 +62,38 @@ public class XSKJavascriptEngineRestServiceTest {
     assertNotNull(restService.getLogger());
   }
 
-  @Test
-  @Parameters({"GET", "PUT", "DELETE", "HEAD", "PATCH"})
-  public void executeServiceTest(String requestType) throws Exception {
-    XSKJavascriptEngineProcessor mockProcessor = Mockito.mock(XSKJavascriptEngineProcessor.class);
-    XSKJavascriptEngineRestService restService = new XSKJavascriptEngineRestService(mockProcessor);
-    Response response = selectAndExecuteMethod(restService, requestType);
-    verify(mockProcessor, times(1)).executeService(TEST_RESOURCE_NAME);
-    assertEquals(Status.OK, response.getStatusInfo().toEnum());
-  }
-
   private Response selectAndExecuteMethod(
       XSKJavascriptEngineRestService restService,
+      HttpServletRequest servletRequest,
       String requestType
-  ) throws Exception {
+  ) throws ContextException {
     switch (requestType) {
       case "GET":
-        return restService.get(TEST_RESOURCE_NAME);
+        return restService.get(servletRequest, TEST_RESOURCE_NAME);
       case "PUT":
-        return restService.put(TEST_RESOURCE_NAME);
+        return restService.put(servletRequest, TEST_RESOURCE_NAME);
       case "HEAD":
-        return restService.head(TEST_RESOURCE_NAME);
+        return restService.head(servletRequest, TEST_RESOURCE_NAME);
       case "DELETE":
-        return restService.delete(TEST_RESOURCE_NAME);
+        return restService.delete(servletRequest, TEST_RESOURCE_NAME);
       case "PATCH":
-        return restService.patch(TEST_RESOURCE_NAME);
+        return restService.patch(servletRequest, TEST_RESOURCE_NAME);
+      case "POST":
+        return restService.post(servletRequest, TEST_RESOURCE_NAME);
       default:
-        throw new Exception("Unexpected request type '" + requestType + "'");
+        throw new RuntimeException("Unexpected request type '" + requestType + "'");
     }
   }
 
-  @Test(expected = ScriptingException.class)
-  @Parameters({"GET", "PUT", "DELETE", "HEAD"})
-  public void executeServiceWithExceptionTest(String requestType) throws Exception {
-    XSKJavascriptEngineProcessor mockProcessor = Mockito.mock(XSKJavascriptEngineProcessor.class);
-    XSKJavascriptEngineRestService restService = new XSKJavascriptEngineRestService(mockProcessor);
-    doThrow(new ScriptingException()).when(mockProcessor).executeService(TEST_RESOURCE_NAME);
-    selectAndExecuteMethod(restService, requestType);
-  }
-
   @Test
-  public void executeServicePostTest() throws ContextException {
+  @Parameters({"GET", "PUT", "POST", "PATCH", "DELETE", "HEAD"})
+  public void executeServicePostTest(String requestType) throws ContextException {
     XSKJavascriptEngineProcessor mockProcessor = Mockito.mock(XSKJavascriptEngineProcessor.class);
     HttpServletRequest mockRequest = Mockito.mock(HttpServletRequest.class);
 
     try (MockedStatic<ThreadContextFacade> mockedThreadContextFacade = mockStatic(ThreadContextFacade.class)) {
       XSKJavascriptEngineRestService restService = new XSKJavascriptEngineRestService(mockProcessor);
-      Response response = restService.post(mockRequest, TEST_RESOURCE_NAME);
+      Response response = selectAndExecuteMethod(restService, mockRequest, requestType);
 
       mockedThreadContextFacade.verify(ThreadContextFacade::setUp, times(1));
       mockedThreadContextFacade.verify(
@@ -123,7 +108,8 @@ public class XSKJavascriptEngineRestServiceTest {
   }
 
   @Test(expected = ContextException.class)
-  public void executeServicePostWithThreadContextExceptionTest() throws ContextException {
+  @Parameters({"GET", "PUT", "POST", "PATCH", "DELETE", "HEAD"})
+  public void executeServicePostWithThreadContextExceptionTest(String requestType) throws ContextException {
     XSKJavascriptEngineProcessor mockProcessor = Mockito.mock(XSKJavascriptEngineProcessor.class);
     HttpServletRequest mockRequest = Mockito.mock(HttpServletRequest.class);
 
@@ -136,67 +122,66 @@ public class XSKJavascriptEngineRestServiceTest {
       ).thenThrow(new ContextException());
 
       XSKJavascriptEngineRestService restService = new XSKJavascriptEngineRestService(mockProcessor);
-      restService.post(mockRequest, TEST_RESOURCE_NAME);
+      selectAndExecuteMethod(restService, mockRequest, requestType);
     }
   }
 
   @Test(expected = ScriptingException.class)
-  public void executeServicePostWithOtherExceptionTest() throws ContextException {
+  @Parameters({"GET", "PUT", "POST", "PATCH", "DELETE", "HEAD"})
+  public void executeServicePostWithOtherExceptionTest(String requestType) throws ContextException {
     XSKJavascriptEngineProcessor mockProcessor = Mockito.mock(XSKJavascriptEngineProcessor.class);
     HttpServletRequest mockRequest = Mockito.mock(HttpServletRequest.class);
     doThrow(new ScriptingException()).when(mockProcessor).executeService(TEST_RESOURCE_NAME);
 
     try (MockedStatic<ThreadContextFacade> mockedThreadContextFacade = mockStatic(ThreadContextFacade.class)) {
       XSKJavascriptEngineRestService restService = new XSKJavascriptEngineRestService(mockProcessor);
-      restService.post(mockRequest, TEST_RESOURCE_NAME);
+      selectAndExecuteMethod(restService, mockRequest, requestType);
     }
   }
 
   @Test
-  public void assertGetMethodHasCorrectAnnotations() throws NoSuchMethodException {
+  public void assertServiceClassHasCorrectAnnotations() {
     Class<XSKJavascriptEngineRestService> serviceClass = XSKJavascriptEngineRestService.class;
-    Method getMethod = serviceClass.getMethod("get", String.class);
-    assertCorrectHttpVerbAnnotation(getMethod, GET.class);
-    assertCorrectPathAnnotation(getMethod);
+    Path pathAnnotation = serviceClass.getAnnotation(Path.class);
+    assertNotNull("Class does not have a path annotation", pathAnnotation);
+    assertEquals("Class does not have correct path", "/xsk", pathAnnotation.value());
+  }
+
+  @Test
+  public void assertGetMethodHasCorrectAnnotations() throws NoSuchMethodException {
+    assertMethodHasCorrectAnnotations("get", GET.class);
   }
 
   @Test
   public void assertPostMethodHasCorrectAnnotations() throws NoSuchMethodException {
-    Class<XSKJavascriptEngineRestService> serviceClass = XSKJavascriptEngineRestService.class;
-    Method postMethod = serviceClass.getMethod("post", HttpServletRequest.class, String.class);
-    assertCorrectHttpVerbAnnotation(postMethod, POST.class);
-    assertCorrectPathAnnotation(postMethod);
+    assertMethodHasCorrectAnnotations("post", POST.class);
   }
 
   @Test
   public void assertPutMethodHasCorrectAnnotations() throws NoSuchMethodException {
-    Class<XSKJavascriptEngineRestService> serviceClass = XSKJavascriptEngineRestService.class;
-    Method putMethod = serviceClass.getMethod("put", String.class);
-    assertCorrectHttpVerbAnnotation(putMethod, PUT.class);
-    assertCorrectPathAnnotation(putMethod);
+    assertMethodHasCorrectAnnotations("put", PUT.class);
   }
 
   @Test
   public void assertPatchMethodHasCorrectAnnotations() throws NoSuchMethodException {
-    Class<XSKJavascriptEngineRestService> serviceClass = XSKJavascriptEngineRestService.class;
-    Method patchMethod = serviceClass.getMethod("patch", String.class);
-    assertCorrectHttpVerbAnnotation(patchMethod, PATCH.class);
-    assertCorrectPathAnnotation(patchMethod);
+    assertMethodHasCorrectAnnotations("patch", PATCH.class);
   }
 
   @Test
   public void assertDeleteMethodHasCorrectAnnotations() throws NoSuchMethodException {
-    Class<XSKJavascriptEngineRestService> serviceClass = XSKJavascriptEngineRestService.class;
-    Method deleteMethod = serviceClass.getMethod("delete", String.class);
-    assertCorrectHttpVerbAnnotation(deleteMethod, DELETE.class);
-    assertCorrectPathAnnotation(deleteMethod);
+    assertMethodHasCorrectAnnotations("delete", DELETE.class);
   }
 
   @Test
   public void assertHeadMethodHasCorrectAnnotations() throws NoSuchMethodException {
+    assertMethodHasCorrectAnnotations("head", HEAD.class);
+  }
+
+  private static void assertMethodHasCorrectAnnotations(String methodName, Class<? extends Annotation> expectedHttpVerbAnnotation)
+      throws NoSuchMethodException {
     Class<XSKJavascriptEngineRestService> serviceClass = XSKJavascriptEngineRestService.class;
-    Method headMethod = serviceClass.getMethod("head", String.class);
-    assertCorrectHttpVerbAnnotation(headMethod, HEAD.class);
+    Method headMethod = serviceClass.getMethod(methodName, HttpServletRequest.class, String.class);
+    assertCorrectHttpVerbAnnotation(headMethod, expectedHttpVerbAnnotation);
     assertCorrectPathAnnotation(headMethod);
   }
 
@@ -210,13 +195,5 @@ public class XSKJavascriptEngineRestServiceTest {
     Path pathAnnotation = serviceMethod.getAnnotation(Path.class);
     assertNotNull("Method " + methodName + " does not have a path annotation", pathAnnotation);
     assertEquals("Method " + methodName + " does not have correct path", "/{path:.*}", pathAnnotation.value());
-  }
-
-  @Test
-  public void assertServiceClassHasCorrectAnnotations() {
-    Class<XSKJavascriptEngineRestService> serviceClass = XSKJavascriptEngineRestService.class;
-    Path pathAnnotation = serviceClass.getAnnotation(Path.class);
-    assertNotNull("Class does not have a path annotation", pathAnnotation);
-    assertEquals("Class does not have correct path", "/xsk", pathAnnotation.value());
   }
 }

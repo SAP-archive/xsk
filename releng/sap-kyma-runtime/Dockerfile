@@ -12,6 +12,10 @@ FROM dirigiblelabs/xsk-kyma-runtime-base as base
 
 COPY target/ROOT.war /usr/local/tomcat/webapps/
 
+RUN apt-get update && \
+    apt-get install git -y && \
+    apt-get clean
+
 FROM gcr.io/distroless/base-debian11
 
 ENV DIRIGIBLE_HOME_URL=/services/v4/web/

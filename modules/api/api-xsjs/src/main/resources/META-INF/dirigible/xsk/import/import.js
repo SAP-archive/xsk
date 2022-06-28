@@ -48,6 +48,7 @@ var Require = (function (modulePath) {
     } catch(e) {
       throw new Error('Error loading module ' + path + ' : ' + e.message, e);
     }
+    
     moduleInfo = {
       loaded: false,
       id: path,

@@ -26,9 +26,10 @@ public class ProjectDeployer {
 
   private final WorkspaceClient workspaceClient;
   private final PublisherClient publisherClient;
+  private final HttpClientFactory httpClientFactory = new HttpClientFactory();
 
-  public ProjectDeployer(ProjectDeploymentType projectDeploymentType) {
-    XSKHttpClient xskHttpClient = HttpClientFactory.createXSKHttpClient(projectDeploymentType);
+  public ProjectDeployer() {
+    XSKHttpClient xskHttpClient = httpClientFactory.createXSKHttpClient();
     this.workspaceClient = new WorkspaceClient(xskHttpClient);
     this.publisherClient = new PublisherClient(xskHttpClient);
   }

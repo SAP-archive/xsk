@@ -13,13 +13,11 @@ package com.sap.xsk.integration.tests.applications;
 
 import com.sap.xsk.integration.tests.applications.deployment.ProjectType;
 import com.sap.xsk.integration.tests.applications.deployment.ProjectDeploymentRule;
-import com.sap.xsk.integration.tests.applications.deployment.ProjectDeploymentType;
 import org.junit.ClassRule;
 
 public class KymaTest {
 
   @ClassRule
-  public static ProjectDeploymentRule projectDeploymentRule = new ProjectDeploymentRule("simple", ProjectType.CUSTOM,
-      ProjectDeploymentType.KYMA);
+  public static ProjectDeploymentRule projectDeploymentRule = new ProjectDeploymentRule("simple", ProjectType.CUSTOM);
 
 }

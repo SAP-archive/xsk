@@ -11,6 +11,8 @@
  */
 package com.sap.xsk.integration.tests.applications;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.sap.xsk.integration.tests.applications.deployment.ProjectDeploymentRule;
 import com.sap.xsk.integration.tests.applications.status.ProjectHealthCheckRule;
 import com.sap.xsk.integration.tests.applications.status.ProjectHttpCheck;
@@ -44,14 +46,12 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static com.sap.xsk.integration.tests.applications.deployment.ProjectType.SAMPLE;
-import static com.sap.xsk.integration.tests.applications.deployment.ProjectDeploymentType.LOCAL;
-import static com.sap.xsk.integration.tests.applications.deployment.ProjectDeploymentConstants.PROJECT_BASE_URI;
-
 import static org.junit.Assert.assertEquals;
 
 public class HdbHdbtiSimpleSampleTest {
 
   private static DataSource dataSource;
+  private static HttpClientFactory httpClientFactory = new HttpClientFactory();
 
   private static final String APPLICATION_NAME = "hdb-hdbti-simple";
   private static final String APPLICATION_SCHEMA = "XSK_SAMPLES_HDB_HDBTI_SIMPLE";
@@ -66,28 +66,31 @@ public class HdbHdbtiSimpleSampleTest {
 
   private static final List<ProjectHttpCheck> HTTP_CHECKS = Arrays.asList(
       new ProjectHttpCheck(XSJS_SERVICE_PATH + "/status", 200, "OK"),
-      new ProjectHttpCheck(XSODATA_SERVICE_PATH + "/ProductsOrders", 200));
+      new ProjectHttpCheck(XSODATA_SERVICE_PATH + "/ProductsOrders", 200)
+  );
 
-  private static final List<ProjectSqlCheck> SQL_CHECKS = Arrays.asList(new ProjectSqlCheck(APPLICATION_SCHEMA, ORDERS_TABLE));
+  private static final List<ProjectSqlCheck> SQL_CHECKS = Arrays.asList(
+      new ProjectSqlCheck(APPLICATION_SCHEMA, ORDERS_TABLE)
+  );
 
-  public static final ProjectDeploymentRule projectDeploymentRule = new ProjectDeploymentRule(APPLICATION_NAME, SAMPLE, LOCAL);
+  public static final ProjectDeploymentRule projectDeploymentRule = new ProjectDeploymentRule(APPLICATION_NAME, SAMPLE);
 
-  public static final ProjectHealthCheckRule projectHealthCheckRule = new ProjectHealthCheckRule(HTTP_CHECKS, SQL_CHECKS, LOCAL);
+  public static final ProjectHealthCheckRule projectHealthCheckRule = new ProjectHealthCheckRule(HTTP_CHECKS, SQL_CHECKS);
 
   @ClassRule
   public static TestRule chain = RuleChain.outerRule(projectDeploymentRule).around(projectHealthCheckRule);
 
   @BeforeClass
-  public static void setDataSource() {
-    dataSource = HanaDataSourceFactory.createHanaDataSource();
+  public static void getDataSource() {
+    dataSource = HanaDataSourceFactory.getDataSource();
   }
 
   @Test
   public void testHdbHdbtiSimpleSampleXsjsService() throws IOException, URISyntaxException, ExecutionException, InterruptedException {
 
-    URL xsjsUrl = new URL(PROJECT_BASE_URI + XSJS_PRODUCTS_ORDERS_PATH);
+    XSKHttpClient xskHttpClient = httpClientFactory.createXSKHttpClient();
 
-    XSKHttpClient xskHttpClient = HttpClientFactory.createXSKHttpClient(LOCAL);
+    URL xsjsUrl = new URL(xskHttpClient.getBaseHost() + XSJS_PRODUCTS_ORDERS_PATH);
 
     HttpUriRequest xsjsRequest = RequestBuilder.get(xsjsUrl.toURI()).build();
 
@@ -95,35 +98,22 @@ public class HdbHdbtiSimpleSampleTest {
     HttpEntity xsjsEntity = xsjsHttpResponse.getEntity();
     String xsjsResult = IOUtils.toString(xsjsEntity.getContent(), StandardCharsets.UTF_8);
 
-    final String expectedXsjsResult = "[{\"Id\":\"1\","
-        + "\"CustomerName\":\"John\","
-        + "\"CustomerSurname\":\"Smith\","
-        + "\"Status\":\"In Progress\","
-        + "\"CreatedAt\":\"2020-01-01T12:25:10.000Z\","
-        + "\"CreatedBy\":\"Mike Baker\","
-        + "\"Description\":\"Migration of XS Classic application from Neo to Kubernetes\","
-        + "\"Address\":\"Montreux Switzerland\","
-        + "\"Phone\":\"-\",\"Email\":\"mike.baker@example.com\"},"
-        + "{\"Id\":\"2\","
-        + "\"CustomerName\":\"Claudia\","
-        + "\"CustomerSurname\":\"Davis\","
-        + "\"Status\":\"In Progress\","
-        + "\"CreatedAt\":\"2020-01-01T12:27:33.000Z\","
-        + "\"CreatedBy\":\"Josh Patel\","
-        + "\"Description\":\"Migration of XS Classic application from Neo to Kubernetes\","
-        + "\"Address\":\"Waldorf Germany\","
-        + "\"Phone\":\"-\","
-        + "\"Email\":\"josh.patel@example.com\"}]";
+    String expectedXsjsResult = IOUtils.toString(
+        HdbHdbtiSimpleSampleTest.class.getResourceAsStream("/expected-results/HdbHdbtiSimpleSampleXsjsResult.json"),
+        StandardCharsets.UTF_8);
 
-    assertEquals("The xsjs request response did not match the expected result!", expectedXsjsResult, xsjsResult);
+    JsonElement xsjsJson = JsonParser.parseString(xsjsResult);
+    JsonElement expectedXsjsJson = JsonParser.parseString(expectedXsjsResult);
+
+    assertEquals("The xsjs request response did not match the expected result!", expectedXsjsJson, xsjsJson);
   }
 
   @Test
   public void testHdbHdbtiSimpleSampleXsodataService() throws IOException, URISyntaxException, ExecutionException, InterruptedException {
 
-    URL xsodataUrl = new URL(PROJECT_BASE_URI + XSODATA_PRODUCTS_ORDERS_PATH);
+    XSKHttpClient xskHttpClient = httpClientFactory.createXSKHttpClient();
 
-    XSKHttpClient xskHttpClient = HttpClientFactory.createXSKHttpClient(LOCAL);
+    URL xsodataUrl = new URL(xskHttpClient.getBaseHost() + XSODATA_PRODUCTS_ORDERS_PATH);
 
     HttpUriRequest xsodataRequest = RequestBuilder.get(xsodataUrl.toURI()).build();
 
@@ -131,35 +121,14 @@ public class HdbHdbtiSimpleSampleTest {
     HttpEntity xsodataEntity = xsodataHttpResponse.getEntity();
     String xsodataResult = IOUtils.toString(xsodataEntity.getContent(), StandardCharsets.UTF_8);
 
-    final String expectedXsodataResult = "{\"d\":{\"results\":"
-        + "[{\"__metadata\":{\"id\":\"http://localhost:8080/odata/v2/ProductsOrders('1')\","
-        + "\"uri\":\"http://localhost:8080/odata/v2/ProductsOrders('1')\","
-        + "\"type\":\"hdb-hdbti-simple.Service.ProductsOrdersType\"},"
-        + "\"Id\":\"1\","
-        + "\"CustomerName\":\"John\","
-        + "\"CustomerSurname\":\"Smith\","
-        + "\"Status\":\"In Progress\","
-        + "\"CreatedAt\":\"\\/Date(1577881510000)\\/\","
-        + "\"CreatedBy\":\"Mike Baker\","
-        + "\"Description\":\"Migration of XS Classic application from Neo to Kubernetes\","
-        + "\"Address\":\"Montreux Switzerland\","
-        + "\"Phone\":\"-\","
-        + "\"Email\":\"mike.baker@example.com\"},"
-        + "{\"__metadata\":{\"id\":\"http://localhost:8080/odata/v2/ProductsOrders('2')\","
-        + "\"uri\":\"http://localhost:8080/odata/v2/ProductsOrders('2')\","
-        + "\"type\":\"hdb-hdbti-simple.Service.ProductsOrdersType\"},"
-        + "\"Id\":\"2\","
-        + "\"CustomerName\":\"Claudia\","
-        + "\"CustomerSurname\":\"Davis\","
-        + "\"Status\":\"In Progress\","
-        + "\"CreatedAt\":\"\\/Date(1577881653000)\\/\","
-        + "\"CreatedBy\":\"Josh Patel\","
-        + "\"Description\":\"Migration of XS Classic application from Neo to Kubernetes\","
-        + "\"Address\":\"Waldorf Germany\","
-        + "\"Phone\":\"-\","
-        + "\"Email\":\"josh.patel@example.com\"}]}}";
+    String expectedXsodataResult = IOUtils.toString(
+        HdbHdbtiSimpleSampleTest.class.getResourceAsStream("/expected-results/HdbHdbtiSimpleSampleXsodataResult.json"),
+        StandardCharsets.UTF_8);
 
-    assertEquals("The xsodata request response did not match the expected result!", expectedXsodataResult, xsodataResult);
+    JsonElement xsodataJson = JsonParser.parseString(xsodataResult);
+    JsonElement expectedXsodataJson = JsonParser.parseString(expectedXsodataResult);
+
+    assertEquals("The xsodata request response did not match the expected result!", expectedXsodataJson, xsodataJson);
   }
 
   @AfterClass

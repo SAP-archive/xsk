@@ -1,6 +1,5 @@
 package com.sap.xsk.integration.tests.applications.utils;
 
-import com.sap.xsk.integration.tests.applications.deployment.ProjectDeploymentType;
 import com.sap.xsk.integration.tests.core.client.http.XSKHttpClient;
 import com.sap.xsk.integration.tests.core.client.http.kyma.KymaXSKHttpClient;
 import com.sap.xsk.integration.tests.core.client.http.local.LocalXSKHttpClient;
@@ -8,25 +7,19 @@ import org.eclipse.dirigible.commons.config.Configuration;
 import java.net.URI;
 
 import static com.sap.xsk.integration.tests.applications.deployment.ProjectDeploymentConstants.KYMA_HOST;
-import static com.sap.xsk.integration.tests.applications.deployment.ProjectDeploymentConstants.PROJECT_BASE_URI;
+import static com.sap.xsk.integration.tests.applications.deployment.ProjectDeploymentConstants.LOCAL_BASE_HOST;
 
 public class HttpClientFactory {
 
-  public static XSKHttpClient createXSKHttpClient(ProjectDeploymentType projectDeploymentType) {
-    XSKHttpClient xskHttpClient = null;
+  public XSKHttpClient createXSKHttpClient() {
+    String kymaHost = Configuration.get(KYMA_HOST);
 
-    switch (projectDeploymentType) {
-      case LOCAL:
-        URI localUri = URI.create(PROJECT_BASE_URI);
-        xskHttpClient = LocalXSKHttpClient.create(localUri);
-        break;
-      case KYMA:
-        String host = Configuration.get(KYMA_HOST);
-        URI kymaUri = URI.create(host);
-        xskHttpClient = KymaXSKHttpClient.create(kymaUri);
-        break;
+    if (kymaHost != null && !kymaHost.isEmpty()) {
+      URI kymaUri = URI.create(kymaHost);
+      return KymaXSKHttpClient.create(kymaUri);
+    } else {
+      URI localUri = URI.create(LOCAL_BASE_HOST);
+      return LocalXSKHttpClient.create(localUri);
     }
-
-    return xskHttpClient;
   }
 }

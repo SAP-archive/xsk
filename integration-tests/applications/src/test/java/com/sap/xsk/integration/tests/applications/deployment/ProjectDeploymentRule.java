@@ -27,11 +27,10 @@ public class ProjectDeploymentRule extends ExternalResource {
   private final String applicationName;
   private final ProjectType projectType;
 
-  public ProjectDeploymentRule(String applicationName, ProjectType projectType,
-      ProjectDeploymentType projectDeploymentType) {
+  public ProjectDeploymentRule(String applicationName, ProjectType projectType) {
     this.applicationName = applicationName;
     this.projectType = projectType;
-    this.projectDeployer = new ProjectDeployer(projectDeploymentType);
+    this.projectDeployer = new ProjectDeployer();
   }
 
   @Override

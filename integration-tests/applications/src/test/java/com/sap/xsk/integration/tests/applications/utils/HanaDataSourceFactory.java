@@ -32,9 +32,13 @@ public class HanaDataSourceFactory {
   private HanaDataSourceFactory() {
   }
 
-  public static DataSource createHanaDataSource() {
+  public static DataSource getDataSource() {
     if (dataSource == null) {
-      dataSource = new HikariDataSource(config);
+      synchronized (HanaDataSourceFactory.class) {
+        if (dataSource == null) {
+          dataSource = new HikariDataSource(config);
+        }
+      }
     }
     return dataSource;
   }

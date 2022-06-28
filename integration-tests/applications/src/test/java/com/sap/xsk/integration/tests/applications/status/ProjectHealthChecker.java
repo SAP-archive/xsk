@@ -1,6 +1,5 @@
 package com.sap.xsk.integration.tests.applications.status;
 
-import com.sap.xsk.integration.tests.applications.deployment.ProjectDeploymentType;
 import com.sap.xsk.integration.tests.applications.utils.HanaDataSourceFactory;
 import com.sap.xsk.integration.tests.applications.utils.HttpClientFactory;
 import com.sap.xsk.integration.tests.core.client.http.XSKHttpClient;
@@ -23,14 +22,15 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import static com.sap.xsk.integration.tests.applications.deployment.ProjectDeploymentConstants.PROJECT_BASE_URI;
-
 public class ProjectHealthChecker {
 
   private final List<ProjectHttpCheck> projectApplicationHttpChecks;
   private final List<ProjectSqlCheck> projectApplicationSqlChecks;
-  private final XSKHttpClient xskHttpClient;
   private final DataSource dataSource;
+
+  private final HttpClientFactory httpClientFactory = new HttpClientFactory();
+  private final XSKHttpClient xskHttpClient;
+
 
   private final static Integer INITIAL_RETRY_INDEX = 0;
   private final static Integer RETRY_COUNT = 10;
@@ -39,12 +39,11 @@ public class ProjectHealthChecker {
   private final static String TABLE_EXISTS_QUERY = "SELECT TABLE_NAME FROM \"SYS\".\"M_TABLES\" WHERE SCHEMA_NAME = ? AND TABLE_NAME = ?";
   private final static String TABLE_HAS_RECORDS_QUERY = "SELECT RECORD_COUNT FROM \"SYS\".\"M_TABLES\" WHERE SCHEMA_NAME = ? AND TABLE_NAME = ?";
 
-  ProjectHealthChecker(List<ProjectHttpCheck> projectApplicationHttpChecks,
-      List<ProjectSqlCheck> projectApplicationSqlChecks, ProjectDeploymentType projectDeploymentType) {
+  ProjectHealthChecker(List<ProjectHttpCheck> projectApplicationHttpChecks, List<ProjectSqlCheck> projectApplicationSqlChecks) {
     this.projectApplicationHttpChecks = projectApplicationHttpChecks;
     this.projectApplicationSqlChecks = projectApplicationSqlChecks;
-    this.xskHttpClient = HttpClientFactory.createXSKHttpClient(projectDeploymentType);
-    this.dataSource = HanaDataSourceFactory.createHanaDataSource();
+    this.xskHttpClient = httpClientFactory.createXSKHttpClient();
+    this.dataSource = HanaDataSourceFactory.getDataSource();
   }
 
   public void performHealthChecks() {
@@ -59,7 +58,7 @@ public class ProjectHealthChecker {
       String expectedBodyMessage = httpCheck.getExpectedBodyMessage();
 
       try {
-        URL requestUrl = new URL(PROJECT_BASE_URI + endpointToCall);
+        URL requestUrl = new URL(xskHttpClient.getBaseHost() + endpointToCall);
         HttpUriRequest httpUriRequest = RequestBuilder.get(requestUrl.toURI()).build();
 
         makeRequestWithRetry(xskHttpClient, httpUriRequest, expectedStatusCode, expectedBodyMessage, INITIAL_RETRY_INDEX);
@@ -73,9 +72,7 @@ public class ProjectHealthChecker {
 
   private void makeRequestWithRetry(XSKHttpClient httpAsyncClient, HttpUriRequest httpUriRequest, Integer expectedStatusCode,
       String expectedBodyMessage, Integer currentRetryIndex) throws InterruptedException, IOException, ExecutionException {
-
     checkRetryCount(currentRetryIndex);
-
     HttpResponse httpResponse = httpAsyncClient.executeRequestAsync(httpUriRequest).get();
     HttpEntity httpEntity = httpResponse.getEntity();
     String responseBodyMessage = IOUtils.toString(httpEntity.getContent(), StandardCharsets.UTF_8);
@@ -114,25 +111,25 @@ public class ProjectHealthChecker {
 
   private void checkIfTableExists(Connection connection, String schemaName, String tableName)
       throws InterruptedException, SQLException, IOException {
-    PreparedStatement statement = connection.prepareStatement(TABLE_EXISTS_QUERY);
-    statement.setString(1, schemaName);
-    statement.setString(2, tableName);
-    executeQueryWithRetryToCheckIfTableExists(statement, INITIAL_RETRY_INDEX);
+    try (PreparedStatement statement = connection.prepareStatement(TABLE_EXISTS_QUERY)) {
+      statement.setString(1, schemaName);
+      statement.setString(2, tableName);
+      executeQueryWithRetryToCheckIfTableExists(statement, INITIAL_RETRY_INDEX);
+    }
   }
 
   private void checkIfTableHasRecords(Connection connection, String schemaName, String tableName)
       throws SQLException, InterruptedException, IOException {
-    PreparedStatement statement = connection.prepareStatement(TABLE_HAS_RECORDS_QUERY);
-    statement.setString(1, schemaName);
-    statement.setString(2, tableName);
-    executeQueryWithRetryToCheckIfTableHasRecords(statement, INITIAL_RETRY_INDEX);
+    try (PreparedStatement statement = connection.prepareStatement(TABLE_HAS_RECORDS_QUERY)) {
+      statement.setString(1, schemaName);
+      statement.setString(2, tableName);
+      executeQueryWithRetryToCheckIfTableHasRecords(statement, INITIAL_RETRY_INDEX);
+    }
   }
 
   private void executeQueryWithRetryToCheckIfTableExists(PreparedStatement statement, Integer currentRetryIndex)
-      throws InterruptedException, IOException, SQLException {
-
+      throws InterruptedException, SQLException {
     checkRetryCount(currentRetryIndex);
-
     ResultSet queryResult = statement.executeQuery();
 
     if (!queryResult.next()) {
@@ -142,10 +139,8 @@ public class ProjectHealthChecker {
   }
 
   private void executeQueryWithRetryToCheckIfTableHasRecords(PreparedStatement statement, Integer currentRetryIndex)
-      throws InterruptedException, SQLException, IOException {
-
+      throws InterruptedException, SQLException {
     checkRetryCount(currentRetryIndex);
-
     ResultSet queryResult = statement.executeQuery();
 
     if (!queryResult.next() || queryResult.getInt("RECORD_COUNT") == 0) {
@@ -154,9 +149,9 @@ public class ProjectHealthChecker {
     }
   }
 
-  private void checkRetryCount(Integer currentRetryIndex) throws IOException {
+  private void checkRetryCount(Integer currentRetryIndex) {
     if (currentRetryIndex > RETRY_COUNT) {
-      throw new IOException("Retry limit reached!");
+      throw new IllegalStateException("Retry limit reached!");
     }
   }
 }

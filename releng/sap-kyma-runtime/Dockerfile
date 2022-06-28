@@ -12,10 +12,6 @@ FROM dirigiblelabs/xsk-kyma-runtime-base as base
 
 COPY target/ROOT.war /usr/local/tomcat/webapps/
 
-RUN apt-get update && \
-    apt-get install git -y && \
-    apt-get clean
-
 FROM gcr.io/distroless/base-debian11
 
 ENV DIRIGIBLE_HOME_URL=/services/v4/web/
@@ -23,7 +19,7 @@ ENV CATALINA_HOME=/usr/local/tomcat
 
 USER nonroot
 COPY --from=base --chown=nonroot:nonroot $CATALINA_HOME $CATALINA_HOME
-COPY --from=base --chown=nonroot:nonroot /usr/lib/jvm/sapmachine-17/ /usr/local/jdk
+COPY --from=base --chown=nonroot:nonroot /usr/local/jdk /usr/local/jdk
 COPY --from=base --chown=nonroot:nonroot /bin/bash /bin/bash
 COPY --from=base --chown=nonroot:nonroot /bin/mkdir /bin/mkdir
 COPY --from=base --chown=nonroot:nonroot /bin/cp /bin/cp

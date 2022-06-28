@@ -16,10 +16,6 @@ FROM dirigiblelabs/xsk-kyma-runtime-base as base
 
 COPY target/ROOT.war /usr/local/tomcat/webapps/
 
-RUN apt-get update && \
-    apt-get install git -y && \
-    apt-get clean
-
 FROM base AS xsk-external-jdk
 # If JDK_TYPE is set to `external-jdk`, then the JDK_HOME is required and it should point to the home directory of the jdk
 ARG JDK_HOME
@@ -31,7 +27,7 @@ ENV JRE_HOME=/usr/local/jdk
 FROM base AS xsk-default-jdk
 RUN echo "The default OpenJDK will be used"
 
-COPY --from=base /usr/lib/jvm/sapmachine-17/ /usr/local/jdk
+COPY --from=base /usr/local/jdk /usr/local/jdk
 
 FROM xsk-${JDK_TYPE} AS dependencies-base
 

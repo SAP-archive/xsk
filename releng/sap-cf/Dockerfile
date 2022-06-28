@@ -14,11 +14,7 @@ ARG JDK_TYPE=default-jdk
 
 FROM dirigiblelabs/xsk-kyma-runtime-base as base
 
-COPY target/ROOT.war $CATALINA_HOME/webapps/
-
-RUN apt-get update && \
-    apt-get install git -y && \
-    apt-get clean
+COPY target/ROOT.war /usr/local/tomcat/webapps/
 
 FROM base AS xsk-external-jdk
 # If JDK_TYPE is set to `external-jdk`, then the JDK_HOME is required and it should point to the home directory of the jdk
@@ -31,7 +27,7 @@ ENV JRE_HOME=/usr/local/jdk
 FROM base AS xsk-default-jdk
 RUN echo "The default OpenJDK will be used"
 
-COPY --from=base /usr/lib/jvm/sapmachine-17/ /usr/local/jdk
+COPY --from=base /usr/local/jdk /usr/local/jdk
 
 FROM xsk-${JDK_TYPE} AS dependencies-base
 
@@ -51,8 +47,8 @@ COPY --from=dependencies-base --chown=nonroot:nonroot /bin/bash /bin/bash
 COPY --from=dependencies-base /lib/x86_64-linux-gnu/libz.so.1 /lib/x86_64-linux-gnu/libz.so.1
 COPY --from=dependencies-base /lib/x86_64-linux-gnu/libpcre2-8.so.0 /lib/x86_64-linux-gnu/libpcre2-8.so.0
 COPY --from=dependencies-base /lib/x86_64-linux-gnu/libtinfo.so.6 /lib/x86_64-linux-gnu/libtinfo.so.6
-
 WORKDIR $CATALINA_HOME
+
 EXPOSE 8080
 
 ENTRYPOINT [ ]

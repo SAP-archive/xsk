@@ -1,4 +1,4 @@
-service hdb-hdbti-simple {
+service namespace "hdb-hdbti-simple" {
     "XSK_SAMPLES_HDB_HDBTI_SIMPLE"."hdb-hdbti-simple::Products.Orders" as "ProductsOrders";
 }
 

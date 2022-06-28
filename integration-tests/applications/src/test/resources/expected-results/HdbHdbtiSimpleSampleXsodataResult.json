@@ -5,7 +5,7 @@
         "__metadata":{
           "id":"http://localhost:8080/odata/v2/ProductsOrders('1')",
           "uri":"http://localhost:8080/odata/v2/ProductsOrders('1')",
-          "type":"hdb-hdbti-simple.Service.ProductsOrdersType"
+          "type":"hdb-hdbti-simple.ProductsOrdersType"
         },
         "Id":"1",
         "CustomerName":"John",
@@ -22,7 +22,7 @@
         "__metadata":{
           "id":"http://localhost:8080/odata/v2/ProductsOrders('2')",
           "uri":"http://localhost:8080/odata/v2/ProductsOrders('2')",
-          "type":"hdb-hdbti-simple.Service.ProductsOrdersType"
+          "type":"hdb-hdbti-simple.ProductsOrdersType"
         },
         "Id":"2",
         "CustomerName":"Claudia",

@@ -82,7 +82,7 @@ export class TrackService {
                 ],
             },
             null,
-            "DefaultDB",
+            "SystemDB",
             "local"
         );
 

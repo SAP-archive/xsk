@@ -122,12 +122,6 @@
       <artifactId>dirigible-api</artifactId>
       <version>${dirigible.version}</version>
       <scope>compile</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.eclipse.dirigible</groupId>
-          <artifactId>dirigible-api-facade-log</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
@@ -162,6 +156,11 @@
     </dependency>
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-ide-ui-database</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-core</artifactId>
       <version>${dirigible.version}</version>
     </dependency>
@@ -169,20 +168,6 @@
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-services</artifactId>
       <version>${dirigible.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.eclipse.dirigible</groupId>
-          <artifactId>dirigible-service-registry</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.eclipse.dirigible</groupId>
-          <artifactId>dirigible-service-operations</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.eclipse.dirigible</groupId>
-          <artifactId>dirigible-service-websockets</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
@@ -216,11 +201,6 @@
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-ide-ui-websockets</artifactId>
-      <version>${dirigible.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.dirigible</groupId>
-      <artifactId>dirigible-ide-ui-console</artifactId>
       <version>${dirigible.version}</version>
     </dependency>
     <dependency>

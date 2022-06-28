@@ -154,4 +154,10 @@ public class HanaITestUtils {
         stmt.executeUpdate(String.format("create table \"%s\".\"%s\"(Id INTEGER,Name NVARCHAR)",
             tableSchema, tableName));
     }
+
+    public static boolean checkCalculatedColumns(Connection connection, String tableName, String tableSchema, String columnName) throws SQLException {
+      DatabaseMetaData metaData = connection.getMetaData();
+      ResultSet rs = metaData.getColumns(null, tableSchema, tableName, columnName);
+      return rs.next();
+    }
 }

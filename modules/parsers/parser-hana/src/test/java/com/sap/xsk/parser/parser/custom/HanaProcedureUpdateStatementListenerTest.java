@@ -13,8 +13,8 @@ package com.sap.xsk.parser.parser.custom;
 
 import com.sap.xsk.parser.hana.core.HanaLexer;
 import com.sap.xsk.parser.hana.core.HanaParser;
-import custom.HanaTableFunctionListener;
-import models.TableFunctionDefinitionModel;
+import custom.HanaProcedureUpdateStatementListener;
+import models.ProcedureDefinitionModel;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -27,27 +27,13 @@ import java.nio.charset.StandardCharsets;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class HanaTableFunctionListenerTest {
+public class HanaProcedureUpdateStatementListenerTest {
 
   @Test
-  public void parseTableFunction() throws Exception {
-    String tableFunctionSample = getSample("/sample.hdbtablefunction");
-    TableFunctionDefinitionModel model = parseModel(tableFunctionSample);
-    assertModel(model, "_SYS_BIC", "customer_sample::SAMPLE_FUNCTION");
-  }
-
-  @Test
-  public void parseLongTableFunction() throws Exception {
-    String tableFunctionSample = getSample("/sample_long.hdbtablefunction");
-    TableFunctionDefinitionModel model = parseModel(tableFunctionSample);
-    assertModel(model, "_SYS_BIC", "Z.VIEWS::TFD");
-  }
-
-  @Test
-  public void parseTableFunctionWithComment() throws Exception {
-    String tableFunctionSample = getSample("/sample_with_comment.hdbtablefunction");
-    TableFunctionDefinitionModel model = parseModel(tableFunctionSample);
-    assertModel(model, null, "customer_sample::SAMPLE_FUNCTION");
+  public void parseHDBProcedureUpdateStatements() throws Exception {
+    String tableFunctionSample = getSample("/sample_with_update_statements.hdbprocedure");
+    ProcedureDefinitionModel model = parseHDBPProcedureModel(tableFunctionSample);
+    assertModel(model, "TEST", "testProcedure");
   }
 
   private String getSample(String sampleName) throws IOException {
@@ -55,7 +41,7 @@ public class HanaTableFunctionListenerTest {
         .toString(HanaTableFunctionListenerTest.class.getResourceAsStream(sampleName), StandardCharsets.UTF_8);
   }
 
-  private TableFunctionDefinitionModel parseModel(String sample) {
+  private ProcedureDefinitionModel parseHDBPProcedureModel(String sample) {
     CharStream inputStream = CharStreams.fromString(sample);
     HanaLexer lexer = new HanaLexer(inputStream);
     CommonTokenStream tokenStream = new CommonTokenStream(lexer);
@@ -64,17 +50,20 @@ public class HanaTableFunctionListenerTest {
     parser.setBuildParseTree(true);
     ParseTree parseTree = parser.sql_script();
 
-    HanaTableFunctionListener listener = new HanaTableFunctionListener();
+    HanaProcedureUpdateStatementListener listener = new HanaProcedureUpdateStatementListener();
     ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
     parseTreeWalker.walk(listener, parseTree);
 
-    return listener.getModel();
+    return listener.getProcedureModel();
   }
 
-  private void assertModel(TableFunctionDefinitionModel model, String expectedSchema, String expectedName) {
+  private void assertModel(ProcedureDefinitionModel model, String expectedSchema, String expectedName) {
     assertNotNull(model);
     model.checkForAllMandatoryFieldsPresence();
     assertEquals("Unexpected schema name. ", expectedSchema, model.getSchema());
-    assertEquals("Unexpected tablefunction name. ", expectedName, model.getName());
+    assertEquals("Unexpected procedure name. ", expectedName, model.getName());
+    assertEquals(6, model.getUpdateStatements().size());
   }
 }
+
+

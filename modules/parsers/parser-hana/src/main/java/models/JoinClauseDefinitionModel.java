@@ -11,20 +11,24 @@
  */
 package models;
 
-import exceptions.TableFunctionMissingPropertyException;
+public class JoinClauseDefinitionModel extends TableReferenceModel {
 
-public class TableFunctionDefinitionModel extends DefinitionModel {
+  private String onPart;
+  private String rawContent;
 
+  public String getOnPart() {
+    return onPart;
+  }
 
-    public TableFunctionDefinitionModel(String schema, String name) {
-        super(schema, name);
-    }
+  public void setOnPart(String onPart) {
+    this.onPart = onPart;
+  }
 
-    public void checkForAllMandatoryFieldsPresence() {
-        if (this.getName() == null) {
-            throw new TableFunctionMissingPropertyException("Missing mandatory field name");
-        }
+  public String getRawContent() {
+    return rawContent;
+  }
 
-    }
-
+  public void setRawContent(String rawContent) {
+    this.rawContent = rawContent;
+  }
 }

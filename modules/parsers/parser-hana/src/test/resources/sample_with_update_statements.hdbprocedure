@@ -1,0 +1,64 @@
+PROCEDURE "TEST"."testProcedure" (
+    IN data "TEST"."testData",
+		OUT result NVARCHAR
+	)
+	LANGUAGE SQLSCRIPT
+	SQL SECURITY INVOKER
+	DEFAULT SCHEMA TEST
+AS
+BEGIN
+
+    -- Update from without join
+    UPDATE E
+    SET "ADDRESS" = address, "STATUS" = status
+    FROM "TEST"."EMPLOYEES" as E
+    WHERE "E"."USER_ID" = :user_id AND "E"."NAME" = :name;
+
+    -- Update from with one join without where
+    UPDATE E
+    SET STATUS = 'ACTIVE'
+    FROM "TEST"."EMPLOYEES" as E
+      INNER JOIN :byRole R
+        ON E.ID = R.ID AND E.NAME = R.NAME AND E.TIMESTAMP = R.TIMESTAMP;
+
+    -- Update from with one join and where
+    UPDATE E
+    SET STATUS = 'ACTIVE'
+    FROM "TEST"."EMPLOYEES" as E
+      INNER JOIN :byRole R
+        ON E.ID = R.ID AND E.NAME = R.NAME AND E.TIMESTAMP = R.TIMESTAMP
+    WHERE R.NUM <> 1;
+
+    -- Update from with multiple joins without where
+    UPDATE E
+    SET FLAG = 'CLOSED', STATUS = CASE WHEN FLAG = 'CLOSED' THEN E.FLAG ELSE E.STATUS END
+    FROM :mails M
+       INNER JOIN "TEST"."JOBS" as J
+         ON  M.ID = J.ID
+       INNER JOIN "TEST"."EMPLOYEES" as E
+         ON  J.EMPLOYEE_ID = E.ID AND J.TIMESTAMP = E.LAST_JOB_TIMESTAMP
+    WHERE J.FLAG = 'PROCESS';
+
+    -- Update from with multiple joins and where
+    UPDATE E
+    SET FLAG = 'CLOSED', STATUS = CASE WHEN FLAG = 'CLOSED' THEN E.FLAG ELSE E.STATUS END
+    FROM :mails M
+       INNER JOIN "TEST"."JOBS" as J
+         ON  M.ID = J.ID
+       INNER JOIN "TEST"."EMPLOYEES" as E
+         ON  J.EMPLOYEE_ID = E.ID AND J.TIMESTAMP = E.LAST_JOB_TIMESTAMP
+    WHERE J.FLAG = 'PROCESS';
+
+    -- Update without from
+    UPDATE "TEST"."EMPLOYEES"
+    SET STATUS = status, ADDRESS = address
+    WHERE USER_ID = user_id;
+
+    -- Some other statement
+    INSERT INTO "TEST"."EMPLOYEES"
+      (USER_ID, NAME, ADDRESS, PHONE)
+    SELECT
+      USER_ID, NAME, ADDRESS, PHONE
+    FROM :current_users WHERE STATUS = 'INSERT';
+
+END;

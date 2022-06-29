@@ -11,20 +11,15 @@
  */
 package models;
 
-import exceptions.TableFunctionMissingPropertyException;
+public class UpdateSetClauseDefinitionModel {
 
-public class TableFunctionDefinitionModel extends DefinitionModel {
+  private String rawContent;
 
+  public String getRawContent() {
+    return rawContent;
+  }
 
-    public TableFunctionDefinitionModel(String schema, String name) {
-        super(schema, name);
-    }
-
-    public void checkForAllMandatoryFieldsPresence() {
-        if (this.getName() == null) {
-            throw new TableFunctionMissingPropertyException("Missing mandatory field name");
-        }
-
-    }
-
+  public void setRawContent(String rawContent) {
+    this.rawContent = rawContent;
+  }
 }

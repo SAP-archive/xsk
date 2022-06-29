@@ -13,12 +13,12 @@ package custom;
 
 import com.sap.xsk.parser.hana.core.HanaBaseListener;
 import com.sap.xsk.parser.hana.core.HanaParser.Create_procedure_bodyContext;
-import models.HDBProcedureDefinitionModel;
+import models.ProcedureDefinitionModel;
 import org.apache.commons.lang3.StringUtils;
 
 public class HanaProcedureListener extends HanaBaseListener {
 
-    private HDBProcedureDefinitionModel model;
+    private ProcedureDefinitionModel model;
 
         @Override
         public void exitCreate_procedure_body(Create_procedure_bodyContext ctx) {
@@ -38,10 +38,10 @@ public class HanaProcedureListener extends HanaBaseListener {
                 }
             }
 
-            model = new HDBProcedureDefinitionModel(strippedSchema, strippedName);
+            model = new ProcedureDefinitionModel(strippedSchema, strippedName);
         }
 
-        public HDBProcedureDefinitionModel getModel() {
+        public ProcedureDefinitionModel getModel() {
             return model;
         }
 }

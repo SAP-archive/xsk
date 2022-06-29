@@ -1,1 +1,2 @@
-com.sap.xsk.engine.XSKScriptingExceptionHandler	# Scripting Dependency Exception Handler
+com.sap.xsk.engine.XSKScriptingExceptionHandler
+com.sap.xsk.engine.XSKContextExceptionHandler

@@ -138,7 +138,7 @@ function getProcessState(ctx, req, res) {
 }
 
 function getMigrations(ctx, request, response) {
-    const connection = database.getConnection("local", "DefaultDB");
+    const connection = database.getConnection("local", "SystemDB");
     let migrationsData = { migrations: "empty" };
     try {
         let statement = connection.prepareStatement("SELECT * FROM XSK_MIGRATIONS");

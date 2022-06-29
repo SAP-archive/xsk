@@ -65,7 +65,7 @@ export class MigrationService {
         const hdiConfig = getHdiFilePlugins();
 
         const projectName = project.getName();
-        const hdiConfigPath = `${projectName}.hdiconfig`;
+        const hdiConfigPath = ".hdiconfig";
         const hdiConfigJson = JSON.stringify(hdiConfig, null, 4);
         const hdiConfigJsonBytes = bytes.textToByteArray(hdiConfigJson);
 
@@ -503,7 +503,11 @@ export class MigrationService {
     }
 
     _isFileCalculationView(filePath) {
-        return filePath.endsWith("hdbcalculationview") || filePath.endsWith("calculationview");
+        return filePath.endsWith(".hdbcalculationview") || filePath.endsWith(".calculationview");
+    }
+
+    _isFileOldExtensionCalculationView(filePath) {
+        return filePath.endsWith(".calculationview");
     }
 
     _transformColumnObject(calculationViewXmlBytes, synonymsArray) {
@@ -647,14 +651,18 @@ export class MigrationService {
         const workspace = workspaceManager.getWorkspace(workspaceName);
         const project = workspace.getProject(projectName);
 
-        if (project.existsFile(relativePath)) {
-            project.deleteFile(relativePath);
+        const relativeSavePath = this._isFileOldExtensionCalculationView(relativePath) ? 
+            relativePath.substr(0, relativePath.lastIndexOf('.')) + ".hdbcalculationview" : 
+            relativePath;
+
+        if (project.existsFile(relativeSavePath)) {
+            project.deleteFile(relativeSavePath);
         }
 
-        const projectFile = project.createFile(relativePath);
+        const projectFile = project.createFile(relativeSavePath);
         const resource = repositoryManager.getResource(repositoryPath);
 
-        if (this._isFileCalculationView(relativePath) || this._isFileCalculationView(repositoryPath)) {
+        if (this._isFileCalculationView(relativeSavePath) || this._isFileCalculationView(repositoryPath)) {
             const modifiedContent = xskModificator.modify(resource.getContent());
             projectFile.setContent(modifiedContent);
         } else {

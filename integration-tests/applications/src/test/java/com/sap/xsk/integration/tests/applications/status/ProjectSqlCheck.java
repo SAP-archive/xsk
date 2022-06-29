@@ -4,10 +4,14 @@ public class ProjectSqlCheck {
 
   private final String schemaName;
   private final String tableName;
+  private final boolean tableExistsCheck;
+  private final boolean tableHasRecordsCheck;
 
-  public ProjectSqlCheck(String schemaName, String tableName) {
+  public ProjectSqlCheck(String schemaName, String tableName, boolean tableExistsCheck, boolean tableHasRecordsCheck) {
     this.schemaName = schemaName;
     this.tableName = tableName;
+    this.tableExistsCheck = tableExistsCheck;
+    this.tableHasRecordsCheck = tableHasRecordsCheck;
   }
 
   public String getSchemaName() {
@@ -16,5 +20,13 @@ public class ProjectSqlCheck {
 
   public String getTableName() {
     return tableName;
+  }
+
+  public boolean tableExistsCheck() {
+    return tableExistsCheck;
+  }
+
+  public boolean tableHasRecordsCheck() {
+    return tableHasRecordsCheck;
   }
 }

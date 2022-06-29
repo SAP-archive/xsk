@@ -70,7 +70,7 @@ public class HdbHdbtiSimpleSampleTest {
   );
 
   private static final List<ProjectSqlCheck> SQL_CHECKS = Arrays.asList(
-      new ProjectSqlCheck(APPLICATION_SCHEMA, ORDERS_TABLE)
+      new ProjectSqlCheck(APPLICATION_SCHEMA, ORDERS_TABLE, true, true)
   );
 
   public static final ProjectDeploymentRule projectDeploymentRule = new ProjectDeploymentRule(APPLICATION_NAME, SAMPLE);
@@ -99,7 +99,7 @@ public class HdbHdbtiSimpleSampleTest {
     String xsjsResult = IOUtils.toString(xsjsEntity.getContent(), StandardCharsets.UTF_8);
 
     String expectedXsjsResult = IOUtils.toString(
-        HdbHdbtiSimpleSampleTest.class.getResourceAsStream("/expected-results/HdbHdbtiSimpleSampleXsjsResult.json"),
+        HdbHdbtiSimpleSampleTest.class.getResourceAsStream("/expected-results/hdb-hdbti-simple/HdbHdbtiSimpleSampleXsjsResult.json"),
         StandardCharsets.UTF_8);
 
     JsonElement xsjsJson = JsonParser.parseString(xsjsResult);
@@ -122,7 +122,7 @@ public class HdbHdbtiSimpleSampleTest {
     String xsodataResult = IOUtils.toString(xsodataEntity.getContent(), StandardCharsets.UTF_8);
 
     String expectedXsodataResult = IOUtils.toString(
-        HdbHdbtiSimpleSampleTest.class.getResourceAsStream("/expected-results/HdbHdbtiSimpleSampleXsodataResult.json"),
+        HdbHdbtiSimpleSampleTest.class.getResourceAsStream("/expected-results/hdb-hdbti-simple/HdbHdbtiSimpleSampleXsodataResult.json"),
         StandardCharsets.UTF_8);
 
     JsonElement xsodataJson = JsonParser.parseString(xsodataResult);

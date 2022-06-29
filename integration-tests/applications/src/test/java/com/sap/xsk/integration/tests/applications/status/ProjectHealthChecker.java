@@ -96,11 +96,18 @@ public class ProjectHealthChecker {
     projectApplicationSqlChecks.forEach(sqlCheck -> {
       String schemaName = sqlCheck.getSchemaName();
       String tableName = sqlCheck.getTableName();
+      boolean tableExistCheck = sqlCheck.tableExistsCheck();
+      boolean tableHasRecordsCheck = sqlCheck.tableHasRecordsCheck();
 
       try (Connection connection = dataSource.getConnection()) {
 
-        checkIfTableExists(connection, schemaName, tableName);
-        checkIfTableHasRecords(connection, schemaName, tableName);
+        if (tableExistCheck) {
+          checkIfTableExists(connection, schemaName, tableName);
+        }
+
+        if (tableHasRecordsCheck) {
+          checkIfTableHasRecords(connection, schemaName, tableName);
+        }
 
       } catch (IOException | SQLException | InterruptedException e) {
         String errorMessage = "SQL health check for table " + tableName + " failed! " + e.getMessage();

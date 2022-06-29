@@ -25,7 +25,5 @@ RUN mkdir -p /usr/local/tomcat/target/dirigible/repository/root/registry/public/
 FROM sapmachine:17.0.2 as jdk
 
 COPY --from=base /usr/local/tomcat /usr/local/tomcat
-
-COPY --from=base /usr/local/tomcat /usr/local/tomcat
 COPY --from=base /usr/bin/git /usr/bin/git
 RUN ln -s /usr/lib/jvm/sapmachine-17/ /usr/local/jdk

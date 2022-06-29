@@ -100,10 +100,10 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!-- Cloud Foundry - Base -->
+		<!-- Server - Base -->
 		<dependency>
 			<groupId>org.eclipse.dirigible</groupId>
-			<artifactId>dirigible-sap-cf-base</artifactId>
+			<artifactId>dirigible-server-all</artifactId>
 			<version>${dirigible.version}</version>
 			<exclusions>
 				<!-- Temporary disables the Wiki engine-->

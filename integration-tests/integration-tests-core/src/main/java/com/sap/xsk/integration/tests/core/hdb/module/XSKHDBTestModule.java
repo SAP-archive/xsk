@@ -9,11 +9,11 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.itest.module;
+package com.sap.xsk.integration.tests.core.hdb.module;
 
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
-import com.sap.xsk.hdb.ds.itest.model.JDBCModel;
-import com.sap.xsk.hdb.ds.itest.repository.TestRepository;
+import com.sap.xsk.integration.tests.core.hdb.model.JDBCModel;
+import com.sap.xsk.integration.tests.core.hdb.repository.TestRepository;
 import com.sap.xsk.hdb.ds.module.XSKHDBModule;
 import com.sap.xsk.hdb.ds.processors.hdbstructure.HDBSynonymRemover;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;

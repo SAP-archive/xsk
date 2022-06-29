@@ -27,7 +27,7 @@ public class KymaXSKHttpClient extends XSKHttpClient {
   }
 
   public static KymaXSKHttpClient create(URI baseHost) {
-    CloseableHttpAsyncClient httpClient = null;
+    CloseableHttpAsyncClient httpClient;
     TokenService tokenService = new TokenService();
     String kymaToken = tokenService.getToken();
     BasicHeader authHeader = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + kymaToken);

@@ -1,0 +1,40 @@
+{
+  "d":{
+    "results":[
+      {
+        "__metadata":{
+          "id":"http://localhost:8080/odata/v2/ProductsOrders('1')",
+          "uri":"http://localhost:8080/odata/v2/ProductsOrders('1')",
+          "type":"hdb-hdbti-simple.ProductsOrdersType"
+        },
+        "Id":"1",
+        "CustomerName":"John",
+        "CustomerSurname":"Smith",
+        "Status":"In Progress",
+        "CreatedAt":"\/Date(1577881510000)\/",
+        "CreatedBy":"Mike Baker",
+        "Description":"Migration of XS Classic application from Neo to Kubernetes",
+        "Address":"Montreux Switzerland",
+        "Phone":"-",
+        "Email":"mike.baker@example.com"
+      },
+      {
+        "__metadata":{
+          "id":"http://localhost:8080/odata/v2/ProductsOrders('2')",
+          "uri":"http://localhost:8080/odata/v2/ProductsOrders('2')",
+          "type":"hdb-hdbti-simple.ProductsOrdersType"
+        },
+        "Id":"2",
+        "CustomerName":"Claudia",
+        "CustomerSurname":"Davis",
+        "Status":"In Progress",
+        "CreatedAt":"\/Date(1577881653000)\/",
+        "CreatedBy":"Josh Patel",
+        "Description":"Migration of XS Classic application from Neo to Kubernetes",
+        "Address":"Waldorf Germany",
+        "Phone":"-",
+        "Email":"josh.patel@example.com"
+      }
+    ]
+  }
+}

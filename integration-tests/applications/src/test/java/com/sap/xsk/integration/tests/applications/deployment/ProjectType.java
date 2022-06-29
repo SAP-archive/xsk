@@ -9,15 +9,9 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.integration.tests.applications;
+package com.sap.xsk.integration.tests.applications.deployment;
 
-import com.sap.xsk.integration.tests.applications.deployment.XSKProjectDeploymentRule;
-import com.sap.xsk.integration.tests.applications.deployment.XSKProjectDeploymentType;
-import org.junit.ClassRule;
-
-public class KymaTest {
-
-    @ClassRule
-    public static XSKProjectDeploymentRule xskProjectDeploymentRule = new XSKProjectDeploymentRule("simple", XSKProjectDeploymentType.KYMA);
-
+public enum ProjectType {
+  SAMPLE,
+  CUSTOM
 }

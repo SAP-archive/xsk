@@ -1,0 +1,26 @@
+[
+  {
+    "Id":"1",
+    "CustomerName":"John",
+    "CustomerSurname":"Smith",
+    "Status":"In Progress",
+    "CreatedAt":"2020-01-01T12:25:10.000Z",
+    "CreatedBy":"Mike Baker",
+    "Description":"Migration of XS Classic application from Neo to Kubernetes",
+    "Address":"Montreux Switzerland",
+    "Phone":"-",
+    "Email":"mike.baker@example.com"
+  },
+  {
+    "Id":"2",
+    "CustomerName":"Claudia",
+    "CustomerSurname":"Davis",
+    "Status":"In Progress",
+    "CreatedAt":"2020-01-01T12:27:33.000Z",
+    "CreatedBy":"Josh Patel",
+    "Description":"Migration of XS Classic application from Neo to Kubernetes",
+    "Address":"Waldorf Germany",
+    "Phone":"-",
+    "Email":"josh.patel@example.com"
+  }
+]

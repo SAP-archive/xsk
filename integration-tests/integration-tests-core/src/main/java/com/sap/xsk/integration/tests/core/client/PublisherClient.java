@@ -35,7 +35,7 @@ public class PublisherClient {
     try {
       var uri = publisherServiceUri.resolve(workspace + "/").resolve(projectName);
       HttpUriRequest request = RequestBuilder.post(uri).build();
-      return xskHttpClient.executeRequestAsync(request);
+      return xskHttpClient.executeRequestAsyncWithCallbackFuture(request);
     } catch (XSKHttpClientException e) {
       String errorMessage = "Publishing project " + projectName + " to workspace: " + workspace + " failed.";
       throw new XSKClientException(errorMessage, e);
@@ -47,7 +47,7 @@ public class PublisherClient {
     try {
       var uri = publisherServiceUri.resolve(workspace + "/").resolve(projectName);
       HttpUriRequest request = RequestBuilder.delete(uri).build();
-      return xskHttpClient.executeRequestAsync(request);
+      return xskHttpClient.executeRequestAsyncWithCallbackFuture(request);
     } catch (XSKHttpClientException e) {
       String errorMessage = "Unpublishing project " + projectName + " from workspace: " + workspace + " failed.";
       throw new XSKClientException(errorMessage, e);

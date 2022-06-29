@@ -9,18 +9,11 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.hdb.ds.itest.utils;
+package com.sap.xsk.integration.tests.applications.status;
 
-import org.eclipse.dirigible.commons.config.Configuration;
+public class ProjectHealthCheckException extends RuntimeException {
 
-public class TestConstants {
-
-  private TestConstants() {
+  public ProjectHealthCheckException(String message, Throwable cause) {
+    super(message, cause);
   }
-  
-  public static final String HANA_DRIVER = "com.sap.db.jdbc.Driver";
-  public static final String HANA_URL = Configuration.get("hana.url");
-  public static final String HANA_USERNAME = Configuration.get("hana.username");
-  public static final String HANA_PASSWORD = Configuration.get("hana.password");
-
 }

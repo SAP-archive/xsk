@@ -11,7 +11,9 @@
  */
 package com.sap.xsk.integration.tests.applications.deployment;
 
-public enum XSKProjectDeploymentType {
-    LOCAL,
-    KYMA
+public class ProjectDeploymentException extends RuntimeException {
+
+  public ProjectDeploymentException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

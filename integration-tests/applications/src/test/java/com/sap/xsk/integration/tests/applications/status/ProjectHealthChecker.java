@@ -130,22 +130,24 @@ public class ProjectHealthChecker {
   private void executeQueryWithRetryToCheckIfTableExists(PreparedStatement statement, Integer currentRetryIndex)
       throws InterruptedException, SQLException {
     checkRetryCount(currentRetryIndex);
-    ResultSet queryResult = statement.executeQuery();
+    try (ResultSet queryResult = statement.executeQuery()) {
 
-    if (!queryResult.next()) {
-      Thread.sleep(RETRY_INTERVAL);
-      executeQueryWithRetryToCheckIfTableHasRecords(statement, currentRetryIndex + 1);
+      if (!queryResult.next()) {
+        Thread.sleep(RETRY_INTERVAL);
+        executeQueryWithRetryToCheckIfTableHasRecords(statement, currentRetryIndex + 1);
+      }
     }
   }
 
   private void executeQueryWithRetryToCheckIfTableHasRecords(PreparedStatement statement, Integer currentRetryIndex)
       throws InterruptedException, SQLException {
     checkRetryCount(currentRetryIndex);
-    ResultSet queryResult = statement.executeQuery();
+    try (ResultSet queryResult = statement.executeQuery()) {
 
-    if (!queryResult.next() || queryResult.getInt("RECORD_COUNT") == 0) {
-      Thread.sleep(RETRY_INTERVAL);
-      executeQueryWithRetryToCheckIfTableHasRecords(statement, currentRetryIndex + 1);
+      if (!queryResult.next() || queryResult.getInt("RECORD_COUNT") == 0) {
+        Thread.sleep(RETRY_INTERVAL);
+        executeQueryWithRetryToCheckIfTableHasRecords(statement, currentRetryIndex + 1);
+      }
     }
   }
 

@@ -20,6 +20,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.util.EntityUtils;
+import org.eclipse.dirigible.commons.config.Configuration;
 import org.junit.After;
 import org.junit.Test;
 
@@ -69,7 +70,8 @@ public class MigrationITest {
   }
 
   private void setup(String param) {
-    webBrowser = new WebBrowser(param, DirigibleConnectionProperties.BASE_URL, true);
+    boolean isHeadless = Configuration.get("ITESTS_SELENIUM_MODE").equals("headless");
+    webBrowser = new WebBrowser(param, DirigibleConnectionProperties.BASE_URL, isHeadless);
     credentials = new MigrationCredentials();
     expectedContentList = expectedContentProvider.getExpectedContentList();
   }
@@ -379,6 +381,9 @@ public class MigrationITest {
 
   @After
   public void afterTest() {
-    webBrowser.quit();
+    boolean quitAfterTest = Configuration.get("ITESTS_SELENIUM_MODE").equals("headless");
+    if(quitAfterTest) {
+      webBrowser.quit();
+    }
   }
 }

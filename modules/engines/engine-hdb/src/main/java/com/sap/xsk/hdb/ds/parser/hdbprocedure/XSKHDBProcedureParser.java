@@ -24,8 +24,8 @@ import com.sap.xsk.utils.XSKCommonsConstants;
 import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import custom.HanaProcedureListener;
-import models.HDBProcedureDefinitionModel;
-import models.HDBProcedureMissingPropertyException;
+import models.ProcedureDefinitionModel;
+import exceptions.ProcedureMissingPropertyException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -60,13 +60,13 @@ public class XSKHDBProcedureParser implements XSKDataStructureParser<XSKDataStru
         ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
         parseTreeWalker.walk(listener, parseTree);
 
-        HDBProcedureDefinitionModel antlr4Model = listener.getModel();
+        ProcedureDefinitionModel antlr4Model = listener.getModel();
         validateAntlrModel(antlr4Model, location);
 
         return createModel(antlr4Model, parametersModel);
     }
 
-    private XSKDataStructureHDBProcedureModel createModel(HDBProcedureDefinitionModel antlrModel,
+    private XSKDataStructureHDBProcedureModel createModel(ProcedureDefinitionModel antlrModel,
                                                           XSKDataStructureParametersModel params) {
 
       XSKDataStructureModelBuilder builder = new XSKDataStructureModelBuilder()
@@ -83,10 +83,10 @@ public class XSKHDBProcedureParser implements XSKDataStructureParser<XSKDataStru
 
     }
 
-    private void validateAntlrModel(HDBProcedureDefinitionModel antlrModel, String location) throws XSKDataStructuresException {
+    private void validateAntlrModel(ProcedureDefinitionModel antlrModel, String location) throws XSKDataStructuresException {
         try {
             antlrModel.checkForAllMandatoryFieldsPresence();
-        } catch (HDBProcedureMissingPropertyException e) {
+        } catch (ProcedureMissingPropertyException e) {
             procedureLogger.logError(location, XSKCommonsConstants.EXPECTED_FIELDS, e.getMessage());
             dataStructuresSynchronizer.applyArtefactState(XSKCommonsUtils.getRepositoryBaseObjectName(location),
                     location,

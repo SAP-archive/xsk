@@ -9,11 +9,11 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package models;
+package exceptions;
 
-public class HDBProcedureMissingPropertyException extends RuntimeException {
+public class TableFunctionMissingPropertyException extends RuntimeException {
 
-    public HDBProcedureMissingPropertyException(String message) {
-        super(message);
-    }
+  public TableFunctionMissingPropertyException(String message) {
+    super(message);
+  }
 }

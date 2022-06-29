@@ -56,6 +56,14 @@ The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeli
       1. Click the `Decode` button to decode the secret. 
       1. Copy the `token` value _(e.g. `eyJhbGciOiJS...`)_.
 
+    Copy the `Service Account` certificate as later will be needed for the `KYMA_TOKEN` secret:
+
+      1. Navigate to your Kyma cluster.
+      1. Go to `Configuration` &#8594; `Service Accounts`.
+      1. Select the `Service Account` _(e.g. `xsk`)_.
+      1. Select the secret for more details _(e.g. `xsk-token-wf6jk`)_.
+      2. Click the `Expand All` button to see all content. 
+      3. Copy the `ca.crt` value _(e.g. `LS0tLS1CRUdJ...`)_.
 
 ## Setup
 ---
@@ -69,6 +77,7 @@ The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeli
         The following GitHub Action builds XSK based Docker image for your application and push it to your Docker registry.
 
         _**Note:** Replace the `<your-organization>/<your-repository>` placeholder with a default organization and repository where the Docker image will be pushed (can be changed when triggering the GitHub Action)_.
+        `description: Application Repository` must be in lower case.
 
     ```yaml
     name: Build Application Image
@@ -218,9 +227,9 @@ The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeli
     The following GitHub Secrets are required in order to successfully run the previously created GitHub Actions. To create GitHub secret:
     
       1. Navigate to your GitHub repository.
-      1. Open the `Settings` tab.
-      1. Go to `Secrets` &#8594; `Actions`.
-      1. Click the `New Repository Secret` button.
+      2. Open the `Settings` tab.
+      3. Go to `Secrets` &#8594; `Actions`.
+      4. Click the `New Repository Secret` button.
 
     |       Name         |          Description                                           | Required for |
     |--------------------|----------------------------------------------------------------|--------------|

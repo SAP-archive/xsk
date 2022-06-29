@@ -11,9 +11,11 @@
  */
 package com.sap.xsk.integration.tests.core.client.http;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import java.net.URI;
+import java.util.concurrent.Future;
 
 public abstract class XSKHttpClient {
 
@@ -29,7 +31,11 @@ public abstract class XSKHttpClient {
     return baseHost;
   }
 
-  public XSKHttpClientFuture executeRequestAsync(HttpUriRequest request) {
+  public Future<HttpResponse> executeRequestAsync(HttpUriRequest request) {
+    return httpClient.execute(request, null);
+  }
+
+  public XSKHttpClientFuture executeRequestAsyncWithCallbackFuture(HttpUriRequest request) {
     var future = new XSKHttpClientFuture(request.getURI());
     httpClient.execute(request, future);
     return future;

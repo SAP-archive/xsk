@@ -9,12 +9,16 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-exports.getPerspective = function () {
-    var perspective = {
-        name: "SAP HANA XS Classic Migration",
-        link: "../ide-migration/migration-perspective.html",
-        order: "820",
-        image: "exchange",
-    };
-    return perspective;
+const perspectiveData = {
+    id: "migration",
+    name: "SAP HANA XS Classic Migration",
+    link: "../ide-migration/migration-perspective.html",
+    order: "820",
+    image: "exchange", // deprecated
+    icon: "../ide-migration/images/migration.svg",
 };
+if (typeof exports !== 'undefined') {
+    exports.getPerspective = function () {
+        return perspectiveData;
+    }
+}

@@ -66,13 +66,7 @@ public class XSKDataStructuresSynchronizer extends AbstractSynchronizer implemen
   private IXSKCoreParserService xskCoreParserService = new XSKCoreParserService();
   private IXSKHDBCoreSynchronizationFacade xskHDBCoreFacade = new XSKHDBCoreSynchronizationFacade();
 
-  /**
-   * Force synchronization.
-   */
-  public static final void forceSynchronization() {
-    XSKDataStructuresSynchronizer dataStructureSynchronizer = new XSKDataStructuresSynchronizer();
-    dataStructureSynchronizer.synchronize();
-  }
+
 
   /**
    * Register predelivered entities files.

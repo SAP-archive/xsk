@@ -8,7 +8,7 @@
   ~ SAP - initial API and implementation
   -->
 <div class="margin-top-bottom-xxl" ng-controller="StartMigrationViewController as smvc"
-    ng-show="isVisible || isZipMigrationVisible">
+    ng-show="isVisible('start-migration')">
     <h1 class="text-center section-title">{{progressTitle}}</h1>
     <p class="margin-top-bottom-nl text-center">{{statusMessage}}</p>
     <div class="progress margin-top-bottom-lg" ng-hide="migrationFinished">

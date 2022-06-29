@@ -12,6 +12,7 @@
 package com.sap.xsk.parser.hdbdd.factory;
 
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssociationContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.CalculatedAssociationContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.ContextRuleContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.DataTypeRuleContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.ElementDeclRuleContext;
@@ -34,7 +35,9 @@ import com.sap.xsk.parser.hdbdd.symbols.type.custom.StructuredDataTypeSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.type.field.FieldSymbol;
 import com.sap.xsk.parser.hdbdd.symbols.view.ViewSymbol;
 import com.sap.xsk.parser.hdbdd.util.HdbddUtils;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Interval;
 
 public class SymbolFactory {
 
@@ -112,6 +115,18 @@ public class SymbolFactory {
     return elementSymbol;
   }
 
+  public EntityElementSymbol getCalculatedColumnSymbol(CalculatedAssociationContext ctx, Scope currentScope) {
+    String elementId = HdbddUtils.processEscapedSymbolName(ctx.ascId.getText());
+    checkForDuplicateName(elementId, currentScope, ctx.ascId.start.getLine());
+
+    EntityElementSymbol elementSymbol = new EntityElementSymbol(elementId, currentScope);
+    elementSymbol.setIdToken(ctx.ascId);
+    elementSymbol.setCalculatedColumn(true);
+    elementSymbol.setStatement(getStringWithSpaces(ctx.statement()));
+
+    return elementSymbol;
+  }
+
   public FieldSymbol getFieldSymbol(FieldDeclRuleContext ctx, Scope currentScope) {
     String filedId = HdbddUtils.processEscapedSymbolName(ctx.identifier().getText());
     checkForDuplicateName(filedId, currentScope, ctx.identifier().start.getLine());
@@ -157,5 +172,12 @@ public class SymbolFactory {
       throw new CDSRuntimeException(
           String.format("Error at line: %s  - '%s' is not a valid artifact type.", artifactType.getLine(), artifactType.getText()));
     }
+  }
+
+  private String getStringWithSpaces(ParserRuleContext ctx) {
+    int startIndex = ctx.start.getStartIndex();
+    int stopIndex = ctx.stop.getStopIndex();
+    Interval selectedColumnsRuleSqlInterval = new Interval(startIndex, stopIndex);
+    return ctx.start.getInputStream().getText(selectedColumnsRuleSqlInterval);
   }
 }

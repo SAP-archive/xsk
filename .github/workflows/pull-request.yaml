@@ -4,8 +4,8 @@ concurrency:
   group: ${{ github.workflow }}
 
 on:
-  push:
-    branches: [ yakov/selenium-test-content-update ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   

@@ -9,12 +9,15 @@
 # SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
 # SPDX-License-Identifier: Apache-2.0
 
-FROM tomcat:9.0.56-jre11-openjdk AS base
+FROM tomcat:9.0.64-jre17-temurin AS base
 
+RUN rm -fr /opt/java/openjdk
 RUN rm -R /usr/local/tomcat/webapps.dist
-COPY target/ROOT.war $CATALINA_HOME/webapps/
-
-RUN wget https://repo1.maven.org/maven2/org/postgresql/postgresql/42.1.4/postgresql-42.1.4.jar -P /usr/local/tomcat/lib/
+RUN rm /usr/local/tomcat/conf/tomcat-users.xml
+RUN apt-get update && \
+    apt-get install wget git -y && \
+    apt-get clean
+    
 RUN wget https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.8.12/ngdbc-2.8.12.jar -P /usr/local/tomcat/lib/
 
 RUN mkdir -p /usr/local/tomcat/target/dirigible/repository/root/registry/public/
@@ -22,3 +25,7 @@ RUN mkdir -p /usr/local/tomcat/target/dirigible/repository/root/registry/public/
 FROM sapmachine:17.0.2 as jdk
 
 COPY --from=base /usr/local/tomcat /usr/local/tomcat
+
+COPY --from=base /usr/local/tomcat /usr/local/tomcat
+COPY --from=base /usr/bin/git /usr/bin/git
+RUN ln -s /usr/lib/jvm/sapmachine-17/ /usr/local/jdk

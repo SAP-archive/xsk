@@ -12,7 +12,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: "Checkout branch"
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
@@ -112,3 +113,43 @@ jobs:
           pack buildpack package dirigiblelabs/buildpacks-xsk-cf --config ./package.toml
           pack builder create dirigiblelabs/buildpacks-builder-xsk-cf --config ./builder.toml
           cd ../../../../
+
+      # Run XSK
+      - name: Docker Run XSK
+        run: docker run -d --name xsk-server -p 8080:8080 dirigiblelabs/xsk
+
+      # Setup Google Chrome
+      - name: Setup Google Chrome
+        uses: browser-actions/setup-chrome@latest
+      - name: Verify Google Chrome
+        run: chrome --version
+
+      # Setup Firefox
+      - name: Setup Firefox
+        uses: browser-actions/setup-firefox@latest
+      - name: Verify Firefox
+        run: firefox --version
+
+      # Wait for XSK Service Container to Startup
+      - name: Wait XSK Startup
+        uses: nick-invision/retry@v2
+        with:
+          timeout_seconds: 15
+          max_attempts: 10
+          warning_on_retry: false
+          command: curl -m 5 --silent --fail --request GET http://127.0.0.1:8080/services/v4/healthcheck | jq --exit-status -n 'inputs | if has("status") then .status=="Ready" else false end' > /dev/null
+
+      # Run Selenium tests on XSK
+      - name: Run Integration & Selenium Tests
+        working-directory: ./integration-tests
+        run: mvn clean test -P itests -fae -Dhana.url="${{secrets.ITESTS_HANA_URL}}" -Dhana.username="${{secrets.ITESTS_HANA_USERNAME}}" -Dhana.password="${{secrets.ITESTS_HANA_PASSWORD}}"
+        env:
+          ITESTS_SELENIUM_MODE: 'headless'
+          ITESTS_SELENIUM_NEO_REGION: ${{ secrets.ITESTS_SELENIUM_NEO_REGION }}
+          ITESTS_SELENIUM_NEO_SUBACCOUNT: ${{ secrets.ITESTS_SELENIUM_NEO_SUBACCOUNT }}
+          ITESTS_SELENIUM_NEO_USERNAME: ${{ secrets.ITESTS_SELENIUM_NEO_USERNAME }}
+          ITESTS_SELENIUM_NEO_PASSWORD: ${{ secrets.ITESTS_SELENIUM_NEO_PASSWORD }}
+          ITESTS_SELENIUM_HANA_DB_SCHEMA: ${{ secrets.ITESTS_SELENIUM_HANA_DB_SCHEMA }}
+          ITESTS_SELENIUM_HANA_DB_SCHEMA_2: ${{ secrets.ITESTS_SELENIUM_HANA_DB_SCHEMA_2 }}
+          ITESTS_SELENIUM_HANA_DB_USERNAME: ${{ secrets.ITESTS_SELENIUM_HANA_DB_USERNAME }}
+          ITESTS_SELENIUM_HANA_DB_PASSWORD: ${{ secrets.ITESTS_SELENIUM_HANA_DB_PASSWORD }}

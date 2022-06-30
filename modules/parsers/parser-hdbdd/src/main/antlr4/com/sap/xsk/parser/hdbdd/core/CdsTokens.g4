@@ -59,7 +59,7 @@ WS : [ \\\t\r\n]+ -> skip;
 LINE_COMMENT1        : '//' .*? '\r'? '\n' -> skip ; // Match "//" stuff '\n'
 LINE_COMMENT2        : '/*' .*? '*/' -> skip ; // Match "/* */" stuff
 
-fragment IdCharacters : ([a-z] | [A-Z])(([a-z] | [A-Z])+ | INTEGER | '_')*;
+fragment IdCharacters : ([a-z] | [A-Z])(([a-z] | [A-Z])+ | INTEGER | '_' | '-')*;
 fragment EscapedIdCharactes: '"' (~["\\\r\n] | EscapeSequence)*? '"';
 fragment EscapeSequence
     : '\\' [btnfr"'\\]

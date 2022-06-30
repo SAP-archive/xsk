@@ -47,7 +47,7 @@ public class LocalXSKHttpClient extends XSKHttpClient {
     try {
       var uri = new URI("http://localhost:8080/services/v4/web/ide/");
       HttpUriRequest request = RequestBuilder.get(uri).build();
-      return this.executeRequestAsync(request)
+      return this.executeRequestAsyncWithCallbackFuture(request)
           .thenCompose(x -> {
             try {
               var jsecurityUri = new URI("http://localhost:8080/services/v4/web/ide/j_security_check");
@@ -56,7 +56,7 @@ public class LocalXSKHttpClient extends XSKHttpClient {
                   .addParameter("j_username", "dirigible")
                   .addParameter("j_password", "dirigible")
                   .build();
-              return this.executeRequestAsync(loginRequest);
+              return this.executeRequestAsyncWithCallbackFuture(loginRequest);
             } catch (URISyntaxException e) {
               throw new RuntimeException(e);
             }

@@ -121,13 +121,11 @@
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-api</artifactId>
       <version>${dirigible.version}</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-repository</artifactId>
       <version>${dirigible.version}</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
@@ -156,11 +154,6 @@
     </dependency>
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
-      <artifactId>dirigible-ide-ui-database</artifactId>
-      <version>${dirigible.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-core</artifactId>
       <version>${dirigible.version}</version>
     </dependency>
@@ -171,21 +164,29 @@
     </dependency>
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
-      <artifactId>dirigible-engine</artifactId>
+      <artifactId>dirigible-engine-api</artifactId>
       <version>${dirigible.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.eclipse.dirigible</groupId>
-          <artifactId>dirigible-engine-wiki</artifactId>
-        </exclusion>
-      </exclusions>
-      <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-engine-javascript</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-engine-web</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-engine-javascript-graalvm</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-mail</artifactId>
       <version>${dirigible.version}</version>
-      <scope>compile</scope>
     </dependency>
 
     <dependency>
@@ -210,6 +211,41 @@
     </dependency>
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-ide-service-git</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-ide-service-core</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-ide-service-databases</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-ide-service-publisher</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-ide-service-workspaces</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-ide-service-console</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-ide-service-editor</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-ide-ui-workspace</artifactId>
       <version>${dirigible.version}</version>
     </dependency>
@@ -225,7 +261,22 @@
     </dependency>
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-ide-ui-console</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-ide-ui-projects</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-ide-ui-database</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-ide-ui-database-menu</artifactId>
       <version>${dirigible.version}</version>
     </dependency>
     <dependency>
@@ -281,6 +332,11 @@
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-ide-ui-result</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-ide-ui-registry</artifactId>
       <version>${dirigible.version}</version>
     </dependency>
     <dependency>
@@ -354,25 +410,21 @@
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-templating-all</artifactId>
       <version>${dirigible.version}</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-resources</artifactId>
       <version>${dirigible.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.dirigible</groupId>
-      <artifactId>dirigible-engine-javascript</artifactId>
-      <version>${dirigible.version}</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-core-scheduler</artifactId>
       <version>${dirigible.version}</version>
-      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-core-registry</artifactId>
+      <version>${dirigible.version}</version>
     </dependency>
   </dependencies>
 	<properties>

@@ -1,6 +1,16 @@
+/*
+ * Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License, v2.0
+ * which accompanies this distribution, and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package com.sap.xsk.xsodata.ds.handler;
 
-import com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils;
 import org.apache.olingo.odata2.api.edm.EdmType;
 import org.apache.olingo.odata2.api.uri.UriInfo;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
@@ -22,7 +32,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 
 @RunWith(MockitoJUnitRunner.class)
-public class XSKOData2EventHandlerUtilsTest {
+public class AbstractXSKOData2EventHandlerTest {
 
   @Mock
   private Connection connection;
@@ -32,12 +42,18 @@ public class XSKOData2EventHandlerUtilsTest {
 
   private static MockedStatic<SqlFactory> sqlFactory = Mockito.mockStatic(SqlFactory.class, Mockito.CALLS_REAL_METHODS);
 
+  private XSKProcedureOData2EventHandler handler = new XSKProcedureOData2EventHandler();
+
   @Test
   public void testBuildCreateTemporaryTableLikeTableSql() {
     sqlFactory.when(() -> SqlFactory.deriveDialect(any())).thenReturn(new HanaSqlDialect());
 
     assertEquals("CREATE LOCAL TEMPORARY TABLE #TEST_TEMP_TABLE LIKE TEST_SCHEMA.test-table WITH NO DATA",
-        XSKOData2EventHandlerUtils.buildCreateTemporaryTableLikeTableSql(connection, ISqlKeywords.METADATA_TABLE, "TEST_SCHEMA",
+        handler.buildCreateTemporaryTableLikeTableSql(connection, ISqlKeywords.METADATA_TABLE, "TEST_SCHEMA",
+            "#TEST_TEMP_TABLE", "test-table"));
+
+    assertEquals("CREATE LOCAL TEMPORARY TABLE #TEST_TEMP_TABLE AS (SELECT * FROM TEST_SCHEMA.test-table) WITH NO DATA",
+        handler.buildCreateTemporaryTableLikeTableSql(connection, ISqlKeywords.METADATA_CALC_VIEW, "TEST_SCHEMA",
             "#TEST_TEMP_TABLE", "test-table"));
   }
 
@@ -47,7 +63,7 @@ public class XSKOData2EventHandlerUtilsTest {
 
     List<SQLStatementParam> parameters = List.of(new SQLStatementParam("123", edmType, null));
     assertEquals("CREATE LOCAL TEMPORARY TABLE #TEST_TEMP_TABLE AS (SELECT * FROM test-table WHERE ID = '123')",
-        XSKOData2EventHandlerUtils.buildCreateTemporaryTableAsSelect(connection, "#TEST_TEMP_TABLE",
+        handler.buildCreateTemporaryTableAsSelect(connection, "#TEST_TEMP_TABLE",
             "SELECT * FROM test-table WHERE ID = ?",
             parameters));
   }

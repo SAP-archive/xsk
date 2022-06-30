@@ -318,20 +318,20 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
     }
   }
 
-  ResultSet callProcedure(Connection connection, String schema, String procedureName, String newTableParam) throws SQLException {
+  protected ResultSet callProcedure(Connection connection, String schema, String procedureName, String newTableParam) throws SQLException {
     String callProcedureSQL = "CALL \"" + schema + "\".\"" + procedureName + "\" (\"" + newTableParam + "\", ?)";
     PreparedStatement statement = prepareStatement(connection, callProcedureSQL);
     return statement.executeQuery();
   }
 
-  ResultSet callProcedure(Connection connection, String schema, String procedureName, String oldTableParam, String newTableParam)
+  protected ResultSet callProcedure(Connection connection, String schema, String procedureName, String oldTableParam, String newTableParam)
       throws SQLException {
     String callProcedureSQL = "CALL \"" + schema + "\".\"" + procedureName + "\" (\"" + newTableParam + "\", \"" + oldTableParam + "\", ?)";
     PreparedStatement statement = prepareStatement(connection, callProcedureSQL);
     return statement.executeQuery();
   }
 
-  String getODataArtifactTypeSchema(String tableName) throws SQLException {
+  protected String getODataArtifactTypeSchema(String tableName) throws SQLException {
     String normalizedTableName = DBMetadataUtil.normalizeTableName(tableName);
     XSKTableMetadataProvider tableMetadataProvider = new XSKTableMetadataProvider();
     PersistenceTableModel persistenceTableModel = tableMetadataProvider.getPersistenceTableModel(normalizedTableName);

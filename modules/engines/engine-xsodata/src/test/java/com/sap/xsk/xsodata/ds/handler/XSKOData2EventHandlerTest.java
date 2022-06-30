@@ -12,7 +12,6 @@
 package com.sap.xsk.xsodata.ds.handler;
 
 import com.google.gson.internal.LinkedTreeMap;
-import com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils;
 import org.apache.olingo.odata2.api.commons.HttpStatusCodes;
 import org.apache.olingo.odata2.api.edm.EdmException;
 import org.apache.olingo.odata2.api.edm.EdmType;
@@ -44,13 +43,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.AFTER_TABLE_NAME;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.BEFORE_DELETE_ENTITY_TABLE_NAME;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.BEFORE_TABLE_NAME;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.BEFORE_UPDATE_ENTITY_TABLE_NAME;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.CONNECTION;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.ENTRY_MAP;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.ON_CREATE_ENTITY_TABLE_NAME;
+import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.CONNECTION;
+import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.AFTER_TABLE_NAME;
+import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.BEFORE_DELETE_ENTITY_TABLE_NAME;
+import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.BEFORE_TABLE_NAME;
+import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.BEFORE_UPDATE_ENTITY_TABLE_NAME;
+import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.ENTRY_MAP;
+import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.ON_CREATE_ENTITY_TABLE_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -58,6 +57,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.notNull;
 
 @RunWith(MockitoJUnitRunner.class)
 public class XSKOData2EventHandlerTest {
@@ -80,8 +80,6 @@ public class XSKOData2EventHandlerTest {
   @Mock
   private InputStream inputStream;
 
-  private static MockedStatic<XSKOData2EventHandlerUtils> handlerUtils;
-
   private static MockedStatic<StaticObjects> staticObjects;
 
   private XSKScriptingOData2EventHandler spyScriptingHandler;
@@ -92,7 +90,6 @@ public class XSKOData2EventHandlerTest {
 
   @Before
   public void setup() {
-    handlerUtils = Mockito.mockStatic(XSKOData2EventHandlerUtils.class);
     staticObjects = Mockito.mockStatic(StaticObjects.class);
     staticObjects.when(() -> StaticObjects.get(StaticObjects.DATASOURCE)).thenReturn(dataSource, dataSource);
     spyScriptingHandler = Mockito.spy(new XSKScriptingOData2EventHandler());
@@ -104,7 +101,6 @@ public class XSKOData2EventHandlerTest {
 
   @After
   public void teardown() {
-    handlerUtils.close();
     staticObjects.close();
   }
 
@@ -112,12 +108,14 @@ public class XSKOData2EventHandlerTest {
   public void testBeforeCreateEntity() throws org.apache.olingo.odata2.api.exception.ODataException, ODataException, SQLException {
     // procedure
     mockGetHandlers();
-    mockCallProcedure(spyProcedureHandler, getInsertTargetTableName(), false);
-    xskoData2EventHandler.beforeCreateEntity(uriInfo, "application/json", "application/json", entry,
+    mockTemporaryTables(spyProcedureHandler);
+    mockCallProcedure(spyProcedureHandler, false);
+    ODataResponse response = xskoData2EventHandler.beforeCreateEntity(uriInfo, "application/json", "application/json", entry,
         procedureHandlerContext);
-    assertResponse(procedureHandlerContext);
+    assertResponse(response);
 
     // .xsjslib
+    mockTemporaryTables(spyScriptingHandler);
     Mockito.doNothing().when(spyScriptingHandler).callSuperBeforeCreateEntity(any(), any(), any(), any(), any());
     xskoData2EventHandler.beforeCreateEntity(uriInfo, "application/json", "application/json", entry, scriptingHandlerContext);
     assertTrue(scriptingHandlerContext.containsKey("connection"));
@@ -125,15 +123,17 @@ public class XSKOData2EventHandlerTest {
   }
 
   @Test
-  public void testAfterCreateEntity() throws ODataException, EdmException, SQLException, EntityProviderException {
+  public void testAfterCreateEntity() throws ODataException, org.apache.olingo.odata2.api.exception.ODataException, SQLException {
     // procedure
     mockGetHandlers();
-    mockCallProcedure(spyProcedureHandler, getInsertTargetTableName(), false);
-    xskoData2EventHandler.afterCreateEntity(uriInfo, "application/json", "application/json", entry,
+    mockTemporaryTables(spyProcedureHandler);
+    mockCallProcedure(spyProcedureHandler, false);
+    ODataResponse response = xskoData2EventHandler.afterCreateEntity(uriInfo, "application/json", "application/json", entry,
         procedureHandlerContext);
-    assertResponse(procedureHandlerContext);
+    assertResponse(response);
 
     // .xsjslib
+    mockTemporaryTables(spyScriptingHandler);
     Mockito.doNothing().when(spyScriptingHandler).callSuperAfterCreateEntity(any(), any(), any(), any(), any());
     xskoData2EventHandler.afterCreateEntity(uriInfo, "application/json", "application/json", entry, scriptingHandlerContext);
     assertTrue(scriptingHandlerContext.containsKey(CONNECTION));
@@ -141,16 +141,18 @@ public class XSKOData2EventHandlerTest {
   }
 
   @Test
-  public void testOnCreateEntity() throws ODataException, EdmException, SQLException, EntityProviderException {
+  public void testOnCreateEntity() throws ODataException, org.apache.olingo.odata2.api.exception.ODataException, SQLException {
     // procedure
     mockGetHandlers();
-    mockCallProcedure(spyProcedureHandler, getInsertTargetTableName(), false);
-    xskoData2EventHandler.onCreateEntity(uriInfo, inputStream, "application/json", "application/json",
+    mockTemporaryTables(spyProcedureHandler);
+    mockCallProcedure(spyProcedureHandler, false);
+    ODataResponse response = xskoData2EventHandler.onCreateEntity(uriInfo, inputStream, "application/json", "application/json",
         procedureHandlerContext);
-    assertResponse(procedureHandlerContext);
+    assertResponse(response);
 
     // .xsjslib
-    Mockito.doReturn(null).when(spyScriptingHandler).callSuperOnCreateEntity(any(), any(), any(), any(), any());
+    mockTemporaryTables(spyScriptingHandler);
+    Mockito.doNothing().when(spyScriptingHandler).callSuperOnCreateEntity(any(), any(), any(), any(), any());
     xskoData2EventHandler.onCreateEntity(uriInfo, inputStream, "application/json", "application/json", scriptingHandlerContext);
     assertTrue(scriptingHandlerContext.containsKey(CONNECTION));
     assertTrue(scriptingHandlerContext.containsKey(AFTER_TABLE_NAME));
@@ -159,15 +161,17 @@ public class XSKOData2EventHandlerTest {
   }
 
   @Test
-  public void testBeforeUpdateEntity() throws ODataException, EdmException, SQLException, EntityProviderException {
+  public void testBeforeUpdateEntity() throws ODataException, org.apache.olingo.odata2.api.exception.ODataException, SQLException {
     // procedure
     mockGetHandlers();
-    mockCallProcedure(spyProcedureHandler, getUpdateTargetTableName(), true);
-    xskoData2EventHandler.beforeUpdateEntity(uriInfo, "application/json", true, "application/json", entry,
+    mockTemporaryTables(spyProcedureHandler);
+    mockCallProcedure(spyProcedureHandler, true);
+    ODataResponse response = xskoData2EventHandler.beforeUpdateEntity(uriInfo, "application/json", true, "application/json", entry,
         procedureHandlerContext);
-    assertResponse(procedureHandlerContext);
+    assertResponse(response);
 
     // .xsjslib
+    mockTemporaryTables(spyScriptingHandler);
     Mockito.doNothing().when(spyScriptingHandler).callSuperBeforeUpdateEntity(any(), any(), anyBoolean(), any(), any(), any());
     xskoData2EventHandler.beforeUpdateEntity(uriInfo, "application/json", true, "application/json", entry, scriptingHandlerContext);
     assertTrue(scriptingHandlerContext.containsKey(CONNECTION));
@@ -177,15 +181,17 @@ public class XSKOData2EventHandlerTest {
   }
 
   @Test
-  public void testAfterUpdateEntity() throws SQLException, ODataException, EdmException, EntityProviderException {
+  public void testAfterUpdateEntity() throws SQLException, ODataException, org.apache.olingo.odata2.api.exception.ODataException {
     // procedure
     mockGetHandlers();
-    mockCallProcedure(spyProcedureHandler, getUpdateTargetTableName(), true);
-    xskoData2EventHandler.afterUpdateEntity(uriInfo, "application/json", true, "application/json", entry,
+    mockTemporaryTables(spyProcedureHandler);
+    mockCallProcedure(spyProcedureHandler, true);
+    ODataResponse response = xskoData2EventHandler.afterUpdateEntity(uriInfo, "application/json", true, "application/json", entry,
         procedureHandlerContext);
-    assertResponse(procedureHandlerContext);
+    assertResponse(response);
 
     // .xsjslib
+    mockTemporaryTables(spyScriptingHandler);
     Mockito.doNothing().when(spyScriptingHandler).callSuperAfterUpdateEntity(any(), any(), anyBoolean(), any(), any(), any());
     xskoData2EventHandler.afterUpdateEntity(uriInfo, "application/json", true, "application/json", entry, scriptingHandlerContext);
     assertTrue(scriptingHandlerContext.containsKey(CONNECTION));
@@ -194,16 +200,18 @@ public class XSKOData2EventHandlerTest {
   }
 
   @Test
-  public void testOnUpdateEntity() throws SQLException, ODataException, EdmException, EntityProviderException {
+  public void testOnUpdateEntity() throws SQLException, ODataException, org.apache.olingo.odata2.api.exception.ODataException {
     // procedure
     mockGetHandlers();
-    mockCallProcedure(spyProcedureHandler, getUpdateTargetTableName(), true);
-    xskoData2EventHandler.onUpdateEntity(uriInfo, inputStream, "application/json", true, "application/json",
+    mockTemporaryTables(spyProcedureHandler);
+    mockCallProcedure(spyProcedureHandler, true);
+    ODataResponse response = xskoData2EventHandler.onUpdateEntity(uriInfo, inputStream, "application/json", true, "application/json",
         procedureHandlerContext);
-    assertResponse(procedureHandlerContext);
+    assertResponse(response);
 
     // .xsjslib
-    Mockito.doReturn(null).when(spyScriptingHandler).callSuperOnUpdateEntity(any(), any(), any(), anyBoolean(), any(), any());
+    mockTemporaryTables(spyScriptingHandler);
+    Mockito.doNothing().when(spyScriptingHandler).callSuperOnUpdateEntity(any(), any(), any(), anyBoolean(), any(), any());
     xskoData2EventHandler.onUpdateEntity(uriInfo, inputStream, "application/json", true, "application/json", scriptingHandlerContext);
     assertTrue(scriptingHandlerContext.containsKey(CONNECTION));
     assertTrue(scriptingHandlerContext.containsKey(BEFORE_TABLE_NAME));
@@ -211,14 +219,16 @@ public class XSKOData2EventHandlerTest {
   }
 
   @Test
-  public void testBeforeDeleteEntity() throws SQLException, ODataException, EdmException, EntityProviderException {
+  public void testBeforeDeleteEntity() throws SQLException, ODataException, org.apache.olingo.odata2.api.exception.ODataException {
     // procedure
     mockGetHandlers();
-    mockCallProcedure(spyProcedureHandler, getDeleteTargetTableName(), false);
-    xskoData2EventHandler.beforeDeleteEntity(uriInfo, "application/json", procedureHandlerContext);
-    assertResponse(procedureHandlerContext);
+    mockTemporaryTables(spyProcedureHandler);
+    mockCallProcedure(spyProcedureHandler, false);
+    ODataResponse response = xskoData2EventHandler.beforeDeleteEntity(uriInfo, "application/json", procedureHandlerContext);
+    assertResponse(response);
 
     // .xsjslib
+    mockTemporaryTables(spyScriptingHandler);
     Mockito.doNothing().when(spyScriptingHandler).callSuperBeforeDeleteEntity(any(), any(), any());
     xskoData2EventHandler.beforeDeleteEntity(uriInfo, "application/json", scriptingHandlerContext);
     assertTrue(scriptingHandlerContext.containsKey(CONNECTION));
@@ -227,14 +237,16 @@ public class XSKOData2EventHandlerTest {
   }
 
   @Test
-  public void testAfterDeleteEntity() throws SQLException, ODataException, EdmException, EntityProviderException {
+  public void testAfterDeleteEntity() throws SQLException, ODataException, org.apache.olingo.odata2.api.exception.ODataException {
     // procedure
     mockGetHandlers();
-    mockCallProcedure(spyProcedureHandler, getDeleteTargetTableName(), false);
-    xskoData2EventHandler.afterDeleteEntity(uriInfo, "application/json", procedureHandlerContext);
-    assertResponse(procedureHandlerContext);
+    mockTemporaryTables(spyProcedureHandler);
+    mockCallProcedure(spyProcedureHandler, false);
+    ODataResponse response = xskoData2EventHandler.afterDeleteEntity(uriInfo, "application/json", procedureHandlerContext);
+    assertResponse(response);
 
     // .xsjslib
+    mockTemporaryTables(spyScriptingHandler);
     Mockito.doNothing().when(spyScriptingHandler).callSuperAfterDeleteEntity(any(), any(), any());
     xskoData2EventHandler.afterDeleteEntity(uriInfo, "application/json", scriptingHandlerContext);
     assertTrue(scriptingHandlerContext.containsKey(CONNECTION));
@@ -242,15 +254,17 @@ public class XSKOData2EventHandlerTest {
   }
 
   @Test
-  public void testOnDeleteEntity() throws SQLException, ODataException, EdmException, EntityProviderException {
+  public void testOnDeleteEntity() throws SQLException, ODataException, org.apache.olingo.odata2.api.exception.ODataException {
     // procedure
     mockGetHandlers();
-    mockCallProcedure(spyProcedureHandler, getDeleteTargetTableName(), false);
-    xskoData2EventHandler.onDeleteEntity(uriInfo, "application/json", procedureHandlerContext);
-    assertResponse(procedureHandlerContext);
+    mockTemporaryTables(spyProcedureHandler);
+    mockCallProcedure(spyProcedureHandler, false);
+    ODataResponse response = xskoData2EventHandler.onDeleteEntity(uriInfo, "application/json", procedureHandlerContext);
+    assertResponse(response);
 
     // .xsjslib
-    Mockito.doReturn(null).when(spyScriptingHandler).callSuperOnDeleteEntity(any(), any(), any());
+    mockTemporaryTables(spyScriptingHandler);
+    Mockito.doNothing().when(spyScriptingHandler).callSuperOnDeleteEntity(any(), any(), any());
     xskoData2EventHandler.onDeleteEntity(uriInfo, "application/json", scriptingHandlerContext);
     assertTrue(scriptingHandlerContext.containsKey(CONNECTION));
     assertTrue(scriptingHandlerContext.containsKey(BEFORE_TABLE_NAME));
@@ -271,12 +285,35 @@ public class XSKOData2EventHandlerTest {
         .thenReturn(procedureHandlers, scriptingHandlers);
   }
 
-  private void mockCallProcedure(XSKProcedureOData2EventHandler handler, Runnable getBuilderTargetTable, boolean isUpdate)
-      throws SQLException {
-    handlerUtils.when(() -> getBuilderTargetTable.run()).thenReturn("test-table", "test-table");
+  private void mockTemporaryTables(AbstractXSKOData2EventHandler handler)
+      throws org.apache.olingo.odata2.api.exception.ODataException, SQLException {
+    Mockito.doReturn("test-table").when(handler).getSQLInsertBuilderTargetTable(any(), any());
 
-    Mockito.doReturn("TEST_SCHEMA").when(handler).getODataArtifactTypeSchema("test-table");
+    Mockito.doReturn("test-table").when(handler).getSQLUpdateBuilderTargetTable(any(), any());
 
+    Mockito.doReturn("test-table").when(handler).getSQLDeleteBuilderTargetTable(any(), any());
+
+    Mockito.doNothing().when(handler).createTemporaryTableLikeTable(any(), any(), any());
+
+    Mockito.doNothing().when(handler).createTemporaryTableAsSelect(any(), any(), any(), any());
+
+    Mockito.doNothing().when(handler).insertIntoTemporaryTable(any(), any(), any(), any());
+
+    Mockito.doNothing().when(handler).updateTemporaryTable(any(), any(), any(), any());
+
+    Mockito.doReturn(new HashMap<>()).when(handler).readEntryMap(any(), any());
+
+    Mockito.doNothing().when(handler).closeConnection(any());
+
+    Mockito.doNothing().when(handler).batchDropTemporaryTables(any());
+
+    if (handler instanceof XSKProcedureOData2EventHandler) {
+      Mockito.doReturn("TEST_SCHEMA").when((XSKProcedureOData2EventHandler) handler).getODataArtifactTypeSchema("test-table");
+    }
+  }
+
+  private void mockCallProcedure(XSKProcedureOData2EventHandler handler, boolean isUpdate)
+      throws SQLException, org.apache.olingo.odata2.api.exception.ODataException {
     ResultSet resultSetMock = Mockito.mock(ResultSet.class);
     Mockito.when(resultSetMock.next()).thenReturn(true);
     Mockito.when(resultSetMock.getString(anyString())).thenReturn("400", "INVALID ID");
@@ -294,15 +331,9 @@ public class XSKOData2EventHandlerTest {
     } else {
       Mockito.doReturn(resultSetMock).when(handler).callProcedure(any(), any(), any(), any());
     }
-
-    handlerUtils.when(() -> XSKOData2EventHandlerUtils.createErrorDocument(resultSetMock)).thenCallRealMethod();
   }
 
-  private void assertResponse(Map<Object, Object> context) throws EntityProviderException {
-    assertTrue(context.containsKey("errorDocument"));
-
-    ODataResponse response = (ODataResponse) context.get("errorDocument");
-
+  private void assertResponse(ODataResponse response) throws EntityProviderException {
     assertEquals(response.getStatus(), HttpStatusCodes.BAD_REQUEST);
     assertEquals("application/json", response.getHeader("Content-Type"));
 
@@ -314,34 +345,34 @@ public class XSKOData2EventHandlerTest {
         (((LinkedTreeMap) responseBody.get("error")).get("innererror")));
   }
 
-  private Runnable getUpdateTargetTableName() {
-    return () -> {
-      try {
-        XSKOData2EventHandlerUtils.getSQLUpdateBuilderTargetTable(any(), any());
-      } catch (org.apache.olingo.odata2.api.exception.ODataException e) {
-        fail();
-      }
-    };
-  }
-
-  private Runnable getInsertTargetTableName() {
-    return () -> {
-      try {
-        XSKOData2EventHandlerUtils.getSQLInsertBuilderTargetTable(any(), any());
-      } catch (org.apache.olingo.odata2.api.exception.ODataException e) {
-        fail();
-      }
-    };
-  }
-
-  private Runnable getDeleteTargetTableName() {
-    return () -> {
-      try {
-        XSKOData2EventHandlerUtils.getSQLDeleteBuilderTargetTable(any(), any());
-      } catch (org.apache.olingo.odata2.api.exception.ODataException e) {
-        fail();
-      }
-    };
-  }
+//  private Runnable getUpdateTargetTableName() {
+//    return () -> {
+//      try {
+//        XSKOData2EventHandlerUtils.getSQLUpdateBuilderTargetTable(any(), any());
+//      } catch (org.apache.olingo.odata2.api.exception.ODataException e) {
+//        fail();
+//      }
+//    };
+//  }
+//
+//  private Runnable getInsertTargetTableName() {
+//    return () -> {
+//      try {
+//        XSKOData2EventHandlerUtils.getSQLInsertBuilderTargetTable(any(), any());
+//      } catch (org.apache.olingo.odata2.api.exception.ODataException e) {
+//        fail();
+//      }
+//    };
+//  }
+//
+//  private Runnable getDeleteTargetTableName() {
+//    return () -> {
+//      try {
+//        XSKOData2EventHandlerUtils.getSQLDeleteBuilderTargetTable(any(), any());
+//      } catch (org.apache.olingo.odata2.api.exception.ODataException e) {
+//        fail();
+//      }
+//    };
+//  }
 
 }

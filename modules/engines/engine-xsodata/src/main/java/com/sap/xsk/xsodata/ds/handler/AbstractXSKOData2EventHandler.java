@@ -9,9 +9,8 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.xsk.xsodata.utils;
+package com.sap.xsk.xsodata.ds.handler;
 
-import com.sap.xsk.xsodata.ds.handler.XSKScriptingOData2EventHandler;
 import com.sap.xsk.xsodata.ds.service.XSKTableMetadataProvider;
 import org.apache.olingo.odata2.api.commons.HttpHeaders;
 import org.apache.olingo.odata2.api.commons.HttpStatusCodes;
@@ -25,6 +24,7 @@ import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.database.sql.SqlFactory;
+import org.eclipse.dirigible.engine.odata2.handler.ScriptingOData2EventHandler;
 import org.eclipse.dirigible.engine.odata2.sql.api.SQLStatement;
 import org.eclipse.dirigible.engine.odata2.sql.api.SQLStatementParam;
 import org.eclipse.dirigible.engine.odata2.sql.builder.SQLContext;
@@ -48,10 +48,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class XSKOData2EventHandlerUtils {
+public abstract class AbstractXSKOData2EventHandler extends ScriptingOData2EventHandler {
 
-  public static final Logger LOGGER = LoggerFactory.getLogger(XSKScriptingOData2EventHandler.class);
-  public static final String ERROR_WHEN_PREPARING_TEMPORARY_TABLE_SQL = "Error when preparing temporary table SQL: ";
+  public static final Logger LOGGER = LoggerFactory.getLogger(AbstractXSKOData2EventHandler.class);
   public static final String UNABLE_TO_HANDLE_BEFORE_CREATE_ENTITY_EVENT = "Unable to handle beforeCreateEntity event";
   public static final String UNABLE_TO_HANDLE_AFTER_CREATE_ENTITY_EVENT = "Unable to handle afterCreateEntity event";
   public static final String UNABLE_TO_HANDLE_ON_CREATE_ENTITY_EVENT = "Unable to handle onCreateEntity event";
@@ -78,7 +77,6 @@ public class XSKOData2EventHandlerUtils {
   public static final String BEFORE_DELETE_ENTITY_TABLE_NAME = "beforeDeleteEntityTableName";
   public static final String ENTRY_MAP = "entryMap";
   public static final String HANDLER = "handler";
-  public static final String ERROR_DOCUMENT = "errorDocument";
 
   private static final String HTTP_STATUS_CODE = "HTTP_STATUS_CODE";
   private static final String ERROR_MESSAGE = "ERROR_MESSAGE";
@@ -86,25 +84,25 @@ public class XSKOData2EventHandlerUtils {
 
   private static DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
-  public static String getSQLInsertBuilderTargetTable(SQLInsertBuilder insertBuilder, SQLContext sqlContext) throws ODataException {
+  protected String getSQLInsertBuilderTargetTable(SQLInsertBuilder insertBuilder, SQLContext sqlContext) throws ODataException {
     SQLStatement sqlStatement = insertBuilder.build(sqlContext);
     sqlStatement.sql();
     return insertBuilder.getTargetTableName();
   }
 
-  public static String getSQLUpdateBuilderTargetTable(SQLUpdateBuilder updateBuilder, SQLContext sqlContext) throws ODataException {
+  protected String getSQLUpdateBuilderTargetTable(SQLUpdateBuilder updateBuilder, SQLContext sqlContext) throws ODataException {
     SQLStatement sqlStatement = updateBuilder.build(sqlContext);
     sqlStatement.sql();
     return updateBuilder.getTargetTableName();
   }
 
-  public static String getSQLDeleteBuilderTargetTable(SQLDeleteBuilder deleteBuilder, SQLContext sqlContext) throws ODataException {
+  protected String getSQLDeleteBuilderTargetTable(SQLDeleteBuilder deleteBuilder, SQLContext sqlContext) throws ODataException {
     SQLStatement sqlStatement = deleteBuilder.build(sqlContext);
     sqlStatement.sql();
     return deleteBuilder.getTargetTableName();
   }
 
-  public static void createTemporaryTableLikeTable(Connection connection, String temporaryTableName, String likeTableName)
+  protected void createTemporaryTableLikeTable(Connection connection, String temporaryTableName, String likeTableName)
       throws SQLException {
     String normalizedTableName = DBMetadataUtil.normalizeTableName(likeTableName);
     XSKTableMetadataProvider tableMetadataProvider = new XSKTableMetadataProvider();
@@ -119,15 +117,16 @@ public class XSKOData2EventHandlerUtils {
     }
   }
 
-  public static void createTemporaryTableAsSelect(Connection connection, String temporaryTableName, SQLSelectBuilder selectBuilder,
+  protected void createTemporaryTableAsSelect(Connection connection, String temporaryTableName, SQLSelectBuilder selectBuilder,
       SQLContext sqlContext) throws SQLException, ODataException {
-    String sql = buildCreateTemporaryTableAsSelect(connection, temporaryTableName, selectBuilder.buildSelect(sqlContext), selectBuilder.getStatementParams());
+    String sql = buildCreateTemporaryTableAsSelect(connection, temporaryTableName, selectBuilder.buildSelect(sqlContext),
+        selectBuilder.getStatementParams());
     try (PreparedStatement preparedStatement = prepareStatement(connection, sql)) {
       preparedStatement.execute();
     }
   }
 
-  public static String buildCreateTemporaryTableLikeTableSql(Connection connection, String artifactType, String odataArtifactTypeSchema,
+  protected String buildCreateTemporaryTableLikeTableSql(Connection connection, String artifactType, String odataArtifactTypeSchema,
       String temporaryTableName, String likeTableName) {
     String sql;
     if (artifactType.equals(ISqlKeywords.METADATA_TABLE)) {
@@ -144,7 +143,7 @@ public class XSKOData2EventHandlerUtils {
     return sql;
   }
 
-  public static String buildCreateTemporaryTableAsSelect(Connection connection, String temporaryTableName, String asSelectQuery,
+  protected String buildCreateTemporaryTableAsSelect(Connection connection, String temporaryTableName, String asSelectQuery,
       List<SQLStatementParam> parameters) {
     String sql = SqlFactory.getNative(connection).create().temporaryTable(temporaryTableName)
         .setAsSelectQuery(asSelectQuery).build();
@@ -152,7 +151,7 @@ public class XSKOData2EventHandlerUtils {
     return replaceSqlParameters(sqlWithoutAliases, parameters);
   }
 
-  public static String replaceSqlParameters(String sql, List<SQLStatementParam> parameters) {
+  protected String replaceSqlParameters(String sql, List<SQLStatementParam> parameters) {
     for (SQLStatementParam p : parameters) {
       sql = sql.replaceFirst("\\?", "'" + p.getValue() + "'");
     }
@@ -160,21 +159,21 @@ public class XSKOData2EventHandlerUtils {
     return sql;
   }
 
-  public static void insertIntoTemporaryTable(Connection connection, SQLInsertBuilder insertBuilder, String temporaryTableName,
+  protected void insertIntoTemporaryTable(Connection connection, SQLInsertBuilder insertBuilder, String temporaryTableName,
       SQLContext sqlContext)
       throws ODataException, SQLException {
     insertBuilder.setTableName("\"" + temporaryTableName + "\"");
     executeSQLStatement(connection, insertBuilder.build(sqlContext));
   }
 
-  public static void updateTemporaryTable(Connection connection, SQLUpdateBuilder updateBuilder, String temporaryTableName,
+  protected void updateTemporaryTable(Connection connection, SQLUpdateBuilder updateBuilder, String temporaryTableName,
       SQLContext sqlContext)
       throws ODataException, SQLException {
     updateBuilder.setTableName("\"" + temporaryTableName + "\"");
     executeSQLStatement(connection, updateBuilder.build(sqlContext));
   }
 
-  public static void batchDropTemporaryTables(String... temporaryTableNames) {
+  protected void batchDropTemporaryTables(String... temporaryTableNames) {
     try (Connection connection = dataSource.getConnection();
         Statement statement = connection.createStatement()) {
       for (String temporaryTableName : temporaryTableNames) {
@@ -189,36 +188,31 @@ public class XSKOData2EventHandlerUtils {
     }
   }
 
-  public static void executeSQLStatement(Connection connection, SQLStatement statement) throws SQLException, ODataException {
+  protected void executeSQLStatement(Connection connection, SQLStatement statement) throws SQLException, ODataException {
     try (PreparedStatement preparedStatement = prepareStatement(connection, statement.sql())) {
       SQLUtils.setParamsOnStatement(preparedStatement, statement.getStatementParams());
       preparedStatement.executeUpdate();
     }
   }
 
-  public static PreparedStatement prepareStatement(Connection connection, String sql) {
-    try {
-      LOGGER.debug("Preparing temporary table statement: {}", sql);
-      return connection.prepareStatement(sql);
-    } catch (SQLException e) {
-      throw new IllegalStateException(ERROR_WHEN_PREPARING_TEMPORARY_TABLE_SQL + e.getMessage());
-    }
+  protected PreparedStatement prepareStatement(Connection connection, String sql) throws SQLException {
+    LOGGER.debug("Preparing temporary table statement: {}", sql);
+    return connection.prepareStatement(sql);
   }
 
-  public static Map<String, Object> readEntryMap(Connection connection, String tableName) throws SQLException {
+  protected Map<String, Object> readEntryMap(Connection connection, String tableName) throws SQLException {
     String selectCreatedEntitySQL = SqlFactory.getNative(connection).select().column("*").from(tableName).build();
-    try (PreparedStatement statement = connection.prepareStatement(selectCreatedEntitySQL)) {
+    try (PreparedStatement statement = connection.prepareStatement(selectCreatedEntitySQL);
+        ResultSet resultSet = statement.executeQuery()) {
       Map<String, Object> currentTargetEntity = new HashMap<>();
-      try (ResultSet resultSet = statement.executeQuery()) {
-        while (resultSet.next()) {
-          currentTargetEntity = resultSetToEntryMap(resultSet);
-        }
+      while (resultSet.next()) {
+        currentTargetEntity = resultSetToEntryMap(resultSet);
       }
       return currentTargetEntity;
     }
   }
 
-  public static Map<String, Object> resultSetToEntryMap(ResultSet resultSet) throws SQLException {
+  protected Map<String, Object> resultSetToEntryMap(ResultSet resultSet) throws SQLException {
     ResultSetMetaData resultSetMetadata = resultSet.getMetaData();
     int columnCount = resultSetMetadata.getColumnCount();
     HashMap<String, Object> entry = new HashMap<>(columnCount);
@@ -229,7 +223,7 @@ public class XSKOData2EventHandlerUtils {
     return entry;
   }
 
-  public static void closeConnection(Connection connection) {
+  protected void closeConnection(Connection connection) {
     try {
       if (connection != null && !connection.isClosed()) {
         connection.close();
@@ -239,11 +233,11 @@ public class XSKOData2EventHandlerUtils {
     }
   }
 
-  public static String generateTemporaryTableName(String targetTypeName) {
+  protected String generateTemporaryTableName(String targetTypeName) {
     return "#" + targetTypeName + UUID.randomUUID().toString().replace("-", "");
   }
 
-  public static ODataResponse createErrorDocument(ResultSet resultSet) throws SQLException {
+  protected ODataResponse createProcedureResponse(ResultSet resultSet) throws SQLException {
     if (resultSet.next()) {
       String errorCode = resultSet.getString(HTTP_STATUS_CODE);
       String message = resultSet.getString(ERROR_MESSAGE);
@@ -271,8 +265,6 @@ public class XSKOData2EventHandlerUtils {
 
       return response;
     }
-
     return null;
   }
-
 }

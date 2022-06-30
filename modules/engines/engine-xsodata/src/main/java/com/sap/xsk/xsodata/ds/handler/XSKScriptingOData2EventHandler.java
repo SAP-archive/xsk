@@ -11,16 +11,13 @@
  */
 package com.sap.xsk.xsodata.ds.handler;
 
-import com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils;
 import org.apache.olingo.odata2.api.ep.entry.ODataEntry;
 import org.apache.olingo.odata2.api.exception.ODataException;
-import org.apache.olingo.odata2.api.processor.ODataRequest;
 import org.apache.olingo.odata2.api.processor.ODataResponse;
 import org.apache.olingo.odata2.api.uri.info.DeleteUriInfo;
 import org.apache.olingo.odata2.api.uri.info.PostUriInfo;
 import org.apache.olingo.odata2.api.uri.info.PutMergePatchUriInfo;
 import org.eclipse.dirigible.commons.config.StaticObjects;
-import org.eclipse.dirigible.engine.odata2.handler.ScriptingOData2EventHandler;
 import org.eclipse.dirigible.engine.odata2.sql.builder.SQLContext;
 import org.eclipse.dirigible.engine.odata2.sql.builder.SQLInsertBuilder;
 import org.eclipse.dirigible.engine.odata2.sql.builder.SQLSelectBuilder;
@@ -31,34 +28,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
 
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.AFTER_TABLE_NAME;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.BEFORE_DELETE_ENTITY_TABLE_NAME;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.BEFORE_TABLE_NAME;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.BEFORE_UPDATE_ENTITY_TABLE_NAME;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.CONNECTION;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.DUMMY_BUILDER;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.ENTRY_MAP;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.INSERT_BUILDER;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.ON_CREATE_ENTITY_TABLE_NAME;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.SELECT_BUILDER;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.SQL_CONTEXT;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.UNABLE_TO_HANDLE_AFTER_CREATE_ENTITY_EVENT;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.UNABLE_TO_HANDLE_AFTER_DELETE_ENTITY_EVENT;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.UNABLE_TO_HANDLE_AFTER_UPDATE_ENTITY_EVENT;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.UNABLE_TO_HANDLE_BEFORE_CREATE_ENTITY_EVENT;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.UNABLE_TO_HANDLE_BEFORE_DELETE_ENTITY_EVENT;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.UNABLE_TO_HANDLE_BEFORE_UPDATE_ENTITY_EVENT;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.UNABLE_TO_HANDLE_ON_CREATE_ENTITY_EVENT;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.UNABLE_TO_HANDLE_ON_DELETE_ENTITY_EVENT;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.UNABLE_TO_HANDLE_ON_UPDATE_ENTITY_EVENT;
-import static com.sap.xsk.xsodata.utils.XSKOData2EventHandlerUtils.UPDATE_BUILDER;
-
-public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler {
+public class XSKScriptingOData2EventHandler extends AbstractXSKOData2EventHandler {
 
   private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
   @Override
-  public void beforeCreateEntity(PostUriInfo uriInfo, String requestContentType, String contentType, ODataEntry entry,
+  public ODataResponse beforeCreateEntity(PostUriInfo uriInfo, String requestContentType, String contentType, ODataEntry entry,
       Map<Object, Object> context) {
     SQLInsertBuilder dummyBuilder = (SQLInsertBuilder) context.get(DUMMY_BUILDER);
     SQLInsertBuilder insertBuilder = (SQLInsertBuilder) context.get(INSERT_BUILDER);
@@ -68,11 +43,11 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     try {
       connectionParam = dataSource.getConnection();
 
-      String targetTableName = XSKOData2EventHandlerUtils.getSQLInsertBuilderTargetTable(dummyBuilder, sqlContext);
-      String afterTableName = XSKOData2EventHandlerUtils.generateTemporaryTableName(uriInfo.getTargetType().getName());
+      String targetTableName = getSQLInsertBuilderTargetTable(dummyBuilder, sqlContext);
+      String afterTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
 
-      XSKOData2EventHandlerUtils.createTemporaryTableLikeTable(connectionParam, afterTableName, targetTableName);
-      XSKOData2EventHandlerUtils.insertIntoTemporaryTable(connectionParam, insertBuilder, afterTableName, sqlContext);
+      createTemporaryTableLikeTable(connectionParam, afterTableName, targetTableName);
+      insertIntoTemporaryTable(connectionParam, insertBuilder, afterTableName, sqlContext);
 
       context.put(CONNECTION, connectionParam);
       context.put(AFTER_TABLE_NAME, afterTableName);
@@ -81,13 +56,14 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
       throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_BEFORE_CREATE_ENTITY_EVENT, e);
     } finally {
-      XSKOData2EventHandlerUtils.closeConnection(connectionParam);
-      XSKOData2EventHandlerUtils.batchDropTemporaryTables((String) context.get(AFTER_TABLE_NAME));
+      closeConnection(connectionParam);
+      batchDropTemporaryTables((String) context.get(AFTER_TABLE_NAME));
     }
+    return null;
   }
 
   @Override
-  public void afterCreateEntity(PostUriInfo uriInfo, String requestContentType, String contentType, ODataEntry entry,
+  public ODataResponse afterCreateEntity(PostUriInfo uriInfo, String requestContentType, String contentType, ODataEntry entry,
       Map<Object, Object> context) {
     SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
@@ -100,8 +76,8 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
       if (context.containsKey(ON_CREATE_ENTITY_TABLE_NAME)) {
         afterTableName = (String) context.get(ON_CREATE_ENTITY_TABLE_NAME);
       } else {
-        afterTableName = XSKOData2EventHandlerUtils.generateTemporaryTableName(uriInfo.getTargetType().getName());
-        XSKOData2EventHandlerUtils.createTemporaryTableAsSelect(connectionParam, afterTableName, selectBuilder, sqlContext);
+        afterTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
+        createTemporaryTableAsSelect(connectionParam, afterTableName, selectBuilder, sqlContext);
       }
 
       context.put(CONNECTION, connectionParam);
@@ -111,9 +87,10 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
       throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_AFTER_CREATE_ENTITY_EVENT, e);
     } finally {
-      XSKOData2EventHandlerUtils.closeConnection(connectionParam);
-      XSKOData2EventHandlerUtils.batchDropTemporaryTables((String) context.get(AFTER_TABLE_NAME));
+      closeConnection(connectionParam);
+      batchDropTemporaryTables((String) context.get(AFTER_TABLE_NAME));
     }
+    return null;
   }
 
   @Override
@@ -125,30 +102,30 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
 
     Connection connectionParam = null;
     try {
-      String targetTableName = XSKOData2EventHandlerUtils.getSQLInsertBuilderTargetTable(dummyBuilder, sqlContext);
-      String afterTableName = XSKOData2EventHandlerUtils.generateTemporaryTableName(uriInfo.getTargetType().getName());
+      String targetTableName = getSQLInsertBuilderTargetTable(dummyBuilder, sqlContext);
+      String afterTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
 
       connectionParam = dataSource.getConnection();
-      XSKOData2EventHandlerUtils.createTemporaryTableLikeTable(connectionParam, afterTableName, targetTableName);
-      XSKOData2EventHandlerUtils.insertIntoTemporaryTable(connectionParam, insertBuilder, afterTableName, sqlContext);
+      createTemporaryTableLikeTable(connectionParam, afterTableName, targetTableName);
+      insertIntoTemporaryTable(connectionParam, insertBuilder, afterTableName, sqlContext);
 
       context.put(CONNECTION, connectionParam);
       context.put(AFTER_TABLE_NAME, afterTableName);
       context.put(ON_CREATE_ENTITY_TABLE_NAME, afterTableName);
 
-      ODataResponse response = callSuperOnCreateEntity(uriInfo, content, requestContentType, contentType, context);
+      callSuperOnCreateEntity(uriInfo, content, requestContentType, contentType, context);
 
-      context.put(ENTRY_MAP, XSKOData2EventHandlerUtils.readEntryMap(connectionParam, afterTableName));
-      return response;
+      context.put(ENTRY_MAP, readEntryMap(connectionParam, afterTableName));
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
       throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_ON_CREATE_ENTITY_EVENT, e);
     } finally {
-      XSKOData2EventHandlerUtils.closeConnection(connectionParam);
+      closeConnection(connectionParam);
     }
+    return null;
   }
 
   @Override
-  public void beforeUpdateEntity(PutMergePatchUriInfo uriInfo, String requestContentType, boolean merge, String contentType,
+  public ODataResponse beforeUpdateEntity(PutMergePatchUriInfo uriInfo, String requestContentType, boolean merge, String contentType,
       ODataEntry entry, Map<Object, Object> context) {
     SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
     SQLUpdateBuilder updateBuilder = (SQLUpdateBuilder) context.get(UPDATE_BUILDER);
@@ -158,14 +135,14 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     try {
       connectionParam = dataSource.getConnection();
 
-      String beforeTableName = XSKOData2EventHandlerUtils.generateTemporaryTableName(uriInfo.getTargetType().getName());
-      String afterTableName = XSKOData2EventHandlerUtils.generateTemporaryTableName(uriInfo.getTargetType().getName());
-      String beforeUpdateEntityTableName = XSKOData2EventHandlerUtils.generateTemporaryTableName(uriInfo.getTargetType().getName());
+      String beforeTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
+      String afterTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
+      String beforeUpdateEntityTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
 
-      XSKOData2EventHandlerUtils.createTemporaryTableAsSelect(connectionParam, beforeTableName, selectBuilder, sqlContext);
-      XSKOData2EventHandlerUtils.createTemporaryTableAsSelect(connectionParam, afterTableName, selectBuilder, sqlContext);
-      XSKOData2EventHandlerUtils.updateTemporaryTable(connectionParam, updateBuilder, afterTableName, sqlContext);
-      XSKOData2EventHandlerUtils.createTemporaryTableAsSelect(connectionParam, beforeUpdateEntityTableName, selectBuilder, sqlContext);
+      createTemporaryTableAsSelect(connectionParam, beforeTableName, selectBuilder, sqlContext);
+      createTemporaryTableAsSelect(connectionParam, afterTableName, selectBuilder, sqlContext);
+      updateTemporaryTable(connectionParam, updateBuilder, afterTableName, sqlContext);
+      createTemporaryTableAsSelect(connectionParam, beforeUpdateEntityTableName, selectBuilder, sqlContext);
 
       context.put(CONNECTION, connectionParam);
       context.put(BEFORE_TABLE_NAME, beforeTableName);
@@ -176,13 +153,14 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
       throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_BEFORE_UPDATE_ENTITY_EVENT, e);
     } finally {
-      XSKOData2EventHandlerUtils.closeConnection(connectionParam);
-      XSKOData2EventHandlerUtils.batchDropTemporaryTables((String) context.get(BEFORE_TABLE_NAME), (String) context.get(AFTER_TABLE_NAME));
+      closeConnection(connectionParam);
+      batchDropTemporaryTables((String) context.get(BEFORE_TABLE_NAME), (String) context.get(AFTER_TABLE_NAME));
     }
+    return null;
   }
 
   @Override
-  public void afterUpdateEntity(PutMergePatchUriInfo uriInfo, String requestContentType, boolean merge, String contentType,
+  public ODataResponse afterUpdateEntity(PutMergePatchUriInfo uriInfo, String requestContentType, boolean merge, String contentType,
       ODataEntry entry, Map<Object, Object> context) {
     SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
@@ -191,8 +169,8 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     try {
       connectionParam = dataSource.getConnection();
 
-      String afterTableName = XSKOData2EventHandlerUtils.generateTemporaryTableName(uriInfo.getTargetType().getName());
-      XSKOData2EventHandlerUtils.createTemporaryTableAsSelect(connectionParam, afterTableName, selectBuilder, sqlContext);
+      String afterTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
+      createTemporaryTableAsSelect(connectionParam, afterTableName, selectBuilder, sqlContext);
 
       context.put(CONNECTION, connectionParam);
       context.put(BEFORE_TABLE_NAME, context.get(BEFORE_UPDATE_ENTITY_TABLE_NAME));
@@ -202,9 +180,10 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
       throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_AFTER_UPDATE_ENTITY_EVENT, e);
     } finally {
-      XSKOData2EventHandlerUtils.closeConnection(connectionParam);
-      XSKOData2EventHandlerUtils.batchDropTemporaryTables((String) context.get(BEFORE_TABLE_NAME), (String) context.get(AFTER_TABLE_NAME));
+      closeConnection(connectionParam);
+      batchDropTemporaryTables((String) context.get(BEFORE_TABLE_NAME), (String) context.get(AFTER_TABLE_NAME));
     }
+    return null;
   }
 
   @Override
@@ -218,28 +197,29 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     try {
       connectionParam = dataSource.getConnection();
 
-      String beforeTableName = XSKOData2EventHandlerUtils.generateTemporaryTableName(uriInfo.getTargetType().getName());
-      String afterTableName = XSKOData2EventHandlerUtils.generateTemporaryTableName(uriInfo.getTargetType().getName());
+      String beforeTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
+      String afterTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
 
-      XSKOData2EventHandlerUtils.createTemporaryTableAsSelect(connectionParam, beforeTableName, selectBuilder, sqlContext);
-      XSKOData2EventHandlerUtils.createTemporaryTableAsSelect(connectionParam, afterTableName, selectBuilder, sqlContext);
-      XSKOData2EventHandlerUtils.updateTemporaryTable(connectionParam, updateBuilder, afterTableName, sqlContext);
+      createTemporaryTableAsSelect(connectionParam, beforeTableName, selectBuilder, sqlContext);
+      createTemporaryTableAsSelect(connectionParam, afterTableName, selectBuilder, sqlContext);
+      updateTemporaryTable(connectionParam, updateBuilder, afterTableName, sqlContext);
 
       context.put(CONNECTION, connectionParam);
       context.put(BEFORE_TABLE_NAME, beforeTableName);
       context.put(AFTER_TABLE_NAME, afterTableName);
 
-      return callSuperOnUpdateEntity(uriInfo, content, requestContentType, merge, contentType, context);
+      callSuperOnUpdateEntity(uriInfo, content, requestContentType, merge, contentType, context);
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
       throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_ON_UPDATE_ENTITY_EVENT, e);
     } finally {
-      XSKOData2EventHandlerUtils.closeConnection(connectionParam);
-      XSKOData2EventHandlerUtils.batchDropTemporaryTables((String) context.get(BEFORE_TABLE_NAME), (String) context.get(AFTER_TABLE_NAME));
+      closeConnection(connectionParam);
+      batchDropTemporaryTables((String) context.get(BEFORE_TABLE_NAME), (String) context.get(AFTER_TABLE_NAME));
     }
+    return null;
   }
 
   @Override
-  public void beforeDeleteEntity(DeleteUriInfo uriInfo, String contentType, Map<Object, Object> context) {
+  public ODataResponse beforeDeleteEntity(DeleteUriInfo uriInfo, String contentType, Map<Object, Object> context) {
     SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
 
@@ -247,11 +227,11 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     try {
       connectionParam = dataSource.getConnection();
 
-      String beforeTableName = XSKOData2EventHandlerUtils.generateTemporaryTableName(uriInfo.getTargetType().getName());
-      String beforeDeleteEntityTableName = XSKOData2EventHandlerUtils.generateTemporaryTableName(uriInfo.getTargetType().getName());
+      String beforeTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
+      String beforeDeleteEntityTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
 
-      XSKOData2EventHandlerUtils.createTemporaryTableAsSelect(connectionParam, beforeTableName, selectBuilder, sqlContext);
-      XSKOData2EventHandlerUtils.createTemporaryTableAsSelect(connectionParam, beforeDeleteEntityTableName, selectBuilder, sqlContext);
+      createTemporaryTableAsSelect(connectionParam, beforeTableName, selectBuilder, sqlContext);
+      createTemporaryTableAsSelect(connectionParam, beforeDeleteEntityTableName, selectBuilder, sqlContext);
 
       context.put(CONNECTION, connectionParam);
       context.put(BEFORE_TABLE_NAME, beforeTableName);
@@ -261,13 +241,14 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
       throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_BEFORE_DELETE_ENTITY_EVENT, e);
     } finally {
-      XSKOData2EventHandlerUtils.closeConnection(connectionParam);
-      XSKOData2EventHandlerUtils.batchDropTemporaryTables((String) context.get(BEFORE_TABLE_NAME));
+      closeConnection(connectionParam);
+      batchDropTemporaryTables((String) context.get(BEFORE_TABLE_NAME));
     }
+    return null;
   }
 
   @Override
-  public void afterDeleteEntity(DeleteUriInfo uriInfo, String contentType, Map<Object, Object> context) {
+  public ODataResponse afterDeleteEntity(DeleteUriInfo uriInfo, String contentType, Map<Object, Object> context) {
     Connection connectionParam = null;
     try {
       connectionParam = dataSource.getConnection();
@@ -279,9 +260,10 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     } catch (org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
       throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_AFTER_DELETE_ENTITY_EVENT, e);
     } finally {
-      XSKOData2EventHandlerUtils.closeConnection(connectionParam);
-      XSKOData2EventHandlerUtils.batchDropTemporaryTables((String) context.get(BEFORE_TABLE_NAME));
+      closeConnection(connectionParam);
+      batchDropTemporaryTables((String) context.get(BEFORE_TABLE_NAME));
     }
+    return null;
   }
 
   @Override
@@ -293,19 +275,20 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     try {
       connectionParam = dataSource.getConnection();
 
-      String beforeTableName = XSKOData2EventHandlerUtils.generateTemporaryTableName(uriInfo.getTargetType().getName());
-      XSKOData2EventHandlerUtils.createTemporaryTableAsSelect(connectionParam, beforeTableName, selectBuilder, sqlContext);
+      String beforeTableName = generateTemporaryTableName(uriInfo.getTargetType().getName());
+      createTemporaryTableAsSelect(connectionParam, beforeTableName, selectBuilder, sqlContext);
 
       context.put(CONNECTION, connectionParam);
       context.put(BEFORE_TABLE_NAME, beforeTableName);
 
-      return callSuperOnDeleteEntity(uriInfo, contentType, context);
+      callSuperOnDeleteEntity(uriInfo, contentType, context);
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
       throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_ON_DELETE_ENTITY_EVENT, e);
     } finally {
-      XSKOData2EventHandlerUtils.closeConnection(connectionParam);
-      XSKOData2EventHandlerUtils.batchDropTemporaryTables((String) context.get(BEFORE_TABLE_NAME));
+      closeConnection(connectionParam);
+      batchDropTemporaryTables((String) context.get(BEFORE_TABLE_NAME));
     }
+    return null;
   }
 
   void callSuperBeforeCreateEntity(PostUriInfo uriInfo, String requestContentType, String contentType, ODataEntry entry,
@@ -318,9 +301,9 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     super.afterCreateEntity(uriInfo, requestContentType, contentType, entry, context);
   }
 
-  ODataResponse callSuperOnCreateEntity(PostUriInfo uriInfo, InputStream content, String requestContentType, String contentType,
+  void callSuperOnCreateEntity(PostUriInfo uriInfo, InputStream content, String requestContentType, String contentType,
       Map<Object, Object> context) throws org.eclipse.dirigible.engine.odata2.api.ODataException {
-    return super.onCreateEntity(uriInfo, content, requestContentType, contentType, context);
+    super.onCreateEntity(uriInfo, content, requestContentType, contentType, context);
   }
 
   void callSuperBeforeUpdateEntity(PutMergePatchUriInfo uriInfo, String requestContentType, boolean merge, String contentType,
@@ -333,9 +316,9 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     super.afterUpdateEntity(uriInfo, requestContentType, merge, contentType, entry, context);
   }
 
-  ODataResponse callSuperOnUpdateEntity(PutMergePatchUriInfo uriInfo, InputStream content, String requestContentType, boolean merge,
+  void callSuperOnUpdateEntity(PutMergePatchUriInfo uriInfo, InputStream content, String requestContentType, boolean merge,
       String contentType, Map<Object, Object> context) throws org.eclipse.dirigible.engine.odata2.api.ODataException {
-    return super.onUpdateEntity(uriInfo, content, requestContentType, merge, contentType, context);
+    super.onUpdateEntity(uriInfo, content, requestContentType, merge, contentType, context);
   }
 
   void callSuperBeforeDeleteEntity(DeleteUriInfo uriInfo, String contentType, Map<Object, Object> context)
@@ -348,8 +331,8 @@ public class XSKScriptingOData2EventHandler extends ScriptingOData2EventHandler 
     super.afterDeleteEntity(uriInfo, contentType, context);
   }
 
-  ODataResponse callSuperOnDeleteEntity(DeleteUriInfo uriInfo, String contentType, Map<Object, Object> context)
+  void callSuperOnDeleteEntity(DeleteUriInfo uriInfo, String contentType, Map<Object, Object> context)
       throws org.eclipse.dirigible.engine.odata2.api.ODataException {
-    return super.onDeleteEntity(uriInfo, contentType, context);
+    super.onDeleteEntity(uriInfo, contentType, context);
   }
 }

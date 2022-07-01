@@ -14,6 +14,7 @@ FROM tomcat:9.0.64-jre17-temurin AS base
 RUN rm -fr /opt/java/openjdk
 RUN rm -R /usr/local/tomcat/webapps.dist
 RUN rm /usr/local/tomcat/conf/tomcat-users.xml
+
 RUN apt-get update && \
     apt-get install wget git -y && \
     apt-get clean

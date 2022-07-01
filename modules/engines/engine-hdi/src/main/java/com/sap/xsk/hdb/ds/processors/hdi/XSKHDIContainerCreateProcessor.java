@@ -42,6 +42,7 @@ public class XSKHDIContainerCreateProcessor {
   private final XSKDeployContainerContentProcessor deployContainerContentProcessor = new XSKDeployContainerContentProcessor();
   private final XSKGrantPrivilegesContainerSchemaProcessor grantPrivilegesContainerSchemaProcessor = new XSKGrantPrivilegesContainerSchemaProcessor();
   private final XSKGrantPrivilegesExternalArtifactsSchemaProcessor grantPrivilegesExternalArtifactsSchemaProcessor = new XSKGrantPrivilegesExternalArtifactsSchemaProcessor();
+  private final XSKGrantPrivilegesDefaultRoleProcessor grantPrivilegesDefaultRoleProcessor = new XSKGrantPrivilegesDefaultRoleProcessor();
 
   public void execute(Connection connection, XSKDataStructureHDIModel hdiModel) {
     LOGGER.info("Start processing HDI Containers...");
@@ -79,6 +80,10 @@ public class XSKHDIContainerCreateProcessor {
 
       // Deploy the Content
       this.deployContainerContentProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getDeploy(), hdiModel.getUndeploy());
+
+      // Grant Privileges to the default role
+      this.grantPrivilegesDefaultRoleProcessor.execute(connection, hdiModel.getContainer(), Configuration.get("HANA_USERNAME"), hdiModel.getDeploy(),
+          hdiModel.getPackageName());
 
       // Grant Privileges to the Container Schema
       this.grantPrivilegesContainerSchemaProcessor.execute(connection, hdiModel.getContainer(), usersAsArray);

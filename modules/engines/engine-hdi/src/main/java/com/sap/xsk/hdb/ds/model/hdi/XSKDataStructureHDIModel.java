@@ -111,4 +111,8 @@ public class XSKDataStructureHDIModel extends XSKDataStructureModel {
 
     return false;
   }
+
+  public String getPackageName() {
+    return this.getName().split(".hdi")[0];
+  }
 }

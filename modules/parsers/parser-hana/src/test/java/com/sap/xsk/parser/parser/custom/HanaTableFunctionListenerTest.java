@@ -15,7 +15,6 @@ import com.sap.xsk.parser.hana.core.HanaLexer;
 import com.sap.xsk.parser.hana.core.HanaParser;
 import custom.HanaTableFunctionListener;
 import models.TableFunctionDefinitionModel;
-import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;

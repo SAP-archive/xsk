@@ -1,0 +1,96 @@
+PROCEDURE "TEST"."testProcedure" (
+    IN data "TEST"."testData",
+		OUT result NVARCHAR
+	)
+	LANGUAGE SQLSCRIPT
+	SQL SECURITY INVOKER
+	DEFAULT SCHEMA TEST
+AS
+BEGIN
+
+    -- Update from without join
+    UPDATE E
+    SET "ADDRESS" = address, "STATUS" = status
+    FROM "TEST"."EMPLOYEES" as E
+    WHERE "E"."USER_ID" = :user_id AND "E"."NAME" = :name;
+
+    -- Update from with one join without where
+    UPDATE E
+    SET STATUS = 'ACTIVE'
+    FROM "TEST"."EMPLOYEES" as E
+      INNER JOIN :byRole R
+        ON E.ID = R.ID AND E.NAME = R.NAME AND E.TIMESTAMP = R.TIMESTAMP;
+
+    -- Update from with one join and where
+    UPDATE E
+    SET STATUS = 'ACTIVE'
+    FROM "TEST"."EMPLOYEES" as E
+      INNER JOIN :byRole R
+        ON E.ID = R.ID AND E.NAME = R.NAME AND E.TIMESTAMP = R.TIMESTAMP
+    WHERE R.NUM <> 1;
+
+    -- Update from with multiple joins without where
+    UPDATE E
+    SET FLAG = 'CLOSED', STATUS = CASE WHEN FLAG = 'CLOSED' THEN E.FLAG ELSE E.STATUS END
+    FROM :mails M
+       INNER JOIN "TEST"."JOBS" as J
+         ON  M.ID = J.ID
+       INNER JOIN "TEST"."EMPLOYEES" as E
+         ON  J.EMPLOYEE_ID = E.ID AND J.TIMESTAMP = E.LAST_JOB_TIMESTAMP
+    WHERE J.FLAG = 'PROCESS';
+
+    -- Update from with multiple joins and where
+    UPDATE E
+    SET FLAG = 'CLOSED', STATUS = CASE WHEN FLAG = 'CLOSED' THEN E.FLAG ELSE E.STATUS END
+    FROM :mails M
+       INNER JOIN "TEST"."JOBS" as J
+         ON  M.ID = J.ID
+       INNER JOIN "TEST"."EMPLOYEES" as E
+         ON  J.EMPLOYEE_ID = E.ID AND J.TIMESTAMP = E.LAST_JOB_TIMESTAMP
+    WHERE J.FLAG = 'PROCESS';
+
+    -- Update with two tables for from source with where
+    UPDATE "TEST"."EMPLOYEES"
+    SET "STATUS" = ACTIVE, "PRIORITY_INDEX" = :emps."PRIORITY_INDEX"
+    FROM "TEST"."EMPLOYEES", :emps
+    WHERE "TEST"."EMPLOYEES"."NAME" = :emps."NAME";
+
+    -- Update with three tables for from source with where
+    UPDATE "TEST"."EMPLOYEES"
+    SET "STATUS" = ACTIVE, "PRIORITY_INDEX" = :emps."PRIORITY_INDEX"
+    FROM "TEST"."EMPLOYEES", :emps, :employee
+    WHERE "TEST"."EMPLOYEES"."NAME" = :emps."NAME";
+
+    -- Update with two tables for from source without where
+    UPDATE "TEST"."EMPLOYEES"
+    SET "STATUS" = ACTIVE, "PRIORITY_INDEX" = :emps."PRIORITY_INDEX"
+    FROM "TEST"."EMPLOYEES", :emps;
+
+    -- Update with nested statements
+    UPDATE T
+    SET T."NAME" = FO."NAME"
+    FROM "TEST"."EMPLOYEES" AS T
+    INNER JOIN (
+        SELECT O."OPTION_ID", C."COUNTRY_CODE"
+        FROM "TEST"."OTHERS" O
+        INNER JOIN "TEST"."COUNTRIES" C
+            ON C."DESCRIPTION_EN_US" = O."DESCRIPTION_EN_US"
+        WHERE O.CATEGORY = 'Location_Country'
+            AND C."COUNTRY_CODE" IN('ARE','SAU','EGY','QAT','JOR','OMN','LBY','LBN','BHR','IRQ','KWT','PAK', 'PSE')
+    ) FO ON FO."COUNTRY_CODE" = T."Country"
+    WHERE T."Country" IN('ARE','SAU','EGY','QAT','JOR','OMN','LBY','LBN','BHR','IRQ','KWT','PAK', 'PSE')
+    AND T."STATUS" = -1;
+
+    -- Update without from
+    UPDATE "TEST"."EMPLOYEES"
+    SET STATUS = status, ADDRESS = address
+    WHERE USER_ID = user_id;
+
+    -- Some other statement
+    INSERT INTO "TEST"."EMPLOYEES"
+      (USER_ID, NAME, ADDRESS, PHONE)
+    SELECT
+      USER_ID, NAME, ADDRESS, PHONE
+    FROM :current_users WHERE STATUS = 'INSERT';
+
+END;

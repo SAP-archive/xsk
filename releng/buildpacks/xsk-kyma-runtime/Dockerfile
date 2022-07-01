@@ -11,21 +11,17 @@
 
 FROM dirigiblelabs/xsk-kyma-runtime as base
 
-ENV CNB_USER_ID=1000
-ENV CNB_GROUP_ID=1000
+ENV CNB_USER_ID=65532
+ENV CNB_GROUP_ID=65532
 ENV CNB_STACK_ID="com.sap.kneo.xsk"
 LABEL io.buildpacks.stack.id="com.sap.kneo.xsk"
 
-RUN groupadd xsk --gid ${CNB_GROUP_ID} && \
-  useradd --uid ${CNB_USER_ID} --gid ${CNB_GROUP_ID} -m -s /bin/bash xsk
-RUN chown -R xsk:xsk /usr/local/tomcat
+USER ${CNB_USER_ID}:${CNB_GROUP_ID}
 
 FROM base as run
 
 USER ${CNB_USER_ID}:${CNB_GROUP_ID}
-RUN chown -R xsk:xsk /usr/local/tomcat
 
 FROM base as build
 
 USER ${CNB_USER_ID}:${CNB_GROUP_ID}
-RUN chown -R xsk:xsk /usr/local/tomcat

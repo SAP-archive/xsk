@@ -61,6 +61,7 @@ jobs:
     # Add repo
     - name: Add XSK helm repo
       run: |
+        sleep 5m
         helm repo add xsk https://www.xsk.io
         helm repo update
         mkdir ~/.gnupg
@@ -73,7 +74,7 @@ jobs:
         timeout_seconds: 5
         max_attempts: 10
         retry_on: error
-        command: |          
+        command: |
           if [[ ! -z "${{ inputs.XSK_DISPATCH }}" ]] 
           then
               OUTPUT=$(helm pull xsk/xsk --version ${{ inputs.XSK_VERSION }} --verify)

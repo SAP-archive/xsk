@@ -68,39 +68,12 @@ kyma:
   # Roles for custom usage 
   roles:
   # Default Roles
-  roleCollections:
-    # Description for role collections
-  - description: XSK Developer
-    # Name for role collections
-    name: XSK-Developer
-    # Role template references for role collections
-    role-template-references:
-    - $XSAPPNAME.Developer
-  - description: XSK Operator
-    name: XSK-Operator
-    role-template-references:
-    - $XSAPPNAME.Operator
-
-  roleTemplates:
-    # Description for role templates
-  - description: Developer related roles
-    # Name for role templates
-    name: "Developer"
-    # Scope references for role templates
-    scopeReferences:
-    - $XSAPPNAME.Developer
-  - description: Operator related roles
-    name: "Operator"
-    scopeReferences:
-    - $XSAPPNAME.Operator
-
-  scopes:
-    # Description for scope
-  - description: Developer scope
-    # Name for scope
-    name: $XSAPPNAME.Developer 
-  - description: Operator scope
-    name: $XSAPPNAME.Operator
+  # Name for role collections for developer 
+  # We add prefix "XSK-" and suffix "-Developer" for default roles and using Helm release name 
+  roleCollectionsNameDeveloper: 
+  # Name for role collections for operator 
+  # We add prefix "XSK-" suffix "-Operator" for default roles and using Helm release name
+  roleCollectionsNameOperator: 
 
 application:
   # Image application image

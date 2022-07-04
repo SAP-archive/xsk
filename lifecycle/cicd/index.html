@@ -1744,7 +1744,7 @@
 <p><em><strong>Note:</strong> Replace the <code>&lt;your-organization&gt;/&lt;your-repository&gt;</code> placeholder with a default organization and repository where the Docker image will be pushed (can be changed when triggering the GitHub Action)</em>.</p>
 <ul>
 <li><code>Application Repository</code> must be in lower case.</li>
-<li><code>Publish image to Github repository</code> if you enable this will add <code>LABEL</code> to your image and will publish your new image in your Github repository packages and if is disable will publish to your organization.</li>
+<li>If you set this environment <code>publishPackageInRepository</code> to <code>true</code> will add <code>LABEL</code> to your image and will publish your new image in your Github repository packages and if is <code>false</code> will publish to your Github organization.</li>
 </ul>
 </div>
 <div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build Application Image</span><span class="w"></span>
@@ -1772,15 +1772,12 @@
 <span class="w">      </span><span class="nt">applicationReleaseVersion</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Application Release Version</span><span class="w"></span>
 <span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">      </span><span class="nt">publishPackageInRepository</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Publish image to Github repository</span><span class="w"></span>
-<span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">boolean</span><span class="w"></span>
-<span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 
 <span class="nt">jobs</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">build</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span><span class="w"></span>
+<span class="w">    </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">publishPackageInRepository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Release Input Parameters</span><span class="w"></span>
 <span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
@@ -1801,7 +1798,7 @@
 <span class="w">          </span><span class="no">&#39;) || </span><span class="w"></span>
 <span class="w">          </span><span class="no">PUBLIC=(&#39;COPY . &quot;/usr/local/tomcat/target/dirigible/repository/root/registry/public/&quot;&#39;)</span><span class="w"></span>
 
-<span class="w">          </span><span class="no">${{github.event.inputs.publishPackageInRepository }} == &#39;true&#39; &amp;&amp;</span><span class="w"></span>
+<span class="w">          </span><span class="no">$publishPackageInRepository == &#39;true&#39; &amp;&amp;</span><span class="w"></span>
 <span class="w">          </span><span class="no">LABEL=&#39;LABEL org.opencontainers.image.source https://github.com/${{ github.event.inputs.applicationRepository }}&#39; ||</span><span class="w"></span>
 <span class="w">          </span><span class="no">LABEL=&#39;&#39;</span><span class="w"></span>
 

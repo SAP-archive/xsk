@@ -140,12 +140,13 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
         | `nameOverride`                                     | Name override                             | ``                                                  |
         | `fullNameOverride`                                 | Full name override                        | ``                                                  |
         | `kyma.enabled`                                     | Enable Kyma                               | ``                                                  |
+        | `kyma.secret`                                      | Create Kyma secret                        | `true`                                              |
         | `kyma.host`                                        | Kyma host                                 | ``                                                  |
         | `kyma.serverMaxHttpHeaderSize`                     | Tomcat max http header size               | `48000`                                             |
         | `kyma.addRoles`                                    | Enable add new roles                      | ``                                                  |
         | `kyma.roles`                                       | Name for new roles                        | ``                                                  |
         | `kyma.roleCollections.description`                 | Set role collections description          | `XSK Developer`, `XSK Operator`                     |
-        | `kyma.roleCollections.name`                        | Set role collections name                 | `XSK-Developer`, `XSK Operator`                     |
+        | `kyma.roleCollections.name`                        | Set role collections name                 | `XSK-<your-release-name>-Developer`, `XSK-<your-release-name>-Operator`                                  |
         | `kyma.roleCollections.role-template-references`    | Set role collections role template        | `$XSAPPNAME.Developer`, `$XSAPPNAME.Operator`       |
         | `kyma.roleTemplates.description`                   | Set role templates description            | `Developer related roles`, `Operator related roles` |
         | `kyma.roleTemplates.name`                          | Set role templates name                   | `Developer`, `Operator`                             |
@@ -156,6 +157,7 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
         | `application.homeUrl`                              | Home url for XSK                          | ``                                                  |
         | `application.imagePullPolicy`                      | Image pull policy                         | `Always`                                            |
         | `application.privateDockerRegistry`                | Paramater to enable docker registry       | ``                                                  |
+        | `application.privateDockerRegistrySecret`          | Paramater to skip creating secret         | `true`                                              |
         | `application.dockerSecretName`                     | Secret name for docker  registry          | `docker-registry-secret`                            |
         | `application.dockerServer`                         | Parameter to set Docker server            | `https://index.docker.io/v1/`                       |
         | `application.dockerUsername`                       | User name for docker registry             | ``                                                  |

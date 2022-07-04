@@ -79,7 +79,7 @@ The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeli
         _**Note:** Replace the `<your-organization>/<your-repository>` placeholder with a default organization and repository where the Docker image will be pushed (can be changed when triggering the GitHub Action)_.
 
         - `Application Repository` must be in lower case.
-        - `Publish image to Github repository` if you enable this will add `LABEL` to your image and will publish your new image in your Github repository packages and if is disable will publish to your organization.
+        - If you set this environment `publishPackageInRepository` to `true` will add `LABEL` to your image and will publish your new image in your Github repository packages and if is `false` will publish to your Github organization.
 
     ```yaml
     name: Build Application Image
@@ -107,15 +107,12 @@ The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeli
           applicationReleaseVersion:
             description: Application Release Version
             required: true
-          publishPackageInRepository:
-            description: Publish image to Github repository
-            required: true
-            type: boolean
-            default: false
 
     jobs:
       build:
         runs-on: ubuntu-latest
+        env:
+          publishPackageInRepository: false
         steps:
           - name: Release Input Parameters
             run: |
@@ -136,7 +133,7 @@ The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeli
               ') || 
               PUBLIC=('COPY . "/usr/local/tomcat/target/dirigible/repository/root/registry/public/"')
 
-              ${{github.event.inputs.publishPackageInRepository }} == 'true' &&
+              $publishPackageInRepository == 'true' &&
               LABEL='LABEL org.opencontainers.image.source https://github.com/${{ github.event.inputs.applicationRepository }}' ||
               LABEL=''
 

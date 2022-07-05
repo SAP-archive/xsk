@@ -20,9 +20,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -49,7 +47,7 @@ public class XSKGrantPrivilegesDefaultRoleProcessorTest {
     testGrantPrivilege(deploys);
   }
 
-  public void testGrantPrivilege(String[] deploys) throws SQLException, IOException, XSKDataStructuresException {
+  private void testGrantPrivilege(String[] deploys) throws SQLException, IOException, XSKDataStructuresException {
     int expectedInvocations = Arrays.asList(deploys).contains(hdbRolePath) ? 1 : 0;
 
     XSKGrantPrivilegesDefaultRoleProcessor processorSpy = spy(XSKGrantPrivilegesDefaultRoleProcessor.class);;
@@ -58,15 +56,15 @@ public class XSKGrantPrivilegesDefaultRoleProcessorTest {
     String user = "HANA_USER";
     processorSpy.execute(mockConnection, container, user, deploys, packageName);
 
-        String mockSQLCreate = "CREATE LOCAL TEMPORARY COLUMN TABLE #ROLES LIKE _SYS_DI.TT_SCHEMA_ROLES;";
-        String mockSQLInsert = String.format("INSERT INTO #ROLES ( ROLE_NAME, PRINCIPAL_SCHEMA_NAME, PRINCIPAL_NAME ) VALUES ( 'xsk_technical_privileges', '', \'%s\' );", user);
-        String mockSQLCall = String.format("CALL %s#DI.GRANT_CONTAINER_SCHEMA_ROLES(#ROLES, _SYS_DI.T_NO_PARAMETERS, ?, ?, ?);", container);
-        String mockSQLDrop = "DROP TABLE #ROLES;";
+    String mockSQLCreate = "CREATE LOCAL TEMPORARY COLUMN TABLE #ROLES LIKE _SYS_DI.TT_SCHEMA_ROLES;";
+    String mockSQLInsert = String.format("INSERT INTO #ROLES ( ROLE_NAME, PRINCIPAL_SCHEMA_NAME, PRINCIPAL_NAME ) VALUES ( 'xsk_technical_privileges', '', \'%s\' );", user);
+    String mockSQLCall = String.format("CALL %s#DI.GRANT_CONTAINER_SCHEMA_ROLES(#ROLES, _SYS_DI.T_NO_PARAMETERS, ?, ?, ?);", container);
+    String mockSQLDrop = "DROP TABLE #ROLES;";
 
-        verify(processorSpy, times(expectedInvocations)).executeUpdate(mockConnection, mockSQLCreate, new String[]{});
-        verify(processorSpy, times(expectedInvocations)).executeUpdate(mockConnection, mockSQLInsert, new String[]{});
-        verify(processorSpy, times(expectedInvocations)).executeQuery(mockConnection, mockSQLCall, new String[]{});
-        verify(processorSpy, times(expectedInvocations)).executeUpdate(mockConnection, mockSQLDrop, new String[]{});
+    verify(processorSpy, times(expectedInvocations)).executeUpdate(mockConnection, mockSQLCreate, new String[]{});
+    verify(processorSpy, times(expectedInvocations)).executeUpdate(mockConnection, mockSQLInsert, new String[]{});
+    verify(processorSpy, times(expectedInvocations)).executeQuery(mockConnection, mockSQLCall, new String[]{});
+    verify(processorSpy, times(expectedInvocations)).executeUpdate(mockConnection, mockSQLDrop, new String[]{});
 
   }
 

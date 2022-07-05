@@ -3,16 +3,14 @@
     "users": [
         "DBADMIN"
     ],
-    "group": "MIGR_TOOLS_XSK_TEST_APP",
-    "container": "MIGR_TOOLS_XSK_TEST_APP",
+    "group": "HDI_MIGR_TOOLS_XSK_TEST_APP",
+    "container": "HDI_MIGR_TOOLS_XSK_TEST_APP",
     "deploy": [
         "/xsk_test_app/test.hdbcalculationview",
         "/xsk_test_app/usersAnalyticPrivilege.analyticprivilege",
         "/xsk_test_app/usersHDBAnalyticPrivilege.hdbanalyticprivilege",
         "/xsk_test_app/usersTableFunction.hdbtablefunction",
         "/xsk_test_app/usersView.calculationview",
-        "/customer_sample/hdi-synonyms.hdbsynonym",
-        "/customer_sample/hdi-public-synonyms.hdbpublicsynonym",
         "/xsk_test_app/hdi-public-synonyms.hdbpublicsynonym",
         "/xsk_test_app/hdi-synonyms.hdbsynonym",
         "/xsk_test_app/usersTableFunction.hdbtablefunction"

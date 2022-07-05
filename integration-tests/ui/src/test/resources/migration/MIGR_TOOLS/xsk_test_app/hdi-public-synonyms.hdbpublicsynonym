@@ -2,19 +2,19 @@
     "xsk_test_app::test": {
         "target": {
             "object": "test",
-            "schema": "MIGR_TOOLS_XSK_TEST_APP"
+            "schema": "HDI_MIGR_TOOLS_XSK_TEST_APP"
         }
     },
     "xsk_test_app::usersTableFunction": {
         "target": {
-            "object": "usersTableFunction",
-            "schema": "MIGR_TOOLS_XSK_TEST_APP"
+            "object": "xsk_test_app::usersTableFunction",
+            "schema": "HDI_MIGR_TOOLS_XSK_TEST_APP"
         }
     },
     "xsk_test_app::usersView": {
         "target": {
             "object": "usersView",
-            "schema": "MIGR_TOOLS_XSK_TEST_APP"
+            "schema": "HDI_MIGR_TOOLS_XSK_TEST_APP"
         }
     }
 }

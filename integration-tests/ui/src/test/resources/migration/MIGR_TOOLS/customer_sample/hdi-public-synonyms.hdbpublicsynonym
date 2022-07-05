@@ -1,32 +1,32 @@
 {
-    "customer_sample::SAMPLE_FUNCTION": {
-        "target": {
-            "object": "SAMPLE_FUNCTION",
-            "schema": "MIGR_TOOLS_CUSTOMER_SAMPLE"
-        }
-    },
-    "customer_sample::SalesOrdersCalculationView": {
-        "target": {
-            "object": "SalesOrdersCalculationView",
-            "schema": "MIGR_TOOLS_CUSTOMER_SAMPLE"
-        }
-    },
-    "customer_sample::TABLE_FUNCTION_CVDOMAIN": {
-        "target": {
-            "object": "TABLE_FUNCTION_CVDOMAIN",
-            "schema": "MIGR_TOOLS_CUSTOMER_SAMPLE"
-        }
-    },
-    "customer_sample.VIEWS::SALES_ORDERS": {
-        "target": {
-            "object": "SALES_ORDERS",
-            "schema": "MIGR_TOOLS_CUSTOMER_SAMPLE"
-        }
-    },
-    "customer_sample.VIEWS::SAMPLE_FUNCTION2": {
-        "target": {
-            "object": "SAMPLE_FUNCTION2",
-            "schema": "MIGR_TOOLS_CUSTOMER_SAMPLE"
-        }
-    }
+   "customer_sample::SAMPLE_FUNCTION":{
+      "target":{
+         "object":"customer_sample::SAMPLE_FUNCTION",
+         "schema":"HDI_MIGR_TOOLS_CUSTOMER_SAMPLE"
+      }
+   },
+   "customer_sample::SalesOrdersCalculationView":{
+      "target":{
+         "object":"SalesOrdersCalculationView",
+         "schema":"HDI_MIGR_TOOLS_CUSTOMER_SAMPLE"
+      }
+   },
+   "customer_sample::TABLE_FUNCTION_CVDOMAIN":{
+      "target":{
+         "object":"customer_sample::TABLE_FUNCTION_CVDOMAIN",
+         "schema":"HDI_MIGR_TOOLS_CUSTOMER_SAMPLE"
+      }
+   },
+   "customer_sample.VIEWS::SALES_ORDERS":{
+      "target":{
+         "object":"SALES_ORDERS",
+         "schema":"HDI_MIGR_TOOLS_CUSTOMER_SAMPLE"
+      }
+   },
+   "customer_sample.VIEWS::SAMPLE_FUNCTION2":{
+      "target":{
+         "object":"customer_sample.VIEWS::SAMPLE_FUNCTION2",
+         "schema":"HDI_MIGR_TOOLS_CUSTOMER_SAMPLE"
+      }
+   }
 }

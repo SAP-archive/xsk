@@ -20,7 +20,7 @@ import com.sap.xsk.utils.XSKCommonsUtils;
 import com.sap.xsk.utils.XSKHDBUtils;
 import custom.HanaTableFunctionListener;
 import models.TableFunctionDefinitionModel;
-import models.TableFunctionMissingPropertyException;
+import exceptions.TableFunctionMissingPropertyException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.codec.digest.DigestUtils;

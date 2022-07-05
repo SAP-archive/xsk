@@ -24,6 +24,22 @@ layersdir=$1
 cat > "$layersdir/launch.toml" <<EOL
 [[processes]]
 type = "web"
-command = "/usr/local/tomcat/bin/catalina.sh run"
+command = "java"
+args = ["-Djava.util.logging.config.file=/usr/local/tomcat/conf/logging.properties",
+ "--add-opens=java.base/java.lang=ALL-UNNAMED",
+ "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
+ "-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager",
+ "-Djdk.tls.ephemeralDHKeySize=2048",
+ "-Djava.protocol.handler.pkgs=org.apache.catalina.webresources",
+ "-Dorg.apache.catalina.security.SecurityListener.UMASK=0027",
+ "-Dignore.endorsed.dirs=",
+ "-classpath",
+ "/usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar",
+ "-Dcatalina.base=/usr/local/tomcat/",
+ "-Dcatalina.home=/usr/local/tomcat/",
+ "-Djava.io.tmpdir=/usr/local/tomcat/temp",
+ "org.apache.catalina.startup.Bootstrap", 
+ "start" 
+]
 EOL
 

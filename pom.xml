@@ -75,30 +75,6 @@
                             <debuglevel>lines,vars,source</debuglevel>
                         </configuration>
                     </plugin>
-                    <!-- <plugin>
-                      <groupId>org.apache.maven.plugins</groupId>
-                      <artifactId>maven-javadoc-plugin</artifactId>
-                      <version>3.2.0</version>
-                      <configuration>
-                        <source>${java.version}</source>
-                      </configuration>
-                      <executions>
-                        <execution>
-                          <id>attach-javadocs</id>
-                          <goals>
-                            <goal>jar</goal>
-                          </goals>
-                        </execution>
-                      </executions>
-                      <configuration> <failOnError>false</failOnError> </configuration>
-                      <dependencies>
-                        <dependency>
-                          <groupId>org.apache.commons</groupId>
-                          <artifactId>commons-lang3</artifactId>
-                          <version>${commons.lang3}</version>
-                        </dependency>
-                      </dependencies>
-                    </plugin> -->
                 </plugins>
             </build>
         </profile>
@@ -313,6 +289,8 @@
         <neo-java-web-sdk.version>4.8.9</neo-java-web-sdk.version>
         <neo-java-web-sdk.javax.activation.version>1.2.0</neo-java-web-sdk.javax.activation.version>
         <neo-java-web-sdk.jaxb.version>2.2.11</neo-java-web-sdk.jaxb.version>
+        <jaxb.version>2.3.1</jaxb.version>
+        <javax.activation.version>1.2.0</javax.activation.version>
         <ngdbc.version>2.13.5</ngdbc.version>
         <maven-dependency-plugin.version>3.3.0</maven-dependency-plugin.version>
         <commons-csv.version>1.9.0</commons-csv.version>
@@ -322,6 +300,9 @@
         <jacoco.version>0.8.8</jacoco.version>
         <hakky.logcaptor.version>2.7.10</hakky.logcaptor.version>
         <jetbrains.annotations.version>23.0.0</jetbrains.annotations.version>
+        <httpmime.version>4.5.13</httpmime.version>
+        <httpasyncclient.version>4.1.5</httpasyncclient.version>
+        <jackson.databind.version>2.13.3</jackson.databind.version>
 
         <profile.content.phase>none</profile.content.phase>
 

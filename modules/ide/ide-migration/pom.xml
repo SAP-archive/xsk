@@ -17,11 +17,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-core</artifactId>
-            <version>3.5.2</version>
-        </dependency>
-        <dependency>
             <groupId>org.eclipse.dirigible</groupId>
             <artifactId>dirigible-api</artifactId>
             <version>${dirigible.version}</version>

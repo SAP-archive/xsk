@@ -55,7 +55,7 @@ public class MigrationITest {
   private final Map<String, Boolean> contentComparisons = new HashMap<>();
 
   @Test
-  @Parameters({"Chrome", "Firefox"})
+  @Parameters({"Chrome", /* "Firefox" */})
   public void migrationTest(String param) throws IOException {
     setup(param);
     loginIfNecessary();
@@ -178,7 +178,7 @@ public class MigrationITest {
     // Find the file's jstree node.
     var fileAnchors = projectAnchor.findElements(By.xpath(".//*[text()='" + fileName + "']"));
     if (fileAnchors.size() != 1) {
-      throw new RuntimeException("Selenium test error: zero or multiple jstree anchors for file found.");
+      throw new RuntimeException("Selenium test error: zero or multiple jstree anchors for file " + fileName + " found.");
     }
     var fileAnchor = fileAnchors.get(0);
 

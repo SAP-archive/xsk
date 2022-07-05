@@ -63,6 +63,44 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
+Create the name of the role collections to use
+*/}}
+{{- define "xsk.roleCollections" -}}
+- description: XSK Developer
+  name: XSK-{{ default .Release.Name .Values.kyma.roleCollectionsNameDeveloper }}-Developer
+  role-template-references:
+    - $XSAPPNAME.Developer
+- description: XSK Operator
+  name: XSK-{{ default .Release.Name .Values.kyma.roleCollectionsNameOperator }}-Operator
+  role-template-references:
+    - $XSAPPNAME.Operator
+{{- end -}}
+
+{{/*
+Create the name of the role templates to use
+*/}}
+{{- define "xsk.roleTemplates" -}}
+- description: Developer related roles
+  name: "Developer"
+  scopeReferences:
+    - $XSAPPNAME.Developer
+- description: Operator related roles
+  name: "Operator"
+  scopeReferences:
+    - $XSAPPNAME.Operator
+{{- end -}}
+
+{{/*
+Create the name of the scopes to use
+*/}}
+{{- define "xsk.scopes" -}}
+- description: Developer scope
+  name: $XSAPPNAME.Developer
+- description: Operator scope
+  name: $XSAPPNAME.Operator
+{{- end -}}
+
+{{/*
 Create secret to pull the private image
 */}}
 {{- define "imagePullSecret" }}

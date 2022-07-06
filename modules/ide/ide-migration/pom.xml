@@ -17,11 +17,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-core</artifactId>
-            <version>3.5.2</version>
-        </dependency>
-        <dependency>
             <groupId>org.eclipse.dirigible</groupId>
             <artifactId>dirigible-api</artifactId>
             <version>${dirigible.version}</version>
@@ -44,63 +39,14 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.dirigible</groupId>
-            <artifactId>dirigible-commons-test</artifactId>
-            <version>${dirigible.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.eclipse.dirigible</groupId>
             <artifactId>dirigible-engine-javascript-graalvm</artifactId>
             <version>${dirigible.version}</version>
         </dependency>
         <dependency>
             <groupId>com.sap.xsk</groupId>
-            <artifactId>xsk-modules-engines-xsjs</artifactId>
-            <version>0.18.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.websocket</groupId>
-            <artifactId>javax.websocket-api</artifactId>
-            <version>1.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.websocket</groupId>
-            <artifactId>javax.websocket-api</artifactId>
-            <version>1.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.websocket</groupId>
-            <artifactId>javax.websocket-api</artifactId>
-            <version>1.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.sap.cloud.db.jdbc</groupId>
-            <artifactId>ngdbc</artifactId>
-            <version>${ngdbc.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.dirigible</groupId>
-            <artifactId>dirigible-repository-local</artifactId>
-            <version>${dirigible.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.sap.xsk</groupId>
             <artifactId>xsk-modules-engines-hdb</artifactId>
             <version>0.18.0-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

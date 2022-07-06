@@ -11,6 +11,9 @@
 
 # (Optional) JDK_TYPE could be `default-jdk` or `external-jdk`
 ARG JDK_TYPE=default-jdk
+ARG DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT
+ARG JPDA_ADDRESS
+ARG JPDA_TRANSPORT
 
 FROM dirigiblelabs/xsk-kyma-runtime-base as base
 
@@ -37,6 +40,11 @@ ENV CATALINA_HOME=/usr/local/tomcat
 ENV JAVA_HOME=/usr/local/jdk
 ENV PATH $PATH:$JAVA_HOME/bin
 ENV CATALINA_OPTS="--add-opens java.base/java.lang.reflect=ALL-UNNAMED"
+
+#Activate DEBUG mode
+ENV DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=$DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT
+ENV JPDA_ADDRESS=$JPDA_ADDRESS
+ENV JPDA_TRANSPORT=$JPDA_TRANSPORT
 
 USER nonroot
 COPY --from=dependencies-base --chown=nonroot:nonroot $CATALINA_HOME $CATALINA_HOME

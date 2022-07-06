@@ -22,7 +22,7 @@
   <baseMeasures>
     <measure id="ADDRESS" order="1" aggregationType="sum" engineAggregation="count" measureType="simple">
       <descriptions defaultDescription="Address"/>
-      <measureMapping schemaName="ADMIN" columnObjectName="product_project.db::Products.Orders" columnName="Address"/>
+      <measureMapping columnObjectName="product_project.db::Products.Orders" columnName="Address"/>
     </measure>
   </baseMeasures>
   <calculatedMeasures/>

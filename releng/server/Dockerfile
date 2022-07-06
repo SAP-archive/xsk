@@ -3,6 +3,9 @@
 
 # (Optional) JDK_TYPE could be `default-jdk` or `external-jdk`
 ARG JDK_TYPE=default-jdk
+ARG DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT
+ARG JPDA_ADDRESS
+ARG JPDA_TRANSPORT
 
 FROM  dirigiblelabs/xsk-kyma-runtime-base as base
 

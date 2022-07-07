@@ -16,8 +16,10 @@ import org.apache.olingo.odata2.api.commons.HttpHeaders;
 import org.apache.olingo.odata2.api.commons.HttpStatusCodes;
 import org.apache.olingo.odata2.api.ep.EntityProvider;
 import org.apache.olingo.odata2.api.exception.ODataException;
+import org.apache.olingo.odata2.api.processor.ODataContext;
 import org.apache.olingo.odata2.api.processor.ODataErrorContext;
 import org.apache.olingo.odata2.api.processor.ODataResponse;
+import org.apache.olingo.odata2.api.uri.UriInfo;
 import org.apache.olingo.odata2.core.commons.ContentType;
 import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
 import org.eclipse.dirigible.commons.config.StaticObjects;
@@ -33,6 +35,7 @@ import org.eclipse.dirigible.engine.odata2.sql.builder.SQLInsertBuilder;
 import org.eclipse.dirigible.engine.odata2.sql.builder.SQLSelectBuilder;
 import org.eclipse.dirigible.engine.odata2.sql.builder.SQLUpdateBuilder;
 import org.eclipse.dirigible.engine.odata2.sql.builder.SQLUtils;
+import org.eclipse.dirigible.engine.odata2.sql.processor.ExpandCallBack;
 import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,33 +53,35 @@ import java.util.UUID;
 
 public abstract class AbstractXSKOData2EventHandler extends ScriptingOData2EventHandler {
 
-  public static final Logger LOGGER = LoggerFactory.getLogger(AbstractXSKOData2EventHandler.class);
-  public static final String UNABLE_TO_HANDLE_BEFORE_CREATE_ENTITY_EVENT = "Unable to handle beforeCreateEntity event";
-  public static final String UNABLE_TO_HANDLE_AFTER_CREATE_ENTITY_EVENT = "Unable to handle afterCreateEntity event";
-  public static final String UNABLE_TO_HANDLE_ON_CREATE_ENTITY_EVENT = "Unable to handle onCreateEntity event";
-  public static final String UNABLE_TO_HANDLE_BEFORE_UPDATE_ENTITY_EVENT = "Unable to handle beforeUpdateEntity event";
-  public static final String UNABLE_TO_HANDLE_AFTER_UPDATE_ENTITY_EVENT = "Unable to handle afterUpdateEntity event";
-  public static final String UNABLE_TO_HANDLE_ON_UPDATE_ENTITY_EVENT = "Unable to handle onUpdateEntity event";
-  public static final String UNABLE_TO_HANDLE_BEFORE_DELETE_ENTITY_EVENT = "Unable to handle beforeDeleteEntity event";
-  public static final String UNABLE_TO_HANDLE_AFTER_DELETE_ENTITY_EVENT = "Unable to handle afterDeleteEntity event";
-  public static final String UNABLE_TO_HANDLE_ON_DELETE_ENTITY_EVENT = "Unable to handle onDeleteEntity event";
-  public static final String UNABLE_TO_DROP_TEMPORARY_TABLES = "Unable to drop temporary tables";
-  public static final String UNABLE_TO_CLOSE_CONNECTION = "Unable to close connection";
+  protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractXSKOData2EventHandler.class);
+  protected static final String UNABLE_TO_HANDLE_BEFORE_CREATE_ENTITY_EVENT = "Unable to handle beforeCreateEntity event";
+  protected static final String UNABLE_TO_HANDLE_AFTER_CREATE_ENTITY_EVENT = "Unable to handle afterCreateEntity event";
+  protected static final String UNABLE_TO_HANDLE_ON_CREATE_ENTITY_EVENT = "Unable to handle onCreateEntity event";
+  protected static final String UNABLE_TO_HANDLE_BEFORE_UPDATE_ENTITY_EVENT = "Unable to handle beforeUpdateEntity event";
+  protected static final String UNABLE_TO_HANDLE_AFTER_UPDATE_ENTITY_EVENT = "Unable to handle afterUpdateEntity event";
+  protected static final String UNABLE_TO_HANDLE_ON_UPDATE_ENTITY_EVENT = "Unable to handle onUpdateEntity event";
+  protected static final String UNABLE_TO_HANDLE_BEFORE_DELETE_ENTITY_EVENT = "Unable to handle beforeDeleteEntity event";
+  protected static final String UNABLE_TO_HANDLE_AFTER_DELETE_ENTITY_EVENT = "Unable to handle afterDeleteEntity event";
+  protected static final String UNABLE_TO_HANDLE_ON_DELETE_ENTITY_EVENT = "Unable to handle onDeleteEntity event";
+  protected static final String UNABLE_TO_DROP_TEMPORARY_TABLES = "Unable to drop temporary tables";
+  protected static final String UNABLE_TO_CLOSE_CONNECTION = "Unable to close connection";
 
-  public static final String DUMMY_BUILDER = "dummyBuilder";
-  public static final String SELECT_BUILDER = "selectBuilder";
-  public static final String INSERT_BUILDER = "insertBuilder";
-  public static final String UPDATE_BUILDER = "updateBuilder";
-  public static final String SQL_CONTEXT = "sqlContext";
+  protected static final String DUMMY_BUILDER = "dummyBuilder";
+  protected static final String SELECT_BUILDER = "selectBuilder";
+  protected static final String INSERT_BUILDER = "insertBuilder";
+  protected static final String UPDATE_BUILDER = "updateBuilder";
+  protected static final String SQL_CONTEXT = "sqlContext";
+  protected static final String DATASOURCE = "datasource";
+  protected static final String ODATA_CONTEXT = "oDataContext";
 
-  public static final String CONNECTION = "connection";
-  public static final String BEFORE_TABLE_NAME = "beforeTableName";
-  public static final String AFTER_TABLE_NAME = "afterTableName";
-  public static final String ON_CREATE_ENTITY_TABLE_NAME = "onCreateEntityTableName";
-  public static final String BEFORE_UPDATE_ENTITY_TABLE_NAME = "beforeUpdateEntityTableName";
-  public static final String BEFORE_DELETE_ENTITY_TABLE_NAME = "beforeDeleteEntityTableName";
-  public static final String ENTRY_MAP = "entryMap";
-  public static final String HANDLER = "handler";
+  protected static final String CONNECTION = "connection";
+  protected static final String BEFORE_TABLE_NAME = "beforeTableName";
+  protected static final String AFTER_TABLE_NAME = "afterTableName";
+  protected static final String ON_CREATE_ENTITY_TABLE_NAME = "onCreateEntityTableName";
+  protected static final String BEFORE_UPDATE_ENTITY_TABLE_NAME = "beforeUpdateEntityTableName";
+  protected static final String BEFORE_DELETE_ENTITY_TABLE_NAME = "beforeDeleteEntityTableName";
+  protected static final String ENTRY_MAP = "entryMap";
+  protected static final String HANDLER = "handler";
 
   private static final String HTTP_STATUS_CODE = "HTTP_STATUS_CODE";
   private static final String ERROR_MESSAGE = "ERROR_MESSAGE";
@@ -174,17 +179,28 @@ public abstract class AbstractXSKOData2EventHandler extends ScriptingOData2Event
   }
 
   protected void batchDropTemporaryTables(String... temporaryTableNames) {
-    try (Connection connection = dataSource.getConnection();
-        Statement statement = connection.createStatement()) {
-      for (String temporaryTableName : temporaryTableNames) {
-        if (temporaryTableName != null && SqlFactory.getNative(connection).exists(connection, temporaryTableName)) {
-          String sql = SqlFactory.getNative(connection).drop().table(temporaryTableName).build();
-          statement.addBatch(sql);
-        }
-      }
-      statement.executeBatch();
+    try (Connection connection = dataSource.getConnection()) {
+      batchDropTemporaryTables(connection, temporaryTableNames);
     } catch (SQLException e) {
       LOGGER.error(UNABLE_TO_DROP_TEMPORARY_TABLES, e);
+    }
+  }
+
+  protected void batchDropTemporaryTables(Connection connection, String... temporaryTableNames) {
+    if (connection != null) {
+      try (Statement statement = connection.createStatement()) {
+        for (String temporaryTableName : temporaryTableNames) {
+          if (temporaryTableName != null && SqlFactory.getNative(connection).exists(connection, temporaryTableName)) {
+            String sql = SqlFactory.getNative(connection).drop().table(temporaryTableName).build();
+            statement.addBatch(sql);
+          }
+        }
+        statement.executeBatch();
+      } catch (SQLException e) {
+        LOGGER.error(UNABLE_TO_DROP_TEMPORARY_TABLES, e);
+      }
+    } else {
+      LOGGER.error("Unable to drop temporary tables - connection is null");
     }
   }
 
@@ -266,5 +282,20 @@ public abstract class AbstractXSKOData2EventHandler extends ScriptingOData2Event
       return response;
     }
     return null;
+  }
+
+  protected ODataResponse createProcedureResponse(ResultSet resultSet, UriInfo uriInfo, ODataContext oDataContext,
+      Map<String, Object> entryMap, String contentType, HttpStatusCodes httpStatusCode) throws SQLException, ODataException {
+    ODataResponse response = createProcedureResponse(resultSet);
+    if (response != null) {
+      return response;
+    } else {
+      response = ExpandCallBack.writeEntryWithExpand(oDataContext,
+          uriInfo,
+          entryMap,
+          contentType);
+      return ODataResponse.fromResponse(response).status(httpStatusCode).contentHeader(ContentType.APPLICATION_XML.toContentTypeString())
+          .build();
+    }
   }
 }

@@ -19,13 +19,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 import javax.sql.DataSource;
+import org.apache.olingo.odata2.api.commons.HttpStatusCodes;
 import org.apache.olingo.odata2.api.ep.entry.ODataEntry;
 import org.apache.olingo.odata2.api.exception.ODataException;
+import org.apache.olingo.odata2.api.processor.ODataContext;
 import org.apache.olingo.odata2.api.processor.ODataResponse;
+import org.apache.olingo.odata2.api.uri.UriInfo;
 import org.apache.olingo.odata2.api.uri.info.DeleteUriInfo;
 import org.apache.olingo.odata2.api.uri.info.PostUriInfo;
 import org.apache.olingo.odata2.api.uri.info.PutMergePatchUriInfo;
-import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.engine.odata2.definition.ODataHandlerDefinition;
 import org.eclipse.dirigible.engine.odata2.sql.builder.SQLContext;
@@ -37,18 +39,17 @@ import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 
 public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandler {
 
-  private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
-
   @Override
   public ODataResponse beforeCreateEntity(PostUriInfo uriInfo, String requestContentType, String contentType, ODataEntry entry,
       Map<Object, Object> context) {
     SQLInsertBuilder dummyBuilder = (SQLInsertBuilder) context.get(DUMMY_BUILDER);
     SQLInsertBuilder insertBuilder = (SQLInsertBuilder) context.get(INSERT_BUILDER);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
+    DataSource dataSource = (DataSource) context.get(DATASOURCE);
     ODataHandlerDefinition handler = (ODataHandlerDefinition) context.get(HANDLER);
 
-    Connection connection = null;
     String newTableParam = null;
+    Connection connection = null;
     try {
       connection = dataSource.getConnection();
 
@@ -64,8 +65,7 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
     } catch (ODataException | SQLException e) {
       throw new XSKProcedureOData2EventHandlerException(UNABLE_TO_HANDLE_ON_CREATE_ENTITY_EVENT, e);
     } finally {
-      closeConnection(connection);
-      batchDropTemporaryTables(newTableParam);
+      batchDropTemporaryTables(connection, newTableParam);
     }
   }
 
@@ -75,6 +75,7 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
     SQLInsertBuilder dummyBuilder = (SQLInsertBuilder) context.get(DUMMY_BUILDER);
     SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
+    DataSource dataSource = (DataSource) context.get(DATASOURCE);
     ODataHandlerDefinition handler = (ODataHandlerDefinition) context.get(HANDLER);
 
     Connection connection = null;
@@ -82,12 +83,8 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
     try {
       connection = dataSource.getConnection();
 
-      if (context.containsKey(ON_CREATE_ENTITY_TABLE_NAME)) {
-        newTableParam = (String) context.get(ON_CREATE_ENTITY_TABLE_NAME);
-      } else {
-        newTableParam = generateTemporaryTableName(uriInfo.getTargetType().getName());
-        createTemporaryTableAsSelect(connection, newTableParam, selectBuilder, sqlContext);
-      }
+      newTableParam = generateTemporaryTableName(uriInfo.getTargetType().getName());
+      createTemporaryTableAsSelect(connection, newTableParam, selectBuilder, sqlContext);
 
       String targetTableName = getSQLInsertBuilderTargetTable(dummyBuilder, sqlContext);
       String schema = getODataArtifactTypeSchema(targetTableName);
@@ -96,8 +93,7 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
     } catch (ODataException | SQLException e) {
       throw new XSKProcedureOData2EventHandlerException(UNABLE_TO_HANDLE_AFTER_CREATE_ENTITY_EVENT, e);
     } finally {
-      closeConnection(connection);
-      batchDropTemporaryTables(newTableParam);
+      batchDropTemporaryTables(connection, newTableParam);
     }
   }
 
@@ -107,9 +103,11 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
     SQLInsertBuilder dummyBuilder = (SQLInsertBuilder) context.get(DUMMY_BUILDER);
     SQLInsertBuilder insertBuilder = (SQLInsertBuilder) context.get(INSERT_BUILDER);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
+    DataSource dataSource = (DataSource) context.get(DATASOURCE);
     ODataHandlerDefinition handler = (ODataHandlerDefinition) context.get(HANDLER);
+    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT);
 
-    Connection connection = null;
+    Connection connection;
     try {
       connection = dataSource.getConnection();
 
@@ -124,12 +122,10 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
       String schema = getODataArtifactTypeSchema(targetTableName);
       ResultSet procedureCallResultSet = callProcedure(connection, schema, handler.getHandler(), newTableParam);
 
-      context.put(ENTRY_MAP, readEntryMap(connection, newTableParam));
-      return createProcedureResponse(procedureCallResultSet);
+      Map<String, Object> entryMap = readEntryMap(connection, newTableParam);
+      return createProcedureResponse(procedureCallResultSet, (UriInfo) uriInfo, oDataContext, entryMap, contentType, HttpStatusCodes.CREATED);
     } catch (ODataException | SQLException e) {
       throw new XSKProcedureOData2EventHandlerException(UNABLE_TO_HANDLE_ON_CREATE_ENTITY_EVENT, e);
-    } finally {
-      closeConnection(connection);
     }
   }
 
@@ -140,6 +136,7 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
     SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
     SQLUpdateBuilder updateBuilder = (SQLUpdateBuilder) context.get(UPDATE_BUILDER);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
+    DataSource dataSource = (DataSource) context.get(DATASOURCE);
     ODataHandlerDefinition handler = (ODataHandlerDefinition) context.get(HANDLER);
 
     Connection connection = null;
@@ -166,8 +163,7 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
     } catch (ODataException | SQLException e) {
       throw new XSKProcedureOData2EventHandlerException(UNABLE_TO_HANDLE_BEFORE_UPDATE_ENTITY_EVENT, e);
     } finally {
-      closeConnection(connection);
-      batchDropTemporaryTables(oldTableParam, newTableParam);
+      batchDropTemporaryTables(connection, oldTableParam, newTableParam);
     }
   }
 
@@ -177,6 +173,7 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
     SQLUpdateBuilder dummyBuilder = (SQLUpdateBuilder) context.get(DUMMY_BUILDER);
     SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
+    DataSource dataSource = (DataSource) context.get(DATASOURCE);
     ODataHandlerDefinition handler = (ODataHandlerDefinition) context.get(HANDLER);
 
     Connection connection = null;
@@ -196,8 +193,7 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
     } catch (ODataException | SQLException e) {
       throw new XSKProcedureOData2EventHandlerException(UNABLE_TO_HANDLE_AFTER_UPDATE_ENTITY_EVENT, e);
     } finally {
-      closeConnection(connection);
-      batchDropTemporaryTables(oldTableParam, newTableParam);
+      batchDropTemporaryTables(connection, oldTableParam, newTableParam);
     }
   }
 
@@ -208,6 +204,7 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
     SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
     SQLUpdateBuilder updateBuilder = (SQLUpdateBuilder) context.get(UPDATE_BUILDER);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
+    DataSource dataSource = (DataSource) context.get(DATASOURCE);
     ODataHandlerDefinition handler = (ODataHandlerDefinition) context.get(HANDLER);
 
     Connection connection = null;
@@ -230,8 +227,7 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
     } catch (ODataException | SQLException e) {
       throw new XSKProcedureOData2EventHandlerException(UNABLE_TO_HANDLE_ON_UPDATE_ENTITY_EVENT, e);
     } finally {
-      closeConnection(connection);
-      batchDropTemporaryTables(oldTableParam, newTableParam);
+      batchDropTemporaryTables(connection, oldTableParam, newTableParam);
     }
   }
 
@@ -240,6 +236,7 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
     SQLDeleteBuilder dummyBuilder = (SQLDeleteBuilder) context.get(DUMMY_BUILDER);
     SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
+    DataSource dataSource = (DataSource) context.get(DATASOURCE);
     ODataHandlerDefinition handler = (ODataHandlerDefinition) context.get(HANDLER);
 
     Connection connection = null;
@@ -262,8 +259,7 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
     } catch (ODataException | SQLException e) {
       throw new XSKProcedureOData2EventHandlerException(UNABLE_TO_HANDLE_BEFORE_DELETE_ENTITY_EVENT, e);
     } finally {
-      closeConnection(connection);
-      batchDropTemporaryTables(oldTableParam);
+      batchDropTemporaryTables(connection, oldTableParam);
     }
   }
 
@@ -271,6 +267,7 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
   public ODataResponse afterDeleteEntity(DeleteUriInfo uriInfo, String contentType, Map<Object, Object> context) {
     SQLDeleteBuilder dummyBuilder = (SQLDeleteBuilder) context.get(DUMMY_BUILDER);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
+    DataSource dataSource = (DataSource) context.get(DATASOURCE);
     ODataHandlerDefinition handler = (ODataHandlerDefinition) context.get(HANDLER);
 
     Connection connection = null;
@@ -286,8 +283,7 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
     } catch (SQLException | ODataException e) {
       throw new XSKProcedureOData2EventHandlerException(UNABLE_TO_HANDLE_AFTER_DELETE_ENTITY_EVENT, e);
     } finally {
-      closeConnection(connection);
-      batchDropTemporaryTables(oldTableParam);
+      batchDropTemporaryTables(connection, oldTableParam);
     }
   }
 
@@ -296,6 +292,7 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
     SQLDeleteBuilder dummyBuilder = (SQLDeleteBuilder) context.get(DUMMY_BUILDER);
     SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
+    DataSource dataSource = (DataSource) context.get(DATASOURCE);
     ODataHandlerDefinition handler = (ODataHandlerDefinition) context.get(HANDLER);
 
     Connection connection = null;
@@ -313,8 +310,7 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
     } catch (ODataException | SQLException e) {
       throw new XSKProcedureOData2EventHandlerException(UNABLE_TO_HANDLE_ON_DELETE_ENTITY_EVENT, e);
     } finally {
-      closeConnection(connection);
-      batchDropTemporaryTables(oldTableParam);
+      batchDropTemporaryTables(connection, oldTableParam);
     }
   }
 

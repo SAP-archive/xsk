@@ -37,6 +37,16 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
 
   private static final String HANDLER = "handler";
 
+  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_BEFORE_CREATE_ENTITY_EVENT = "More than one handler present for before create entity event";
+  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_AFTER_CREATE_ENTITY_EVENT = "More than one handler present for after create entity event";
+  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_ON_CREATE_ENTITY_EVENT = "More than one handler present for on create entity event";
+  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_BEFORE_UPDATE_ENTITY_EVENT = "More than one handler present for before update entity event";
+  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_AFTER_UPDATE_ENTITY_EVENT = "More than one handler present for after update entity event";
+  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_ON_UPDATE_ENTITY_EVENT = "More than one handler present for on update entity event";
+  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_BEFORE_DELETE_ENTITY_EVENT = "More than one handler present for before delete entity event";
+  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_AFTER_DELETE_ENTITY_EVENT = "More than one handler present for after delete entity event";
+  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_ON_DELETE_ENTITY_EVENT = "More than one handler present for on delete entity event";
+
   private ODataCoreService odataCoreService;
   private XSKProcedureOData2EventHandler procedureHandler;
   private XSKScriptingOData2EventHandler scriptingHandler;
@@ -45,7 +55,8 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
     this(new ODataCoreService(), new XSKProcedureOData2EventHandler(), new XSKScriptingOData2EventHandler());
   }
 
-  public XSKOData2EventHandler(ODataCoreService odataCoreService, XSKProcedureOData2EventHandler procedureHandler, XSKScriptingOData2EventHandler scriptingHandler) {
+  public XSKOData2EventHandler(ODataCoreService odataCoreService, XSKProcedureOData2EventHandler procedureHandler,
+      XSKScriptingOData2EventHandler scriptingHandler) {
     this.odataCoreService = odataCoreService;
     this.procedureHandler = procedureHandler;
     this.scriptingHandler = scriptingHandler;
@@ -61,10 +72,12 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
       String method = ODataHandlerMethods.create.name();
       String type = ODataHandlerTypes.before.name();
       List<ODataHandlerDefinition> handlers = odataCoreService.getHandlers(namespace, name, method, type);
-      if(handlers.size() > 0) {
+      if (handlers.size() > 0) {
         AbstractXSKOData2EventHandler eventHandler = determineEventHandler(handlers.get(0));
         context.put(HANDLER, handlers.get(0));
         return eventHandler.beforeCreateEntity(uriInfo, requestContentType, contentType, entry, context);
+      } else {
+        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_BEFORE_CREATE_ENTITY_EVENT);
       }
     } catch (EdmException e) {
       LOGGER.error(e.getMessage(), e);
@@ -82,10 +95,12 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
       String method = ODataHandlerMethods.create.name();
       String type = ODataHandlerTypes.after.name();
       List<ODataHandlerDefinition> handlers = odataCoreService.getHandlers(namespace, name, method, type);
-      if(handlers.size() > 0) {
+      if (handlers.size() > 0) {
         AbstractXSKOData2EventHandler eventHandler = determineEventHandler(handlers.get(0));
         context.put(HANDLER, handlers.get(0));
         return eventHandler.afterCreateEntity(uriInfo, requestContentType, contentType, entry, context);
+      } else {
+        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_AFTER_CREATE_ENTITY_EVENT);
       }
     } catch (EdmException e) {
       LOGGER.error(e.getMessage(), e);
@@ -103,10 +118,12 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
       String method = ODataHandlerMethods.create.name();
       String type = ODataHandlerTypes.on.name();
       List<ODataHandlerDefinition> handlers = odataCoreService.getHandlers(namespace, name, method, type);
-      if(handlers.size() > 0) {
+      if (handlers.size() > 0) {
         AbstractXSKOData2EventHandler eventHandler = determineEventHandler(handlers.get(0));
         context.put(HANDLER, handlers.get(0));
         return eventHandler.onCreateEntity(uriInfo, content, requestContentType, contentType, context);
+      } else {
+        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_ON_CREATE_ENTITY_EVENT);
       }
     } catch (EdmException e) {
       LOGGER.error(e.getMessage(), e);
@@ -123,10 +140,12 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
       String method = ODataHandlerMethods.update.name();
       String type = ODataHandlerTypes.before.name();
       List<ODataHandlerDefinition> handlers = odataCoreService.getHandlers(namespace, name, method, type);
-      if(handlers.size() > 0) {
+      if (handlers.size() > 0) {
         AbstractXSKOData2EventHandler eventHandler = determineEventHandler(handlers.get(0));
         context.put(HANDLER, handlers.get(0));
         return eventHandler.beforeUpdateEntity(uriInfo, requestContentType, merge, contentType, entry, context);
+      } else {
+        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_BEFORE_UPDATE_ENTITY_EVENT);
       }
     } catch (EdmException e) {
       LOGGER.error(e.getMessage(), e);
@@ -143,10 +162,12 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
       String method = ODataHandlerMethods.update.name();
       String type = ODataHandlerTypes.after.name();
       List<ODataHandlerDefinition> handlers = odataCoreService.getHandlers(namespace, name, method, type);
-      if(handlers.size() > 0) {
+      if (handlers.size() > 0) {
         AbstractXSKOData2EventHandler eventHandler = determineEventHandler(handlers.get(0));
         context.put(HANDLER, handlers.get(0));
         return eventHandler.afterUpdateEntity(uriInfo, requestContentType, merge, contentType, entry, context);
+      } else {
+        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_AFTER_UPDATE_ENTITY_EVENT);
       }
     } catch (EdmException e) {
       LOGGER.error(e.getMessage(), e);
@@ -163,10 +184,12 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
       String method = ODataHandlerMethods.update.name();
       String type = ODataHandlerTypes.on.name();
       List<ODataHandlerDefinition> handlers = odataCoreService.getHandlers(namespace, name, method, type);
-      if(handlers.size() > 0) {
+      if (handlers.size() > 0) {
         AbstractXSKOData2EventHandler eventHandler = determineEventHandler(handlers.get(0));
         context.put(HANDLER, handlers.get(0));
         return eventHandler.onUpdateEntity(uriInfo, content, requestContentType, merge, contentType, context);
+      } else {
+        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_ON_UPDATE_ENTITY_EVENT);
       }
     } catch (EdmException e) {
       LOGGER.error(e.getMessage(), e);
@@ -182,10 +205,12 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
       String method = ODataHandlerMethods.delete.name();
       String type = ODataHandlerTypes.before.name();
       List<ODataHandlerDefinition> handlers = odataCoreService.getHandlers(namespace, name, method, type);
-      if(handlers.size() > 0) {
+      if (handlers.size() > 0) {
         AbstractXSKOData2EventHandler eventHandler = determineEventHandler(handlers.get(0));
         context.put(HANDLER, handlers.get(0));
         return eventHandler.beforeDeleteEntity(uriInfo, contentType, context);
+      } else {
+        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_BEFORE_DELETE_ENTITY_EVENT);
       }
     } catch (EdmException e) {
       LOGGER.error(e.getMessage(), e);
@@ -201,10 +226,12 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
       String method = ODataHandlerMethods.delete.name();
       String type = ODataHandlerTypes.after.name();
       List<ODataHandlerDefinition> handlers = odataCoreService.getHandlers(namespace, name, method, type);
-      if(handlers.size() > 0) {
+      if (handlers.size() > 0) {
         AbstractXSKOData2EventHandler eventHandler = determineEventHandler(handlers.get(0));
         context.put(HANDLER, handlers.get(0));
         return eventHandler.afterDeleteEntity(uriInfo, contentType, context);
+      } else {
+        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_AFTER_DELETE_ENTITY_EVENT);
       }
     } catch (EdmException e) {
       LOGGER.error(e.getMessage(), e);
@@ -220,10 +247,12 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
       String method = ODataHandlerMethods.delete.name();
       String type = ODataHandlerTypes.on.name();
       List<ODataHandlerDefinition> handlers = odataCoreService.getHandlers(namespace, name, method, type);
-      if(handlers.size() > 0) {
+      if (handlers.size() > 0) {
         AbstractXSKOData2EventHandler eventHandler = determineEventHandler(handlers.get(0));
         context.put(HANDLER, handlers.get(0));
         return eventHandler.onDeleteEntity(uriInfo, contentType, context);
+      } else {
+        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_ON_DELETE_ENTITY_EVENT);
       }
     } catch (EdmException e) {
       LOGGER.error(e.getMessage(), e);
@@ -237,7 +266,7 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
   }
 
   private AbstractXSKOData2EventHandler determineEventHandler(ODataHandlerDefinition handler) {
-    if(handler.getHandler().contains(".xsjslib::")) {
+    if (handler.getHandler().contains(".xsjslib::")) {
       return scriptingHandler;
     } else {
       return procedureHandler;

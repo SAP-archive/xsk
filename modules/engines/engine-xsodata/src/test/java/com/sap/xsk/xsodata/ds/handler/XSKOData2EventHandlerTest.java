@@ -48,16 +48,16 @@ import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.AFTER
 import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.BEFORE_DELETE_ENTITY_TABLE_NAME;
 import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.BEFORE_TABLE_NAME;
 import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.BEFORE_UPDATE_ENTITY_TABLE_NAME;
+import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.DATASOURCE;
 import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.ENTRY_MAP;
 import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.ON_CREATE_ENTITY_TABLE_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.notNull;
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class XSKOData2EventHandlerTest {
@@ -97,6 +97,7 @@ public class XSKOData2EventHandlerTest {
     xskoData2EventHandler = new XSKOData2EventHandler(odataCoreService, spyProcedureHandler, spyScriptingHandler);
     scriptingHandlerContext = new HashMap();
     procedureHandlerContext = new HashMap();
+    procedureHandlerContext.put(DATASOURCE, dataSource);
   }
 
   @After
@@ -313,7 +314,7 @@ public class XSKOData2EventHandlerTest {
   }
 
   private void mockCallProcedure(XSKProcedureOData2EventHandler handler, boolean isUpdate)
-      throws SQLException, org.apache.olingo.odata2.api.exception.ODataException {
+      throws SQLException {
     ResultSet resultSetMock = Mockito.mock(ResultSet.class);
     Mockito.when(resultSetMock.next()).thenReturn(true);
     Mockito.when(resultSetMock.getString(anyString())).thenReturn("400", "INVALID ID");
@@ -344,35 +345,4 @@ public class XSKOData2EventHandlerTest {
     assertEquals("{\"errordetail\":{\"errorDetail2\":\"detail message 2\",\"errorDetail1\":\"detail message 1\"}}",
         (((LinkedTreeMap) responseBody.get("error")).get("innererror")));
   }
-
-//  private Runnable getUpdateTargetTableName() {
-//    return () -> {
-//      try {
-//        XSKOData2EventHandlerUtils.getSQLUpdateBuilderTargetTable(any(), any());
-//      } catch (org.apache.olingo.odata2.api.exception.ODataException e) {
-//        fail();
-//      }
-//    };
-//  }
-//
-//  private Runnable getInsertTargetTableName() {
-//    return () -> {
-//      try {
-//        XSKOData2EventHandlerUtils.getSQLInsertBuilderTargetTable(any(), any());
-//      } catch (org.apache.olingo.odata2.api.exception.ODataException e) {
-//        fail();
-//      }
-//    };
-//  }
-//
-//  private Runnable getDeleteTargetTableName() {
-//    return () -> {
-//      try {
-//        XSKOData2EventHandlerUtils.getSQLDeleteBuilderTargetTable(any(), any());
-//      } catch (org.apache.olingo.odata2.api.exception.ODataException e) {
-//        fail();
-//      }
-//    };
-//  }
-
 }

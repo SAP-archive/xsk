@@ -33,7 +33,6 @@ import static org.mockito.ArgumentMatchers.any;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AbstractXSKOData2EventHandlerTest {
-
   @Mock
   private Connection connection;
 
@@ -67,5 +66,4 @@ public class AbstractXSKOData2EventHandlerTest {
             "SELECT * FROM test-table WHERE ID = ?",
             parameters));
   }
-
 }

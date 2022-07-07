@@ -1,0 +1,14 @@
+Namespace itest;
+
+@Schema: 'TEST_SCHEMA'
+
+context CalculatedColumns {
+  Entity Employee {
+    "MUID": String(25);
+    "firstName": String(150);
+    "lastName": String(150);
+    "UserID": String(25);
+    "UserID_UPPER": String(25) = upper("UserID");
+    "fullName": String(301) = "firstName" || ' ' || "lastName";
+  }
+}

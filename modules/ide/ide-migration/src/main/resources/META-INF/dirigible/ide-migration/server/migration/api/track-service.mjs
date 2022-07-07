@@ -61,6 +61,24 @@ export class TrackService {
                         type: "VARCHAR",
                         required: false,
                     },
+                    {
+                        name: "processInstanceId",
+                        column: "PROCESS_INSTANCE_ID",
+                        type: "VARCHAR",
+                        required: false,
+                    },
+                    {
+                        name: "workspaceName",
+                        column: "WORKSPACE_NAME",
+                        type: "VARCHAR",
+                        required: false,
+                    },
+                    {
+                        name: "duString",
+                        column: "DU_STRING",
+                        type: "VARCHAR",
+                        required: false,
+                    },
                 ],
             },
             null,
@@ -77,7 +95,6 @@ export class TrackService {
         this.setupTable();
         try {
             let entryToUpdate = migrationsTable.find(process.getVariable(execution.getId(), "migrationIndex"));
-            console.log(JSON.parse(JSON.stringify(entryToUpdate)));
             let startedOn = entryToUpdate.startedOn;
             entryToUpdate.lastUpdated = Date.now();
             entryToUpdate.startedOn = Date.parse(startedOn);
@@ -89,19 +106,48 @@ export class TrackService {
         }
     }
 
+    updateProcessInstanceId(entryInstance, processInstanceId) {
+        this.setupTable();
+        try {
+            let entryToUpdate = migrationsTable.find(entryInstance);
+            console.log(JSON.parse(JSON.stringify(entryToUpdate)));
+            entryToUpdate.processInstanceId = processInstanceId;
+            entryToUpdate.lastUpdated = Date.now();
+            entryToUpdate.startedOn = Date.parse(entryToUpdate.startedOn);
+            migrationsTable.update(entryToUpdate);
+            entryInstance = entryToUpdate;
+        } catch (e) {
+            throw new Error("Cant update migration instance id. Reason: " + e);
+        }
+    }
+
     addEntry(status) {
         this.setupTable();
-
         try {
             entryInstance = migrationsTable.insert({
                 executedBy: userName,
                 startedOn: Date.now(),
                 lastUpdated: Date.now(),
-                status: status,
+                status: status
             });
             this.currentIndex = entryInstance;
         } catch (e) {
             throw new Error("Cant add new migration entry. Reason: " + e);
+        }
+    }
+
+    updateMigrationTarget(workspaceName, du) {
+        this.setupTable();
+        try {
+            let entryToUpdate = migrationsTable.find(process.getVariable(execution.getId(), "migrationIndex"));
+            entryToUpdate.lastUpdated = Date.now();
+            entryToUpdate.startedOn = Date.parse(entryToUpdate.startedOn);
+            entryToUpdate.workspaceName = workspaceName;
+            entryToUpdate.duString = JSON.stringify(du.map((d) => { return { name: d.name } })); //we only need the names and the entire object is too large
+            migrationsTable.update(entryToUpdate);
+            entryInstance = entryToUpdate;
+        } catch (e) {
+            throw new Error("Cant update migration instance id. Reason: " + e);
         }
     }
 }

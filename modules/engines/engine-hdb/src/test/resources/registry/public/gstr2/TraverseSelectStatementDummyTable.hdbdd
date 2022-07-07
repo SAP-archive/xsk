@@ -1,0 +1,13 @@
+namespace gstr2;
+@Schema: 'ADMIN'
+context TraverseSelectStatementDummyTable {
+
+Entity employee {
+ 		key USER_ID: String(255);
+  };
+
+define view employee_view as
+  select from DUMMY {
+     "USER_ID"
+  };
+};

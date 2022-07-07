@@ -1,0 +1,17 @@
+namespace gstr2;
+@Schema: 'ADMIN'
+context FuzzySearchIndexEnabledNewSyntax {
+  type id     : String(4);
+  type name   : String(12);
+
+  Entity ENTITY1 {
+      key COL1 : id;
+      @SearchIndex.fuzzy: { enabled: true }
+      COL2 : name;
+  };
+  Entity ENTITY2 {
+      key COL1 : id;
+      @SearchIndex.fuzzy: { enabled: false }
+      COL2 : name;
+  };
+};

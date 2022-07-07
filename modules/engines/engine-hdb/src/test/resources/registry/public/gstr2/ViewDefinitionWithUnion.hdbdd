@@ -25,4 +25,12 @@ context ViewDefinitionWithUnion {
           'Developer' as "EmployeeRoleType",
           '2200' as "EmployeeSalary"
         };
+
+    entity employee_roles {
+        ID : String(32);
+    }
+
+    entity employee_salaries {
+        ID : String(32);
+    }
 }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="OrdersCount" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="2.3" defaultClient="$$client$$" visibility="reportingEnabled" outputViewType="Aggregation" calculationScenarioType="TREE_BASED" enforceSqlExecution="false">
+<descriptions defaultDescription="OrdersCount"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="product_project.db::Products.Orders">
+    <viewAttributes allViewAttributes="true"/>
+    <resourceUri>product_project.db::Products.Orders</resourceUri>
+  </DataSource>
+</dataSources>
+<calculationViews/>
+<logicalModel id="product_project.db::Products.Orders">
+  <attributes/>
+  <calculatedAttributes>
+    <calculatedAttribute id="count" order="2" semanticType="empty" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="count"/>
+      <keyCalculation datatype="INTEGER" expressionLanguage="COLUMN_ENGINE">
+        <formula>1</formula>
+      </keyCalculation>
+    </calculatedAttribute>
+  </calculatedAttributes>
+  <baseMeasures>
+    <measure id="ADDRESS" order="1" aggregationType="sum" engineAggregation="count" measureType="simple">
+      <descriptions defaultDescription="Address"/>
+      <measureMapping columnObjectName="product_project.db::Products.Orders" columnName="Address"/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

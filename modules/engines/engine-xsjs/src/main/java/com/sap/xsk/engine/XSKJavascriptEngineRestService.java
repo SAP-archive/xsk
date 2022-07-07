@@ -16,17 +16,19 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HEAD;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import org.eclipse.dirigible.commons.api.scripting.ScriptingDependencyException;
+import org.eclipse.dirigible.commons.api.context.ContextException;
+import org.eclipse.dirigible.commons.api.context.ThreadContextFacade;
 import org.eclipse.dirigible.commons.api.service.AbstractRestService;
 import org.eclipse.dirigible.commons.api.service.IRestService;
 import org.slf4j.Logger;
@@ -38,92 +40,93 @@ import org.slf4j.LoggerFactory;
     @ApiResponse(code = 404, message = "Not Found"), @ApiResponse(code = 500, message = "Internal Server Error")})
 public class XSKJavascriptEngineRestService extends AbstractRestService {
 
-  private static final Logger logger = LoggerFactory.getLogger(XSKJavascriptEngineRestService.class);
+  private Logger logger = LoggerFactory.getLogger(XSKJavascriptEngineRestService.class);
 
-  private XSKJavascriptEngineProcessor processor = new XSKJavascriptEngineProcessor();
+  private XSKJavascriptEngineProcessor processor;
 
-  @Context
-  private HttpServletResponse response;
+  public XSKJavascriptEngineRestService() {
+    this.processor = new XSKJavascriptEngineProcessor();
+  }
 
-  /**
-   * Execute service.
-   *
-   * @param path the path
-   * @return result of the execution of the service
-   */
+  public XSKJavascriptEngineRestService(XSKJavascriptEngineProcessor processor) {
+    this.processor = processor;
+  }
+
   @GET
   @Path("/{path:.*}")
   @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
   @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response executeRhinoServiceGet(@PathParam("path") String path) {
-    try {
-      processor.executeService(path);
-      return Response.ok().build();
-    } catch (ScriptingDependencyException e) {
-      logger.error(e.getMessage(), e);
-      return Response.status(Response.Status.ACCEPTED).entity(e.getMessage()).build();
-    } catch (Throwable e) {
-      String message = e.getMessage();
-      logger.error(message, e);
-      createErrorResponseInternalServerError(message);
-      return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(message).build();
-    }
+  public Response get(
+      @Context HttpServletRequest httpServletRequest,
+      @PathParam("path") String path
+  ) throws ContextException {
+    return executeJS(httpServletRequest, path);
   }
 
-  /**
-   * Execute service post.
-   *
-   * @param path the path
-   * @return result of the execution of the service
-   */
   @POST
   @Path("/{path:.*}")
   @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
   @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response executeRhinoServicePost(@PathParam("path") String path) {
-    return executeRhinoServiceGet(path);
+  public Response post(
+      @Context HttpServletRequest httpServletRequest,
+      @PathParam("path") String path
+  ) throws ContextException {
+    return executeJS(httpServletRequest, path);
   }
 
-  /**
-   * Execute service put.
-   *
-   * @param path the path
-   * @return result of the execution of the service
-   */
   @PUT
   @Path("/{path:.*}")
   @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
   @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response executeRhinoServicePut(@PathParam("path") String path) {
-    return executeRhinoServiceGet(path);
+  public Response put(
+      @Context HttpServletRequest httpServletRequest,
+      @PathParam("path") String path
+  ) throws ContextException {
+    return executeJS(httpServletRequest, path);
   }
 
-  /**
-   * Execute service delete.
-   *
-   * @param path the path
-   * @return result of the execution of the service
-   */
   @DELETE
   @Path("/{path:.*}")
   @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
   @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response executeRhinoServiceDelete(@PathParam("path") String path) {
-    return executeRhinoServiceGet(path);
+  public Response delete(
+      @Context HttpServletRequest httpServletRequest,
+      @PathParam("path") String path
+  ) throws ContextException {
+    return executeJS(httpServletRequest, path);
   }
 
-  /**
-   * Execute service head.
-   *
-   * @param path the path
-   * @return result of the execution of the service
-   */
   @HEAD
   @Path("/{path:.*}")
   @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
   @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
-  public Response executeRhinoServiceHead(@PathParam("path") String path) {
-    return executeRhinoServiceGet(path);
+  public Response head(
+      @Context HttpServletRequest httpServletRequest,
+      @PathParam("path") String path
+  ) throws ContextException {
+    return executeJS(httpServletRequest, path);
+  }
+
+  @PATCH
+  @Path("/{path:.*}")
+  @ApiOperation("Execute Server Side JavaScript HANA XS Classic Resource")
+  @ApiResponses({@ApiResponse(code = 200, message = "Execution Result")})
+  public Response patch(
+      @Context HttpServletRequest httpServletRequest,
+      @PathParam("path") String path
+  ) throws ContextException {
+    return executeJS(httpServletRequest, path);
+  }
+
+  private Response executeJS(HttpServletRequest httpServletRequest, String path) throws ContextException {
+    ThreadContextFacade.setUp();
+    try {
+      ThreadContextFacade.set(HttpServletRequest.class.getCanonicalName(), httpServletRequest);
+      processor.executeService(path);
+      return Response.ok().build();
+    } finally {
+      ThreadContextFacade.tearDown();
+    }
   }
 
   /*

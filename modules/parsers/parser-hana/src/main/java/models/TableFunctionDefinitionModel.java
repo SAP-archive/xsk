@@ -11,6 +11,8 @@
  */
 package models;
 
+import exceptions.TableFunctionMissingPropertyException;
+
 public class TableFunctionDefinitionModel extends DefinitionModel {
 
 

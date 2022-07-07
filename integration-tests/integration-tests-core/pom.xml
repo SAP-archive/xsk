@@ -5,17 +5,42 @@
   <parent>
     <artifactId>xsk-integration-tests-parent</artifactId>
     <groupId>com.sap.xsk</groupId>
-    <version>0.17.0-SNAPSHOT</version>
+    <version>0.18.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
   <name>XSK - Integration Tests - Core</name>
   <artifactId>integration-tests-core</artifactId>
-  <version>0.17.0-SNAPSHOT</version>
+  <version>0.18.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <dependencies>
+    <dependency>
+      <groupId>com.sap.xsk</groupId>
+      <artifactId>xsk-modules-engines-hdb</artifactId>
+      <version>0.18.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-commons-test</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-database-custom</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-database-h2</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dirigible</groupId>
+      <artifactId>dirigible-repository-local</artifactId>
+      <version>${dirigible.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-commons-api</artifactId>
@@ -24,12 +49,12 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpmime</artifactId>
-      <version>4.5.13</version>
+      <version>${httpmime.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpasyncclient</artifactId>
-      <version>4.1.5</version>
+      <version>${httpasyncclient.version}</version>
     </dependency>
   </dependencies>
 

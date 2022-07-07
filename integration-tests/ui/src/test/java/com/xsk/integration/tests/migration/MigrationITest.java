@@ -20,12 +20,11 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.util.EntityUtils;
+import org.eclipse.dirigible.commons.config.Configuration;
 import org.junit.After;
 import org.junit.Test;
 
 import static com.xsk.integration.tests.migration.DirigibleConnectionProperties.LOCALHOST_URI;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
 
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
@@ -39,6 +38,7 @@ import java.nio.file.Paths;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,9 +52,10 @@ public class MigrationITest {
   private WebBrowser webBrowser;
   private MigrationCredentials credentials;
   private Map<String, List<ExpectedContent>> expectedContentList;
+  private final Map<String, Boolean> contentComparisons = new HashMap<>();
 
   @Test
-  @Parameters({"Chrome", "Firefox"})
+  @Parameters({"Chrome", /* "Firefox" */})
   public void migrationTest(String param) throws IOException {
     setup(param);
     loginIfNecessary();
@@ -65,10 +66,12 @@ public class MigrationITest {
     approveChanges();
     goToWorkspace();
     validateProjectFIles();
+    assertComparisonResultsTrue();
   }
 
   private void setup(String param) {
-    webBrowser = new WebBrowser(param, DirigibleConnectionProperties.BASE_URL, true);
+    boolean isHeadless = Configuration.get("ITESTS_SELENIUM_MODE").equals("headless");
+    webBrowser = new WebBrowser(param, DirigibleConnectionProperties.BASE_URL, isHeadless);
     credentials = new MigrationCredentials();
     expectedContentList = expectedContentProvider.getExpectedContentList();
   }
@@ -93,7 +96,7 @@ public class MigrationITest {
     webBrowser.waitForPageWithTitle("SAP HANA XS Classic Migration | XSK WebIDE");
     webBrowser.switchToDefaultContent();
     webBrowser.switchToIframe(By.xpath("//iframe[@src='../ide-migration/migration-launch.html']"));
-    webBrowser.clickItem(By.xpath("//*[@ng-click='showMigrationScreen()']"));
+    webBrowser.clickItem(By.xpath("//*[@ng-click='selectLiveMigration()']"));
     webBrowser.log();
   }
 
@@ -103,7 +106,7 @@ public class MigrationITest {
     webBrowser.enterAndAssertField(By.id("neo-username"), credentials.getUsername());
     webBrowser.enterAndAssertField(By.id("neo-password"), credentials.getPassword());
     webBrowser.log();
-    webBrowser.clickItem(By.xpath("//*[@ng-click='nextClicked()']"));
+    webBrowser.clickItem(By.xpath("//*[@ng-click='goForward()']"));
   }
 
   private void enterHanaCredentials() {
@@ -111,7 +114,7 @@ public class MigrationITest {
     webBrowser.enterAndAssertField(By.id("username"), credentials.getHanaUsername());
     webBrowser.enterAndAssertField(By.id("password"), credentials.getHanaPassword());
     webBrowser.log();
-    webBrowser.clickItem(By.xpath("//*[@ng-click='nextClicked()']"));
+    webBrowser.clickItem(By.xpath("//*[@ng-click='goForward()']"));
   }
 
   private void selectDeliveryUnits() {
@@ -119,16 +122,17 @@ public class MigrationITest {
     webBrowser.selectAndAssertDropdown("deliveryUnitList", (item) -> item.equals(expectedContentProvider.getExpectedDeliveryUnitName()));
     webBrowser.clickItem(By.xpath("//*[@ng-disabled=\"duDropdownDisabled\"]"));
     webBrowser.log();
-    webBrowser.clickItem(By.xpath("//*[@ng-click=\"nextClicked()\"]"));
+    webBrowser.clickItem(By.xpath("//*[@ng-click=\"goForward()\"]"));
   }
 
   private void approveChanges() {
-    webBrowser.clickItem(By.xpath("//*[@ng-click=\"startMigration()\"]"));
+    webBrowser.log();
+    webBrowser.clickItem(By.xpath("//*[@ng-click=\"continueMigration()\"]"));
   }
 
   private void goToWorkspace() {
     webBrowser.clickItem(By.xpath("//*[@ng-click=\"goToWorkspace()\"]"));
-    webBrowser.waitForPageWithTitle("Workspace | XSK WebIDE");
+    webBrowser.waitForPageWithTitle("Workbench | XSK");
     webBrowser.switchToDefaultContent();
     webBrowser.log();
   }
@@ -155,7 +159,7 @@ public class MigrationITest {
 
   private void switchToWorkspaceFrame() {
     webBrowser.switchToDefaultContent();
-    webBrowser.switchToIframe(By.xpath("//iframe[@src='../ide-workspace/workspace.html']"));
+    webBrowser.switchToIframe(By.xpath("//iframe[@src='../ide-projects/projects.html']"));
     webBrowser.waitForVisibilityOfElement(By.id("j1_1_anchor"));
   }
 
@@ -174,16 +178,29 @@ public class MigrationITest {
     // Find the file's jstree node.
     var fileAnchors = projectAnchor.findElements(By.xpath(".//*[text()='" + fileName + "']"));
     if (fileAnchors.size() != 1) {
-      throw new RuntimeException("Selenium test error: zero or multiple jstree anchors for file found.");
+      throw new RuntimeException("Selenium test error: zero or multiple jstree anchors for file " + fileName + " found.");
     }
     var fileAnchor = fileAnchors.get(0);
 
     // Open the file by clicking on the jstree node or via context menu.
     if (isNonTextEditorFile(file.getFilePath())) {
+      webBrowser.scrollIntoView(fileAnchor);
       webBrowser.contextClick(fileAnchor);
-      webBrowser.clickItem(By.xpath("//*[text()='Open with...']"));
-      webBrowser.clickItem(By.xpath("//*[text()='Code Editor']"));
+      webBrowser.switchToDefaultContent();
+
+      String openWithMenuItemXpath = "//*[text()='Open With']";
+      String codeEditorMenuItemXpath = "//*[text()='Code Editor']";
+
+      webBrowser.moveTo(By.xpath(openWithMenuItemXpath));
+      webBrowser.clickItem(By.xpath(openWithMenuItemXpath));
+
+      webBrowser.moveTo(By.xpath(codeEditorMenuItemXpath));
+      webBrowser.clickItem(By.xpath(codeEditorMenuItemXpath));
+
+      webBrowser.switchToIframe(By.xpath("//iframe[@src='../ide-projects/projects.html']"));
+      webBrowser.waitForVisibilityOfElement(By.id("j1_1_anchor"));
     } else {
+      webBrowser.scrollIntoView(fileAnchor);
       webBrowser.doubleClickItem(fileAnchor);
     }
   }
@@ -201,7 +218,7 @@ public class MigrationITest {
 
       if (collectionHasElementEndingWith(fileQueryParameter, filePath)) {
         if (isImageFile(filePath)) {
-          assertImageFileEquals(file);
+          assertImageFileEquals(iframe, file);
         } else {
           assertMonacoTextFileEquals(iframe, file);
         }
@@ -252,21 +269,23 @@ public class MigrationITest {
         || filePath.toLowerCase().endsWith(".hdi");
   }
 
-  void assertImageFileEquals(ExpectedContent file) throws IOException {
-    var migratedImage = getImageFileContent(file.getFilePath());
+  void assertImageFileEquals(WebElement imageTabIframe, ExpectedContent file) throws IOException {
+    var migratedImage = getImageFileContent(file.getFilePath(), imageTabIframe);
     var expectedFileContent = file.getContent();
 
-    System.out.println(
-        "[MigrationITest] Asserting image file equals: "
+    boolean comparisonResult = Arrays.equals(expectedFileContent, migratedImage);
+    contentComparisons.put(file.getFilePath(), comparisonResult);
+    if(!comparisonResult) {
+      System.out.println(
+              "\n"
+            + "[MigrationITest] Unexpected image file content! "
             + file.getFilePath()
             + "\n Expected Byte Length: \n"
             + expectedFileContent.length
             + "\n Actual Byte Length: \n"
-            + migratedImage.length
-    );
-
-    assertArrayEquals("Images after migration must match expected content",
-        expectedFileContent, migratedImage);
+            + migratedImage.length + "\n"
+      );
+    }
   }
 
   void assertMonacoTextFileEquals(WebElement monacoTabIframe, ExpectedContent file) {
@@ -275,20 +294,24 @@ public class MigrationITest {
     var expectedTextFile = new String(file.getContent(), StandardCharsets.UTF_8)
         .replaceAll("\\s", "");
 
-    System.out.println(
-        "[MigrationITest] Asserting text file equals: "
-            + file.getFilePath()
-            + "\n Expected: \n"
-            + expectedTextFile
-            + "\n Actual: \n"
-            + migratedTextFile
-    );
-
-    assertEquals("Text files after migration must match expected content ",
-        expectedTextFile, migratedTextFile);
+    boolean comparisonResult = expectedTextFile.equals(migratedTextFile);
+    contentComparisons.put(file.getFilePath(), comparisonResult);
+    if(!comparisonResult) {
+      System.out.println(
+            "\n"
+          + "[MigrationITest]  Unexpected text file content! "
+          + file.getFilePath()
+          + "\n Expected: \n"
+          + expectedTextFile
+          + "\n Actual: \n"
+          + migratedTextFile + "\n"
+      );
+    }
   }
 
-  private byte[] getImageFileContent(String filePath) throws IOException {
+  private byte[] getImageFileContent(String filePath, WebElement imageTabIframe) throws IOException {
+    webBrowser.switchToDefaultContent();
+    webBrowser.switchToIframe(imageTabIframe);
     var imageUrl = new URL(
         "http://"
             + DirigibleConnectionProperties.HOST
@@ -303,7 +326,14 @@ public class MigrationITest {
       HttpUriRequest request = RequestBuilder.get(imageUrl.toURI()).build();
       var response = client.executeRequestAsync(request).get();
       HttpEntity entity = response.getEntity();
-      webBrowser.sleep(3000); // This sleep lets the image load in the editor so it is visible in the next .log() call
+      webBrowser.retryJavascriptWithTimeout(
+          "var image = document.getElementById('image-view');\n"
+          + "var isLoaded = image.complete && image.naturalHeight !== 0; \n"
+              + "isLoaded ? true : new Error(\"Image is not loaded.\");",
+          10000,
+          100
+      );
+      webBrowser.switchToDefaultContent();
       return EntityUtils.toByteArray(entity);
     } catch (URISyntaxException | InterruptedException | ExecutionException e) {
       throw new RuntimeException(e);
@@ -313,8 +343,11 @@ public class MigrationITest {
   String getTextFileContent(WebElement monacoTabIframe) {
     webBrowser.switchToDefaultContent();
     webBrowser.switchToIframe(monacoTabIframe);
-    webBrowser.sleep(3000); // This sleep is required, otherwise monaco on js execution in next line is undefined.
-    var migratedText = webBrowser.executeJavascript("return monaco.editor.getModels().at(0).getValue();");
+    String migratedText = webBrowser.retryJavascriptWithTimeout(
+        "return monaco.editor.getModels().at(0).getValue()",
+        10000,
+        100
+    );
     webBrowser.switchToDefaultContent();
     return migratedText;
   }
@@ -327,8 +360,30 @@ public class MigrationITest {
     return list.stream().anyMatch(x -> x.endsWith(endingWith));
   }
 
+  private void assertComparisonResultsTrue() {
+    boolean finalResult = true;
+    for(var fileResult : contentComparisons.entrySet()) {
+      if(!fileResult.getValue()) {
+        finalResult = false;
+        System.out.println(
+            "SELENIUM CONTENT VALIDATION ERROR: '"
+            + fileResult.getKey()
+            + "' MIGRATED WITH WRONG CONTENT!");
+      }
+    }
+
+    if(finalResult) {
+      System.out.println("Selenium Migration was successful!");
+    } else {
+      throw new RuntimeException("Selenium Migration FAILED due to unexpected content!");
+    }
+  }
+
   @After
   public void afterTest() {
-    webBrowser.quit();
+    boolean quitAfterTest = Configuration.get("ITESTS_SELENIUM_MODE").equals("headless");
+    if(quitAfterTest) {
+      webBrowser.quit();
+    }
   }
 }

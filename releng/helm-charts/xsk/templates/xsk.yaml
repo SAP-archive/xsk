@@ -1,4 +1,5 @@
 {{- if .Values.hana.enabled }}
+{{- if .Values.hana.secret }}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -13,12 +14,14 @@ stringData:
   HANA_URL: {{ required "Missing HANA url" .Values.hana.url }}
   HANA_USERNAME: {{ required "Missing HANA username" .Values.hana.username }}
 ---
+{{- end }}
 {{- else }}
 {{- if or .Values.hana.username .Values.hana.password .Values.hana.url }}
 {{ required "Missing HANA set configuration 'hana.enabled=true' " .Values.hana.enabled }}
 {{- end }}
 {{- end }}
 {{- if .Values.application.privateDockerRegistry }}
+{{- if .Values.application.privateDockerRegistrySecret }}
 apiVersion: v1
 data:
   .dockerconfigjson: {{ template "imagePullSecret" . }}
@@ -27,6 +30,7 @@ metadata:
   name: {{ required "Missing docker secret name" .Values.application.dockerSecretName }}
 type: kubernetes.io/dockerconfigjson 
 ---
+{{- end }}
 {{- end }}
 apiVersion: apps/v1
 kind: Deployment
@@ -179,7 +183,7 @@ spec:
       - https://{{ .Release.Name }}.{{ required "Missing Kyma host" .Values.kyma.host }}
       token-validity: 7200
     role-collections:
-    {{- toYaml .Values.kyma.roleCollections | nindent 4 }}
+    {{- include "xsk.roleCollections" . | nindent 4 }}
     {{- if .Values.kyma.addRoles }}
     {{ range .Values.kyma.roles }}
     - description: XSK {{ . }}
@@ -189,7 +193,7 @@ spec:
     {{- end }}
     {{- end }}
     role-templates:
-    {{- toYaml .Values.kyma.roleTemplates | nindent 4 }}
+    {{- include "xsk.roleTemplates" . | nindent 4 }}
     {{- if .Values.kyma.addRoles }}
     {{ range .Values.kyma.roles }}
     - description: {{ . }}  related roles
@@ -199,7 +203,7 @@ spec:
     {{- end }}
     {{- end }}
     scopes:
-    {{- toYaml .Values.kyma.scopes | nindent 4 }}
+    {{- include "xsk.scopes" . | nindent 4 }}
     {{- if .Values.kyma.addRoles }}
     {{ range .Values.kyma.roles }}
     - description: {{ . }} scope

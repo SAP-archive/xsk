@@ -43,7 +43,7 @@ COPY --from=dependencies-base /lib/x86_64-linux-gnu/libpcre2-8.so.0 /lib/x86_64-
 COPY --from=dependencies-base /lib/x86_64-linux-gnu/libtinfo.so.6 /lib/x86_64-linux-gnu/libtinfo.so.6
 WORKDIR $CATALINA_HOME
 
-EXPOSE 8080 8081 8000
+EXPOSE 8080
 
 ENTRYPOINT [ ]
 

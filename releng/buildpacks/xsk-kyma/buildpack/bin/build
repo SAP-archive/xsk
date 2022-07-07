@@ -23,6 +23,6 @@ layersdir=$1
 cat > "$layersdir/launch.toml" <<EOL
 [[processes]]
 type = "web"
-command = "/bin/sh /usr/local/tomcat/bin/catalina.sh jpda run"
+command = "/bin/sh /usr/local/tomcat/bin/catalina.sh run"
 EOL
 

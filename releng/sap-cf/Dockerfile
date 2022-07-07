@@ -53,4 +53,4 @@ EXPOSE 8080
 
 ENTRYPOINT [ ]
 
-CMD [ "/bin/sh","/usr/local/tomcat/bin/catalina.sh","jpda","run" ]
+CMD [ "/bin/sh","/usr/local/tomcat/bin/catalina.sh","run" ]

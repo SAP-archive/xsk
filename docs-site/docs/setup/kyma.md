@@ -399,6 +399,13 @@ You can deploy XSK in the SAP BTP[^1], Kyma environment.
         - By default deployment strategy type is `Recreate` which will recreate deployment resources when you apply new changes.
         - Replace the placeholders:
             - `<your-kyma-cluster-host>` with your Kyma cluster host _(e.g. `c-xxx.kyma.xxx.ondemand.com`)_.
+        - For version >0.17.0 you need to provide security context specially when you use Persistent Volume Claim.
+            ```yaml
+            securityContext:
+              runAsUser: 65532
+              runAsGroup: 65532
+              fsGroup: 65532
+            ```
 
     !!! tip "XSK versions"
         Instead of using the `latest` tag (version), for production and development use cases it is recommended that you use a stable release version:

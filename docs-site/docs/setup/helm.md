@@ -134,7 +134,9 @@ You can deploy XSK via Helm chart in a Kubernetes cluster.
         | `serviceAccount.name`                              | Service account name                      | ``                                                  |
         | `securityContext.allowPrivilegeEscalation`         | Allow privileged escalation               | `false`                                             |
         | `securityContext.seccompProfile.type`              | Enable seccomp profile                    | `RuntimeDefault`                                    |
-        | `podSecurityContext`                               | Pod Security Context                      | ``                                                  |
+        | `securityContext.runAsUser`                        | Deployment security context run as user   | `65532`                                             |
+        | `securityContext.runAsGroup`                       | Deployment security context run as group  | `65532`                                             |
+        | `podSecurityContext.fsGroup                        | Pod Security Context                      | `65532`                                             |
         | `service.type`                                     | Type of service                           | `ClusterIP`                                         |
         | `service.port`                                     | Port of service                           | `8080`                                              |
         | `nameOverride`                                     | Name override                             | ``                                                  |

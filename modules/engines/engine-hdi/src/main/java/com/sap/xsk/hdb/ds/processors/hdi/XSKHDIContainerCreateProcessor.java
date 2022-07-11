@@ -70,7 +70,7 @@ public class XSKHDIContainerCreateProcessor {
       XSKGrantPrivilegesContainerSchemaProcessor grantPrivilegesContainerSchemaProcesso,
       XSKGrantPrivilegesExternalArtifactsSchemaProcessor grantPrivilegesExternalArtifactsSchemaProcessor,
       XSKGrantPrivilegesDefaultRoleProcessor grantPrivilegesDefaultRoleProcessor
-  ) {
+  ) { //NOSONAR
     this.grantPrivilegesContainerGroupAPIProcessor = grantPrivilegesContainerGroupAPIProcessor;
     this.createContainerGroupProcessor =createContainerGroupProcessor;
     this.grantPrivilegesContainerGroupProcessor = grantPrivilegesContainerGroupProcessor;

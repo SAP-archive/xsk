@@ -1,7 +1,7 @@
 ## XSK Kyma Buildpack
 
 1. Set the XSK version:
-    > Replace the `#{XSKVersion}#` placeholder (e.g. `latest`, `0.7.1`, `1.0.0`) in `buildpack/*.toml` files.
+    > Replace the `#{XSKVersion}#` placeholder (e.g. `latest`, `0.7.1`, `1.0.0`) in `buildpack/*.toml` files. If you need jpda in buildpack change in `buildpack/bin/build` add jpda in `command = "/bin/sh /usr/local/tomcat/bin/catalina.sh jpda run`.
 
 1. Build `XSK Kyma Stack`:
 

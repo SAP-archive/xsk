@@ -13,7 +13,6 @@ package com.sap.xsk.synchronizer.cleaners;
 
 import com.sap.db.jdbcext.wrapper.WrappedPreparedStatement;
 import com.sap.xsk.synchronizer.XSJSLibSynchronizer;
-import org.eclipse.dirigible.database.api.wrappers.WrappedConnection;
 import org.eclipse.dirigible.database.api.wrappers.WrappedDataSource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,7 +58,7 @@ public class XSJSSynchronizerDBCleanerTest {
   }
 
   private DataSource createDataSourceMock(PreparedStatement preparedStatementMock) throws SQLException {
-    Connection connectionMock = mock(WrappedConnection.class);
+    Connection connectionMock = mock(Connection.class);
     when(connectionMock.prepareStatement("DELETE FROM \""
         + XSJSLibSynchronizer.XSJSLIB_SYNCHRONIZER_STATE_TABLE_NAME
         + "\" WHERE \"LOCATION\" LIKE ?")).thenReturn(preparedStatementMock);

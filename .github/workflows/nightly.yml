@@ -10,14 +10,6 @@ jobs:
   integration-tests:
     runs-on: ubuntu-latest
 
-    # Download latest DockerHub image of XSK and run it in a service container
-    # that is available to the steps below via 127.0.0.1:8080
-    services:
-      xsk:
-        image: dirigiblelabs/xsk
-        ports:
-          - 8080:8080
-
     steps:
       # Checkout
       - uses: actions/checkout@v2
@@ -51,7 +43,17 @@ jobs:
       - name: Verify Firefox
         run: firefox --version
 
-      # Wait for XSK Service Container to Startup
+      # Build and Run XSK
+      - name: Build XSK
+        run: mvn clean install
+
+      - name: Docker Build XSK
+        run: docker build -t dirigiblelabs/xsk-selenium-build /home/runner/work/xsk/xsk/releng/server/.
+
+      - name: Docker Run XSK
+        run: docker run -d --name dirigible -p 8080:8080 dirigiblelabs/xsk-selenium-build
+
+      # Wait for XSK to Startup
       - name: Wait XSK Startup
         uses: nick-invision/retry@v2
         with:
@@ -60,16 +62,13 @@ jobs:
           warning_on_retry: false
           command: curl -m 5 --silent --fail --request GET http://127.0.0.1:8080/services/v4/healthcheck | jq --exit-status -n 'inputs | if has("status") then .status=="Ready" else false end' > /dev/null
 
-      # Build XSK
-      - name: Build XSK
-        run: mvn clean install
-
-      # Run Selenium tests on XSK
+      # Run Selenium tests on locally running XSK
       - name: Run Integration & Selenium Tests
         working-directory: ./integration-tests
         run: mvn clean test -P itests -fae -Dhana.url="${{secrets.ITESTS_HANA_URL}}" -Dhana.username="${{secrets.ITESTS_HANA_USERNAME}}" -Dhana.password="${{secrets.ITESTS_HANA_PASSWORD}}"
 
         env:
+          ITESTS_SELENIUM_MODE: 'headless'
           ITESTS_SELENIUM_NEO_REGION: ${{ secrets.ITESTS_SELENIUM_NEO_REGION }}
           ITESTS_SELENIUM_NEO_SUBACCOUNT: ${{ secrets.ITESTS_SELENIUM_NEO_SUBACCOUNT }}
           ITESTS_SELENIUM_NEO_USERNAME: ${{ secrets.ITESTS_SELENIUM_NEO_USERNAME }}

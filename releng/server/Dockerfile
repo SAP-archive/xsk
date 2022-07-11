@@ -32,11 +32,6 @@ ENV JAVA_HOME=/usr/local/jdk
 ENV PATH $PATH:$JAVA_HOME/bin
 ENV CATALINA_OPTS="--add-opens java.base/java.lang.reflect=ALL-UNNAMED"
 
-ENV DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
-#Activate DEBUG mode
-#ENV JPDA_ADDRESS=0.0.0.0:8000
-#ENV JPDA_TRANSPORT=dt_socket
-
 USER nonroot
 COPY --from=dependencies-base --chown=nonroot:nonroot $CATALINA_HOME $CATALINA_HOME
 COPY --from=dependencies-base --chown=nonroot:nonroot $JAVA_HOME $JAVA_HOME
@@ -48,9 +43,9 @@ COPY --from=dependencies-base /lib/x86_64-linux-gnu/libpcre2-8.so.0 /lib/x86_64-
 COPY --from=dependencies-base /lib/x86_64-linux-gnu/libtinfo.so.6 /lib/x86_64-linux-gnu/libtinfo.so.6
 WORKDIR $CATALINA_HOME
 
-EXPOSE 8080 8081 8000
+EXPOSE 8080
 
 ENTRYPOINT [ ]
 
-CMD [ "/bin/sh","/usr/local/tomcat/bin/catalina.sh","jpda","run" ]
+CMD [ "/bin/sh","/usr/local/tomcat/bin/catalina.sh","run" ]
 

@@ -29,6 +29,17 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import com.sap.xsk.hdb.ds.processors.hdi.XSKConfigureLibrariesProcessor;
+import com.sap.xsk.hdb.ds.processors.hdi.XSKCreateContainerGroupProcessor;
+import com.sap.xsk.hdb.ds.processors.hdi.XSKCreateContainerProcessor;
+import com.sap.xsk.hdb.ds.processors.hdi.XSKDeployContainerContentProcessor;
+import com.sap.xsk.hdb.ds.processors.hdi.XSKGrantPrivilegesContainerAPIProcessor;
+import com.sap.xsk.hdb.ds.processors.hdi.XSKGrantPrivilegesContainerGroupAPIProcessor;
+import com.sap.xsk.hdb.ds.processors.hdi.XSKGrantPrivilegesContainerGroupProcessor;
+import com.sap.xsk.hdb.ds.processors.hdi.XSKGrantPrivilegesContainerSchemaProcessor;
+import com.sap.xsk.hdb.ds.processors.hdi.XSKGrantPrivilegesDefaultRoleProcessor;
+import com.sap.xsk.hdb.ds.processors.hdi.XSKGrantPrivilegesExternalArtifactsSchemaProcessor;
+import com.sap.xsk.hdb.ds.processors.hdi.XSKWriteContainerContentProcessor;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.dirigible.commons.config.Configuration;
 import org.eclipse.dirigible.commons.config.StaticObjects;
@@ -69,8 +80,36 @@ public class XSKDataStructuresHDISynchronizer extends AbstractSynchronizer imple
   private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
   private IXSKCoreParserService xskCoreParserService = new XSKCoreParserService();
   private IXSKDataStructuresCoreService xskDataStructuresCoreService = new XSKDataStructuresCoreService();
-  private XSKHDIContainerCreateProcessor xskhdiContainerCreateProcessor = new XSKHDIContainerCreateProcessor();
+
+  private XSKHDIContainerCreateProcessor xskhdiContainerCreateProcessor;
   private DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
+
+  public XSKDataStructuresHDISynchronizer() {
+    XSKGrantPrivilegesContainerGroupAPIProcessor grantPrivilegesContainerGroupAPIProcessor = new XSKGrantPrivilegesContainerGroupAPIProcessor();
+    XSKCreateContainerGroupProcessor createContainerGroupProcessor = new XSKCreateContainerGroupProcessor();
+    XSKGrantPrivilegesContainerGroupProcessor grantPrivilegesContainerGroupProcessor = new XSKGrantPrivilegesContainerGroupProcessor();
+    XSKCreateContainerProcessor createContainerProcessor = new XSKCreateContainerProcessor();
+    XSKGrantPrivilegesContainerAPIProcessor grantPrivilegesContainerAPIProcessor = new XSKGrantPrivilegesContainerAPIProcessor();
+    XSKWriteContainerContentProcessor writeContainerContentProcessor = new XSKWriteContainerContentProcessor();
+    XSKConfigureLibrariesProcessor configureLibrariesProcessor = new XSKConfigureLibrariesProcessor();
+    XSKDeployContainerContentProcessor deployContainerContentProcessor = new XSKDeployContainerContentProcessor();
+    XSKGrantPrivilegesContainerSchemaProcessor grantPrivilegesContainerSchemaProcessor = new XSKGrantPrivilegesContainerSchemaProcessor();
+    XSKGrantPrivilegesExternalArtifactsSchemaProcessor grantPrivilegesExternalArtifactsSchemaProcessor = new XSKGrantPrivilegesExternalArtifactsSchemaProcessor();
+    XSKGrantPrivilegesDefaultRoleProcessor grantPrivilegesDefaultRoleProcessor = new XSKGrantPrivilegesDefaultRoleProcessor();
+
+    this.xskhdiContainerCreateProcessor = new XSKHDIContainerCreateProcessor(grantPrivilegesContainerGroupAPIProcessor,
+        createContainerGroupProcessor,
+        grantPrivilegesContainerGroupProcessor,
+        createContainerProcessor,
+        grantPrivilegesContainerAPIProcessor,
+        writeContainerContentProcessor,
+        configureLibrariesProcessor,
+        deployContainerContentProcessor,
+        grantPrivilegesContainerSchemaProcessor,
+        grantPrivilegesExternalArtifactsSchemaProcessor,
+        grantPrivilegesDefaultRoleProcessor
+    );
+  }
 
 
 

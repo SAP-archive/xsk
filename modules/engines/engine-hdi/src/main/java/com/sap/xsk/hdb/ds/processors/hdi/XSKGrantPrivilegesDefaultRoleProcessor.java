@@ -21,7 +21,7 @@ public class XSKGrantPrivilegesDefaultRoleProcessor extends XSKHDIAbstractProces
 
   private static final Logger LOGGER = LoggerFactory.getLogger(XSKGrantPrivilegesDefaultRoleProcessor.class);
 
-  public final void execute(Connection connection, String container, String user, String[] deployPaths, String rootPath) throws SQLException {
+  public void execute(Connection connection, String container, String user, String[] deployPaths, String rootPath) throws SQLException {
     if (Arrays.asList(deployPaths).contains("/" + rootPath +"/xsk_technical_privileges.hdbrole"))  {
         if (user == null) {
           LOGGER.warn("xsk_technical_privileges.hdbrole assignment failed. No user provided.");

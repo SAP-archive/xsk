@@ -32,17 +32,43 @@ public class XSKHDIContainerCreateProcessor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(XSKHDIContainerCreateProcessor.class);
 
-  private final XSKGrantPrivilegesContainerGroupAPIProcessor grantPrivilegesContainerGroupAPIProcessor = new XSKGrantPrivilegesContainerGroupAPIProcessor();
-  private final XSKCreateContainerGroupProcessor createContainerGroupProcessor = new XSKCreateContainerGroupProcessor();
-  private final XSKGrantPrivilegesContainerGroupProcessor grantPrivilegesContainerGroupProcessor = new XSKGrantPrivilegesContainerGroupProcessor();
-  private final XSKCreateContainerProcessor createContainerProcessor = new XSKCreateContainerProcessor();
-  private final XSKGrantPrivilegesContainerAPIProcessor grantPrivilegesContainerAPIProcessor = new XSKGrantPrivilegesContainerAPIProcessor();
-  private final XSKWriteContainerContentProcessor writeContainerContentProcessor = new XSKWriteContainerContentProcessor();
-  private final XSKConfigureLibrariesProcessor configureLibrariesProcessor = new XSKConfigureLibrariesProcessor();
-  private final XSKDeployContainerContentProcessor deployContainerContentProcessor = new XSKDeployContainerContentProcessor();
-  private final XSKGrantPrivilegesContainerSchemaProcessor grantPrivilegesContainerSchemaProcessor = new XSKGrantPrivilegesContainerSchemaProcessor();
-  private final XSKGrantPrivilegesExternalArtifactsSchemaProcessor grantPrivilegesExternalArtifactsSchemaProcessor = new XSKGrantPrivilegesExternalArtifactsSchemaProcessor();
-  private final XSKGrantPrivilegesDefaultRoleProcessor grantPrivilegesDefaultRoleProcessor = new XSKGrantPrivilegesDefaultRoleProcessor();
+  private final XSKGrantPrivilegesContainerGroupAPIProcessor grantPrivilegesContainerGroupAPIProcessor;
+  private final XSKCreateContainerGroupProcessor createContainerGroupProcessor;
+  private final XSKGrantPrivilegesContainerGroupProcessor grantPrivilegesContainerGroupProcessor;
+  private final XSKCreateContainerProcessor createContainerProcessor;
+  private final XSKGrantPrivilegesContainerAPIProcessor grantPrivilegesContainerAPIProcessor;
+  private final XSKWriteContainerContentProcessor writeContainerContentProcessor;
+  private final XSKConfigureLibrariesProcessor configureLibrariesProcessor;
+  private final XSKDeployContainerContentProcessor deployContainerContentProcessor;
+  private final XSKGrantPrivilegesContainerSchemaProcessor grantPrivilegesContainerSchemaProcessor;
+  private final XSKGrantPrivilegesExternalArtifactsSchemaProcessor grantPrivilegesExternalArtifactsSchemaProcessor;
+  private final XSKGrantPrivilegesDefaultRoleProcessor grantPrivilegesDefaultRoleProcessor;
+
+  public XSKHDIContainerCreateProcessor(
+      XSKGrantPrivilegesContainerGroupAPIProcessor grantPrivilegesContainerGroupAPIProcessor,
+      XSKCreateContainerGroupProcessor createContainerGroupProcessor,
+      XSKGrantPrivilegesContainerGroupProcessor grantPrivilegesContainerGroupProcessor,
+      XSKCreateContainerProcessor createContainerProcessor,
+      XSKGrantPrivilegesContainerAPIProcessor grantPrivilegesContainerAPIProcessor,
+      XSKWriteContainerContentProcessor xskWriteContainerContentProcessor,
+      XSKConfigureLibrariesProcessor configureLibrariesProcessor,
+      XSKDeployContainerContentProcessor deployContainerContentProcessor,
+      XSKGrantPrivilegesContainerSchemaProcessor grantPrivilegesContainerSchemaProcesso,
+      XSKGrantPrivilegesExternalArtifactsSchemaProcessor grantPrivilegesExternalArtifactsSchemaProcessor,
+      XSKGrantPrivilegesDefaultRoleProcessor grantPrivilegesDefaultRoleProcessor
+  ) {
+    this.grantPrivilegesContainerGroupAPIProcessor = grantPrivilegesContainerGroupAPIProcessor;
+    this.createContainerGroupProcessor =createContainerGroupProcessor;
+    this.grantPrivilegesContainerGroupProcessor = grantPrivilegesContainerGroupProcessor;
+    this.createContainerProcessor = createContainerProcessor;
+    this.configureLibrariesProcessor = configureLibrariesProcessor;
+    this.deployContainerContentProcessor = deployContainerContentProcessor;
+    this.grantPrivilegesContainerSchemaProcessor = grantPrivilegesContainerSchemaProcesso;
+    this.grantPrivilegesExternalArtifactsSchemaProcessor = grantPrivilegesExternalArtifactsSchemaProcessor;
+    this.grantPrivilegesContainerAPIProcessor = grantPrivilegesContainerAPIProcessor;
+    this.grantPrivilegesDefaultRoleProcessor = grantPrivilegesDefaultRoleProcessor;
+    this.writeContainerContentProcessor = xskWriteContainerContentProcessor;
+  }
 
   public void execute(Connection connection, XSKDataStructureHDIModel hdiModel) {
     LOGGER.info("Start processing HDI Containers...");

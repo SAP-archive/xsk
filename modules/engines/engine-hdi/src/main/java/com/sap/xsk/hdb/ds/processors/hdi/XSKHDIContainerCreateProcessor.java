@@ -44,6 +44,20 @@ public class XSKHDIContainerCreateProcessor {
   private final XSKGrantPrivilegesExternalArtifactsSchemaProcessor grantPrivilegesExternalArtifactsSchemaProcessor;
   private final XSKGrantPrivilegesDefaultRoleProcessor grantPrivilegesDefaultRoleProcessor;
 
+  public XSKHDIContainerCreateProcessor() {
+    this.grantPrivilegesContainerGroupAPIProcessor = new XSKGrantPrivilegesContainerGroupAPIProcessor();
+    this.createContainerGroupProcessor = new XSKCreateContainerGroupProcessor();
+    this.grantPrivilegesContainerGroupProcessor = new XSKGrantPrivilegesContainerGroupProcessor();
+    this.createContainerProcessor = new XSKCreateContainerProcessor();
+    this.configureLibrariesProcessor = new XSKConfigureLibrariesProcessor();
+    this.deployContainerContentProcessor = new XSKDeployContainerContentProcessor();
+    this.grantPrivilegesContainerSchemaProcessor = new XSKGrantPrivilegesContainerSchemaProcessor();
+    this.grantPrivilegesExternalArtifactsSchemaProcessor = new XSKGrantPrivilegesExternalArtifactsSchemaProcessor();
+    this.grantPrivilegesContainerAPIProcessor = new XSKGrantPrivilegesContainerAPIProcessor();
+    this.grantPrivilegesDefaultRoleProcessor = new XSKGrantPrivilegesDefaultRoleProcessor();
+    this.writeContainerContentProcessor = new XSKWriteContainerContentProcessor();
+  }
+
   public XSKHDIContainerCreateProcessor(
       XSKGrantPrivilegesContainerGroupAPIProcessor grantPrivilegesContainerGroupAPIProcessor,
       XSKCreateContainerGroupProcessor createContainerGroupProcessor,

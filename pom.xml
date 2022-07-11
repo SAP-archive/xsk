@@ -229,7 +229,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 
-        <dirigible.version>6.3.8</dirigible.version>
+        <dirigible.version>6.3.9</dirigible.version>
 
 
         <!-- Sonar Cloud -->
@@ -269,7 +269,6 @@
         <lucene.version>7.0.1</lucene.version>
         <chemistry.version>1.1.0</chemistry.version>
         <flowable.version>6.3.0</flowable.version>
-        <jaxb.version>2.3.0</jaxb.version>
         <jaxws.version>2.3.0</jaxws.version>
         <olingo.version>2.0.11</olingo.version>
         <mockito.version>4.6.1</mockito.version>

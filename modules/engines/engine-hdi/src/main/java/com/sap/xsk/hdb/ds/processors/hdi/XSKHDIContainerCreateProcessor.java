@@ -44,7 +44,7 @@ public class XSKHDIContainerCreateProcessor {
   private final XSKGrantPrivilegesExternalArtifactsSchemaProcessor grantPrivilegesExternalArtifactsSchemaProcessor;
   private final XSKGrantPrivilegesDefaultRoleProcessor grantPrivilegesDefaultRoleProcessor;
 
-  public XSKHDIContainerCreateProcessor() {
+  public XSKHDIContainerCreateProcessor() { //NOSONAR
     this.grantPrivilegesContainerGroupAPIProcessor = new XSKGrantPrivilegesContainerGroupAPIProcessor();
     this.createContainerGroupProcessor = new XSKCreateContainerGroupProcessor();
     this.grantPrivilegesContainerGroupProcessor = new XSKGrantPrivilegesContainerGroupProcessor();

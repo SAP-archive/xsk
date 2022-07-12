@@ -1888,9 +1888,19 @@ kubectl --namespace default port-forward $POD_NAME 8080:8080
 <td><code>RuntimeDefault</code></td>
 </tr>
 <tr>
-<td><code>podSecurityContext</code></td>
-<td>Pod Security Context</td>
-<td>``</td>
+<td><code>securityContext.runAsUser</code></td>
+<td>Deployment security context run as user</td>
+<td><code>65532</code></td>
+</tr>
+<tr>
+<td><code>securityContext.runAsGroup</code></td>
+<td>Deployment security context run as group</td>
+<td><code>65532</code></td>
+</tr>
+<tr>
+<td><code>podSecurityContext.fsGroup                        | Pod Security Context                      |</code>65532`</td>
+<td></td>
+<td></td>
 </tr>
 <tr>
 <td><code>service.type</code></td>

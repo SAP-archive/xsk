@@ -2140,6 +2140,12 @@ sudo mv kubelogin /usr/bin/kubectl-oidc_login
 <li><code>&lt;your-kyma-cluster-host&gt;</code> with your Kyma cluster host <em>(e.g. <code>c-xxx.kyma.xxx.ondemand.com</code>)</em>.</li>
 </ul>
 </li>
+<li>For version &gt;0.17.0 you need to provide security context specially when you use Persistent Volume Claim.
+    <div class="highlight"><pre><span></span><code><span class="nt">securityContext</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">runAsUser</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">65532</span><span class="w"></span>
+<span class="w">  </span><span class="nt">runAsGroup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">65532</span><span class="w"></span>
+<span class="w">  </span><span class="nt">fsGroup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">65532</span><span class="w"></span>
+</code></pre></div></li>
 </ul>
 </div>
 <div class="admonition tip">

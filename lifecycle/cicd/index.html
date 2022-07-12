@@ -1789,23 +1789,18 @@
 <span class="w">          </span><span class="nt">fetch-depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build Dockerfile</span><span class="w"></span>
 <span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
-<span class="w">          </span><span class="no">[ ${{github.event.inputs.xskRepository}} != &#39;dirigiblelabs/xsk-kyma-runtime-distro&#39; ] &amp;&amp;</span><span class="w"></span>
-<span class="w">          </span><span class="no">PUBLIC=(&#39;</span><span class="w"></span>
-<span class="w">            </span><span class="no">RUN mkdir -p &quot;/usr/local/tomcat/target/dirigible/repository/root/registry/public/&quot;</span><span class="w"></span>
-<span class="w">            </span><span class="no">COPY . &quot;/usr/local/tomcat/target/dirigible/repository/root/registry/public/&quot; </span><span class="w"></span>
-<span class="w">            </span><span class="no">RUN rm -rf &quot;/usr/local/tomcat/target/dirigible/repository/root/registry/public/Dockerfile&quot; </span><span class="w"></span>
-<span class="w">            </span><span class="no">RUN rm -rf &quot;/usr/local/tomcat/target/dirigible/repository/root/registry/public/.github/&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="no">&#39;) || </span><span class="w"></span>
-<span class="w">          </span><span class="no">PUBLIC=(&#39;COPY . &quot;/usr/local/tomcat/target/dirigible/repository/root/registry/public/&quot;&#39;)</span><span class="w"></span>
-
 <span class="w">          </span><span class="no">$publishPackageInRepository == &#39;true&#39; &amp;&amp;</span><span class="w"></span>
 <span class="w">          </span><span class="no">LABEL=&#39;LABEL org.opencontainers.image.source https://github.com/${{ github.event.inputs.applicationRepository }}&#39; ||</span><span class="w"></span>
 <span class="w">          </span><span class="no">LABEL=&#39;&#39;</span><span class="w"></span>
 
+<span class="w">          </span><span class="no">PUBLIC=&#39;/usr/local/tomcat/target/dirigible/repository/root/registry/public&#39;</span><span class="w"></span>
+
 <span class="w">          </span><span class="no">DOCKERFILE_CONTENT=$(cat &lt;&lt; EOF</span><span class="w"></span>
+<span class="w">          </span><span class="no">FROM scratch as build</span><span class="w"></span>
+<span class="w">          </span><span class="no">COPY . &quot;$PUBLIC/&quot;</span><span class="w"></span>
 <span class="w">          </span><span class="no">FROM ${{ github.event.inputs.xskRepository }}:${{ github.event.inputs.xskVersion }}</span><span class="w"></span>
+<span class="w">          </span><span class="no">COPY --from=build --chown=nonroot:nonroot &quot;$PUBLIC/&quot; &quot;$PUBLIC/&quot;</span><span class="w"></span>
 <span class="w">          </span><span class="no">$LABEL</span><span class="w"></span>
-<span class="w">          </span><span class="no">$PUBLIC</span><span class="w"></span>
 <span class="w">          </span><span class="no">EOF</span><span class="w"></span>
 <span class="w">          </span><span class="no">)</span><span class="w"></span>
 <span class="w">          </span><span class="no">echo &quot;$DOCKERFILE_CONTENT&quot; &gt;&gt; Dockerfile</span><span class="w"></span>

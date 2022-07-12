@@ -124,23 +124,18 @@ The current setup is leveraging GitHub Actions and Kyma to create a CI/CD pipeli
               fetch-depth: 0
           - name: Build Dockerfile
             run: |
-              [ ${{github.event.inputs.xskRepository}} != 'dirigiblelabs/xsk-kyma-runtime-distro' ] &&
-              PUBLIC=('
-                RUN mkdir -p "/usr/local/tomcat/target/dirigible/repository/root/registry/public/"
-                COPY . "/usr/local/tomcat/target/dirigible/repository/root/registry/public/" 
-                RUN rm -rf "/usr/local/tomcat/target/dirigible/repository/root/registry/public/Dockerfile" 
-                RUN rm -rf "/usr/local/tomcat/target/dirigible/repository/root/registry/public/.github/"
-              ') || 
-              PUBLIC=('COPY . "/usr/local/tomcat/target/dirigible/repository/root/registry/public/"')
-
               $publishPackageInRepository == 'true' &&
               LABEL='LABEL org.opencontainers.image.source https://github.com/${{ github.event.inputs.applicationRepository }}' ||
               LABEL=''
 
+              PUBLIC='/usr/local/tomcat/target/dirigible/repository/root/registry/public'
+
               DOCKERFILE_CONTENT=$(cat << EOF
+              FROM scratch as build
+              COPY . "$PUBLIC/"
               FROM ${{ github.event.inputs.xskRepository }}:${{ github.event.inputs.xskVersion }}
+              COPY --from=build --chown=nonroot:nonroot "$PUBLIC/" "$PUBLIC/"
               $LABEL
-              $PUBLIC
               EOF
               )
               echo "$DOCKERFILE_CONTENT" >> Dockerfile

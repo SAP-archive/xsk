@@ -46,7 +46,8 @@ securityContext:
   runAsUser: 65532
   runAsGroup: 65532
 
-podSecurityContext: {}
+podSecurityContext:
+  fsGroup: 65532
 
 service:
   # Type of service when you expose

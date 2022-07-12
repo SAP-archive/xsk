@@ -198,7 +198,7 @@ public class XsodataWithXsjsHandlersTest {
   }
 
   @AfterClass
-  public static void deleteSchema() throws SQLException {
+  public static void dropSchema() throws SQLException {
     try (Connection connection = dataSource.getConnection(); Statement statement = connection.createStatement()) {
       HanaITestUtils.dropSchema(statement, APPLICATION_SCHEMA);
     }

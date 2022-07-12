@@ -33,7 +33,7 @@ public class ProjectHealthChecker {
 
 
   private final static Integer INITIAL_RETRY_INDEX = 0;
-  private final static Integer RETRY_COUNT = 10;
+  private final static Integer RETRY_COUNT = 50;
   private final static Integer RETRY_INTERVAL = 5000;
 
   private final static String TABLE_EXISTS_QUERY = "SELECT TABLE_NAME FROM \"SYS\".\"M_TABLES\" WHERE SCHEMA_NAME = ? AND TABLE_NAME = ?";
@@ -48,14 +48,20 @@ public class ProjectHealthChecker {
 
   public void performHealthChecks() {
     performHttpHealthChecks();
+    System.out.println("HTTP health checks passed.");
     performSqlHealthChecks();
+    System.out.println("SQL health checks passed.");
   }
 
   private void performHttpHealthChecks() {
+    System.out.println("Starting to perform HTTP health checks.");
+
     projectApplicationHttpChecks.forEach(httpCheck -> {
       String endpointToCall = httpCheck.getEndpointToCall();
       Integer expectedStatusCode = httpCheck.getExpectedStatusCode();
       String expectedBodyMessage = httpCheck.getExpectedBodyMessage();
+
+      System.out.println("Performing HTTP health check to endpoint: " + endpointToCall);
 
       try {
         URL requestUrl = new URL(xskHttpClient.getBaseHost() + endpointToCall);
@@ -93,19 +99,21 @@ public class ProjectHealthChecker {
   }
 
   private void performSqlHealthChecks() {
+    System.out.println("Starting to perform SQL health checks.");
+
     projectApplicationSqlChecks.forEach(sqlCheck -> {
       String schemaName = sqlCheck.getSchemaName();
       String tableName = sqlCheck.getTableName();
-      boolean tableExistCheck = sqlCheck.tableExistsCheck();
-      boolean tableHasRecordsCheck = sqlCheck.tableHasRecordsCheck();
 
       try (Connection connection = dataSource.getConnection()) {
 
-        if (tableExistCheck) {
+        if (sqlCheck.tableExistsCheck()) {
+          System.out.println("Performing SQL table exists check for: " + "\"" + schemaName + "\".\"" + tableName + "\"");
           checkIfTableExists(connection, schemaName, tableName);
         }
 
-        if (tableHasRecordsCheck) {
+        if (sqlCheck.tableHasRecordsCheck()) {
+          System.out.println("Performing SQL table has records check for: " + "\"" + schemaName + "\".\"" + tableName + "\"");
           checkIfTableHasRecords(connection, schemaName, tableName);
         }
 

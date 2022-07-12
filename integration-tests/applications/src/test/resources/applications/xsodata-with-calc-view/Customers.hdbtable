@@ -1,0 +1,6 @@
+table.schemaName = "TEST_SCHEMA";
+table.tableType = COLUMNSTORE;
+table.columns = [
+	{name = "ID"; sqlType = INTEGER; nullable = false; },
+	{name = "NAME"; sqlType = NVARCHAR; length = 20; nullable = false;}];
+table.primaryKey.pkcolumns = ["ID"];

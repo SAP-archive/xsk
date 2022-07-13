@@ -85,7 +85,8 @@ public class XSKHDIContainerCreateProcessor {
       this.createContainerGroupProcessor.execute(connection, hdiModel.getGroup());
 
       List<String> users = new ArrayList<>(Arrays.asList(hdiModel.getUsers()));
-      users.add(Configuration.get("HANA_USERNAME"));
+      String hanaUsername = Configuration.get("HANA_USERNAME");
+      users.add(hanaUsername);
       String[] usersAsArray = users.toArray(new String[0]);
 
       // Grant Privileges to the Container Group
@@ -111,8 +112,7 @@ public class XSKHDIContainerCreateProcessor {
       this.deployContainerContentProcessor.execute(connection, hdiModel.getContainer(), hdiModel.getDeploy(), hdiModel.getUndeploy());
 
       // Grant Privileges to the default role
-      this.grantPrivilegesDefaultRoleProcessor.execute(connection, hdiModel.getContainer(), Configuration.get("HANA_USERNAME"), hdiModel.getDeploy(),
-          hdiModel.getPackageName());
+      this.grantPrivilegesDefaultRoleProcessor.execute(connection, hdiModel.getContainer(), hanaUsername, hdiModel.getDeploy());
 
       // Grant Privileges to the Container Schema
       this.grantPrivilegesContainerSchemaProcessor.execute(connection, hdiModel.getContainer(), usersAsArray);

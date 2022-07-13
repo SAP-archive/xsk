@@ -2269,7 +2269,21 @@ sudo mv kubelogin /usr/bin/kubectl-oidc_login
 <p>To learn more about application scaling in Kubernetes, see <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/">Horizontal Pod Autoscaling</a>.</p>
 </div>
 <h3 id="debugging">Debugging</h3>
-<p>To debug the XSK engine via <strong>Remote Java Debugging</strong> execute the following command:</p>
+<p>By default debugging is disable if you want to to debug the XSK engine via <strong>Remote Java Debugging</strong> execute the following command:</p>
+<p>Add this environment variables:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">env</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT</span><span class="w"></span>
+<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;0.0.0.0:8081&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">JPDA_ADDRESS</span><span class="w"></span>
+<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;0.0.0.0:8000&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">JPDA_TRANSPORT</span><span class="w"></span>
+<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;dt_socket&#39;</span><span class="w"></span>
+</code></pre></div>
+<p>Change the deployment and add this:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;/bin/sh&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;/usr/local/tomcat/bin/catalina.sh&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;jpda&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;run&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+</code></pre></div>
+<p>Port forward to your deployment:</p>
 <div class="highlight"><pre><span></span><code>kubectl port-forward deployment/xsk 8000:8000
 </code></pre></div>
 <div class="footnote">

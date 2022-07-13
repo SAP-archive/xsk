@@ -515,10 +515,30 @@ The XSK **Deployment** could be scaled horizontally by adding/removing **Pods** 
 
     To learn more about application scaling in Kubernetes, see [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/).
 
-
 ### Debugging
 
-To debug the XSK engine via **Remote Java Debugging** execute the following command:
+By default debugging is disable if you want to to debug the XSK engine via **Remote Java Debugging** execute the following command:
+
+Add this environment variables:
+
+```yaml
+env:
+    - name: DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT
+      value: '0.0.0.0:8081'
+    - name: JPDA_ADDRESS
+      value: '0.0.0.0:8000'
+    - name: JPDA_TRANSPORT
+      value: 'dt_socket'
+```
+
+Change the deployment and add this:
+
+```yaml
+command: ["/bin/sh"]
+args: ["/usr/local/tomcat/bin/catalina.sh","jpda","run"]
+```
+
+Port forward to your deployment:
 
 ```
 kubectl port-forward deployment/xsk 8000:8000

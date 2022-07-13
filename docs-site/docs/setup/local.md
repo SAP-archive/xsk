@@ -80,10 +80,15 @@ You can deploy XSK locally using Docker or Tomcat server.
 
             ```
             docker run --name xsk \
-            -e JPDA_ADDRESS=0.0.0.0:8000 \
-            -e JPDA_TRANSPORT=dt_socket \
-            --rm -p 8080:8080 -p 8081:8081 -p 8000:8000 \
-            dirigiblelabs/xsk:latest
+            --rm \
+            -p 8080:8080 \
+            -p 8000:8000 \
+            -p 8081:8081 \
+            -e DIRIGBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT="0.0.0.0:8081" \
+            -e JPDA_ADDRESS="0.0.0.0:8000" \
+            -e JPDA_TRANSPORT="dt_socket" \
+            dirigiblelabs/xsk:latest \
+            /bin/sh /usr/local/tomcat/bin/catalina.sh jpda run
             ```
 
     === "Tomcat"

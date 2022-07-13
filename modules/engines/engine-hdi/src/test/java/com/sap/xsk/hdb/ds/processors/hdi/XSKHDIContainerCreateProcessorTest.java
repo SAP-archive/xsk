@@ -90,8 +90,7 @@ public class XSKHDIContainerCreateProcessorTest {
     verify(deployContainerContentProcessor, times(1)).execute(mockConnection, container, deploy, undeploy);
     verify(grantPrivilegesContainerSchemaProcessor, times(1)).execute(mockConnection, container, users);
     verify(grantPrivilegesExternalArtifactsSchemaProcessor, times(1)).execute(mockConnection, container, deploy);
-    verify(grantPrivilegesDefaultRoleProcessor, times(1)).execute(mockConnection, hdiModel.getContainer(), Configuration.get("HANA_USERNAME"), hdiModel.getDeploy(),
-        hdiModel.getPackageName());
+    verify(grantPrivilegesDefaultRoleProcessor, times(1)).execute(mockConnection, hdiModel.getContainer(), Configuration.get("HANA_USERNAME"), hdiModel.getDeploy());
   }
 
 }

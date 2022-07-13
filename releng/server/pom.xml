@@ -201,16 +201,6 @@
     </dependency>
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
-      <artifactId>dirigible-ide-ui-websockets</artifactId>
-      <version>${dirigible.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.dirigible</groupId>
-      <artifactId>dirigible-ide-ui-swagger</artifactId>
-      <version>${dirigible.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-ide-service-git</artifactId>
       <version>${dirigible.version}</version>
     </dependency>
@@ -337,16 +327,6 @@
     <dependency>
       <groupId>org.eclipse.dirigible</groupId>
       <artifactId>dirigible-ide-ui-registry</artifactId>
-      <version>${dirigible.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.dirigible</groupId>
-      <artifactId>dirigible-ide-ui-database</artifactId>
-      <version>${dirigible.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.dirigible</groupId>
-      <artifactId>dirigible-ide-ui-database-menu</artifactId>
       <version>${dirigible.version}</version>
     </dependency>
     <dependency>

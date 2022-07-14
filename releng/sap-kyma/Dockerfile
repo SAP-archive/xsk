@@ -16,6 +16,10 @@ FROM dirigiblelabs/xsk-kyma-runtime-base as base
 
 COPY target/ROOT.war /usr/local/tomcat/webapps/
 
+RUN apt-get update && \
+    apt-get install git -y && \
+    apt-get clean
+
 FROM base AS xsk-external-jdk
 # If JDK_TYPE is set to `external-jdk`, then the JDK_HOME is required and it should point to the home directory of the jdk
 ARG JDK_HOME

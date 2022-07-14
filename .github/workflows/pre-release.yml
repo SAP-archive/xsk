@@ -70,8 +70,7 @@ jobs:
     - name: Push XSK for SAP Kyma
       run: |
         cd releng/sap-kyma
-        cp -r "${JAVA_HOME}" jdk
-        docker build --load -t dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }} --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
+        docker build --load -t dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }} .
         docker push dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }}
         cd ../../
     - name: Push XSK for SAP Kyma Runtime

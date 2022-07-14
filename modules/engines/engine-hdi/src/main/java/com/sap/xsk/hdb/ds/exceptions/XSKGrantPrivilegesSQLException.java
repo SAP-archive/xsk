@@ -13,7 +13,7 @@ package com.sap.xsk.hdb.ds.exceptions;
 
 public class XSKGrantPrivilegesSQLException extends RuntimeException {
 
-  public XSKGrantPrivilegesSQLException(String message) {
-    super(message);
+  public XSKGrantPrivilegesSQLException(String message, Throwable cause) {
+    super(message, cause);
   }
 }

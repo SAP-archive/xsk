@@ -26,8 +26,8 @@ public class XSKGrantPrivilegesDefaultRoleProcessor extends XSKHDIAbstractProces
     Arrays.stream(deployPaths).filter(deployPath -> deployPath.endsWith("xsk_technical_privileges.hdbrole")).forEach(filePath -> {
       try {
         grantPrivileges(connection, container, user);
-      } catch (SQLException throwables) {
-        throw new XSKGrantPrivilegesSQLException(throwables.getMessage());
+      } catch (SQLException exception) {
+        throw new XSKGrantPrivilegesSQLException("Failed to grant xsk_technical_privileges.hdbrole to user " + user, exception);
       }
     });
 

@@ -50,7 +50,7 @@ public class XSKGrantPrivilegesDefaultRoleProcessorTest {
 
   @Test
   public void testNoHanaUserProvided() {
-    Exception exception = assertThrows(RuntimeException.class, () -> {
+    Exception exception = assertThrows(IllegalStateException.class, () -> {
       String[] deploys = {};
       testGrantPrivilege(deploys, null, container);
     });

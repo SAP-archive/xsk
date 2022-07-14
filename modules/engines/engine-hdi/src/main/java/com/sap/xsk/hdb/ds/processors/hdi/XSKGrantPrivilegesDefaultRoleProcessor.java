@@ -14,20 +14,22 @@ package com.sap.xsk.hdb.ds.processors.hdi;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
+import com.sap.xsk.hdb.ds.exceptions.XSKGrantPrivilegesSQLException;
 
 public class XSKGrantPrivilegesDefaultRoleProcessor extends XSKHDIAbstractProcessor {
 
-  public void execute(Connection connection, String container, String user, String[] deployPaths) throws SQLException {
-    for (String path : Arrays.asList(deployPaths)) {
-      if (path.endsWith("xsk_technical_privileges.hdbrole"))  {
-        if (user == null) {
-          throw new IllegalStateException("xsk_technical_privileges.hdbrole assignment failed. No user provided.");
-        } else {
-          grantPrivileges(connection, container, user);
-        }
-        return;
-      }
+  public void execute(Connection connection, String container, String user, String[] deployPaths) {
+    if (user == null) {
+      throw new IllegalStateException("xsk_technical_privileges.hdbrole assignment failed. No user provided.");
     }
+
+    Arrays.stream(deployPaths).filter(deployPath -> deployPath.endsWith("xsk_technical_privileges.hdbrole")).forEach(filePath -> {
+      try {
+        grantPrivileges(connection, container, user);
+      } catch (SQLException throwables) {
+        throw new XSKGrantPrivilegesSQLException(throwables.getMessage());
+      }
+    });
 
   }
 

@@ -23,6 +23,8 @@ import java.util.Arrays;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(MockitoJUnitRunner.class)
 public class XSKGrantPrivilegesDefaultRoleProcessorTest {
@@ -31,26 +33,39 @@ public class XSKGrantPrivilegesDefaultRoleProcessorTest {
   private Connection mockConnection;
 
   private String hdbRolePath = "/package/xsk_technical_privileges.hdbrole";
+  private String user = "HANA_USER";
+  private String container = "testContainer";
 
   @Test
   public void testDeployedRole() throws SQLException {
     String[] deploys = { hdbRolePath };
-    testGrantPrivilege(deploys);
+    testGrantPrivilege(deploys, user, container);
   }
 
   @Test
   public void testNoDeployedRole() throws SQLException {
     String[] deploys = {};
-    testGrantPrivilege(deploys);
+    testGrantPrivilege(deploys, user, container);
   }
 
-  private void testGrantPrivilege(String[] deploys) throws SQLException {
+  @Test
+  public void testNoHanaUserProvided() {
+    Exception exception = assertThrows(RuntimeException.class, () -> {
+      String[] deploys = {};
+      testGrantPrivilege(deploys, null, container);
+    });
+
+    String expectedMessage = "xsk_technical_privileges.hdbrole assignment failed. No user provided.";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  private void testGrantPrivilege(String[] deploys, String user, String container) throws SQLException {
     int expectedInvocations = Arrays.asList(deploys).contains(hdbRolePath) ? 1 : 0;
 
     XSKGrantPrivilegesDefaultRoleProcessor processorSpy = spy(XSKGrantPrivilegesDefaultRoleProcessor.class);;
 
-    String container = "testContainer";
-    String user = "HANA_USER";
     processorSpy.execute(mockConnection, container, user, deploys);
 
     String mockSQLCreate = "CREATE LOCAL TEMPORARY COLUMN TABLE #ROLES LIKE _SYS_DI.TT_SCHEMA_ROLES;";

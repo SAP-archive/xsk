@@ -32,18 +32,7 @@ public class XSKSecureStoreSynchronizer extends AbstractSynchronizer {
   private final String SYNCHRONIZER_NAME = this.getClass().getCanonicalName();
   private XSKSecureStoreCoreService xskSecureStoreCoreService = new XSKSecureStoreCoreService();
 
-  /**
-   * Force synchronization.
-   */
-  public static final void forceSynchronization() {
-    XSKSecureStoreSynchronizer synchronizer = new XSKSecureStoreSynchronizer();
-    synchronizer.setForcedSynchronization(true);
-    try {
-      synchronizer.synchronize();
-    } finally {
-      synchronizer.setForcedSynchronization(false);
-    }
-  }
+
 
   @Override
   public void synchronize() {

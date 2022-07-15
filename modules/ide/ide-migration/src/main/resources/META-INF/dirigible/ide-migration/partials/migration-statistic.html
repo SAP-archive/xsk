@@ -13,6 +13,7 @@
                             <th>Started at</th>
                             <th>Updated at</th>
                             <th>Status</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tr ng-repeat="migrationEntry in migrations">
@@ -20,6 +21,13 @@
                         <td>{{migrationEntry.STARTED_ON |date : 'HH:mm:ss dd/MM/yyyy'}}</td>
                         <td>{{migrationEntry.LAST_UPDATED |date : 'HH:mm:ss dd/MM/yyyy'}}</td>
                         <td>{{migrationEntry.STATUS}}</td>
+                        <td>
+                            <button type="button" class="btn btn-secondary btn-big pull-right"
+                                ng-click="continueClicked(migrationEntry)"
+                                ng-disabled="migrationEntry.STATUS !== 'POPULATING_PROJECTS_EXECUTED'">
+                                Continue
+                            </button>
+                        </td>
                     </tr>
                 </table>
             </div>

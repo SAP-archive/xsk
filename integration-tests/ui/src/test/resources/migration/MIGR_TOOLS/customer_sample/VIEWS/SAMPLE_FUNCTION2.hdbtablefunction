@@ -1,0 +1,16 @@
+FUNCTION "customer_sample.VIEWS::SAMPLE_FUNCTION2" (CurrentUserId INTEGER)
+RETURNS TABLE ("count" INT,  "ADDRESS" DECIMAL(18,0))
+LANGUAGE SQLSCRIPT
+SQL SECURITY DEFINER
+  AS 
+
+ 
+ /********* Begin Procedure Script ************/ 
+ BEGIN 
+ 	 var_out = SELECT
+		 *
+	FROM "SALES_ORDERS";
+
+
+return :var_out;
+END;

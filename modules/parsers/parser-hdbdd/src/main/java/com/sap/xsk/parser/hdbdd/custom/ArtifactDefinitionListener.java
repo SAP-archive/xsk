@@ -29,6 +29,7 @@ import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignHanaTypeWithArgsContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssignTypeContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssociationConstraintsContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.AssociationContext;
+import com.sap.xsk.parser.hdbdd.core.CdsParser.CalculatedAssociationContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.ContextRuleContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.DataTypeRuleContext;
 import com.sap.xsk.parser.hdbdd.core.CdsParser.ElementConstraintsContext;
@@ -77,6 +78,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
@@ -137,7 +139,7 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
     Symbol newSymbol = this.symbolFactory.getSymbol(ctx, this.currentScope, this.schema);
     symbolsByParseTreeContext.put(ctx, newSymbol);
     registerSymbolToSymbolTable(newSymbol);
-    fullSymbolNames.push(newSymbol.getName());
+    fullSymbolNames.add(newSymbol.getName());
     this.currentScope = (Scope) newSymbol;
   }
 
@@ -145,7 +147,21 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
   public void exitContextRule(ContextRuleContext ctx) {
     this.currentScope = this.currentScope.getEnclosingScope(); // pop com.sap.xsk.parser.hdbdd.symbols.scope
     validateTopLevelSymbol(this.symbolsByParseTreeContext.get(ctx));
-    fullSymbolNames.pop();
+    fullSymbolNames.removeLast();
+  }
+
+  @Override
+  public void enterCalculatedAssociation(CalculatedAssociationContext ctx) {
+    EntityElementSymbol elementSymbol = this.symbolFactory.getCalculatedColumnSymbol(ctx, currentScope);
+    this.entityElements.put(ctx, elementSymbol);
+    this.symbolsByParseTreeContext.put(ctx, elementSymbol);
+    this.typeables.put(ctx, elementSymbol);
+  }
+
+  @Override
+  public void exitCalculatedAssociation(CalculatedAssociationContext ctx) {
+    EntityElementSymbol elementSymbol = this.entityElements.get(ctx);
+    this.currentScope.define(elementSymbol);
   }
 
   @Override
@@ -153,7 +169,7 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
     Symbol newSymbol = this.symbolFactory.getSymbol(ctx, this.currentScope, this.schema);
     symbolsByParseTreeContext.put(ctx, newSymbol);
     registerSymbolToSymbolTable(newSymbol);
-    fullSymbolNames.push(newSymbol.getName());
+    fullSymbolNames.add(newSymbol.getName());
     this.currentScope = (Scope) newSymbol;
     this.symbolTable.addEntityToGraph(newSymbol.getFullName());
   }
@@ -162,7 +178,7 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
   public void exitEntityRule(EntityRuleContext ctx) {
     this.currentScope = this.currentScope.getEnclosingScope(); // pop com.sap.xsk.parser.hdbdd.symbols.scope
     validateTopLevelSymbol(this.symbolsByParseTreeContext.get(ctx));
-    fullSymbolNames.pop();
+    fullSymbolNames.removeLast();
   }
 
   @Override
@@ -184,7 +200,7 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
     Symbol newSymbol = this.symbolFactory.getSymbol(ctx, this.currentScope, this.schema);
     symbolsByParseTreeContext.put(ctx, newSymbol);
     registerSymbolToSymbolTable(newSymbol);
-    fullSymbolNames.push(newSymbol.getName());
+    fullSymbolNames.add(newSymbol.getName());
     this.currentScope = (Scope) newSymbol;
   }
 
@@ -192,7 +208,7 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
   public void exitStructuredTypeRule(StructuredTypeRuleContext ctx) {
     this.currentScope = this.currentScope.getEnclosingScope(); // pop com.sap.xsk.parser.hdbdd.symbols.scope
     validateTopLevelSymbol(this.symbolsByParseTreeContext.get(ctx));
-    fullSymbolNames.pop();
+    fullSymbolNames.removeLast();
   }
 
   @Override
@@ -457,7 +473,7 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
     Symbol newSymbol = this.symbolFactory.getSymbol(ctx, this.currentScope, this.schema);
     symbolsByParseTreeContext.put(ctx, newSymbol);
     registerSymbolToSymbolTable(newSymbol);
-    fullSymbolNames.push(newSymbol.getName());
+    fullSymbolNames.add(newSymbol.getName());
     this.currentScope = (Scope) newSymbol;
     ((ViewSymbol) newSymbol).setPackageId(this.packageId);
     ((ViewSymbol) newSymbol).setContext(((ContextSymbol) currentScope.getEnclosingScope()).getName());
@@ -467,7 +483,7 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
   @Override
   public void exitViewRule(ViewRuleContext ctx) {
     this.currentScope = this.currentScope.getEnclosingScope(); // pop com.sap.xsk.parser.hdbdd.symbols.scope
-    fullSymbolNames.pop();
+    fullSymbolNames.removeLast();
   }
 
   @Override
@@ -499,7 +515,9 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
     }
 
     if (ctx.dependsOnTable != null) {
-      selectSymbol.setDependsOnTable(handleStringLiteral(ctx.dependsOnTable.getText()));
+      String parsedDependsOnTable = ctx.dependsOnTable.stream().map(RuleContext::getText).collect(Collectors.joining("."));
+      String dependsOnTableNoQuotes = handleStringLiteral(parsedDependsOnTable);
+      selectSymbol.setDependsOnTable(dependsOnTableNoQuotes);
     }
 
     if (ctx.dependingTableAlias != null) {
@@ -707,9 +725,7 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
       AnnotationSimpleValue nameValue = (AnnotationSimpleValue) schemaAnnotation.getValue("name");
       this.schema = nameValue.getValue();
       if (symbol instanceof ContextSymbol) {
-        ((ContextSymbol) symbol).getSymbols().forEach((k, v) ->
-            v.setSchema(this.schema)
-        );
+        setContextChildSchemas((ContextSymbol) symbol, this.schema);
       } else {
         symbol.setSchema(this.schema);
       }
@@ -719,6 +735,16 @@ public class ArtifactDefinitionListener extends CdsBaseListener {
       throw new CDSRuntimeException(String.format("Error at line: %s. Top level symbol name does not match the filename.",
           symbol.getIdToken().start.getLine()));
     }
+  }
+
+  private void setContextChildSchemas(ContextSymbol symbol, String schema) {
+    symbol.getSymbols().forEach((k, v) -> {
+      if (v instanceof ContextSymbol) {
+        setContextChildSchemas((ContextSymbol) v, schema);
+      } else {
+        v.setSchema(schema);
+      }
+    });
   }
 
   private String getTopLevelSymbolExpectedName() {

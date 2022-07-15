@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>com.sap.xsk</groupId>
 		<artifactId>xsk-releng-parent</artifactId>
-		<version>0.17.0-SNAPSHOT</version>
+		<version>0.18.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>XSK - Releng - Cloud Foundry</name>
 	<artifactId>xsk-releng-cf</artifactId>
-	<version>0.17.0-SNAPSHOT</version>
+	<version>0.18.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<build>
@@ -76,6 +76,12 @@
 			<artifactId>dirigible-sap-cf-base</artifactId>
 			<version>${dirigible.version}</version>
 			<exclusions>
+				<!-- Temporary disables the Wiki engine-->
+				<exclusion>
+					<groupId>org.eclipse.dirigible</groupId>
+					<artifactId>dirigible-engine-wiki</artifactId>
+				</exclusion>
+
 				<exclusion>
 					<groupId>org.eclipse.dirigible</groupId>
 					<artifactId>dirigible-ext-elasticsearch</artifactId>
@@ -116,14 +122,18 @@
 					<groupId>org.eclipse.dirigible</groupId>
 					<artifactId>dirigible-api-facade-spark</artifactId>
 				</exclusion>
-        <exclusion>
-          <groupId>org.eclipse.dirigible</groupId>
-          <artifactId>dirigible-ide-ui-workspace-menu</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.eclipse.dirigible</groupId>
-          <artifactId>dirigible-ide-ui-jobs-menu</artifactId>
-        </exclusion>
+				<exclusion>
+					<groupId>org.eclipse.dirigible</groupId>
+					<artifactId>dirigible-ide-ui-branding</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.eclipse.dirigible</groupId>
+					<artifactId>dirigible-ide-ui-workspace-menu</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.eclipse.dirigible</groupId>
+					<artifactId>dirigible-ide-ui-jobs-menu</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 	</dependencies>

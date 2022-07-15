@@ -20,6 +20,8 @@ public class EntityElementSymbol extends FieldSymbol {
   private boolean isDefaultValueDateTimeFunction;
   private boolean isKey;
   private boolean isNotNull;
+  private boolean isCalculatedColumn;
+  private String statement;
 
   public EntityElementSymbol(String name, Scope scope) {
     super(name, scope);
@@ -65,5 +67,21 @@ public class EntityElementSymbol extends FieldSymbol {
 
   public void setKey(boolean key) {
     isKey = key;
+  }
+
+  public boolean isCalculatedColumn() {
+    return isCalculatedColumn;
+  }
+
+  public void setCalculatedColumn(boolean calculatedColumn) {
+    isCalculatedColumn = calculatedColumn;
+  }
+
+  public String getStatement() {
+    return statement;
+  }
+
+  public void setStatement(String statement) {
+    this.statement = statement;
   }
 }

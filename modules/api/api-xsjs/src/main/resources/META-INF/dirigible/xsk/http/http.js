@@ -9,9 +9,9 @@
  * SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-var dClient = require("http/v4/client");
-var web = require("xsk/web/web");
-var config = require("core/v4/configurations");
+const dClient = require("http/v4/client");
+const web = require("xsk/web/web");
+const config = require("core/v4/configurations");
 
 exports.OPTIONS = 0;
 exports.GET = 1;
@@ -65,7 +65,7 @@ exports.GATEWAY_TIMEOUT = 504;
 exports.HTTP_VERSION_NOT_SUPPORTED = 505;
 
 exports.readDestination = function (destinationPackage, destinationName) {
-  let readDestination = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.getDestination(destinationName);
+  const readDestination = com.sap.xsk.api.destination.CloudPlatformDestinationFacade.getDestination(destinationName);
   let destination = new exports.Destination();
 
   destination.host = readDestination.getHost();
@@ -73,7 +73,7 @@ exports.readDestination = function (destinationPackage, destinationName) {
   destination.pathPrefix = readDestination.getPathPrefix();
   destination.name = destinationName;
 
-  let properties = JSON.parse(readDestination.getPropertiesAsJSON());
+  const properties = JSON.parse(readDestination.getPropertiesAsJSON());
 
   return Object.assign(destination, properties);
 };
@@ -85,13 +85,12 @@ exports.Client = function () {
   this.request = function (param1, param2, param3) {
     if (typeof param1 === "string") {
       sendRequestWithHttpMethod(param1, param2, param3);
-      return;
     } else if (typeof param2 === "string") {
       sendRequestObjToUrl(param1, param2, param3);
-      return;
+    } else {
+      sendRequestObjToDestination(param1, param2);
     }
-
-    sendRequestObjToDestination(param1, param2);
+    return this; 
   };
 
   this.close = function () {
@@ -122,7 +121,7 @@ exports.Client = function () {
       options.proxyPort = config.get("DIRIGIBLE_CONNECTIVITY_ONPREMISE_PROXY_PORT");
     }
 
-    var requestHeaders = tupelObjectToArray(requestObj.headers);
+    const requestHeaders = tupelObjectToArray(requestObj.headers);
     addCookieToHeadersFromTupel(requestObj.cookies, requestHeaders);
     requestObj.headers = requestHeaders;
 
@@ -138,14 +137,14 @@ exports.Client = function () {
   }
 
   function sendRequestObjToUrl(requestObj, url, proxy) {
-    var fullUrl = url + requestObj.path;
+    const fullUrl = url + requestObj.path;
 
-    var options = {};
+    let options = {};
     if (proxy) {
       options = proxyUrlToOptionsObject(proxy);
     }
 
-    var requestHeaders = tupelObjectToArray(requestObj.headers);
+    let requestHeaders = tupelObjectToArray(requestObj.headers);
     addCookieToHeadersFromTupel(requestObj.cookies, requestHeaders);
     options.headers = requestHeaders;
 
@@ -160,7 +159,7 @@ exports.Client = function () {
   }
 
   function sendRequestWithHttpMethod(requestHttpMethod, url, proxy) {
-    var options = {};
+    let options = {};
 
     if (proxy) {
       options = proxyUrlToOptionsObject(proxy);
@@ -171,9 +170,9 @@ exports.Client = function () {
   }
 
   function proxyUrlToOptionsObject(proxyUrl) {
-    var options = {};
+    let options = {};
 
-    var proxyHostPortPair = proxyUrl.split(":");
+    const proxyHostPortPair = proxyUrl.split(":");
     options.proxyHost = proxyHostPortPair[0].trim();
     options.proxyPort = Number.parseInt(proxyHostPortPair[1]).trim();
 
@@ -208,7 +207,7 @@ exports.Client = function () {
       dResponse = JSON.parse(dResponse);
     }
 
-    var webResponse = new web.WebResponse(dResponse);
+    const webResponse = new web.WebResponse(dResponse);
     return webResponse;
   }
 
@@ -217,8 +216,8 @@ exports.Client = function () {
       return;
     }
 
-    var arr = [];
-    for (var i = 0; i < tupelObject.length; i++) {
+    let arr = [];
+    for (let i = 0; i < tupelObject.length; i++) {
       arr.push(tupelObject[i]);
     }
 
@@ -226,16 +225,12 @@ exports.Client = function () {
   }
 
   function getUrlParametersFromTupel(tupelParameters) {
-    var queryParameterPairs = [];
-    for (var i = 0; i < tupelParameters.length; i++) {
-      var name = tupelParameters[i].name;
-      var value = tupelParameters[i].value;
+    let queryParameterPairs = [];
+    for (let i = 0; i < tupelParameters.length; i++) {
+      const name = tupelParameters[i].name;
+      const value = tupelParameters[i].value;
 
-      if (value instanceof Array) {
-        value = value.join(",");
-      }
-
-      var queryPair = name + "=" + value;
+      const queryPair = name + "=" + (value instanceof Array ? value.join(",") : value);
 
       queryParameterPairs.push(queryPair);
     }
@@ -248,7 +243,7 @@ exports.Client = function () {
       return url;
     }
 
-    var urlQueryParameters = getUrlParametersFromTupel(parametersTupel);
+    const urlQueryParameters = getUrlParametersFromTupel(parametersTupel);
     return url + "?" + urlQueryParameters;
   }
 
@@ -258,9 +253,9 @@ exports.Client = function () {
     }
 
     var cookiesArray = [];
-    for (var i = 0; i < tupelCookie.length; i++) {
-      var cookieName = tupelCookie[i].name;
-      var cookieValue = tupelCookie[i].value;
+    for (let i = 0; i < tupelCookie.length; i++) {
+      const cookieName = tupelCookie[i].name;
+      const cookieValue = tupelCookie[i].value;
 
       cookiesArray.push(cookieName + "=" + cookieValue + ";");
     }
@@ -276,13 +271,8 @@ function processDestValue(destValueArg) {
     return;
   }
 
-  var splitDestValueArray = destValueArg.split('"');
-  var destValue;
-  if (splitDestValueArray.length > 1) {
-    destValue = splitDestValueArray[1].trim();
-  } else {
-    destValue = splitDestValueArray[0].trim();
-  }
+  const splitDestValueArray = destValueArg.split('"');
+  const destValue = splitDestValueArray.length > 1 ? splitDestValueArray[1].trim() : splitDestValueArray[0].trim();
 
   return parseDestValue(destValue);
 }

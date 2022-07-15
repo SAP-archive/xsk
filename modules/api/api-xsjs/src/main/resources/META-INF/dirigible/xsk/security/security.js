@@ -45,3 +45,22 @@ exports.Store = function (filePath) {
         com.sap.xsk.xssecurestore.ds.facade.XSKSecureStoreFacade.removeForUser(filePath, removeObject.name);
     }
 }
+
+exports.crypto = function (){
+    return new XSCrypto()
+
+}
+
+class XSCrypto {
+    CryptoFacade = Java.type("com.sap.xsk.xssecurestore.ds.facade.XSKSecureCryptoFacade");
+
+    md5(data,key){
+        return this.CryptoFacade.md5(data,key);
+    }
+    sha1(data,key){
+        return this.CryptoFacade.sha1(data,key);
+    }
+    sha256(data,key){
+        return this.CryptoFacade.sha256(data,key);
+    }
+}

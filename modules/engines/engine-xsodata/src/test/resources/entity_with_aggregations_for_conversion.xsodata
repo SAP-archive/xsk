@@ -1,0 +1,9 @@
+service  {
+    "TEST_VIEW" as "UserDetails"
+    with ("USER_ID","USER_PAYMENT","ROLE_NUMBER")
+    key generate local "ID"
+  	aggregates always (AVG of "USER_PAYMENT", SUM of "ROLE_NUMBER");
+}
+annotations {
+   enable OData4SAP;
+}

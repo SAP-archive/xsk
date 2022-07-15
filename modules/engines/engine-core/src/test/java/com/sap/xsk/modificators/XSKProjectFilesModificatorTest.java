@@ -39,122 +39,127 @@ public class XSKProjectFilesModificatorTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void testModifyPorjectFilesSuccessfullyWhenXsjs() throws IOException {
-    modifyProjectFilesAssertArrayEqualsWhenModified("testSuccessful.xsjs");
+  public void testModifyXsjsWithSessionUser() throws IOException {
+    modifyProjectFilesAssertArrayEqualsWhenModified("testModifySessionUser.xsjs");
   }
 
   @Test
-  public void testModifyProjectFilesSuccessfullyWhenXsjslib() throws IOException {
-    modifyProjectFilesAssertArrayEqualsWhenModified("testSuccessful.xsjslib");
-  }
-
-  @Test
-  public void testModifyProjectFilesSuccessfullyWhenHdbprocedure() throws IOException {
-    modifyProjectFilesAssertArrayEqualsWhenModified("testSuccessful.hdbprocedure");
-  }
-
-  @Test
-  public void testModifyProjectFilesSuccessfullyWhenHdbTablefunction() throws IOException {
-    modifyProjectFilesAssertArrayEqualsWhenModified("testSuccessful.hdbtablefunction");
-  }
-
-  @Test
-  public void testModifyProjectFilesSuccessfullyWhenAnalyticprivilege() throws IOException {
-    modifyProjectFilesAssertArrayEqualsWhenModified("testSuccessful.analyticprivilege");
-  }
-
-  @Test
-  public void testModifyProjectFilesSuccessfullyWhenHdbAnalyticprivilege() throws IOException {
-    modifyProjectFilesAssertArrayEqualsWhenModified("testSuccessful.hdbanalyticprivilege");
-  }
-
-  @Test
-  public void testModifyProjectFilesWithEmptyContentWhenXsjs() throws IOException {
-    modifyProjectFilesAssertArrayEqualsWhenEmptyContent("testEmpty.xsjs");
-  }
-
-  @Test
-  public void testModifyProjectFilesWithEmptyContentWhenXsjslib() throws IOException {
-    modifyProjectFilesAssertArrayEqualsWhenEmptyContent("testEmpty.xsjslib");
-  }
-
-  @Test
-  public void testModifyProjectFilesWithEmptyContentWhenHdbprocedure() throws IOException {
-    modifyProjectFilesAssertArrayEqualsWhenEmptyContent("testEmpty.hdbprocedure");
-  }
-
-  @Test
-  public void testModifyProjectFilesWithEmptyContentWhenHdbtablefunction() throws IOException {
-    modifyProjectFilesAssertArrayEqualsWhenEmptyContent("testEmpty.hdbtablefunction");
-  }
-
-  @Test
-  public void testModifyProjectFilesWithEmptyContentWhenAnalyticprivilege() throws IOException {
-    modifyProjectFilesAssertArrayEqualsWhenEmptyContent("testEmpty.analyticprivilege");
-  }
-
-  @Test
-  public void testModifyProjectFilesWithEmptyContentWhenHdbanalyticprivilege() throws IOException {
-    modifyProjectFilesAssertArrayEqualsWhenEmptyContent("testEmpty.hdbanalyticprivilege");
-  }
-
-  @Test
-  public void testModifyProjectFilesWithUnsupportedExtension() throws IOException {
-    modifyProjectFilesAssertArrayEqualsWhenNoModification("testUnsupported.txt");
-  }
-
-  @Test
-  public void testModifyProjectFilesWithNoSessionUserWhenXsjs() throws IOException {
+  public void testModifyXsjsWithoutSessionUser() throws IOException {
     modifyProjectFilesAssertArrayEqualsWhenNoModification("testNoSessionUser.xsjs");
   }
 
   @Test
-  public void testModifyProjectFilesWithNoSessionUserWhenXsjslib() throws IOException {
+  public void testModifyXsjsWithEmptyContent() throws IOException {
+    modifyProjectFilesAssertArrayEqualsWhenEmptyContent("testEmpty.xsjs");
+  }
+
+  @Test
+  public void testModifyXsjslibWithSessionUser() throws IOException {
+    modifyProjectFilesAssertArrayEqualsWhenModified("testModifySessionUser.xsjslib");
+  }
+
+  @Test
+  public void testModifyXsjslibWithoutSessionUser() throws IOException {
     modifyProjectFilesAssertArrayEqualsWhenNoModification("testNoSessionUser.xsjslib");
   }
 
   @Test
-  public void testModifyProjectFilesWithNoSessionUserWhenHdbprocedure() throws IOException {
+  public void testModifyXsjslibWithEmptyContent() throws IOException {
+    modifyProjectFilesAssertArrayEqualsWhenEmptyContent("testEmpty.xsjslib");
+  }
+
+  @Test
+  public void testModifyHdbprocedureWithSessionUser() throws IOException {
+    modifyProjectFilesAssertArrayEqualsWhenModified("testModifySessionUser.hdbprocedure");
+  }
+
+  @Test
+  public void testModifyHdbprocedureWithoutSessionUser() throws IOException {
     modifyProjectFilesAssertArrayEqualsWhenNoModification("testNoSessionUser.hdbprocedure");
   }
 
   @Test
-  public void testModifyProjectFilesWithNoSessionUserWhenHdbtablefunction() throws IOException {
+  public void testModifyHdbprocedureWithReservedWordRow() throws IOException {
+    modifyProjectFilesAssertArrayEqualsWhenModified("testReplaceReservedWordRow.hdbprocedure");
+  }
+
+  @Test
+  public void testModifyHdbprocedureWithUpdateFromStatement() throws IOException {
+    modifyProjectFilesAssertArrayEqualsWhenModified("testModifyUpdateFrom.hdbprocedure");
+  }
+
+  @Test
+  public void testModifyHdbprocedureWithEmptyContent() throws IOException {
+    modifyProjectFilesAssertArrayEqualsWhenEmptyContent("testEmpty.hdbprocedure");
+  }
+
+  @Test
+  public void testModifyHdbTablefunctionWithSessionUser() throws IOException {
+    modifyProjectFilesAssertArrayEqualsWhenModified("testModifySessionUser.hdbtablefunction");
+  }
+
+  @Test
+  public void testModifyHdbtablefunctionWithoutSessionUser() throws IOException {
     modifyProjectFilesAssertArrayEqualsWhenNoModification("testNoSessionUser.hdbtablefunction");
   }
 
   @Test
-  public void testModifyProjectFilesWithNoSessionUserWhenAnalyticprivilege() throws IOException {
+  public void testModifyHdbtablefunctionWithEmptyContent() throws IOException {
+    modifyProjectFilesAssertArrayEqualsWhenEmptyContent("testEmpty.hdbtablefunction");
+  }
+
+  @Test
+  public void testModifyAnalyticprivilegeWithSessionUserModelUriViewPath() throws IOException {
+    modifyProjectFilesAssertArrayEqualsWhenModified("testModifyModelUriSessionUserViewPath.analyticprivilege");
+  }
+
+  @Test
+  public void testModifyAnalyticprivilegeWithoutSessionUser() throws IOException {
     modifyProjectFilesAssertArrayEqualsWhenModified("testNoSessionUser.analyticprivilege");
   }
 
   @Test
-  public void testModifyProjectFilesWithNoSessionUserWhenHdbanalyticprivilege() throws IOException {
+  public void testModifyAnalyticprivilegeWithEmptyContent() throws IOException {
+    modifyProjectFilesAssertArrayEqualsWhenEmptyContent("testEmpty.analyticprivilege");
+  }
+
+  @Test
+  public void testModifyHdbAnalyticprivilegeWithSessionUserModelUriViewPath() throws IOException {
+    modifyProjectFilesAssertArrayEqualsWhenModified("testModifyModelUriSessionUserViewPath.hdbanalyticprivilege");
+  }
+
+  @Test
+  public void testModifyHdbanalyticprivilegeWithoutSessionUser() throws IOException {
     modifyProjectFilesAssertArrayEqualsWhenModified("testNoSessionUser.hdbanalyticprivilege");
   }
 
   @Test
-  public void testModifyProjectFilesWhenAnalyticPrivilegeContentIsWrongFormat() throws IOException {
+  public void testModifyHdbanalyticprivilegeWithEmptyContent() throws IOException {
+    modifyProjectFilesAssertArrayEqualsWhenEmptyContent("testEmpty.hdbanalyticprivilege");
+  }
+
+  @Test
+  public void testModifyAnalyticPrivilegeWithWrongFormat() throws IOException {
     modifyProjectFilesAssertArrayEqualsWhenNoModification("testWrongFormat.analyticprivilege");
   }
 
   @Test
-  public void testModifyProjectFilesWhenAnalyticPrivilegeContentHasNoWhereSql() throws IOException {
+  public void testModifyAnalyticPrivilegeWithoutWhereSql() throws IOException {
     modifyProjectFilesAssertArrayEqualsWhenModified("testNoWhereSql.analyticprivilege");
   }
 
   @Test
-  public void testModifyProjectFilesWhenAnalyticPrivilegeContentHasEmptyWhereSql() throws IOException {
+  public void testModifyAnalyticPrivilegeWithEmptyWhereSql() throws IOException {
     modifyProjectFilesAssertArrayEqualsWhenModified("testEmptyWhereSql.analyticprivilege");
   }
 
   @Test
-  public void testModifyProjectFilesWhenAnalyticPrivilegeContentHasNoModelUri() throws IOException {
+  public void testModifyAnalyticPrivilegeWithoutModelUri() throws IOException {
     modifyProjectFilesAssertArrayEqualsWhenModified("testNoModelUri.analyticprivilege");
   }
 
   @Test
-  public void testModifyProjectFilesWhenAnalyticPrivilegeContentHasEmptyModelUri() throws IOException {
+  public void testModifyAnalyticPrivilegeWithEmptyModelUri() throws IOException {
     modifyProjectFilesAssertArrayEqualsWhenModified("testEmptyModelUri.analyticprivilege");
   }
 
@@ -164,12 +169,12 @@ public class XSKProjectFilesModificatorTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void testModifyAnalyticPrivilegeModelUriSameString() {
+  public void testModifyAnalyticPrivilegeModelUriWhenCorrect() {
     assertEquals("test.tinydb::myview", projectFilesModificator.processModelUri("test.tinydb::myview"));
   }
 
   @Test
-  public void testModifyAnalyticPrivilegeModelUriEmptyString() {
+  public void testModifyAnalyticPrivilegeModelUriWhenEmptyString() {
     assertEquals("", projectFilesModificator.processModelUri(""));
   }
 
@@ -180,19 +185,19 @@ public class XSKProjectFilesModificatorTest extends AbstractDirigibleTest {
   }
 
   @Test
-  public void testModifyAnalyticPrivilegeWhereSqlNoModificationRequired() {
+  public void testModifyAnalyticPrivilegeWhereSqlWhenCorrect() {
     assertEquals("SELECT \"HANAUserName\" FROM \"CALCVIEW\"",
         projectFilesModificator.processWhereSql("SELECT \"HANAUserName\" FROM \"CALCVIEW\""));
   }
 
   @Test
-  public void testModifyAnalyticPrivilegeWhereSqlEmptyString() {
+  public void testModifyAnalyticPrivilegeWhereSqlWhenEmptyString() {
     assertEquals("", projectFilesModificator.processWhereSql(""));
   }
 
   @Test
-  public void testModifyProjectFiles() throws IOException {
-    modifyProjectFilesAssertArrayEqualsWhenModified("testReplaceReservedWordRow.hdbprocedure");
+  public void testModifyProjectFilesWithUnsupportedExtension() throws IOException {
+    modifyProjectFilesAssertArrayEqualsWhenNoModification("testUnsupported.txt");
   }
 
   private void modifyProjectFilesAssertArrayEqualsWhenModified(String fileName) throws IOException {

@@ -19,6 +19,14 @@ public class XSKDataStructureHDBTableConstraintUniqueModel extends XSKDataStruct
   private String indexName;
   private String indexType;
   private String order;
+  public XSKDataStructureHDBTableConstraintUniqueModel(){
+  }
+
+  public XSKDataStructureHDBTableConstraintUniqueModel(String indexName, String order, String[] indexColumns){
+    this.indexName = indexName;
+    this.order = order;
+    this.setColumns(indexColumns);
+  }
 
   public String getIndexName() {
     return indexName;

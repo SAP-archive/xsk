@@ -1,0 +1,87 @@
+PROCEDURE "TEST"."testProcedure" (
+    IN data "TEST"."testData",
+		OUT result NVARCHAR
+	)
+	LANGUAGE SQLSCRIPT
+	SQL SECURITY INVOKER
+	DEFAULT SCHEMA TEST
+AS
+BEGIN
+
+    -- Update from without join
+    UPDATE "TEST"."EMPLOYEES" AS E
+	SET "ADDRESS" = address, "STATUS" = status
+	WHERE "E"."USER_ID" = :user_id AND "E"."NAME" = :name;
+
+    -- Update from with one join without where
+    MERGE INTO "TEST"."EMPLOYEES" AS E
+	USING :byRole AS R
+		ON E.ID = R.ID AND E.NAME = R.NAME AND E.TIMESTAMP = R.TIMESTAMP
+	WHEN MATCHED THEN UPDATE
+	SET STATUS = 'ACTIVE';
+
+    -- Update from with one join and where
+    MERGE INTO "TEST"."EMPLOYEES" AS E
+	USING :byRole AS R
+		ON E.ID = R.ID AND E.NAME = R.NAME AND E.TIMESTAMP = R.TIMESTAMP
+	WHEN MATCHED AND R.NUM <> 1 THEN UPDATE
+	SET STATUS = 'ACTIVE';
+
+    -- Update from with multiple joins without where
+    MERGE INTO "TEST"."EMPLOYEES" AS E
+	USING :mails AS M
+		INNER JOIN "TEST"."JOBS" as J
+         ON  M.ID = J.ID
+	ON  J.EMPLOYEE_ID = E.ID AND J.TIMESTAMP = E.LAST_JOB_TIMESTAMP
+	WHEN MATCHED AND J.FLAG = 'PROCESS' THEN UPDATE
+	SET FLAG = 'CLOSED', STATUS = CASE WHEN FLAG = 'CLOSED' THEN E.FLAG ELSE E.STATUS END;
+
+    -- Update from with multiple joins and where
+    MERGE INTO "TEST"."EMPLOYEES" AS E
+	USING :mails AS M
+		INNER JOIN "TEST"."JOBS" as J
+         ON  M.ID = J.ID
+	ON  J.EMPLOYEE_ID = E.ID AND J.TIMESTAMP = E.LAST_JOB_TIMESTAMP
+	WHEN MATCHED AND J.FLAG = 'PROCESS' THEN UPDATE
+	SET FLAG = 'CLOSED', STATUS = CASE WHEN FLAG = 'CLOSED' THEN E.FLAG ELSE E.STATUS END;
+
+    -- Update with two tables for from source with where
+    MERGE INTO "TEST"."EMPLOYEES"	USING :emps ON "TEST"."EMPLOYEES"."NAME" = :emps."NAME" 	WHEN MATCHED THEN UPDATE	SET "STATUS" = ACTIVE, "PRIORITY_INDEX" = :emps."PRIORITY_INDEX";
+
+    -- Update with three tables for from source with where
+    UPDATE "TEST"."EMPLOYEES"
+    SET "STATUS" = ACTIVE, "PRIORITY_INDEX" = :emps."PRIORITY_INDEX"
+    FROM "TEST"."EMPLOYEES", :emps, :employee
+    WHERE "TEST"."EMPLOYEES"."NAME" = :emps."NAME";
+
+    -- Update with two tables for from source without where
+    MERGE INTO "TEST"."EMPLOYEES"	USING :emps ON (1 = 1)	WHEN MATCHED THEN UPDATE	SET "STATUS" = ACTIVE, "PRIORITY_INDEX" = :emps."PRIORITY_INDEX";
+
+    -- Update with nested statements
+    MERGE INTO "TEST"."EMPLOYEES" AS T
+	USING (
+        SELECT O."OPTION_ID", C."COUNTRY_CODE"
+        FROM "TEST"."OTHERS" O
+        INNER JOIN "TEST"."COUNTRIES" C
+            ON C."DESCRIPTION_EN_US" = O."DESCRIPTION_EN_US"
+        WHERE O.CATEGORY = 'Location_Country'
+            AND C."COUNTRY_CODE" IN('ARE','SAU','EGY','QAT','JOR','OMN','LBY','LBN','BHR','IRQ','KWT','PAK', 'PSE')
+    ) AS FO
+		ON FO."COUNTRY_CODE" = T."Country"
+	WHEN MATCHED AND T."Country" IN('ARE','SAU','EGY','QAT','JOR','OMN','LBY','LBN','BHR','IRQ','KWT','PAK', 'PSE')
+    AND T."STATUS" = -1 THEN UPDATE
+	SET T."NAME" = FO."NAME";
+
+    -- Update without from
+    UPDATE "TEST"."EMPLOYEES"
+    SET STATUS = status, ADDRESS = address
+    WHERE USER_ID = user_id;
+
+    -- Some other statement
+    INSERT INTO "TEST"."EMPLOYEES"
+      (USER_ID, NAME, ADDRESS, PHONE)
+    SELECT
+      USER_ID, NAME, ADDRESS, PHONE
+    FROM :current_users WHERE STATUS = 'INSERT';
+
+END;

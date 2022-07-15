@@ -17,6 +17,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.sap.xsk.hdb.ds.model.XSKDataStructureModelBuilder;
 import com.sap.xsk.hdb.ds.model.hdbprocedure.XSKDataStructureHDBProcedureModel;
 import com.sap.xsk.hdb.ds.processors.hdbprocedure.HDBProcedureCreateProcessor;
 import com.sap.xsk.hdb.ds.processors.hdbprocedure.HDBProcedureDropProcessor;
@@ -91,10 +92,12 @@ public class HDBProcedureProcessorTest extends AbstractDirigibleTest {
 			HDBProcedureCreateProcessor processorSpy = spy(HDBProcedureCreateProcessor.class);
 			String hdbprocedureSample = IOUtils.toString(XSKViewParserTest.class.getResourceAsStream("/OrderProcedure.hdbprocedure"), StandardCharsets.UTF_8);
 
-			XSKDataStructureHDBProcedureModel model = new XSKDataStructureHDBProcedureModel();
-			model.setContent(hdbprocedureSample);
-			model.setName("\"MYSCHEMA\".\"hdb_view::OrderProcedure\"");
-			String sql = XSKConstants.XSK_HDBPROCEDURE_CREATE + model.getContent();
+      XSKDataStructureModelBuilder builder = new XSKDataStructureModelBuilder()
+          .rawContent(hdbprocedureSample)
+          .withName("\"MYSCHEMA\".\"hdb_view::OrderProcedure\"");
+
+			XSKDataStructureHDBProcedureModel model = new XSKDataStructureHDBProcedureModel(builder);
+			String sql = XSKConstants.XSK_HDBPROCEDURE_CREATE + model.getRawContent();
 			sqlFactory.when(() -> SqlFactory.getNative(mockConnection).exists(mockConnection, XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1], DatabaseArtifactTypes.PROCEDURE)).thenReturn(doExist);
 
 			when(mockConnection.prepareStatement(sql)).thenReturn(mockStatement);
@@ -114,9 +117,10 @@ public class HDBProcedureProcessorTest extends AbstractDirigibleTest {
 			HDBProcedureCreateProcessor processorSpy = spy(HDBProcedureCreateProcessor.class);
 			String hdbprocedureSample = IOUtils.toString(XSKViewParserTest.class.getResourceAsStream("/OrderProcedure.hdbprocedure"), StandardCharsets.UTF_8);
 
-			XSKDataStructureHDBProcedureModel model = new XSKDataStructureHDBProcedureModel();
-			model.setContent(hdbprocedureSample);
-			model.setName("\"MYSCHEMA\".\"hdb_view::OrderProcedure\"");
+      XSKDataStructureModelBuilder builder = new XSKDataStructureModelBuilder()
+          .rawContent(hdbprocedureSample)
+          .withName("\"MYSCHEMA\".\"hdb_view::OrderProcedure\"");
+			XSKDataStructureHDBProcedureModel model = new XSKDataStructureHDBProcedureModel(builder);
 			sqlFactory.when(() -> SqlFactory.getNative(mockConnection).exists(mockConnection, XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1], DatabaseArtifactTypes.PROCEDURE)).thenReturn(false);
 			problemsFacade.when(() -> ProblemsFacade.save(any(), any(), any(), any(), any(), any(), any(), any(), any(), any())).thenAnswer((Answer<Void>) invocation -> null);
 			processorSpy.execute(mockConnection, model);
@@ -142,8 +146,9 @@ public class HDBProcedureProcessorTest extends AbstractDirigibleTest {
 
 			HDBProcedureDropProcessor processorSpy = spy(HDBProcedureDropProcessor.class);
 
-			XSKDataStructureHDBProcedureModel model = new XSKDataStructureHDBProcedureModel();
-			model.setName("\"MYSCHEMA\".\"hdb_view::OrderProcedure\"");
+      XSKDataStructureModelBuilder builder = new XSKDataStructureModelBuilder()
+          .withName("\"MYSCHEMA\".\"hdb_view::OrderProcedure\"");
+			XSKDataStructureHDBProcedureModel model = new XSKDataStructureHDBProcedureModel(builder);
 			String sql = XSKConstants.XSK_HDBPROCEDURE_DROP + model.getName();
 			when(SqlFactory.getNative(mockConnection).exists(mockConnection, XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1], DatabaseArtifactTypes.PROCEDURE)).thenReturn(doExist);
 
@@ -163,8 +168,9 @@ public class HDBProcedureProcessorTest extends AbstractDirigibleTest {
 
 			HDBProcedureDropProcessor processorSpy = spy(HDBProcedureDropProcessor.class);
 
-			XSKDataStructureHDBProcedureModel model = new XSKDataStructureHDBProcedureModel();
-			model.setName("\"MYSCHEMA\".\"hdb_view::OrderProcedure\"");
+      XSKDataStructureModelBuilder builder = new XSKDataStructureModelBuilder()
+          .withName("\"MYSCHEMA\".\"hdb_view::OrderProcedure\"");
+			XSKDataStructureHDBProcedureModel model = new XSKDataStructureHDBProcedureModel(builder);
 
 			sqlFactory.when(() -> SqlFactory.getNative(mockConnection).exists(mockConnection, XSKCommonsUtils.extractArtifactNameWhenSchemaIsProvided(model.getName())[1], DatabaseArtifactTypes.PROCEDURE)).thenReturn(true);
 

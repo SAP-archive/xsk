@@ -75,18 +75,7 @@ public class XSKODataSynchronizer extends AbstractSynchronizer implements IOrder
 
   private XSKOData2ODataHTransformer xskOData2ODataHTransformer = new XSKOData2ODataHTransformer();
 
-  /**
-   * Force synchronization.
-   */
-  public static void forceSynchronization() {
-    XSKODataSynchronizer synchronizer = new XSKODataSynchronizer();
-    synchronizer.setForcedSynchronization(true);
-    try {
-      synchronizer.synchronize();
-    } finally {
-      synchronizer.setForcedSynchronization(false);
-    }
-  }
+
 
   /**
    * Concatenate list of strings.

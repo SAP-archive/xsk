@@ -1,4 +1,5 @@
 {{- if .Values.hana.enabled }}
+{{- if .Values.hana.secret }}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -13,12 +14,14 @@ stringData:
   HANA_URL: {{ required "Missing HANA url" .Values.hana.url }}
   HANA_USERNAME: {{ required "Missing HANA username" .Values.hana.username }}
 ---
+{{- end }}
 {{- else }}
 {{- if or .Values.hana.username .Values.hana.password .Values.hana.url }}
 {{ required "Missing HANA set configuration 'hana.enabled=true' " .Values.hana.enabled }}
 {{- end }}
 {{- end }}
 {{- if .Values.application.privateDockerRegistry }}
+{{- if .Values.application.privateDockerRegistrySecret }}
 apiVersion: v1
 data:
   .dockerconfigjson: {{ template "imagePullSecret" . }}
@@ -27,6 +30,7 @@ metadata:
   name: {{ required "Missing docker secret name" .Values.application.dockerSecretName }}
 type: kubernetes.io/dockerconfigjson 
 ---
+{{- end }}
 {{- end }}
 apiVersion: apps/v1
 kind: Deployment
@@ -55,6 +59,10 @@ spec:
           {{- if .Values.hana.enabled }}
             - secretRef:
                 name: {{ required "Missing HANA secret name" .Values.hana.secretName }}
+          {{- end }}
+          {{- if .Values.kyma.enabled }}
+            - secretRef:
+                name: xsuaa-{{ include "xsk.fullname" . }}-binding
           {{- end }}
           env:
             {{- if .Values.kyma.enabled }}
@@ -160,15 +168,14 @@ spec:
     name: {{ include "xsk.fullname" . }}
     port: 8080
 ---
-apiVersion: servicecatalog.k8s.io/v1beta1
+apiVersion: services.cloud.sap.com/v1
 kind: ServiceInstance
 metadata:
   name: xsuaa-{{ include "xsk.fullname" . }}
 spec:
-  clusterServiceClassExternalName: xsuaa
-  clusterServiceClassRef:
-    name: xsuaa
-  clusterServicePlanExternalName: broker
+  serviceOfferingName: xsuaa
+  servicePlanName: application
+  externalName: {{ include "xsk.fullname" . }}-service-instance
   parameters:
     xsappname: {{ include "xsk.fullname" . }}-xsuaa
     oauth2-configuration:
@@ -176,7 +183,7 @@ spec:
       - https://{{ .Release.Name }}.{{ required "Missing Kyma host" .Values.kyma.host }}
       token-validity: 7200
     role-collections:
-    {{- toYaml .Values.kyma.roleCollections | nindent 4 }}
+    {{- include "xsk.roleCollections" . | nindent 4 }}
     {{- if .Values.kyma.addRoles }}
     {{ range .Values.kyma.roles }}
     - description: XSK {{ . }}
@@ -186,7 +193,7 @@ spec:
     {{- end }}
     {{- end }}
     role-templates:
-    {{- toYaml .Values.kyma.roleTemplates | nindent 4 }}
+    {{- include "xsk.roleTemplates" . | nindent 4 }}
     {{- if .Values.kyma.addRoles }}
     {{ range .Values.kyma.roles }}
     - description: {{ . }}  related roles
@@ -196,7 +203,7 @@ spec:
     {{- end }}
     {{- end }}
     scopes:
-    {{- toYaml .Values.kyma.scopes | nindent 4 }}
+    {{- include "xsk.scopes" . | nindent 4 }}
     {{- if .Values.kyma.addRoles }}
     {{ range .Values.kyma.roles }}
     - description: {{ . }} scope
@@ -205,29 +212,15 @@ spec:
     {{- end }}
       
 ---
-apiVersion: servicecatalog.k8s.io/v1beta1
+apiVersion: services.cloud.sap.com/v1
 kind: ServiceBinding
 metadata:
   name: xsuaa-{{ include "xsk.fullname" . }}-binding
 spec:
-  instanceRef:
-    name: xsuaa-{{ include "xsk.fullname" . }}
-  parameters: {}
+  serviceInstanceName: xsuaa-{{ include "xsk.fullname" . }}
+  externalName: {{ include "xsk.fullname" . }}-binding-external
   secretName: xsuaa-{{ include "xsk.fullname" . }}-binding
----
-apiVersion: servicecatalog.kyma-project.io/v1alpha1
-kind: ServiceBindingUsage
-metadata:
-  name: xsuaa-{{ include "xsk.fullname" . }}-usage
-spec:
-  parameters:
-    envPrefix:
-      name: ""
-  serviceBindingRef:
-    name: xsuaa-{{ include "xsk.fullname" . }}-binding
-  usedBy:
-    kind: deployment
-    name: {{ include "xsk.fullname" . }}
+  parameters: {}
 {{- else }}
 {{- if or .Values.kyma.host }}
 {{ required "Missing Kyma set configuration 'kyma.enabled=true' " .Values.kyma.enabled }}

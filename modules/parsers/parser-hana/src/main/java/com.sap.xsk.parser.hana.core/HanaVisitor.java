@@ -328,6 +328,54 @@ public interface HanaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitInsert_stmt(HanaParser.Insert_stmtContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link HanaParser#delete_stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDelete_stmt(HanaParser.Delete_stmtContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HanaParser#truncate_stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTruncate_stmt(HanaParser.Truncate_stmtContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HanaParser#create_stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCreate_stmt(HanaParser.Create_stmtContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HanaParser#proc_while}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProc_while(HanaParser.Proc_whileContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HanaParser#proc_for}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProc_for(HanaParser.Proc_forContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HanaParser#proc_rollback}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProc_rollback(HanaParser.Proc_rollbackContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HanaParser#proc_commit}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProc_commit(HanaParser.Proc_commitContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link HanaParser#proc_break}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProc_break(HanaParser.Proc_breakContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link HanaParser#proc_signal}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -370,11 +418,11 @@ public interface HanaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProc_if(HanaParser.Proc_ifContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link HanaParser#proc_elsif_list}.
+	 * Visit a parse tree produced by {@link HanaParser#proc_elseif_list}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitProc_elsif_list(HanaParser.Proc_elsif_listContext ctx);
+	T visitProc_elseif_list(HanaParser.Proc_elseif_listContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link HanaParser#proc_else}.
 	 * @param ctx the parse tree

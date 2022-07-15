@@ -4,7 +4,15 @@
 # (Optional) JDK_TYPE could be `default-jdk` or `external-jdk`
 ARG JDK_TYPE=default-jdk
 
-FROM tomcat:8.5.78-jdk17-openjdk AS base
+FROM  dirigiblelabs/xsk-kyma-runtime-base as base
+
+COPY target/ROOT.war /usr/local/tomcat/webapps/
+
+RUN wget --no-check-certificate https://www.dirigible.io/help/conf/tomcat-users.xml -P /usr/local/tomcat/conf/
+
+RUN apt-get update && \
+    apt-get install git -y && \
+    apt-get clean
 
 FROM base AS xsk-external-jdk
 # If JDK_TYPE is set to `external-jdk`, then the JDK_HOME is required and it should point to the home directory of the jdk
@@ -17,35 +25,31 @@ ENV JRE_HOME=/usr/local/jdk
 FROM base AS xsk-default-jdk
 RUN echo "The default OpenJDK will be used"
 
+COPY --from=base /usr/local/jdk /usr/local/jdk
+
 FROM xsk-${JDK_TYPE} AS dependencies-base
 
-COPY target/ROOT.war $CATALINA_HOME/webapps/
+FROM gcr.io/distroless/base-debian11:debug
 
-RUN rm /usr/local/tomcat/conf/tomcat-users.xml
-
-RUN wget --no-check-certificate https://www.dirigible.io/help/conf/tomcat-users.xml -P /usr/local/tomcat/conf/
-
-RUN wget https://repo1.maven.org/maven2/org/postgresql/postgresql/42.1.4/postgresql-42.1.4.jar -P /usr/local/tomcat/lib/
-RUN wget https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.8.12/ngdbc-2.8.12.jar -P /usr/local/tomcat/lib/
-
-#Activate DEBUG mode
-#ENV JPDA_ADDRESS=0.0.0.0:8000
-#ENV JPDA_TRANSPORT=dt_socket
-
-ENV DIRIGIBLE_JAVASCRIPT_GRAALVM_DEBUGGER_PORT=0.0.0.0:8081
+ENV CATALINA_HOME=/usr/local/tomcat
+ENV JAVA_HOME=/usr/local/jdk
+ENV PATH $PATH:$JAVA_HOME/bin
 ENV CATALINA_OPTS="--add-opens java.base/java.lang.reflect=ALL-UNNAMED"
 
-EXPOSE 8080 8081 8000
+USER nonroot
+COPY --from=dependencies-base --chown=nonroot:nonroot $CATALINA_HOME $CATALINA_HOME
+COPY --from=dependencies-base --chown=nonroot:nonroot $JAVA_HOME $JAVA_HOME
+COPY --from=dependencies-base --chown=nonroot:nonroot /bin/sh /bin/sh
+COPY --from=dependencies-base --chown=nonroot:nonroot /usr/bin/git /usr/bin/git
+COPY --from=dependencies-base --chown=nonroot:nonroot /bin/bash /bin/bash
+COPY --from=dependencies-base /lib/x86_64-linux-gnu/libz.so.1 /lib/x86_64-linux-gnu/libz.so.1
+COPY --from=dependencies-base /lib/x86_64-linux-gnu/libpcre2-8.so.0 /lib/x86_64-linux-gnu/libpcre2-8.so.0
+COPY --from=dependencies-base /lib/x86_64-linux-gnu/libtinfo.so.6 /lib/x86_64-linux-gnu/libtinfo.so.6
+WORKDIR $CATALINA_HOME
 
-ADD entrypoint.sh /entrypoint.sh
+EXPOSE 8080
 
-RUN useradd -rm -d $CATALINA_HOME -s /bin/bash -u 1001 dirigible
+ENTRYPOINT [ ]
 
-# Add gosu utility for privilege drop
-RUN apt-get update && \
-    apt-get install gosu && \
-    apt-get clean
+CMD [ "/bin/sh","/usr/local/tomcat/bin/catalina.sh","run" ]
 
-ENTRYPOINT ["/entrypoint.sh"]
-
-CMD ["/usr/local/tomcat/bin/catalina.sh","jpda","run"]

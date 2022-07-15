@@ -74,6 +74,12 @@
             <groupId>org.eclipse.dirigible</groupId>
             <artifactId>dirigible-bpm</artifactId>
             <version>${dirigible.version}</version>
+            <exclusions>
+                <exclusion>
+                  <groupId>org.liquibase</groupId>
+                  <artifactId>liquibase-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.eclipse.dirigible</groupId>

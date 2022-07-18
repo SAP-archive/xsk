@@ -1,6 +1,19 @@
 <!DOCTYPE HTML>
+<!--
+Copyright (c) 2022 SAP SE or an SAP affiliate company and XSK contributors
+
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the Apache License, v2.0
+which accompanies this distribution, and is available at
+http://www.apache.org/licenses/LICENSE-2.0
+  
+SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
+SPDX-License-Identifier: Apache-2.0
+  -->
+
 <html lang="en" ng-app="busy" ng-controller="BusyController as busy">
 	<head>
+		<title>XSK Health status</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta charset="utf-8">
 
@@ -97,7 +110,7 @@
 			}
 
 			.Running:before {
-			    font-family: 'FontAwesome';
+			    font-family: 'FontAwesome',sans-serif;
 			    font-size:1.3em;
 			    color: yellow;
 			    content: '\f054';  /* the chevron right icon */
@@ -105,7 +118,7 @@
 			}
 
 			.Succeeded:before {
-			    font-family: 'FontAwesome';
+			    font-family: 'FontAwesome',sans-serif;
 			    font-size:1.3em;
 			    color: green;
 			    content: '\f00c';  /* the check icon */
@@ -113,7 +126,7 @@
 			}
 
 			.Failed:before {
-			    font-family: 'FontAwesome';
+			    font-family: 'FontAwesome',sans-serif;
 			    font-size:1.3em;
 			    color: red;
 			    content: '\f00d';  /* the times icon */
@@ -142,10 +155,11 @@
 			<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></span></h1>
 
 			<table class="table table-striped">
+				<caption>Status</caption>
 		    <thead>
 		        <tr>
-		            <td>Name</td>
-		            <td>Status</td>
+								<th>Name</th>d
+		            <th>Status</th>
 		        </tr>
 		    </thead>
 		    <tbody>

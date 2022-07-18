@@ -51,7 +51,7 @@ class XSCrypto {
 	CryptoFacade = Java.type("com.sap.xsk.xssecurestore.ds.facade.XSKSecureCryptoFacade");
 
 	md5(data, key) {
-		if (typeof data == 'object') {
+		if (data instanceof ArrayBuffer) {
 			data = fromBufferToArray(data);
 		}
 		const javaBytes = this.CryptoFacade.md5(data, key);
@@ -59,7 +59,7 @@ class XSCrypto {
 	}
 
 	sha1(data, key) {
-		if (typeof data == 'object') {
+		if (data instanceof ArrayBuffer) {
 			data = fromBufferToArray(data);
 		}
 		const javaBytes = this.CryptoFacade.sha1(data, key);
@@ -67,7 +67,7 @@ class XSCrypto {
 	}
 
 	sha256(data, key) {
-		if (typeof data == 'object') {
+		if (data instanceof ArrayBuffer) {
 			data = fromBufferToArray(data);
 		}
 		const javaBytes = this.CryptoFacade.sha256(data, key);
@@ -75,7 +75,7 @@ class XSCrypto {
 	}
 }
 
-exports.crypto = new XSCrypto;
+exports.crypto = new XSCrypto();
 
 // From ArrayBuffer to byte[]
 function fromBufferToArray(buffer) {

@@ -46,21 +46,45 @@ exports.Store = function (filePath) {
     }
 }
 
-exports.crypto = function (){
-    return new XSCrypto()
-
-}
 
 class XSCrypto {
-    CryptoFacade = Java.type("com.sap.xsk.xssecurestore.ds.facade.XSKSecureCryptoFacade");
+	CryptoFacade = Java.type("com.sap.xsk.xssecurestore.ds.facade.XSKSecureCryptoFacade");
 
-    md5(data,key){
-        return this.CryptoFacade.md5(data,key);
-    }
-    sha1(data,key){
-        return this.CryptoFacade.sha1(data,key);
-    }
-    sha256(data,key){
-        return this.CryptoFacade.sha256(data,key);
-    }
+	md5(data, key) {
+		if (typeof data == 'object') {
+			data = fromBufferToArray(data);
+		}
+		const javaBytes = this.CryptoFacade.md5(data, key);
+		return fromArrayToBuffer(javaBytes);
+	}
+
+	sha1(data, key) {
+		if (typeof data == 'object') {
+			data = fromBufferToArray(data);
+		}
+		const javaBytes = this.CryptoFacade.sha1(data, key);
+		return fromArrayToBuffer(javaBytes);
+	}
+
+	sha256(data, key) {
+		if (typeof data == 'object') {
+			data = fromBufferToArray(data);
+		}
+		const javaBytes = this.CryptoFacade.sha256(data, key);
+		return fromArrayToBuffer(javaBytes);
+	}
+}
+
+exports.crypto = new XSCrypto;
+
+// From ArrayBuffer to byte[]
+function fromBufferToArray(buffer) {
+	return Array.from(new Uint8Array(buffer))
+}
+
+// from Java byte[]  to JS ArrayBuffer
+function fromArrayToBuffer(javaBytes) {
+	var uint8Array = new Uint8Array(javaBytes.length);
+	uint8Array.set(Java.from(javaBytes));
+	return uint8Array.buffer
 }

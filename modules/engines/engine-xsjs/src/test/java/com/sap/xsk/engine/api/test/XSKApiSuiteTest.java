@@ -90,6 +90,8 @@ public class XSKApiSuiteTest extends XSJSTest {
       "test/xsk/hdb/connection-execute-update.xsjs",
       "test/xsk/hdb/result-set.xsjs",
       "test/xsk/hdb/resultset-metadata.xsjs",
+      "test/xsk/hdb/array-buffer-mappings.xsjs",
+      "test/xsk/hdb/date-mappings.xsjs"
   })
   public void runXSKApiTest(String testModule) throws IOException, ContextException, ExtensionsException {
     runXSKApiTest(graaljsJavascriptEngineExecutor, repository, testModule);

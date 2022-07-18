@@ -33,10 +33,9 @@ exports.getResultSetValueByDataTypeAndRowNumber = function (resultSet, dataType,
         case "ALPHANUM":
             return resultSet.getString(colNumber);
         case "NVARCHAR":
+        case "NCHAR":
         case "SHORTTEXT":
             return resultSet.native.getNString(colNumber);
-        case "VARBINARY":
-            return resultSet.getBytes(colNumber);
         case "BOOLEAN":
             return resultSet.getBoolean(colNumber);
         case "DATE":
@@ -48,7 +47,12 @@ exports.getResultSetValueByDataTypeAndRowNumber = function (resultSet, dataType,
         case "SECONDDATE":
             throw new Error(`The '${dataType}' data type in the resultSet is not supported`);
         case "BLOB":
-            return resultSet.getBlob(colNumber);
+            return new Uint8Array(resultSet.getBlob(colNumber)).buffer
+        case "BINARY":
+        case "VARBINARY":
+        case "ST_GEOMETRY":
+        case "ST_POINT":
+            return new Uint8Array(resultSet.getBytes(colNumber)).buffer;
         case "TEXT":
         case "CLOB":
             return resultSet.getClob(colNumber);
@@ -56,10 +60,6 @@ exports.getResultSetValueByDataTypeAndRowNumber = function (resultSet, dataType,
             throw new Error(`The '${dataType}' data type in the resultSet is not supported`);
         case "NCLOB":
             return resultSet.getNClob(colNumber);
-        case "ST_GEOMETRY":
-            throw new Error(`The '${dataType}' data type in the resultSet is not supported`);
-        case "ST_POINT":
-            throw new Error(`The '${dataType}' data type in the resultSet is not supported`);
         default:
             throw new Error(`The '${dataType}' data type in the resultSet is not supported`);
     }

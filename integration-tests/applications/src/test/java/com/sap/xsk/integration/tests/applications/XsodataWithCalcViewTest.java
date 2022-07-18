@@ -24,7 +24,6 @@ import com.sap.xsk.integration.tests.core.hdb.utils.HanaITestUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.junit.AfterClass;
@@ -45,35 +44,34 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import static com.sap.xsk.integration.tests.applications.deployment.ProjectType.SAMPLE;
+import static com.sap.xsk.integration.tests.applications.deployment.ProjectType.CUSTOM;
 import static org.junit.Assert.assertEquals;
 
-public class HdbHdbtiSimpleSampleTest {
+public class XsodataWithCalcViewTest {
 
   private static DataSource dataSource;
   private static HttpClientFactory httpClientFactory = new HttpClientFactory();
 
-  private static final String APPLICATION_NAME = "hdb-hdbti-simple";
-  private static final String APPLICATION_SCHEMA = "XSK_SAMPLES_HDB_HDBTI_SIMPLE";
+  private static final String APPLICATION_NAME = "xsodata-with-calc-view";
+  private static final String APPLICATION_SCHEMA = "TEST_SCHEMA";
+  private static final String HDI_CONTAINER_NAME = "XSODATA_WITH_CALC_VIEW_HDI";
+  private static final String HDI_CONTAINER_GROUP = "XSODATA_WITH_CALC_VIEW_GROUP";
 
-  private static final String ORDERS_TABLE = "hdb-hdbti-simple::Products.Orders";
+  private static final String CUSTOMERS_TABLE = "xsodata-with-calc-view::Customers";
 
-  private static final String XSJS_SERVICE_PATH = "/services/v4/xsk/hdb-hdbti-simple/Service.xsjs";
-  private static final String XSODATA_SERVICE_PATH = "/services/v4/web/hdb-hdbti-simple/Service.xsodata";
+  private static final String XSODATA_SERVICE_PATH = "/services/v4/web/xsodata-with-calc-view/Service.xsodata";
 
-  private static final String XSJS_PRODUCTS_ORDERS_PATH = XSJS_SERVICE_PATH + "/productsOrders";
-  private static final String XSODATA_PRODUCTS_ORDERS_PATH = XSODATA_SERVICE_PATH + "/ProductsOrders?$format=json";
+  private static final String XSODATA_CUSTOMERS_PATH = XSODATA_SERVICE_PATH + "/Customers?$format=json";
 
   private static final List<ProjectHttpCheck> HTTP_CHECKS = Arrays.asList(
-      new ProjectHttpCheck(XSJS_SERVICE_PATH + "/status", 200, "OK"),
-      new ProjectHttpCheck(XSODATA_SERVICE_PATH + "/ProductsOrders", 200)
+      new ProjectHttpCheck(XSODATA_SERVICE_PATH + "/Customers", 200)
   );
 
   private static final List<ProjectSqlCheck> SQL_CHECKS = Arrays.asList(
-      new ProjectSqlCheck(APPLICATION_SCHEMA, ORDERS_TABLE, true, true)
+      new ProjectSqlCheck(APPLICATION_SCHEMA, CUSTOMERS_TABLE, true, true)
   );
 
-  public static final ProjectDeploymentRule projectDeploymentRule = new ProjectDeploymentRule(APPLICATION_NAME, SAMPLE);
+  public static final ProjectDeploymentRule projectDeploymentRule = new ProjectDeploymentRule(APPLICATION_NAME, CUSTOM);
 
   public static final ProjectHealthCheckRule projectHealthCheckRule = new ProjectHealthCheckRule(HTTP_CHECKS, SQL_CHECKS);
 
@@ -86,34 +84,11 @@ public class HdbHdbtiSimpleSampleTest {
   }
 
   @Test
-  public void testHdbHdbtiSimpleSampleXsjsService() throws IOException, URISyntaxException, ExecutionException, InterruptedException {
+  public void testXsodataWithCalculationView() throws IOException, URISyntaxException, ExecutionException, InterruptedException {
 
     XSKHttpClient xskHttpClient = httpClientFactory.createXSKHttpClient();
 
-    URL xsjsUrl = new URL(xskHttpClient.getBaseHost() + XSJS_PRODUCTS_ORDERS_PATH);
-
-    HttpUriRequest xsjsRequest = RequestBuilder.get(xsjsUrl.toURI()).build();
-
-    HttpResponse xsjsHttpResponse = xskHttpClient.executeRequestAsync(xsjsRequest).get();
-    HttpEntity xsjsEntity = xsjsHttpResponse.getEntity();
-    String xsjsResult = IOUtils.toString(xsjsEntity.getContent(), StandardCharsets.UTF_8);
-
-    String expectedXsjsResult = IOUtils.toString(
-        HdbHdbtiSimpleSampleTest.class.getResourceAsStream("/expected-results/hdb-hdbti-simple/HdbHdbtiSimpleSampleXsjsResult.json"),
-        StandardCharsets.UTF_8);
-
-    JsonElement xsjsJson = JsonParser.parseString(xsjsResult);
-    JsonElement expectedXsjsJson = JsonParser.parseString(expectedXsjsResult);
-
-    assertEquals("The xsjs request response did not match the expected result!", expectedXsjsJson, xsjsJson);
-  }
-
-  @Test
-  public void testHdbHdbtiSimpleSampleXsodataService() throws IOException, URISyntaxException, ExecutionException, InterruptedException {
-
-    XSKHttpClient xskHttpClient = httpClientFactory.createXSKHttpClient();
-
-    URL xsodataUrl = new URL(xskHttpClient.getBaseHost() + XSODATA_PRODUCTS_ORDERS_PATH);
+    URL xsodataUrl = new URL(xskHttpClient.getBaseHost() + XSODATA_CUSTOMERS_PATH);
 
     HttpUriRequest xsodataRequest = RequestBuilder.get(xsodataUrl.toURI()).build();
 
@@ -122,7 +97,7 @@ public class HdbHdbtiSimpleSampleTest {
     String xsodataResult = IOUtils.toString(xsodataEntity.getContent(), StandardCharsets.UTF_8);
 
     String expectedXsodataResult = IOUtils.toString(
-        HdbHdbtiSimpleSampleTest.class.getResourceAsStream("/expected-results/hdb-hdbti-simple/HdbHdbtiSimpleSampleXsodataResult.json"),
+        XsodataWithCalcViewTest.class.getResourceAsStream("/expected-results/xsodata-with-calc-view/XsodataWithCalcViewResult.json"),
         StandardCharsets.UTF_8);
 
     JsonElement xsodataJson = JsonParser.parseString(xsodataResult);
@@ -132,9 +107,11 @@ public class HdbHdbtiSimpleSampleTest {
   }
 
   @AfterClass
-  public static void dropSchema() throws SQLException {
+  public static void dropSchemaAndContainer() throws SQLException {
     try (Connection connection = dataSource.getConnection(); Statement statement = connection.createStatement()) {
       HanaITestUtils.dropSchema(statement, APPLICATION_SCHEMA);
+      HanaITestUtils.dropHDIContainer(statement, HDI_CONTAINER_NAME, HDI_CONTAINER_GROUP);
+      HanaITestUtils.dropHDIContainerGroup(statement, HDI_CONTAINER_GROUP);
     }
   }
 }

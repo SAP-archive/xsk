@@ -1,0 +1,11 @@
+service namespace "xsodata-with-calc-view" {
+    "CustomersCalcView" as "Customers" keys ("Name");
+}
+
+annotations {
+   enable OData4SAP;
+}
+
+settings {
+    support null;
+} 

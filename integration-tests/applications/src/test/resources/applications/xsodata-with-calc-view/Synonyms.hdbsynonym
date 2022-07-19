@@ -1,0 +1,8 @@
+{
+  "Customers": {
+    "target": {
+      "object": "xsodata-with-calc-view::Customers",
+      "schema": "TEST_SCHEMA"
+    }
+  }
+}

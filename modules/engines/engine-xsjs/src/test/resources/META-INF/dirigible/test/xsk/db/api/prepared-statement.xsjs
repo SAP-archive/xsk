@@ -1,51 +1,57 @@
 var db = $.db;
 var assertTrue = require('utils/assert').assertTrue;
-var connection = db.getConnection();
+var connection;
+try{
+  connection = db.getConnection();
+  try {
+    connection.prepareStatement("DROP TABLE TEST_USERS").execute();
+  } catch {}
 
-try {
-  connection.prepareStatement("DROP TABLE TEST_USERS").execute();
-} catch {}
+  createTable();
 
-createTable();
+  var insert = "INSERT INTO TEST_USERS (BLOB_, BIGINT_, DATE_, CLOB_, DOUBLE_, FLOAT_, INT_, REAL_, SMALLINT_, STRING_, TIME_, TIMESTAMP_, TINYINT_) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  var statement = connection.prepareStatement(insert);
 
-var insert = "INSERT INTO TEST_USERS (BLOB_, BIGINT_, DATE_, CLOB_, DOUBLE_, FLOAT_, INT_, REAL_, SMALLINT_, STRING_, TIME_, TIMESTAMP_, TINYINT_) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-var statement = connection.prepareStatement(insert);
+  // Smoke test for all of the different set methods
+  setStatementFields();
 
-// Smoke test for all of the different set methods
-setStatementFields();
+  statement.addBatch();
 
-statement.addBatch();
+  statement.addBatch();
 
-statement.addBatch();
+  // We've added 2 inserts to the batch, expect this to == 2
+  var batchExecutes = statement.executeBatch().length;
 
-// We've added 2 inserts to the batch, expect this to == 2
-var batchExecutes = statement.executeBatch().length;
+  var executeResult = statement.execute();
 
-var executeResult = statement.execute();
+  var resultSet = connection.prepareStatement("SELECT * FROM TEST_USERS").executeQuery();
 
-var resultSet = connection.prepareStatement("SELECT * FROM TEST_USERS").executeQuery();
+  var updatedRows = connection.prepareStatement("UPDATE TEST_USERS SET INT_ = 9 WHERE INT_ = 10").executeUpdate();
 
-var updatedRows = connection.prepareStatement("UPDATE TEST_USERS SET INT_ = 9 WHERE INT_ = 10").executeUpdate();
+  var metadataAssertion = statement.getMetaData().constructor.name == "XscResultSetMetaData";
 
-var metadataAssertion = statement.getMetaData().constructor.name == "XscResultSetMetaData";
+  var moreResultsAssertion = typeof statement.getMoreResults() == "boolean";
 
-var moreResultsAssertion = typeof statement.getMoreResults() == "boolean";
+  var parameterMetaDataAssertion = statement.getParameterMetaData().constructor.name == "XscParameterMetaData";
 
-var parameterMetaDataAssertion = statement.getParameterMetaData().constructor.name == "XscParameterMetaData";
+  statement.getSQLWarning(); // Couldn't manage to make this return something other than null, the function itself called the wrong dirigible function
 
-statement.getSQLWarning(); // Couldn't manage to make this return something other than null, the function itself called the wrong dirigible function
+  statement.close();
+  var isClosedAssertion = statement.isClosed() == true;
 
-statement.close();
-var isClosedAssertion = statement.isClosed() == true;
+  var closeAssertion = true;
+  try {
+    statement.execute(); // Expect this to fail since the statement is closed
+    closeAssertion = false;
+  } catch {}
 
-var closeAssertion = true;
-try {
-  statement.execute(); // Expect this to fail since the statement is closed
-  closeAssertion = false;
-} catch {}
-
-assertTrue(batchExecutes == 2 && !executeResult && closeAssertion && updatedRows == 3 && metadataAssertion && moreResultsAssertion && parameterMetaDataAssertion && isClosedAssertion && closeAssertion);
-
+  assertTrue(batchExecutes == 2 && !executeResult && closeAssertion && updatedRows == 3 && metadataAssertion && moreResultsAssertion && parameterMetaDataAssertion && isClosedAssertion && closeAssertion);
+} finally {
+  if(connection){
+    connection.commit();
+    connection.close();
+  }
+}
 function setStatementFields() {
   var blob = [123];
   statement.setBlob(1, [123]);

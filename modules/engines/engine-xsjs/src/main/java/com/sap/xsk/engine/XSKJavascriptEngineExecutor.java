@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.apache.commons.io.IOUtils;
@@ -24,6 +25,7 @@ import org.eclipse.dirigible.engine.api.script.IScriptEngineExecutor;
 import org.eclipse.dirigible.engine.js.api.IJavascriptModuleSourceProvider;
 import org.eclipse.dirigible.engine.js.graalvm.processor.GraalVMJavascriptEngineExecutor;
 import org.eclipse.dirigible.repository.api.IRepositoryStructure;
+import org.eclipse.dirigible.repository.api.RepositoryException;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
@@ -38,6 +40,7 @@ public class XSKJavascriptEngineExecutor extends GraalVMJavascriptEngineExecutor
   public static final String ENGINE_NAME = "HANA XS Classic JavaScript Engine";
   private static final String ENGINE_JAVA_SCRIPT = "js";
   private static final String XSK_API_LOCATION = "/xsk/api.js";
+  private static final List<String> SUPPORTED_MODULE_EXTENSIONS = List.of(".xsjslib", ".xsjs", ".js", ".mjs");
   private static final Charset DEFAULT_CHARSET = Charset.defaultCharset();
   private static String XSK_API_CONTENT = null;
   private final XSKRepositoryModuleSourceProvider sourceProvider = new XSKRepositoryModuleSourceProvider(this,
@@ -80,6 +83,21 @@ public class XSKJavascriptEngineExecutor extends GraalVMJavascriptEngineExecutor
           .toString(XSKJavascriptEngineExecutor.class.getResourceAsStream("/META-INF/dirigible" + XSK_API_LOCATION), DEFAULT_CHARSET);
     }
     return XSK_API_CONTENT;
+  }
+
+  @Override
+  public boolean existsModule(String root, String module) throws RepositoryException {
+    if (SUPPORTED_MODULE_EXTENSIONS.stream().anyMatch(module::endsWith)) {
+      return super.existsModule(root, module, null);
+    }
+
+    for (String supportedExtension : SUPPORTED_MODULE_EXTENSIONS) {
+      if (super.existsModule(root, module, supportedExtension)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   @Override

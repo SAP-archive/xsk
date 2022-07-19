@@ -18,7 +18,8 @@ exports.getResultSetValueByDataTypeAndRowNumber = function (resultSet, dataType,
         case "INTEGER":
             return resultSet.getInt(colNumber);
         case "BIGINT":
-            return resultSet.getLong(colNumber);
+            return new Int64(resultSet.getLong(colNumber));
+        // return resultSet.getLong(colNumber);
         case "SMALLDECIMAL":
         case "DECIMAL":
             return resultSet.getBigDecimal(colNumber).toPlainString(); // convert to String as in HANA XSJS it is returned as String
@@ -145,4 +146,25 @@ function tryConvertNumberToBigDecimal(maybeNumber) {
         return BigDecimal.valueOf(maybeNumber);
     }
     return maybeNumber;
+}
+
+class Int64 {
+    value;
+    constructor(number) {
+        this.value = com.sap.xsk.api.int64.Int64.getValue(number);
+    }
+
+    lo() {
+        return com.sap.xsk.api.int64.Int64.getLow(this.value);
+    }
+    hi() {
+        return com.sap.xsk.api.int64.Int64.getHi(this.value);
+    }
+    compare(a, b) {
+        return com.sap.xsk.api.int64.Int64.compare(a, b)
+    }
+    join(high, low) {
+        return com.sap.xsk.api.int64.Int64.join(high, low);
+    }
+
 }

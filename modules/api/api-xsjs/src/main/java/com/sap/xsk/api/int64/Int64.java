@@ -15,6 +15,8 @@ import static java.lang.Long.parseLong;
 
 public class Int64 {
 
+    private Int64(){}
+
     public static long getValue(String valueAsString){
         return parseLong(valueAsString);
     }

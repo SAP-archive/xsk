@@ -1,0 +1,8 @@
+{
+  "CustomersCalcView": {
+    "target": {
+      "object": "xsodata-with-calc-view::Customers",
+      "schema": "XSODATA_WITH_CALC_VIEW_HDI"
+    }
+  }
+}

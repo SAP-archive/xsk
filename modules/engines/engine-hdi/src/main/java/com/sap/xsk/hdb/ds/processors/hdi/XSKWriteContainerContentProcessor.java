@@ -38,7 +38,7 @@ public class XSKWriteContainerContentProcessor extends XSKHDIAbstractProcessor {
     return folders.toArray(new String[]{});
   }
 
-  public final void execute(Connection connection, String container, String[] files, String configuration)
+  public void execute(Connection connection, String container, String[] files, String configuration)
       throws SQLException, IOException, ScriptingException {
 
     String[] folders = enumerateFolders(files);

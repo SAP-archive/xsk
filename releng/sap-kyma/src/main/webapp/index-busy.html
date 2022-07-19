@@ -1,7 +1,6 @@
 <!DOCTYPE HTML>
 <html lang="en" ng-app="busy" ng-controller="BusyController as busy">
 	<head>
-		<title>XSK Health status</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta charset="utf-8">
 
@@ -98,7 +97,7 @@
 			}
 
 			.Running:before {
-			    font-family: 'FontAwesome',sans-serif;				
+			    font-family: 'FontAwesome';
 			    font-size:1.3em;
 			    color: yellow;
 			    content: '\f054';  /* the chevron right icon */
@@ -106,7 +105,7 @@
 			}
 
 			.Succeeded:before {
-			    font-family: 'FontAwesome',sans-serif;
+			    font-family: 'FontAwesome';
 			    font-size:1.3em;
 			    color: green;
 			    content: '\f00c';  /* the check icon */
@@ -114,7 +113,7 @@
 			}
 
 			.Failed:before {
-			    font-family: 'FontAwesome',sans-serif;
+			    font-family: 'FontAwesome';
 			    font-size:1.3em;
 			    color: red;
 			    content: '\f00d';  /* the times icon */
@@ -143,7 +142,6 @@
 			<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></span></h1>
 
 			<table class="table table-striped">
-				<caption>Status</caption>
 			    <thead>
 			        <tr>
 			            <th>Synchronizer</th>

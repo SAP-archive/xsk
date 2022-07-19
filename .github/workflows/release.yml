@@ -46,6 +46,13 @@ jobs:
           docker build --load -t dirigiblelabs/xsk:${{ env.XSK_VERSION }} --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
           docker push dirigiblelabs/xsk:${{ env.XSK_VERSION }}
           cd ../../
+      - name: Push XSK - Runtime
+        run: |
+          cd releng/server-runtime
+          cp -r "${JAVA_HOME}" jdk
+          docker build --load -t dirigiblelabs/xsk-runtime:${{ env.XSK_VERSION }} --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
+          docker push dirigiblelabs/xsk-runtime:${{ env.XSK_VERSION }}
+          cd ../../
       - name: Push XSK for SAP Cloud Foundry
         run: |
           cd releng/sap-cf
@@ -156,6 +163,7 @@ jobs:
       - name: Package WAR files
         run: |
           zip --junk-paths server releng/server/target/ROOT.war
+          zip --junk-paths server-runtime releng/server-runtime/target/ROOT.war
           zip --junk-paths sap-cf releng/sap-cf/target/ROOT.war
 
       - name: Package Samples
@@ -205,11 +213,13 @@ jobs:
 
             #### Docker images:
               - [dirigiblelabs/xsk](https://hub.docker.com/r/dirigiblelabs/xsk/tags?page=1&ordering=last_updated) - XSK Server.
+              - [dirigiblelabs/xsk](https://hub.docker.com/r/dirigiblelabs/xsk-runtime/tags?page=1&ordering=last_updated) - XSK Server Runtime.
               - [dirigiblelabs/xsk-cf](https://hub.docker.com/r/dirigiblelabs/xsk-cf/tags?page=1&ordering=last_updated) - XSK Cloud Foundry.
               - [dirigiblelabs/xsk-kyma](https://hub.docker.com/r/dirigiblelabs/xsk-kyma/tags?page=1&ordering=last_updated) - XSK Kyma.
 
             #### Available for download `*.war` packages:
               - [server](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/server.zip) - XSK Server.
+              - [server](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/server-runtime.zip) - XSK Server Runtime.
               - [sap-cf](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/sap-cf.zip) - XSK Cloud Foundry.
 
             > _**Note:** Unzip the downloaded file to extract the `ROOT.war` binary._

@@ -16,6 +16,7 @@
 	<modules>
 		<module>buildpacks</module>
 		<module>server</module>
+		<module>server-runtime</module>
 		<module>sap-cf</module>
 		<module>sap-kyma</module>
 		<module>sap-kyma-runtime</module>

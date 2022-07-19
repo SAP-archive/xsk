@@ -47,7 +47,6 @@ import org.eclipse.dirigible.engine.odata2.definition.ODataNavigation;
 import org.eclipse.dirigible.engine.odata2.definition.ODataParameter;
 import org.eclipse.dirigible.engine.odata2.definition.ODataProperty;
 import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -168,7 +167,6 @@ public class XSKODataUtils {
     return oDataDefinitionModel;
   }
 
-  @NotNull
   private Consumer<XSKHDBXSODATAModification> processModification(ODataEntityDefinition oDataEntityDefinition,
       List<ODataHandler> handlers) {
     return modification -> {
@@ -198,7 +196,6 @@ public class XSKODataUtils {
     };
   }
 
-  @NotNull
   Consumer<XSKHDBXSODATANavigation> processNavigation(XSKODataModel xskoDataModel,
       ODataDefinition oDataDefinitionModel, ODataEntityDefinition oDataEntityDefinition) {
     return navigate -> {

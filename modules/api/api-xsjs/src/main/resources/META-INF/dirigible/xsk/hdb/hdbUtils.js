@@ -19,7 +19,6 @@ exports.getResultSetValueByDataTypeAndRowNumber = function (resultSet, dataType,
             return resultSet.getInt(colNumber);
         case "BIGINT":
             return new Int64(resultSet.getLong(colNumber));
-        // return resultSet.getLong(colNumber);
         case "SMALLDECIMAL":
         case "DECIMAL":
             return resultSet.getBigDecimal(colNumber).toPlainString(); // convert to String as in HANA XSJS it is returned as String

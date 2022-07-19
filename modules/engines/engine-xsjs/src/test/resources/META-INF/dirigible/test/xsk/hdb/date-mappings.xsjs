@@ -18,3 +18,4 @@ while(iterator.next()) {
 
 }
 
+conn.close();

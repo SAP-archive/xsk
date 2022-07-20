@@ -14,24 +14,36 @@ package com.sap.xsk.api.int64;
 import static java.lang.Long.parseLong;
 
 public class Int64 {
+    private long value;
 
-    private Int64(){}
+    public Int64(String value){
+      this.value = getValue(value);
+    }
+    public Int64(int value){
+       this.value = getValue(String.valueOf(value));
+    }
+    public Int64(Int64 int64){
+      this.value = int64.value;
+    }
 
-    public static long getValue(String valueAsString){
+    public long getValue(String valueAsString) {
         return parseLong(valueAsString);
     }
 
-    public static long getLow(Long number){
-        return number & 0xFFFFFFFFL;
-    }
-    public static long getHi(Long number){
-        return number >> 32;
+
+    public int getLow(Int64 number) {
+        return (int) (number.value & 0xFFFFFFFFL);
     }
 
-    public static long join (long high, long low){
-        return (high << 32) + low;
+    public int getHi(Int64 number) {
+        return (int) (number.value >> 32);
     }
-    public static long compare(long a, long b){
-        return Math.max(a, b);
+
+    public long join(int high, int low) {
+        return ((long) high << 32) + low;
+    }
+
+    public long compare(Int64 a, Int64 b) {
+        return Long.compare(a.value, b.value);
     }
 }

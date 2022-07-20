@@ -148,22 +148,35 @@ function tryConvertNumberToBigDecimal(maybeNumber) {
 }
 
 class Int64 {
-    value;
-    constructor(number) {
-        this.value = com.sap.xsk.api.int64.Int64.getValue(number);
-    }
 
-    lo() {
-        return com.sap.xsk.api.int64.Int64.getLow(this.value);
-    }
-    hi() {
-        return com.sap.xsk.api.int64.Int64.getHi(this.value);
-    }
-    compare(a, b) {
-        return com.sap.xsk.api.int64.Int64.compare(a, b)
-    }
-    join(high, low) {
-        return com.sap.xsk.api.int64.Int64.join(high, low);
-    }
+	constructor(number) {
+        const JavaInt64 = Java.type('com.sap.xsk.api.int64.Int64');
+		this.internalInt64Value = new JavaInt64(number);
+	}
+
+    //Int 64 number
+	static lo(number) {
+        // should return low 32 bits
+		return number.internalInt64Value.getLow(number);
+	}
+    //Int 64 number
+	static hi(number) {
+		return number.internalInt64Value.getHi(number);
+	}
+    //Int 64 number
+	static compare(a, b) {
+		return number.internalInt64Value.compare(a, b)
+	}
+    //Int 64 number
+	static join(high, low) {
+
+		return number.internalInt64Value.join(high, low);
+	}
 
 }
+
+exports.Int64 = new Int64();
+
+// globalThis.ctypes = {
+//     Int64:Int64
+// }

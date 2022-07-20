@@ -63,6 +63,7 @@ nav:
       - Kyma: 'setup/kyma.md'
       - Helm: 'setup/helm.md'
       - Configurations:
+        - On-Premise Connectivity: 'setup/configurations/on-premise.md'
         - Environment Variables: 'setup/configurations/environment-variables.md'
         - HDI: 'setup/configurations/hdi.md'
     - Migration:

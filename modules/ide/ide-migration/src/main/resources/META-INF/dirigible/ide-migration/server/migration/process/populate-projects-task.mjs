@@ -3,7 +3,7 @@ import { MigrationService } from "../api/migration-service.mjs";
 import { MigrationTask } from "./task.mjs";
 import { configurations as config } from "@dirigible/core";
 import { DiffToolService } from "../api/diff-tool-executor.mjs";
-const repositoryManager = require("platform/v4/repository");
+import { repository } from "@dirigible/platform";
 
 export class PopulateProjectsTask extends MigrationTask {
     execution = process.getExecutionContext();
@@ -28,7 +28,7 @@ export class PopulateProjectsTask extends MigrationTask {
                 const workspacePath = workspaceName;
 
                 const repositoryPath = `${workspacePath}/${projectName}`;
-                const duRootCollection = repositoryManager.getCollection(repositoryPath);
+                const duRootCollection = repository.getCollection(repositoryPath);
 
                 function localHandler(collection, localName) {
                     const local = collection.getResource(localName);
@@ -49,7 +49,7 @@ export class PopulateProjectsTask extends MigrationTask {
                 for (const generatedFile of generatedFiles) {
                     migrationService.addFileToWorkspace(workspaceName, generatedFile.repositoryPath, generatedFile.relativePath, generatedFile.projectName);
                 }
-                migrationService.handleHDBTableFunctions(workspaceName, projectName, deliveryUnit.synonyms);
+                migrationService.handleHDBTableFunctionsAndHDBRoles(workspaceName, projectName, deliveryUnit.synonyms);
 
                 //modify files
                 console.log("Modifying files...")
@@ -69,6 +69,27 @@ export class PopulateProjectsTask extends MigrationTask {
         const diffTool = new DiffToolService();
         const diffViewData = diffTool.diffFolders(`${workspaceHolderFolder}/${workspaceName}_unmodified`, `${workspaceHolderFolder}/${workspaceName}`);
         migrationService.removeTemporaryFolders(workspaceName);
-        process.setVariable(this.execution.getId(), "diffViewData", JSON.stringify(diffViewData));
+        this._persistDiffViewData(diffViewData);
     }
+
+    _persistDiffViewData(diffViewData) {
+        const diffViewsCollectionPath = "/diff-views";
+        const diffViewsCollection = repository.getCollection(diffViewsCollectionPath);
+        if (!diffViewsCollection.exists()) {
+            diffViewsCollection.create();
+        }
+
+        const executionId = this.execution.getId();
+        const currentDiffViewFileName = `migration-process-id-${executionId}`;
+
+        const currentDiffViewResource = diffViewsCollection.getResource(currentDiffViewFileName);
+        if (!currentDiffViewResource.exists()) {
+            currentDiffViewResource.create();
+        }
+
+        const diffViewDataJson = JSON.stringify(diffViewData);
+        currentDiffViewResource.setText(diffViewDataJson);
+        process.setVariable(this.execution.getId(), "diffViewDataFileName", `${diffViewsCollectionPath}/${currentDiffViewFileName}`);
+    }
+
 }

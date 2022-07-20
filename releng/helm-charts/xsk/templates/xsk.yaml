@@ -66,7 +66,7 @@ spec:
           {{- end }}
           {{- if .Values.kyma.destinationServiceEnabled }}
             - secretRef:
-                name: {{ default  .Release.Name  .Values.kyma.destinationServiceBindingSecretName }}-binding
+                name: destination-{{ default  .Release.Name  .Values.kyma.destinationServiceBindingSecretName }}-binding
               prefix: destination_
           {{- end }}
           env:
@@ -239,21 +239,21 @@ spec:
 apiVersion: services.cloud.sap.com/v1
 kind: ServiceInstance
 metadata:
-  name: {{ default .Release.Name .Values.kyma.destinationServiceInstanceName }}
+  name: destination-{{ default .Release.Name .Values.kyma.destinationServiceInstanceName }}
 spec:
   serviceOfferingName: {{ required "Missing destination service instance offering name" .Values.kyma.destinationServiceInstanceOfferingName }}
   servicePlanName: {{ required "Missing destination service instance plan name" .Values.kyma.destinationServiceInstancePlanName }}
-  externalName: {{ default .Release.Name .Values.kyma.destinationServiceInstanceExternalName }}
+  externalName: destination-{{ default .Release.Name .Values.kyma.destinationServiceInstanceExternalName }}
   parameters: {{ required "Missing destination service instance parameters" .Values.kyma.destinationServiceInstanceParameters }}
 ---
 apiVersion: services.cloud.sap.com/v1
 kind: ServiceBinding
 metadata:
-  name: {{ default .Release.Name .Values.kyma.destinationServiceBindingName }}-binding
+  name: destination-{{ default .Release.Name .Values.kyma.destinationServiceBindingName }}-binding
 spec:
-  serviceInstanceName: {{ default .Release.Name .Values.kyma.destinationServiceInstanceName }}
-  externalName: {{ default  .Release.Name .Values.kyma.destinationServiceBindingExternalName }}-binding
-  secretName: {{ default  .Release.Name  .Values.kyma.destinationServiceBindingSecretName }}-binding
+  serviceInstanceName: destination-{{ default .Release.Name .Values.kyma.destinationServiceInstanceName }}
+  externalName: destination-{{ default  .Release.Name .Values.kyma.destinationServiceBindingExternalName }}-binding
+  secretName: destination-{{ default  .Release.Name  .Values.kyma.destinationServiceBindingSecretName }}-binding
   parameters: {{ required "Missing destination service binding parameters" .Values.kyma.destinationServiceBindingParameters }}
 {{- end }}
 {{- else }}

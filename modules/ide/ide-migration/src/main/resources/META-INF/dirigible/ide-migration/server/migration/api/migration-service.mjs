@@ -4,6 +4,7 @@ import { database } from "@dirigible/db";
 import { configurations as config } from "@dirigible/core";
 import { client as git } from "@dirigible/git";
 import { repository } from "@dirigible/platform";
+import { xml } from "@dirigible/utils";
 
 import { HanaRepository } from "../repository/hana-repository";
 import { HanaVisitor } from "./hana-visitor.mjs";
@@ -26,6 +27,7 @@ export class MigrationService {
     repo = null;
     tableFunctionPaths = [];
 
+    xskTechnicalPrivilegesFileName = "xsk_technical_privileges";
     synonymFileName = "hdi-synonyms.hdbsynonym";
     publicSynonymFileName = "hdi-public-synonyms.hdbpublicsynonym";
     modelsWithoutSynonym = ["com.sap.xsk.hdb.ds.model.hdbschema.XSKDataStructureHDBSchemaModel", "com.sap.xsk.hdb.ds.model.hdbsequence.XSKDataStructureHDBSequenceModel"];
@@ -211,7 +213,7 @@ export class MigrationService {
 
         }
         this._handleCalculationViews(calcViews, synonyms, workspaceName);
-        this._createXsSecurityJson(lastProjectName, scopes, roleTemplates, roleCollections,workspaceCollection);
+        this._createXsSecurityJson(lastProjectName, scopes, roleTemplates, roleCollections, workspaceCollection);
         return { projectNames, synonyms };
     }
 
@@ -429,6 +431,19 @@ export class MigrationService {
         };
     }
 
+    _generateHdbRole(name, privileges) {
+        return {
+            role: {
+                name,
+                schema_analytic_privileges: [
+                    {
+                        privileges
+                    }
+                ]
+            }
+        };
+    }
+
     _buildXSSecurityElementsFromXSPrivileges(content, privilegePrefix, scopes, roleTemplates, roleCollections) {
         if (content["privileges"]) {
             let privileges = content["privileges"];
@@ -450,7 +465,7 @@ export class MigrationService {
                 roleCollections.push({
                     "name": "Role" + privilegeName,
                     "description": "XSK role for " + fullPrivilegeName,
-                    "role-template-references": "$XSAPPNAME.RoleTemplate" + privilegeName
+                    "role-template-references": ["$XSAPPNAME.RoleTemplate" + privilegeName]
                 })
             }
         }
@@ -679,7 +694,7 @@ export class MigrationService {
         return filesAndPackagesObject.files;
     }
 
-    _visitCollection(project, collection, parentPath, synonyms, projectName, workspaceName) {
+    _visitCollection(project, collection, parentPath, synonyms, projectName, workspaceName, apIds) {
         let resNames = collection.getResourcesNames();
         const synonymsToGenerate = [];
         for (const resName of resNames) {
@@ -724,6 +739,18 @@ export class MigrationService {
                 project.getFile(oldProjectRelativePath).setText(visitor.content);
                 this.tableFunctionPaths.push(oldProjectRelativePath);
             }
+
+            if (path.endsWith(".hdbanalyticprivilege") || path.endsWith(".analyticprivilege")) {
+                const resource = collection.getResource(resName);
+                const content = resource.getText();
+                const json = JSON.parse(xml.toJson(content));
+                if (json["Privilege:analyticPrivilege"]) {
+                    const apId = json["Privilege:analyticPrivilege"]["-id"];
+                    if (apId) {
+                        apIds.push(apId);
+                    }
+                }
+            }
         }
 
         this._appendOrCreateSynonymsFile(this.synonymFileName, synonymsToGenerate, workspaceName, projectName);
@@ -731,20 +758,28 @@ export class MigrationService {
         let collectionsNames = collection.getCollectionsNames();
         for (const name of collectionsNames) {
             let nestedCollection = collection.getCollection(name);
-            this._visitCollection(project, nestedCollection, parentPath + "/" + name, synonyms, projectName, workspaceName);
+            this._visitCollection(project, nestedCollection, parentPath + "/" + name, synonyms, projectName, workspaceName, apIds);
         }
     }
 
-    handleHDBTableFunctions(workspaceName, projectName, synonyms) {
+    handleHDBTableFunctionsAndHDBRoles(workspaceName, projectName, synonyms) {
         const workspaceCollection = this._getOrCreateTemporaryWorkspaceCollection(workspaceName);
         const projectCollection = this._getOrCreateTemporaryProjectCollection(workspaceCollection, projectName);
 
         const workspace = workspaceManager.getWorkspace(workspaceName);
         const project = workspace.getProject(projectName);
-        this._visitCollection(project, projectCollection, ".", synonyms, projectName, workspaceName);
+        const apIds = [];
+        this._visitCollection(project, projectCollection, ".", synonyms, projectName, workspaceName, apIds);
+
+        const hdbRoleContent = JSON.stringify(this._generateHdbRole(this.xskTechnicalPrivilegesFileName, apIds));
+
+        const hdbRoleName = `${this.xskTechnicalPrivilegesFileName}.hdbrole`;
+        const hdbRoleFile = project.createFile(hdbRoleName);
+        hdbRoleFile.setText(hdbRoleContent);
 
         console.log("Adding tablefunctions to hdi file...");
         this._addTableFunctionsToHDI(project, projectName, projectCollection);
+        this._addHdbRolesToHDI(project, projectName, projectCollection, hdbRoleName);
         this._resetTableFunctionPaths();
     }
 
@@ -762,17 +797,35 @@ export class MigrationService {
         const hdiObject = JSON.parse(hdiFile.getText());
 
         for (const path of this.tableFunctionPaths) {
-            let trimmed = path;
-            if (path.startsWith("./")) {
-                trimmed = path.substring(2);
-            }
-            hdiObject["deploy"].push(`/${projectName}/${trimmed}`);
+            this._addPathToHDI(hdiObject, path, projectName);
         }
 
+        this._populateHdiFile(projectCollection, hdiFile, hdiObject, hdiPath);
+    }
+
+    _addHdbRolesToHDI(project, projectName, projectCollection, rolePath) {
+        const hdiPath = `${projectName}.hdi`;
+        const hdiFile = project.getFile(hdiPath);
+        const hdiObject = JSON.parse(hdiFile.getText());
+        this._addPathToHDI(hdiObject, rolePath, projectName)
+
+        this._populateHdiFile(projectCollection, hdiFile, hdiObject, hdiPath);
+        
+    }
+
+    _populateHdiFile(projectCollection, hdiFile, hdiObject, hdiPath) {
         const hdiJson = JSON.stringify(hdiObject, null, 4);
         let resource = projectCollection.getResource(hdiPath);
         resource.setText(hdiJson);
         hdiFile.setText(hdiJson);
+    }
+
+    _addPathToHDI(hdiObject, path, projectName) {
+        let trimmed = path;
+        if (path.startsWith("./")) {
+            trimmed = path.substring(2);
+        }
+        hdiObject["deploy"].push(`/${projectName}/${trimmed}`);
     }
 
     _getPublicSynonymArtifactName(artifactName, filePath) {

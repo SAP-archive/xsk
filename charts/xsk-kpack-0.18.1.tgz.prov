@@ -1,0 +1,48 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+apiVersion: v2
+appVersion: 0.18.1
+description: Compatible environment for SAP HANA Extended Application Services (XS)
+  based applications outside of SAP HANA instance running in a container deployed
+  on Kubernetes.
+home: https://github.com/sap/xsk
+icon: https://raw.githubusercontent.com/eclipse/dirigible/master/logo/dirigible-logo-symbol.png
+keywords:
+- - sap
+- - xsc
+- - hana
+- - neo
+- - xsk
+- - kyma
+- - platform
+- - development
+- - applications
+- - in-system
+kubeVersion: '> 1.19'
+maintainers:
+- - email: yordan.pavlov@sap.com
+  name: Yordan Pavlov
+  url: https://github.com/ThuF
+name: xsk-kpack
+sources:
+- - https://github.com/sap/xsk
+type: application
+version: 0.18.1
+
+...
+files:
+  xsk-kpack-0.18.1.tgz: sha256:73735896631e23c44ed197c73fe1321b1b2b514f202b7494e7e13cd8b87aeab7
+-----BEGIN PGP SIGNATURE-----
+
+wsDcBAEBCgAQBQJi2DI5CRBgEPRU0YGUhAAA2s0MAGtLFXypU0AMSNL6DmgN1Q8M
+e8UrqkmO5N8R4+n53+vJ3AKleW/kTIBrymxBBfVy1nX5fkUwYporM/trvM64MuV7
+33VGmgzof9cQMsWDLcqikeKp923ZTRw7nO+FYG8peVOat7stY5B7j0rnIH8lNyIc
+S/EiNa1n5rxgjWVC0TiGwBxHK36UbmC9iMUc8/iADxlRz/34cRHvj593YIZu6tDS
+NRUVvJbrFV2rFKH2bA8smtrKMvqqMJA8bqjNEjYYyr1/UjWGVdfy7HOEd/vB6A0I
+fOVAJblDIT7VX6BDljVYomAffFiTVXA8kkohJ+El0heVBXXMGnxKAA6cKCX4W7vS
+wuX7ysieLdI1fQU4D4zdCNugCCTTuNT8K1+uI/7gI6sDesF4k46OipaDHOhKtlHl
+6cICnr+Ud999zCty+sBLCEOq05c9hqo4UBGEVfSZDJbtsEtviSDtVxatoAqSY6m5
+0PSNu3NfdUf02ySko2xwQ8hQegmOFXymPT3I73iRJw==
+=6102
+-----END PGP SIGNATURE-----

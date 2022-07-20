@@ -1,36 +1,44 @@
 var db = $.db;
 var assertTrue = require('utils/assert').assertTrue;
 
-var connection = db.getConnection();
-
+var connection;
 try {
-  connection.prepareStatement("DROP TABLE TEST_USERS").execute();
-} catch {}
+  connection = db.getConnection();
 
-connection.prepareStatement("CREATE TABLE TEST_USERS (ID int)").execute();
+  try {
+    connection.prepareStatement("DROP TABLE TEST_USERS").execute();
+  } catch {}
 
-connection.prepareStatement("INSERT INTO TEST_USERS (ID) VALUES (1)").execute();
+  connection.prepareStatement("CREATE TABLE TEST_USERS (ID int)").execute();
 
-var metadata = connection.prepareStatement("SELECT * FROM TEST_USERS").executeQuery().getMetaData();
+  connection.prepareStatement("INSERT INTO TEST_USERS (ID) VALUES (1)").execute();
 
-metadata.getCatalogName(1);
+  var metadata = connection.prepareStatement("SELECT * FROM TEST_USERS").executeQuery().getMetaData();
 
-var columnCountAssertion = metadata.getColumnCount() == 1;
+  metadata.getCatalogName(1);
 
-metadata.getColumnDisplaySize(1);
+  var columnCountAssertion = metadata.getColumnCount() == 1;
 
-var labelAssertion = metadata.getColumnLabel(1) == "ID";
+  metadata.getColumnDisplaySize(1);
 
-var nameAssertion = metadata.getColumnName(1) == "ID";
+  var labelAssertion = metadata.getColumnLabel(1) == "ID";
 
-var typeAssertion = metadata.getColumnType(1) == 3;
+  var nameAssertion = metadata.getColumnName(1) == "ID";
 
-var typeNameAssertion = metadata.getColumnTypeName(1) == "INTEGER";
+  var typeAssertion = metadata.getColumnType(1) == 3;
 
-var precisionAssertion = metadata.getPrecision(1) == 32;
+  var typeNameAssertion = metadata.getColumnTypeName(1) == "INTEGER";
 
-var scaleAssertion = metadata.getScale(1) == 0;
+  var precisionAssertion = metadata.getPrecision(1) == 32;
 
-var tableNameAssertion = metadata.getTableName(1) == "TEST_USERS";
+  var scaleAssertion = metadata.getScale(1) == 0;
 
-assertTrue(columnCountAssertion && labelAssertion && nameAssertion && typeAssertion && typeNameAssertion && precisionAssertion && scaleAssertion && tableNameAssertion);
+  var tableNameAssertion = metadata.getTableName(1) == "TEST_USERS";
+
+  assertTrue(columnCountAssertion && labelAssertion && nameAssertion && typeAssertion && typeNameAssertion && precisionAssertion && scaleAssertion && tableNameAssertion);
+} finally {
+  if(connection){
+    connection.commit();
+    connection.close();
+  }
+}

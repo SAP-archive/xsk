@@ -52,6 +52,7 @@ exports.getResultSetValueByDataTypeAndRowNumber = function (resultSet, dataType,
         case "VARBINARY":
         case "ST_GEOMETRY":
         case "ST_POINT":
+        case "TEXT":
             return new Uint8Array(resultSet.getBytes(colNumber)).buffer;
         case "TEXT":
         case "CLOB":
@@ -121,7 +122,6 @@ exports.setParamByType = function (preparedStatement, paramType, paramValue, par
         case "BLOB":
             preparedStatement.setBlob(paramIndex, paramValue);
             break;
-        case "TEXT":
         case "CLOB":
             preparedStatement.setClob(paramIndex, paramValue);
             break;

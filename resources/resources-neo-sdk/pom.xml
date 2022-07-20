@@ -6,16 +6,25 @@
   <parent>
     <groupId>com.sap.xsk</groupId>
     <artifactId>xsk-resources-parent</artifactId>
-    <version>0.18.0-SNAPSHOT</version>
+    <version>0.19.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <name>XSK - Resources - Neo SDK</name>
   <artifactId>xsk-resources-neo-sdk</artifactId>
-  <version>0.18.0-SNAPSHOT</version>
+  <version>0.19.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>META-INF/dirigible/resources-neo-sdk/sdk/tools/**</include>
+          <include>META-INF/dirigible/resources-neo-sdk/differ.sh</include>
+        </includes>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -82,6 +91,28 @@
                   <overWrite>true</overWrite>
                 </artifactItem>
               </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>${exec-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>chmod</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>chmod</executable>
+              <arguments>
+                <argument>+x</argument>
+                <argument>${project.build.directory}/classes/META-INF/dirigible/resources-neo-sdk/differ.sh</argument>
+                <argument>${project.build.directory}/classes/META-INF/dirigible/resources-neo-sdk/sdk/tools/neo.sh</argument>
+              </arguments>
             </configuration>
           </execution>
         </executions>

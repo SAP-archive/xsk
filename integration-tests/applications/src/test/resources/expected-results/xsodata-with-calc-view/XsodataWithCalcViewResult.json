@@ -1,0 +1,22 @@
+{
+  "d":{
+    "results":[
+      {
+        "__metadata":{
+          "id":"http://localhost:8080/odata/v2/Customers('Claudia%20Davis')",
+          "uri":"http://localhost:8080/odata/v2/Customers('Claudia%20Davis')",
+          "type":"xsodata-with-calc-view.CustomersType"
+        },
+        "Name":"Claudia Davis"
+      },
+      {
+        "__metadata":{
+          "id":"http://localhost:8080/odata/v2/Customers('John%20Smith')",
+          "uri":"http://localhost:8080/odata/v2/Customers('John%20Smith')",
+          "type":"xsodata-with-calc-view.CustomersType"
+        },
+        "Name":"John Smith"
+      }
+    ]
+  }
+}

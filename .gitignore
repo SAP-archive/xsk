@@ -2,7 +2,7 @@
 dist/
 .settings/
 .idea/
-.vscode
+.vscode/
 .run/
 target/
 dirigible_local/

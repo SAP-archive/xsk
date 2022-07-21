@@ -11,18 +11,19 @@
 
 FROM tomcat:9.0.64-jre17-temurin AS base
 
+RUN rm -fr /opt/java/openjdk
 RUN rm -R /usr/local/tomcat/webapps.dist
 RUN rm /usr/local/tomcat/conf/tomcat-users.xml
-
-FROM sapmachine:17.0.2
-
-COPY --from=base /usr/local/tomcat /usr/local/tomcat
-
 RUN apt-get update && \
-    apt-get install git -y && \
+    apt-get install wget -y && \
     apt-get clean
-    
+
 RUN wget https://repo1.maven.org/maven2/com/sap/cloud/db/jdbc/ngdbc/2.8.12/ngdbc-2.8.12.jar -P /usr/local/tomcat/lib/
 
 RUN mkdir -p /usr/local/tomcat/target/dirigible/repository/root/registry/public/
+
+FROM sapmachine:17.0.2 as jdk
+
+COPY --from=base /usr/local/tomcat /usr/local/tomcat
 RUN ln -s /usr/lib/jvm/sapmachine-17/ /usr/local/jdk
+

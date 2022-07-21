@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario id="xsodata-with-calc-view::Customers" outputViewType="Projection">
+    <dataSources>
+        <DataSource id="Customers" type="DATA_BASE_TABLE">
+            <resourceUri>Customers</resourceUri>
+        </DataSource>
+    </dataSources>
+    <calculationViews>
+        <calculationView xsi:type="Calculation:ProjectionView" id="Customers_Projection">
+            <viewAttributes>
+                <viewAttribute id="Name" />
+            </viewAttributes>
+            <input node="#Customers">
+            <mapping xsi:type="Calculation:AttributeMapping" target="Name" source="NAME" />
+            </input>
+        </calculationView>
+    </calculationViews>
+    <logicalModel id="Customers_Projection">
+        <attributes>
+            <attribute id="Name">
+                <keyMapping columnObjectName="Customers_Projection" columnName="Name" />
+            </attribute>
+        </attributes>
+    </logicalModel>
+</Calculation:scenario>

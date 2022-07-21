@@ -1,0 +1,14 @@
+{
+    "configuration": "/xsodata-with-calc-view/Config.hdiconfig",
+    "users": [
+        "DBADMIN"
+    ],
+    "group": "XSODATA_WITH_CALC_VIEW_GROUP",
+    "container": "XSODATA_WITH_CALC_VIEW_HDI",
+    "deploy": [
+        "/xsodata-with-calc-view/Synonyms.hdbsynonym",
+        "/xsodata-with-calc-view/PublicSynonyms.hdbpublicsynonym",
+        "/xsodata-with-calc-view/Customers.hdbcalculationview"
+    ],
+    "undeploy": []
+}

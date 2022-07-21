@@ -29,6 +29,8 @@ exports.ProcedureResult = function () {
 exports.ResultSet = XscResultSet;
 
 function XscConnection(dConnection) {
+	dConnection.setAutoCommit(false);
+	
 	this.close = function () {
 		dConnection.close();
 	};

@@ -4,6 +4,7 @@
 // Inserts a new row in employee status table.
 function beforeCreate(params) {
     let connection = params.connection;
+    connection.setAutoCommit(true);
 
     let statement = connection.prepareStatement("SELECT * FROM \"" + params.afterTableName + "\";");
     statement.execute();
@@ -12,7 +13,6 @@ function beforeCreate(params) {
 
     while (resultSet.next()) {
         let employeeId = resultSet.getInteger("Id");
-
         let statement = connection.prepareStatement("INSERT INTO \"TEST_SCHEMA\".\"xsodata-with-xsjs-handlers::Entities.Status\" VALUES (?, true);");
         statement.setInteger(1, employeeId);
         statement.execute();
@@ -22,6 +22,7 @@ function beforeCreate(params) {
 // Inserts a new row in the employee table.
 function onCreate(params) {
     let connection = params.connection;
+    connection.setAutoCommit(true);
 
     let statement = connection.prepareStatement("SELECT * FROM \"" + params.afterTableName + "\";");
     statement.execute();
@@ -46,6 +47,7 @@ function onCreate(params) {
 // Inserts a new row in the employee salary table.
 function afterCreate(params) {
     let connection = params.connection;
+    connection.setAutoCommit(true);
 
     let statement = connection.prepareStatement("SELECT * FROM \"" + params.afterTableName + "\";");
     statement.execute();
@@ -66,6 +68,7 @@ function afterCreate(params) {
 // Updates the employee status.
 function beforeUpdate(params) {
     let connection = params.connection;
+    connection.setAutoCommit(true);
 
     let statement = connection.prepareStatement("SELECT * FROM \"" + params.afterTableName + "\";");
     statement.execute();
@@ -84,6 +87,7 @@ function beforeUpdate(params) {
 // Updates the employee details.
 function onUpdate(params) {
     let connection = params.connection;
+    connection.setAutoCommit(true);
 
     let statement = connection.prepareStatement("SELECT * FROM \"" + params.afterTableName + "\";");
     statement.execute();
@@ -108,6 +112,7 @@ function onUpdate(params) {
 // Updates the employee salary.
 function afterUpdate(params) {
     let connection = params.connection;
+    connection.setAutoCommit(true);
 
     let statement = connection.prepareStatement("SELECT * FROM \"" + params.afterTableName + "\";");
     statement.execute();
@@ -128,6 +133,7 @@ function afterUpdate(params) {
 // Deletes the employee data from the status table.
 function beforeDelete(params) {
     let connection = params.connection;
+    connection.setAutoCommit(true);
 
     let statement = connection.prepareStatement("SELECT * FROM \"" + params.beforeTableName + "\";");
     statement.execute();
@@ -146,6 +152,7 @@ function beforeDelete(params) {
 // Deletes the record from employees table.
 function onDelete(params) {
     let connection = params.connection;
+    connection.setAutoCommit(true);
 
     let statement = connection.prepareStatement("SELECT * FROM \"" + params.beforeTableName + "\";");
     statement.execute();
@@ -164,6 +171,7 @@ function onDelete(params) {
 // Deletes the employee data from the salary table.
 function afterDelete(params) {
     let connection = params.connection;
+    connection.setAutoCommit(true);
 
     let statement = connection.prepareStatement("SELECT * FROM \"" + params.beforeTableName + "\";");
     statement.execute();

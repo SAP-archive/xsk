@@ -29,6 +29,8 @@ exports.ProcedureResult = function () {
 exports.ResultSet = XscResultSet;
 
 function XscConnection(dConnection) {
+	dConnection.setAutoCommit(false);
+
 	this.close = function () {
 		dConnection.close();
 	};
@@ -273,6 +275,7 @@ function getColumnMetadataArray(dResultSetMetaData) {
 	}
 	return columnMetadataArray;
 }
+
 
 globalThis.ctypes = {
 	Int64:HDB_UTILS.Int64

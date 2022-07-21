@@ -209,6 +209,8 @@ function XscCallableStatement(callableStatement) {
 }
 
 function XscConnection(dConnection) {
+	dConnection.setAutoCommit(false);
+	
 	this.close = function () {
 		dConnection.close();
 	};

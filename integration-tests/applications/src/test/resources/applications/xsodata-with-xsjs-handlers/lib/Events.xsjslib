@@ -22,7 +22,6 @@ function beforeCreate(params) {
 // Inserts a new row in the employee table.
 function onCreate(params) {
     let connection = params.connection;
-    connection.setAutoCommit(true);
 
     let statement = connection.prepareStatement("SELECT * FROM \"" + params.afterTableName + "\";");
     statement.execute();
@@ -42,12 +41,13 @@ function onCreate(params) {
         statement.setString(4, employeeCountry);
         statement.execute();
     }
+
+    connection.commit();
 }
 
 // Inserts a new row in the employee salary table.
 function afterCreate(params) {
     let connection = params.connection;
-    connection.setAutoCommit(true);
 
     let statement = connection.prepareStatement("SELECT * FROM \"" + params.afterTableName + "\";");
     statement.execute();
@@ -61,6 +61,8 @@ function afterCreate(params) {
         statement.setInteger(1, employeeId);
         statement.execute();
     }
+
+    connection.commit();
 }
 
 // UPDATE HANDLERS
@@ -87,7 +89,6 @@ function beforeUpdate(params) {
 // Updates the employee details.
 function onUpdate(params) {
     let connection = params.connection;
-    connection.setAutoCommit(true);
 
     let statement = connection.prepareStatement("SELECT * FROM \"" + params.afterTableName + "\";");
     statement.execute();
@@ -107,12 +108,13 @@ function onUpdate(params) {
         statement.setInteger(4, employeeId);
         statement.execute();
     }
+
+    connection.commit();
 }
 
 // Updates the employee salary.
 function afterUpdate(params) {
     let connection = params.connection;
-    connection.setAutoCommit(true);
 
     let statement = connection.prepareStatement("SELECT * FROM \"" + params.afterTableName + "\";");
     statement.execute();
@@ -126,6 +128,8 @@ function afterUpdate(params) {
         statement.setInteger(1, employeeId);
         statement.execute();
     }
+
+    connection.commit();
 }
 
 // DELETE HANDLERS
@@ -152,7 +156,6 @@ function beforeDelete(params) {
 // Deletes the record from employees table.
 function onDelete(params) {
     let connection = params.connection;
-    connection.setAutoCommit(true);
 
     let statement = connection.prepareStatement("SELECT * FROM \"" + params.beforeTableName + "\";");
     statement.execute();
@@ -166,12 +169,13 @@ function onDelete(params) {
         statement.setInteger(1, employeeId);
         statement.execute();
     }
+
+    connection.commit();
 }
 
 // Deletes the employee data from the salary table.
 function afterDelete(params) {
     let connection = params.connection;
-    connection.setAutoCommit(true);
 
     let statement = connection.prepareStatement("SELECT * FROM \"" + params.beforeTableName + "\";");
     statement.execute();
@@ -185,4 +189,6 @@ function afterDelete(params) {
         statement.setInteger(1, employeeId);
         statement.execute();
     }
+
+    connection.commit();
 }

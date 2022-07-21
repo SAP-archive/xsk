@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Privilege:analyticPrivilege xmlns:Privilege="http://www.sap.com/ndb/BiModelPrivilege.ecore" id="items_ordered_total_ap" privilegeType="SQL_ANALYTIC_PRIVILEGE" schemaVersion="1.1">
 <descriptions defaultDescription="items_ordered_ap"/>
 <securedModels>
   <modelUri>items_ordered_total</modelUri>
 </securedModels>
 <whereSql>
-&quot;Username&quot; = SESSION_CONTEXT('APPLICATIONUSER')
+"Username" = SESSION_CONTEXT('APPLICATIONUSER')
 </whereSql>
 </Privilege:analyticPrivilege>

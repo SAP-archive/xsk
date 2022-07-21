@@ -1,13 +1,7 @@
 {
-    "products.db::Products.Orders": {
+    "products.db::Products.ShippingAddresses": {
         "target": {
-            "object": "products.db::Products.Orders",
-            "schema": "XSK_SAMPLES_PRODUCTS"
-        }
-    },
-    "products.db::Products.OrderLine": {
-        "target": {
-            "object": "products.db::Products.OrderLine",
+            "object": "products.db::Products.ShippingAddresses",
             "schema": "XSK_SAMPLES_PRODUCTS"
         }
     },
@@ -17,15 +11,21 @@
             "schema": "XSK_SAMPLES_PRODUCTS"
         }
     },
-    "products.db::Products.ShippingAddresses": {
-        "target": {
-            "object": "products.db::Products.ShippingAddresses",
-            "schema": "XSK_SAMPLES_PRODUCTS"
-        }
-    },
     "products.db::Products.Item": {
         "target": {
             "object": "products.db::Products.Item",
+            "schema": "XSK_SAMPLES_PRODUCTS"
+        }
+    },
+    "products.db::Products.Orders": {
+        "target": {
+            "object": "products.db::Products.Orders",
+            "schema": "XSK_SAMPLES_PRODUCTS"
+        }
+    },
+    "products.db::Products.OrderLine": {
+        "target": {
+            "object": "products.db::Products.OrderLine",
             "schema": "XSK_SAMPLES_PRODUCTS"
         }
     }

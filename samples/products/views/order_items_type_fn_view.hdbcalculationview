@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="order_items_type_fn_view" dataCategory="DIMENSION"
-  dimensionType="STANDARD" schemaVersion="2.3" defaultClient="$$client$$" visibility="internal"
-  outputViewType="Projection" calculationScenarioType="TREE_BASED" enforceSqlExecution="false">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="order_items_type_fn_view"
+  applyPrivilegeType="SQL_ANALYTIC_PRIVILEGE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="2.3"
+  defaultClient="$$client$$" visibility="internal" outputViewType="Projection" calculationScenarioType="TREE_BASED"
+  enforceSqlExecution="false">
   <descriptions defaultDescription="order_items_type_fn_view" />
   <localVariables>
     <variable id="itemType" parameter="true">

@@ -35,8 +35,12 @@ function doPost() {
 function doGet() {
 	var response;
 	var productsService = new ProductsService(connection, "XSK_SAMPLES_PRODUCTS");
-	response = productsService.handleGetRequest();
-	connection.close();
+
+	try {
+		response = productsService.handleGetRequest();
+	} finally {
+		connection.close();
+	}
 	positiveResult(response);
 }
 

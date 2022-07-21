@@ -38,17 +38,8 @@ let mail = new $.net.Mail({
     })]
 });
 
-// Set mail server configurations.
-let mailConfig = {
-    "mail.user": "<your-user>",
-    "mail.password": "<your-password>",
-    "mail.transport.protocol": "smtps",
-    "mail.smtps.host": "<your-mail-provider-host>",
-    "mail.smtps.port": "465",
-    "mail.smtps.auth": "true"
-};
 
-let returnValue = mail.send(mailConfig);
+let returnValue = mail.send();
 $.response.setBody(JSON.stringify(returnValue));
 ```
 
@@ -89,21 +80,8 @@ new $.net.Mail(MailObject)
 
 | Function     | Description                                                                                                                |  Returns     |
 |--------------|----------------------------------------------------------------------------------------------------------------------------| -------------|
-| **send(mailConfig)**   | method that returns an object containing two properties: 'messageId' and 'finalReply'.|  _`object`_  |
+| **send()**   | method that returns an object containing two properties: 'messageId' and 'finalReply'.|  _`object`_  |
 
-## mailConfig Properties
-
-Property     | Description | Type
------------- | ----------- | --------
-**mail.user**   | The mailbox user | *string*
-**mail.password**   | The mailbox password | *string*
-**mail.transport.protocol**   | (optional) The mail transport protocol, default is *smtps* | *string*
-**mail.smtps.host**   | The mail SMPTPS host | *string*
-**mail.smtps.port**   | The mail SMPTPS port | *number as string*
-**mail.smtps.auth**   | Enable/Disable mail SMPTPS authentication | *boolean as string*
-**mail.smtp.host**   | The mail SMPTP host | *string*
-**mail.smtp.port**   | The mail SMPTP port | *number as string*
-**mail.smtp.auth**   | Enable/Disable mail SMPTP authentication | *boolean as string*
 
 Addition mail client options can be found here:
 - [SMTP/SMTPS](https://javaee.github.io/javamail/docs/api/com/sun/mail/smtp/package-summary.html)

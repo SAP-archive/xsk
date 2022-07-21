@@ -67,17 +67,7 @@ var mail = new $.net.Mail({
 
 mail.parts.push(attachmentPart, inlinePart, textPart);
 
-// Set mail server configurations.
-let mailConfig = {
-    "mail.user": "<your-user>",
-    "mail.password": "<your-password>",
-    "mail.transport.protocol": "smtps",
-    "mail.smtps.host": "<your-mail-provider-host>",
-    "mail.smtps.port": "465",
-    "mail.smtps.auth": "true"
-};
-
-let returnValue = mail.send(mailConfig);
+let returnValue = mail.send();
 $.response.setBody(JSON.stringify(returnValue));
 ```
 

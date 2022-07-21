@@ -138,6 +138,10 @@
 					<groupId>com.ibm.icu</groupId>
 					<artifactId>icu4j</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.eclipse.dirigible</groupId>
+					<artifactId>dirigible-templates</artifactId>
+				</exclusion>				
 			</exclusions>
 		</dependency>
 	</dependencies>

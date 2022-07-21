@@ -21,6 +21,12 @@ deployment:
   volumeMountsMountPath: /usr/local/tomcat/target/dirigible/repository
   volumesName: xsk-volume
   volumespersistentVolumeClaimClaimName: xsk-claim
+  # Resource limits
+  resourcesEnabled: 
+  resourcesRequestsMemory: "2Gi"
+  resourcesRequestsCpu: "3000m"
+  resourcesLimitsMemory: "3Gi"
+  resourcesLimitsCpu: "4000m"
 
 persistentVolumeClaim:
   enabled: true
@@ -76,7 +82,18 @@ kyma:
   roleCollectionsNameDeveloper: 
   # Name for role collections for operator 
   # We add prefix "XSK-" suffix "-Operator" for default roles and using Helm release name
-  roleCollectionsNameOperator: 
+  roleCollectionsNameOperator:
+  # Destination service
+  destinationServiceEnabled:
+  destinationServiceInstanceName: 
+  destinationServiceInstanceOfferingName: destination
+  destinationServiceInstancePlanName: lite
+  destinationServiceInstanceExternalName: 
+  destinationServiceInstanceParameters: '{}'
+  destinationServiceBindingName: 
+  destinationServiceBindingExternalName: 
+  destinationServiceBindingSecretName: 
+  destinationServiceBindingParameters: '{}'
 
 application:
   # Image application image

@@ -66,12 +66,10 @@ public abstract class AbstractXSKOData2EventHandler extends ScriptingOData2Event
   protected static final String UNABLE_TO_DROP_TEMPORARY_TABLES = "Unable to drop temporary tables";
   protected static final String UNABLE_TO_CLOSE_CONNECTION = "Unable to close connection";
 
-  protected static final String DUMMY_BUILDER = "dummyBuilder";
-  protected static final String SELECT_BUILDER = "selectBuilder";
-  protected static final String INSERT_BUILDER = "insertBuilder";
-  protected static final String UPDATE_BUILDER = "updateBuilder";
+  protected static final String SQL_BUILDER = "sqlBuilder";
+  protected static final String ENTITY_SET = "entitySet";
   protected static final String SQL_CONTEXT = "sqlContext";
-  protected static final String DATASOURCE = "datasource";
+  protected static final String DATASOURCE = "DATASOURCE";
   protected static final String ODATA_CONTEXT = "oDataContext";
 
   protected static final String CONNECTION = "connection";
@@ -81,6 +79,8 @@ public abstract class AbstractXSKOData2EventHandler extends ScriptingOData2Event
   protected static final String BEFORE_UPDATE_ENTITY_TABLE_NAME = "beforeUpdateEntityTableName";
   protected static final String BEFORE_DELETE_ENTITY_TABLE_NAME = "beforeDeleteEntityTableName";
   protected static final String ENTRY_MAP = "entryMap";
+  protected static final String BEFORE_UPDATE_ENTRY_JSON = "beforeUpdateEntryJSON";
+  protected static final String BEFORE_DELETE_ENTRY_JSON = "beforeDeleteEntryJSON";
   protected static final String HANDLER = "handler";
 
   private static final String HTTP_STATUS_CODE = "HTTP_STATUS_CODE";
@@ -176,14 +176,6 @@ public abstract class AbstractXSKOData2EventHandler extends ScriptingOData2Event
       throws ODataException, SQLException {
     updateBuilder.setTableName("\"" + temporaryTableName + "\"");
     executeSQLStatement(connection, updateBuilder.build(sqlContext));
-  }
-
-  protected void batchDropTemporaryTables(String... temporaryTableNames) {
-    try (Connection connection = dataSource.getConnection()) {
-      batchDropTemporaryTables(connection, temporaryTableNames);
-    } catch (SQLException e) {
-      LOGGER.error(UNABLE_TO_DROP_TEMPORARY_TABLES, e);
-    }
   }
 
   protected void batchDropTemporaryTables(Connection connection, String... temporaryTableNames) {
@@ -290,12 +282,18 @@ public abstract class AbstractXSKOData2EventHandler extends ScriptingOData2Event
     if (response != null) {
       return response;
     } else {
-      response = ExpandCallBack.writeEntryWithExpand(oDataContext,
-          uriInfo,
-          entryMap,
-          contentType);
-      return ODataResponse.fromResponse(response).status(httpStatusCode).contentHeader(ContentType.APPLICATION_XML.toContentTypeString())
-          .build();
+      return buildResponse(uriInfo, oDataContext, entryMap, contentType, httpStatusCode);
     }
+  }
+
+  protected ODataResponse buildResponse(UriInfo uriInfo, ODataContext oDataContext, Map<String, Object> entryMap, String contentType,
+      HttpStatusCodes httpStatusCode)
+      throws ODataException {
+    ODataResponse response = ExpandCallBack.writeEntryWithExpand(oDataContext,
+        uriInfo,
+        entryMap,
+        contentType);
+    return ODataResponse.fromResponse(response).status(httpStatusCode).contentHeader(contentType)
+        .build();
   }
 }

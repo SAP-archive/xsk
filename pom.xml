@@ -12,7 +12,7 @@
     <description>XSK - HANA XS Classic Compatibility Environment</description>
     <groupId>com.sap.xsk</groupId>
     <artifactId>xsk-parent</artifactId>
-    <version>0.17.0-SNAPSHOT</version>
+    <version>0.19.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <inceptionYear>2019</inceptionYear>
@@ -75,30 +75,6 @@
                             <debuglevel>lines,vars,source</debuglevel>
                         </configuration>
                     </plugin>
-                    <!-- <plugin>
-                      <groupId>org.apache.maven.plugins</groupId>
-                      <artifactId>maven-javadoc-plugin</artifactId>
-                      <version>3.2.0</version>
-                      <configuration>
-                        <source>${java.version}</source>
-                      </configuration>
-                      <executions>
-                        <execution>
-                          <id>attach-javadocs</id>
-                          <goals>
-                            <goal>jar</goal>
-                          </goals>
-                        </execution>
-                      </executions>
-                      <configuration> <failOnError>false</failOnError> </configuration>
-                      <dependencies>
-                        <dependency>
-                          <groupId>org.apache.commons</groupId>
-                          <artifactId>commons-lang3</artifactId>
-                          <version>${commons.lang3}</version>
-                        </dependency>
-                      </dependencies>
-                    </plugin> -->
                 </plugins>
             </build>
         </profile>
@@ -253,7 +229,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 
-        <dirigible.version>6.2.27</dirigible.version>
+        <dirigible.version>6.3.9</dirigible.version>
 
 
         <!-- Sonar Cloud -->
@@ -275,17 +251,17 @@
         <maven.compiler.plugin.version>3.10.1</maven.compiler.plugin.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <maven.scm.plugin.version>1.12.2</maven.scm.plugin.version>
+        <maven.scm.plugin.version>1.13.0</maven.scm.plugin.version>
         <commons.io>2.7</commons.io>
         <commons.codec>1.10</commons.codec>
         <cxf.version>3.1.11</cxf.version>
         <gson.version>2.9.0</gson.version>
         <guava.version>31.1-jre</guava.version>
-        <scp-cf.version>3.67.0</scp-cf.version>
+        <scp-cf.version>3.71.0</scp-cf.version>
         <slf4j.version>1.7.36</slf4j.version>
         <slf4j.simple.version>1.7.12</slf4j.simple.version>
         <logback.version>1.2.11</logback.version>
-        <com.h2database.version>2.1.212</com.h2database.version>
+        <com.h2database.version>2.1.214</com.h2database.version>
         <derby.version>10.12.1.1</derby.version>
         <activemq.version>5.14.5</activemq.version>
         <jsr250-api.version>1.0</jsr250-api.version>
@@ -293,10 +269,9 @@
         <lucene.version>7.0.1</lucene.version>
         <chemistry.version>1.1.0</chemistry.version>
         <flowable.version>6.3.0</flowable.version>
-        <jaxb.version>2.3.0</jaxb.version>
         <jaxws.version>2.3.0</jaxws.version>
         <olingo.version>2.0.11</olingo.version>
-        <mockito.version>4.5.1</mockito.version>
+        <mockito.version>4.6.1</mockito.version>
         <junit.version>4.13.2</junit.version>
         <junitparams.version>1.1.1</junitparams.version>
         <hamcrest.all.version>1.3</hamcrest.all.version>
@@ -308,12 +283,14 @@
         <license-maven-plugin.version>4.2.rc3</license-maven-plugin.version>
         <antlr4-runtime.version>4.10.1</antlr4-runtime.version>
         <antlr4-maven-plugin.version>4.10.1</antlr4-maven-plugin.version>
-        <selenium.version>4.1.4</selenium.version>
-        <selenium.webdriver.manager.version>5.1.1</selenium.webdriver.manager.version>
+        <selenium.version>4.3.0</selenium.version>
+        <selenium.webdriver.manager.version>5.2.1</selenium.webdriver.manager.version>
         <neo-java-web-sdk.version>4.8.9</neo-java-web-sdk.version>
         <neo-java-web-sdk.javax.activation.version>1.2.0</neo-java-web-sdk.javax.activation.version>
         <neo-java-web-sdk.jaxb.version>2.2.11</neo-java-web-sdk.jaxb.version>
-        <ngdbc.version>2.12.9</ngdbc.version>
+        <jaxb.version>2.3.1</jaxb.version>
+        <javax.activation.version>1.2.0</javax.activation.version>
+        <ngdbc.version>2.13.9</ngdbc.version>
         <maven-dependency-plugin.version>3.3.0</maven-dependency-plugin.version>
         <commons-csv.version>1.9.0</commons-csv.version>
         <commons-dbcp2.version>2.9.0</commons-dbcp2.version>
@@ -321,6 +298,10 @@
         <javax.websocket-api.version>1.1</javax.websocket-api.version>
         <jacoco.version>0.8.8</jacoco.version>
         <hakky.logcaptor.version>2.7.10</hakky.logcaptor.version>
+        <jetbrains.annotations.version>23.0.0</jetbrains.annotations.version>
+        <httpmime.version>4.5.13</httpmime.version>
+        <httpasyncclient.version>4.1.5</httpasyncclient.version>
+        <jackson.databind.version>2.13.3</jackson.databind.version>
 
         <profile.content.phase>none</profile.content.phase>
 
@@ -337,7 +318,7 @@
 
         <license.header.location>licensing-header.txt</license.header.location>
         <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
-
+        <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
 
     </properties>
 </project>

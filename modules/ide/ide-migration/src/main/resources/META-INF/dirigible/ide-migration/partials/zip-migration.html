@@ -23,7 +23,7 @@
     }
 
 </style>
-<div ng-controller="ImportZippedDU" ng-show="migrationFromZip && currentZipStep.id < 2">
+<div ng-controller="ImportZippedDU" ng-show="isVisible('zip-migration')">
     <h1 class="section-title">Migrate Delivery Unit(s) from ZIP</h1>
     <p class="margin-top-bottom-nl">Upload ZIP file containing your Delivery Unit</p>
     <div class="row">
@@ -119,9 +119,9 @@
 
     <div class="bottom-nav margin-top-bottom-lg">
         <button type="button" class="btn btn-default btn-big pull-left" ng-click="backToChoice()"
-            ng-hide="previousVisible">Previous</button>
+            ng-hide="previousVisible()">Previous</button>
         <button type="button" class="btn btn-primary btn-big pull-right" ng-click="uploadAndMigrate(uploader)"
-            ng-disabled="!uploader.queue.length" ng-show="finishVisible">Migrate uploaded</button>
+            ng-disabled="!uploader.queue.length">Migrate uploaded</button>
     </div>
 
 

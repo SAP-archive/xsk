@@ -36,7 +36,7 @@ public class XSKHDBScalarFunctionParser implements XSKDataStructureParser<XSKDat
     hdbScalarFunction.setHash(DigestUtils.md5Hex(parametersModel.getContent()));
     hdbScalarFunction.setCreatedBy(UserFacade.getName());
     hdbScalarFunction.setCreatedAt(new Timestamp(new java.util.Date().getTime()));
-    hdbScalarFunction.setContent(parametersModel.getContent());
+    hdbScalarFunction.setRawContent(parametersModel.getContent());
     return hdbScalarFunction;
   }
 

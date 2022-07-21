@@ -32,7 +32,7 @@ CREATE PROCEDURE <proc_name> [(<parameter_clause>)] [LANGUAGE <lang>] [SQL SECUR
   END
 */
 create_procedure_body
-    : CREATE PROCEDURE proc_name
+    : CREATE? PROCEDURE proc_name
 	  (parameter_clause)?
 	  (LANGUAGE lang)?
 	  (SQL SECURITY security_mode)?
@@ -40,8 +40,8 @@ create_procedure_body
 	  (READS SQL DATA (WITH RESULT VIEW view_name)?)?
 	  AS
 	  BEGIN (SEQUENTIAL EXECUTION)?
-		  procedure_body
-	  END ';'
+		  procedure_body?
+	  END ';'?
 //	  (body | call_spec | EXTERNAL) ';'
 	;
 
@@ -55,7 +55,7 @@ create_func_body
 	  (READS SQL DATA (WITH RESULT VIEW view_name)?)?
 	  AS
 	  BEGIN (SEQUENTIAL EXECUTION)?
-		  procedure_body
+		  procedure_body?
 	  END ';'
 //	  (body | call_spec | EXTERNAL) ';'
 	;
@@ -100,9 +100,11 @@ sql_type
 	| BLOB
 	| CLOB
 	| NCLOB
+	| STRING
+	| CHAR ('(' numeric ')')?
 	;
 
-table_type : id_expression ;
+table_type : (schema_name '.')? id_expression ;
 
 table_type_definition : TABLE column_list_definition ;
 
@@ -124,7 +126,7 @@ parameter
 
 parameter_clause : '(' parameter? (',' parameter)* ')' ;
 
-lang : SQLSCRIPT | 'R' ;
+lang : SQLSCRIPT | R ;
 
 security_mode : DEFINER | INVOKER ;
 
@@ -155,17 +157,17 @@ variable_name_list : variable_name (',' variable_name)? ;
 
 //<column_list_elements> ::= (<column_definition>[{,<column_definition>}...])
 
-array_datatype : sql_type ARRAY ( '=' array_constructor ) ;
+array_datatype : sql_type ARRAY ( '=' array_constructor )? ;
 
 array_constructor : ARRAY '(' expression (',' expression)* ')' ;
 
-proc_default : (DEFAULT | ':=' ) expression ;
+proc_default : (DEFAULT | ':=' | '=' ) expression ;
 
-proc_cursor : CURSOR cursor_name ( proc_cursor_param_list )? FOR /*<subquery>*/ ; //TODO subquery
+proc_cursor : CURSOR cursor_name ( proc_cursor_param_list )? FOR select_statement ; //TODO subquery
 
 proc_cursor_param_list : proc_cursor_param (',' proc_cursor_param)* ;
 
-variable_name : id_expression ;
+variable_name : id_expression ('.' general_element_part)* ('[' bind_variable ']')?;
 
 cursor_name : id_expression ;
 
@@ -209,10 +211,12 @@ proc_stmt
 	| proc_if
 	| proc_signal
 	| proc_resignal
+	| proc_while
+	| proc_for
+	| proc_rollback
+	| proc_commit
 /*	| <proc_multi_assign>
 	| <proc_loop>
-	| <proc_while>
-	| <proc_for>
 	| <proc_foreach>
 	| <proc_exit>
 	| <proc_continue>
@@ -227,23 +231,51 @@ proc_sql
 	: subquery ';'
 	| insert_stmt ';'
 	| update_stmt ';'
-/*	| <select_into_stmt>
-	| <insert_stmt>
-	| <delete_stmt>
-	| <update_stmt>
-	| <replace_stmt>
-	| <call_stmt>
-	| <create_table>
-	| <drop_table>*/
+	| delete_stmt ';'
+	| create_stmt ';'
+	| truncate_stmt ';'
+//	| <select_into_stmt>
+//	| <insert_stmt>
+//	| <update_stmt>
+//	| <replace_stmt>
+//	| <call_stmt>
+//	| <drop_table>
 	;
 
 update_stmt
-    : UPDATE general_table_ref update_set_clause from_clause? where_clause? static_returning_clause? error_logging_clause?
+    : UPDATE general_table_ref (AS table_alias)? update_set_clause from_clause? where_clause? static_returning_clause? error_logging_clause?
     ;
 
 insert_stmt
     : INSERT (single_table_insert | multi_table_insert)
     ;
+
+delete_stmt
+    : delete_statement
+    ;
+
+truncate_stmt
+    : TRUNCATE TABLE table_ref
+    ;
+
+create_stmt
+    : CREATE LOCAL TEMPORARY TABLE table_name column_list_definition
+    ;
+
+proc_while
+    : WHILE condition DO proc_stmt_list END WHILE ';';
+
+proc_for
+    : FOR param_name (AS param_name)? (IN expression '..' expression)? DO proc_stmt_list? END FOR ';';
+
+proc_rollback
+    : ROLLBACK ';';
+
+proc_commit
+    : COMMIT ';';
+
+proc_break
+    : BREAK ';';
 
 proc_signal : SIGNAL signal_value set_signal_info? ';' ;
 
@@ -256,7 +288,7 @@ signal_value
 
 signal_name : id_expression ;
 
-set_signal_info : SET MESSAGE_TEXT '=' '\'' message_string '\'' ;
+set_signal_info : SET MESSAGE_TEXT '=' ('\'' message_string '\'' | expression) ;
 
 message_string : expression;
 
@@ -265,16 +297,18 @@ proc_if
 	  proc_decl_list?
 	  proc_handler_list?
 	  proc_stmt_list?
-	  proc_elsif_list?
+	  proc_break?
+	  proc_elseif_list?
 	  proc_else?
 	  END IF ';'
 	;
 
-proc_elsif_list
+proc_elseif_list
 	: ELSEIF condition THEN (SEQUENTIAL EXECUTION)*
 	  proc_decl_list?
 	  proc_handler_list?
 	  proc_stmt_list?
+	  proc_elseif_list?
 	;
 
 proc_else
@@ -287,6 +321,7 @@ proc_else
 proc_block
 	: BEGIN proc_block_option?
 	  proc_decl_list?
+	  proc_rollback?
 	  proc_handler_list?
 	  proc_stmt_list?
 	  END ';'
@@ -300,6 +335,7 @@ proc_block_option
 proc_assign
 	: variable_name ':=' ( expression /*| <array_function>*/ ) ';'
 	| variable_name  '[' expression ']' '=' expression  ';'
+	| variable_name '=' expression ';'
 	;
 
 
@@ -311,7 +347,10 @@ proc_single_assign
 	: variable_name '=' select_statement ';' //subquery ';'
 //	|  <variable_name> = <proc_ce_call> ';'
 //	|  <variable_name> = <proc_apply_filter> ';'
+  |  variable_name '=' function_call ';'
 	|  variable_name '=' unnest_function ';'
+	|  variable_name '=' BINDVAR ';'
+	|  variable_name '=' CHAR_STRING ';'
 	;
 
 //proc_multi_assign : (<var_name_list>) = <function_expression>
@@ -338,6 +377,10 @@ proc_param
 named_param
 	: id_expression '=>' id_expression
 	| id_expression '=>' bind_variable
+	| id_expression '=>' statement
+	| id_expression '=>' CHAR_STRING
+	| id_expression '=>' NULL
+	| id_expression '=>' expression
 	;
 /* ------------------------------------------------------------------------ */
 
@@ -955,8 +998,8 @@ subquery_basic_elements
     ;
 
 query_block
-    : SELECT (DISTINCT | UNIQUE | ALL)? ('*' | selected_element (',' selected_element)*)
-      into_clause? from_clause where_clause? hierarchical_query_clause? group_by_clause? model_clause?
+    : SELECT (DISTINCT | UNIQUE | ALL)? (TOP numeric)? ('*' | selected_element (',' selected_element)*)
+      into_clause? from_clause join_clause? where_clause? for_update_clause? order_by_clause? hierarchical_query_clause? group_by_clause? model_clause? (LIMIT (numeric | expression))?
     ;
 
 selected_element
@@ -964,13 +1007,15 @@ selected_element
     ;
 
 from_clause
-    : FROM table_ref_list
+    : FROM (table_ref_list | function_call)
     ;
 
 select_list_elements
     : tableview_name '.' '*'
     | expression
     | expression_
+    | statement
+    | NULL
     ;
 
 table_ref_list
@@ -1203,7 +1248,7 @@ column_based_update_set_clause
 // $>
 
 delete_statement
-    : DELETE FROM? general_table_ref where_clause? static_returning_clause? error_logging_clause?
+    : DELETE FROM? table_ref where_clause? static_returning_clause? error_logging_clause?
     ;
 
 insert_statement
@@ -1345,7 +1390,7 @@ error_logging_reject_part
 
 dml_table_expression_clause
     : table_collection_expression
-    | '(' select_statement subquery_restriction_clause? ')'
+    | '(' select_statement subquery_restriction_clause? ')' (EXCEPT (table_ref_list | function_call))?
     | tableview_name sample_clause?
     ;
 
@@ -1423,7 +1468,7 @@ in_predicate : expression_ NOT? IN ( expression__list | subquery ) ;
 
 exist_predicate : NOT? EXISTS '(' subquery ')' ;
 
-like_predicate : expression_ NOT? LIKE expression_ (ESCAPE expression_)? ;
+like_predicate : expression_ NOT? like_type expression_ (ESCAPE expression_)? ;
 
 null_predicate : expression_ IS NOT? NULL ;
 
@@ -1521,10 +1566,12 @@ aggregate_order_by_clause
 expression
     : cursor_expression
     | logical_and_expression ( OR logical_and_expression )*
+    | NULL
     ;
 
 expression_wrapper
-    : expression
+    : expression order_by_clause?
+    | START expression IN expression
     ;
 
 logical_and_expression
@@ -1556,9 +1603,9 @@ relational_expression : compound_expression (relational_expression_operator comp
 
 relational_expression_operator
 	: '='
-	| not_equal_op
 	| '<'
 	| '>'
+	| not_equal_op
 	| less_than_or_equals_op
 	| greater_than_or_equals_op
 	;
@@ -1573,6 +1620,7 @@ like_type
     | LIKEC
     | LIKE2
     | LIKE4
+    | LIKE_REGEXPR
     ;
 
 like_escape_part
@@ -2086,7 +2134,8 @@ keep_clause
     ;
 
 function_argument
-    : '(' argument? (',' argument )* ')' keep_clause?
+    : '(' (argument)? (',' (argument) )* ')' keep_clause?
+//    : '(' ( argument ( COMMA argument )* )? ')' keep_clause?
     ;
 
 function_argument_analytic
@@ -2104,7 +2153,7 @@ respect_or_ignore_nulls
     ;
 
 argument
-    : (id '=' '>')? expression_wrapper
+    : ( ((id '=' '>')? expression_wrapper) | function_call)
     ;
 
 type_spec
@@ -2183,7 +2232,7 @@ native_datatype_element
 bind_variable
     : (BINDVAR | ':' UNSIGNED_INTEGER)
       (INDICATOR? (BINDVAR | ':' UNSIGNED_INTEGER))?
-      ('.' general_element_part)*
+      ('.' general_element_part)* ('[' bind_variable ']')?
     | bind_sql_error_code
     | const_sql_error_code
     | bind_sql_error_message
@@ -2259,7 +2308,10 @@ id_expression
     ;
 
 not_equal_op
-    : NOT_EQUAL_OP
+    : '!='
+    | '<>'
+    | '^='
+    | '~='
     | '<' '>'
     | '!' '='
     | '^' '='
@@ -2320,6 +2372,7 @@ regular_id
     | BODY
     | BOOLEAN
     | BOTH
+    | BREAK
     // | BREADTH
     | BULK
     // | BY
@@ -2361,7 +2414,7 @@ regular_id
     | CORRUPT_XID_ALL
     | COST
     | COUNT
-    //| CREATE
+    | CREATE
     | CROSS
     | CUBE
     //| CURRENT
@@ -2486,6 +2539,7 @@ regular_id
     | LIKE2
     | LIKE4
     | LIKEC
+    | LIKE_REGEXPR
     | LIMIT
     | LOCAL
     //| LOCK
@@ -2506,7 +2560,7 @@ regular_id
     | MINUTE
     | MINVALUE
     | MLSLABEL
-    //| MODE
+    | MODE
     | MODEL
     | MODIFY
     | MONTH
@@ -2636,7 +2690,7 @@ regular_id
     | SIGNTYPE
     | SIMPLE_INTEGER
     | SINGLE
-    //| SIZE
+    | SIZE
     | SKIP_
     | SMALLINT
     | SNAPSHOT
@@ -2661,6 +2715,7 @@ regular_id
     //| TABLE
     //| THE
     //| THEN
+    | TEMPORARY
     | TIME
     | TIMESTAMP
     | TIMESTAMP_LTZ_UNCONSTRAINED
@@ -2670,6 +2725,7 @@ regular_id
     | TIMEZONE_HOUR
     | TIMEZONE_MINUTE
     | TIMEZONE_REGION
+    | TINYINT
     //| TO
     | TRAILING
     | TRANSACTION
@@ -2801,6 +2857,7 @@ BODY:                         B O D Y;
 BOOLEAN:                      B O O L E A N;
 BOTH:                         B O T H;
 BREADTH:                      B R E A D T H;
+BREAK:                        B R E A K;
 BULK:                         B U L K;
 BY:                           B Y;
 BYTE:                         B Y T E;
@@ -2890,6 +2947,7 @@ ENTITYESCAPING:               E N T I T Y E S C A P I N G;
 ERRORS:                       E R R O R S;
 ESCAPE:                       E S C A P E;
 EVALNAME:                     E V A L N A M E;
+EXCEPT:                       E X C E P T;
 EXCEPTION:                    E X C E P T I O N;
 EXCEPTION_INIT:               E X C E P T I O N '_' I N I T;
 EXCEPTIONS:                   E X C E P T I O N S;
@@ -2968,6 +3026,7 @@ LIKE:                         L I K E;
 LIKE2:                        L I K E '2';
 LIKE4:                        L I K E '4';
 LIKEC:                        L I K E C;
+LIKE_REGEXPR:                 L I K E '_' R E G E X P R;
 LIMIT:                        L I M I T;
 LOCAL:                        L O C A L;
 LOCK:                         L O C K;
@@ -3148,6 +3207,7 @@ SUBTYPE:                      S U B T Y P E;
 SUCCESS:                      S U C C E S S;
 SUSPEND:                      S U S P E N D;
 TABLE:                        T A B L E;
+TEMPORARY:                    T E M P O R A R Y;
 THE:                          T H E;
 THEN:                         T H E N;
 TIME:                         T I M E;
@@ -3224,6 +3284,8 @@ YEAR:                         Y E A R;
 YES:                          Y E S;
 YMINTERVAL_UNCONSTRAINED:     Y M I N T E R V A L '_' U N C O N S T R A I N E D;
 ZONE:                         Z O N E;
+TOP:                          T O P;
+DO:                           D O;
 
 // SAP HANA
 AUTONOMOUS:                   A U T O N O M O U S;
@@ -3462,9 +3524,9 @@ ASSIGN_OP
 
 // See OCI reference for more information about this
 BINDVAR
-    : ':' SIMPLE_LETTER  (SIMPLE_LETTER | '0' .. '9' | '_')*
-    | ':' DELIMITED_ID  // not used in SQL but spotted in v$sqltext when using cursor_sharing
-    | ':' UNSIGNED_INTEGER
+    : (':' | '::' ) SIMPLE_LETTER  (SIMPLE_LETTER | '0' .. '9' | '_')* ('[' BINDVAR ']')?
+    | (':' | '::' ) DELIMITED_ID  // not used in SQL but spotted in v$sqltext when using cursor_sharing
+    | (':' | '::' ) UNSIGNED_INTEGER
     | QUESTION_MARK // not in SQL, not in Oracle, not in OCI, use this for JDBC
     ;
 
@@ -3598,5 +3660,5 @@ fragment
 SPACE: [ \t];
 
 REGULAR_ID
-    : (SIMPLE_LETTER) (SIMPLE_LETTER | '$' | '_' | '#' | '0'..'9')*
+    : '#'? (SIMPLE_LETTER) (SIMPLE_LETTER | '$' | '_' | '#' | '0'..'9')*
     ;

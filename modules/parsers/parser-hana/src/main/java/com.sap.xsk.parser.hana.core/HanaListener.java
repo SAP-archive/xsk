@@ -529,6 +529,86 @@ public interface HanaListener extends ParseTreeListener {
 	 */
 	void exitInsert_stmt(HanaParser.Insert_stmtContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HanaParser#delete_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterDelete_stmt(HanaParser.Delete_stmtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HanaParser#delete_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitDelete_stmt(HanaParser.Delete_stmtContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HanaParser#truncate_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterTruncate_stmt(HanaParser.Truncate_stmtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HanaParser#truncate_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitTruncate_stmt(HanaParser.Truncate_stmtContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HanaParser#create_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterCreate_stmt(HanaParser.Create_stmtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HanaParser#create_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitCreate_stmt(HanaParser.Create_stmtContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HanaParser#proc_while}.
+	 * @param ctx the parse tree
+	 */
+	void enterProc_while(HanaParser.Proc_whileContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HanaParser#proc_while}.
+	 * @param ctx the parse tree
+	 */
+	void exitProc_while(HanaParser.Proc_whileContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HanaParser#proc_for}.
+	 * @param ctx the parse tree
+	 */
+	void enterProc_for(HanaParser.Proc_forContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HanaParser#proc_for}.
+	 * @param ctx the parse tree
+	 */
+	void exitProc_for(HanaParser.Proc_forContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HanaParser#proc_rollback}.
+	 * @param ctx the parse tree
+	 */
+	void enterProc_rollback(HanaParser.Proc_rollbackContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HanaParser#proc_rollback}.
+	 * @param ctx the parse tree
+	 */
+	void exitProc_rollback(HanaParser.Proc_rollbackContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HanaParser#proc_commit}.
+	 * @param ctx the parse tree
+	 */
+	void enterProc_commit(HanaParser.Proc_commitContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HanaParser#proc_commit}.
+	 * @param ctx the parse tree
+	 */
+	void exitProc_commit(HanaParser.Proc_commitContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HanaParser#proc_break}.
+	 * @param ctx the parse tree
+	 */
+	void enterProc_break(HanaParser.Proc_breakContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HanaParser#proc_break}.
+	 * @param ctx the parse tree
+	 */
+	void exitProc_break(HanaParser.Proc_breakContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HanaParser#proc_signal}.
 	 * @param ctx the parse tree
 	 */
@@ -599,15 +679,15 @@ public interface HanaListener extends ParseTreeListener {
 	 */
 	void exitProc_if(HanaParser.Proc_ifContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link HanaParser#proc_elsif_list}.
+	 * Enter a parse tree produced by {@link HanaParser#proc_elseif_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterProc_elsif_list(HanaParser.Proc_elsif_listContext ctx);
+	void enterProc_elseif_list(HanaParser.Proc_elseif_listContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link HanaParser#proc_elsif_list}.
+	 * Exit a parse tree produced by {@link HanaParser#proc_elseif_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitProc_elsif_list(HanaParser.Proc_elsif_listContext ctx);
+	void exitProc_elseif_list(HanaParser.Proc_elseif_listContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HanaParser#proc_else}.
 	 * @param ctx the parse tree

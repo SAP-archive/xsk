@@ -11,6 +11,7 @@ export class HanaVisitor {
     fw_super;
     schemaRefs = [];
     viewRefs = [];
+    tableRefs = [];
     schemaSeparator = '"."';
     viewSeparator = "/";
 
@@ -34,6 +35,7 @@ export class HanaVisitor {
             },
             visitTableview_name: function (ctx) {
                 const text = ctx.getText();
+                that.addToTableRefs(text);
                 that.addToSchemaRefsIfNeeded(text);
                 return that.fw_super.visitChildren(ctx);
             },
@@ -56,6 +58,10 @@ export class HanaVisitor {
         if (text.split(this.viewSeparator).length > 1) {
             this.viewRefs.push(text.replace(/['"]+/g, ""));
         }
+    }
+
+    addToTableRefs(text) {
+        this.tableRefs.push(text.replace(/['"]+/g, ""));
     }
 
     visit() {

@@ -15,7 +15,7 @@
 var database = require('db/v4/database');
 const TYPE_CONVERTER = require('xsk/db/sqlToXSCColumnTypeConverter');
 
-exports.getConnection = function () {
+function getConnection() {
 	var dConnection = database.getConnection();
 	return new XscConnection(dConnection);
 };
@@ -209,6 +209,8 @@ function XscCallableStatement(callableStatement) {
 }
 
 function XscConnection(dConnection) {
+	dConnection.setAutoCommit(false);
+	
 	this.close = function () {
 		dConnection.close();
 	};
@@ -574,8 +576,10 @@ function SQLException() {
 
 }
 
+exports.getConnection = getConnection;
 exports.CallableStatement = XscCallableStatement;
 exports.Connection = XscConnection;
+exports.XscConnection = XscConnection;
 exports.ParameterMetaData = XscParameterMetaData;
 exports.PreparedStatement = XscPreparedStatement;
 exports.ResultSet = XscResultSet;

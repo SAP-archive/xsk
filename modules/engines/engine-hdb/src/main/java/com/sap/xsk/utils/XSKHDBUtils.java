@@ -16,18 +16,27 @@ import static com.sap.xsk.utils.XSKCommonsConstants.MODULE_PARSERS;
 import static com.sap.xsk.utils.XSKCommonsConstants.PARSER_ERROR;
 import static com.sap.xsk.utils.XSKCommonsConstants.PROGRAM_XSK;
 import static com.sap.xsk.utils.XSKCommonsConstants.SOURCE_PUBLISH_REQUEST;
-
+import com.sap.xsk.exceptions.XSKArtifactParserException;
 import com.sap.xsk.hdb.ds.api.IXSKDataStructureModel;
 import com.sap.xsk.hdb.ds.api.XSKDataStructuresException;
 import com.sap.xsk.hdb.ds.model.XSKDBContentType;
 import com.sap.xsk.hdb.ds.model.XSKDataStructureModel;
+import com.sap.xsk.hdb.ds.model.XSKDataStructureParametersModel;
 import com.sap.xsk.hdb.ds.model.hdbdd.XSKDataStructureEntityModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKDataStructureHDBSynonymModel;
 import com.sap.xsk.hdb.ds.model.hdbsynonym.XSKHDBSYNONYMDefinitionModel;
 import com.sap.xsk.hdb.ds.service.manager.IXSKDataStructureManager;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import com.sap.xsk.parser.hana.core.HanaLexer;
+import com.sap.xsk.parser.hana.core.HanaParser;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.dirigible.api.v3.security.UserFacade;
 import org.eclipse.dirigible.commons.config.Configuration;
@@ -161,4 +170,29 @@ public class XSKHDBUtils {
   public static String removeSqlCommentsFromContent(String content) {
     return content.replaceAll(commentRegex, "").trim();
   }
+  public static ParseTree getParsedThree (XSKDataStructureParametersModel parametersModel) throws XSKArtifactParserException {
+
+    CharStream inputStream;
+    try (ByteArrayInputStream is = new ByteArrayInputStream(parametersModel.getContent().getBytes())) {
+      inputStream = CharStreams.fromStream(is);
+    }catch (IOException exception){
+      throw new XSKArtifactParserException("Cannot get parsed tree",exception);
+    }
+
+    HanaLexer lexer = new HanaLexer(inputStream);
+    lexer.removeErrorListeners();
+    CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+
+    HanaParser parser = new HanaParser(tokenStream);
+    parser.setBuildParseTree(true);
+    parser.removeErrorListeners();
+
+    return parser.sql_script();
+
+  }
+
+  public static Timestamp getTimestamp(){
+    return new Timestamp(new java.util.Date().getTime());
+  }
+
 }

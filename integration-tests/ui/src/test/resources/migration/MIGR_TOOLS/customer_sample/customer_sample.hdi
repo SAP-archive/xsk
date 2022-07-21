@@ -1,0 +1,23 @@
+{
+   "configuration":"/customer_sample/customer_sample.hdiconfig",
+   "users":[
+      "DBADMIN"
+   ],
+   "group":"HDI_MIGR_TOOLS_CUSTOMER_SAMPLE",
+   "container":"HDI_MIGR_TOOLS_CUSTOMER_SAMPLE",
+   "deploy":[
+      "/customer_sample/TABLE_FUNCTION_CVDOMAIN.hdbtablefunction",
+      "/customer_sample/SalesOrdersCalculationView.hdbcalculationview",
+      "/customer_sample/SAMPLE_FUNCTION.hdbtablefunction",
+      "/customer_sample/VIEWS/SAMPLE_FUNCTION2.hdbtablefunction",
+      "/customer_sample/VIEWS/SALES_ORDERS.calculationview",
+      "/customer_sample/hdi-public-synonyms.hdbpublicsynonym",
+      "/customer_sample/hdi-synonyms.hdbsynonym",
+      "/customer_sample/TABLE_FUNCTION_CVDOMAIN.hdbtablefunction",
+      "/customer_sample/SAMPLE_FUNCTION.hdbtablefunction",
+      "/customer_sample/VIEWS/SAMPLE_FUNCTION2.hdbtablefunction"
+   ],
+   "undeploy":[
+
+   ]
+}

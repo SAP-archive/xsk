@@ -11,7 +11,7 @@
  */
 package com.sap.xsk.hdb.ds.itest.hdbview;
 
-import static com.sap.xsk.hdb.ds.itest.utils.TestConstants.HANA_USERNAME;
+import static com.sap.xsk.integration.tests.core.hdb.utils.TestConstants.HANA_USERNAME;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
@@ -25,9 +25,9 @@ import org.eclipse.dirigible.repository.local.LocalResource;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sap.xsk.hdb.ds.itest.AbstractXSKHDBITTest;
-import com.sap.xsk.hdb.ds.itest.module.XSKHDBTestModule;
-import com.sap.xsk.hdb.ds.itest.utils.HanaITestUtils;
+import com.sap.xsk.hdb.ds.AbstractXSKHDBITTest;
+import com.sap.xsk.integration.tests.core.hdb.module.XSKHDBTestModule;
+import com.sap.xsk.integration.tests.core.hdb.utils.HanaITestUtils;
 import com.sap.xsk.utils.XSKConstants;
 
 public class XSKHDBViewParserHanaITTest extends AbstractXSKHDBITTest {

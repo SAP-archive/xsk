@@ -1,5 +1,36 @@
 # Drumbeats
 
+## 2022 Week 20 (16 May - 22 May)
+
+#### Focus topics:
+- Support for XSJS modification exits in XSOData 
+- Support for exposing calculation views with input parameters via XSOData
+- Support for aggregation in XSOData
+- Fixes related to communication with SAP BTP Destination service
+- Quality improvements
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-05-16..2022-05-22) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+closed%3A2022-05-16..2022-05-22) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-05-16..2022-05-22) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-05-16..2022-05-22) PRs
+
+## 2022 Week 19 (09 May - 15 May)
+
+#### Focus topics:
+- More secure login in migration wizard
+- Support for $.security.crypto API
+- Fix login flow in local dev setup
+- Bump versions of a few dependencies
+
+#### Issues and PRs:
+
+* [created](https://github.com/SAP/xsk/issues?q=is%3Aissue+created%3A2022-05-09..2022-05-15) issues
+* [closed](https://github.com/SAP/xsk/issues?q=is%3Aissue+closed%3A2022-05-09..2022-05-15) issues 
+* [created](https://github.com/SAP/xsk/pulls?q=is%3Aissue+created%3A2022-05-09..2022-05-15) PRs
+* [closed](https://github.com/SAP/xsk/pulls?q=is%3Aissue+closed%3A2022-05-09..2022-05-15) PRs
 
 ## 2022 Week 18 (02 May - 08 May)
 

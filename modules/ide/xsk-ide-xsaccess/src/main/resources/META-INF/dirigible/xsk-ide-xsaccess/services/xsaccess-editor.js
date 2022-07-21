@@ -16,7 +16,6 @@ exports.getEditor = function () {
 		"factory": "frame",
 		"region": "center-top",
 		"label": "XS Access",
-		"defaultEditor": true,
 		"link": "../xsk-ide-xsaccess/editor/editor.html",
 		"contentTypes": ["application/json+xsaccess"]
 	};

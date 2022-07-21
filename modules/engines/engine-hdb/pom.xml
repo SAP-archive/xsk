@@ -7,25 +7,25 @@
   <parent>
     <groupId>com.sap.xsk</groupId>
     <artifactId>xsk-modules-engines-parent</artifactId>
-    <version>0.17.0-SNAPSHOT</version>
+    <version>0.19.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <name>XSK - Modules - Engines - HDB</name>
   <artifactId>xsk-modules-engines-hdb</artifactId>
-  <version>0.17.0-SNAPSHOT</version>
+  <version>0.19.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <dependencies>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-engines-commons</artifactId>
-      <version>0.17.0-SNAPSHOT</version>
+      <version>0.19.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-all</artifactId>
-      <version>0.17.0-SNAPSHOT</version>
+      <version>0.19.0-SNAPSHOT</version>
       <exclusions>
         <exclusion>
           <groupId>log4j</groupId>
@@ -44,7 +44,7 @@
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-api-all</artifactId>
-      <version>0.17.0-SNAPSHOT</version>
+      <version>0.19.0-SNAPSHOT</version>
     </dependency>
 
     <dependency>
@@ -169,31 +169,31 @@
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-hdbti</artifactId>
-      <version>0.17.0-SNAPSHOT</version>
+      <version>0.19.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-hdbsequence</artifactId>
-      <version>0.17.0-SNAPSHOT</version>
+      <version>0.19.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-hdbschema</artifactId>
-      <version>0.17.0-SNAPSHOT</version>
+      <version>0.19.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-hdbtable</artifactId>
-      <version>0.17.0-SNAPSHOT</version>
+      <version>0.19.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-hdbdd</artifactId>
-      <version>0.17.0-SNAPSHOT</version>
+      <version>0.19.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
       <dependency>
@@ -209,86 +209,6 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <!-- <profiles>
-    <profile>
-      <id>itests</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-failsafe-plugin</artifactId>
-            <version>3.0.0-M5</version>
-            <configuration>
-              <systemPropertyVariables>
-                <hana.url>url</hana.url>
-                <hana.username>username</hana.username>
-                <hana.password>password</hana.password>
-              </systemPropertyVariables>
-              <includes>
-                <include>**/*ITTest</include>
-              </includes>
-            </configuration>
-            <executions>
-              <execution>
-                <id>integration-test-embedded</id>
-                <phase>integration-test</phase>
-                <goals>
-                  <goal>integration-test</goal>
-                </goals>
-                <inherited>false</inherited>
-              </execution>
-              <execution>
-                <id>integration-test-verify</id>
-                <phase>post-integration-test</phase>
-                <goals>
-                  <goal>verify</goal>
-                </goals>
-                <inherited>false</inherited>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>build-helper-maven-plugin</artifactId>
-            <version>1.9.1</version>
-            <executions>
-              <execution>
-                <id>add-integration-test-sources</id>
-                <phase>generate-test-sources</phase>
-                <goals>
-                  <goal>add-test-source</goal>
-                </goals>
-                <configuration>
-                  <sources>
-                    <source>src/itest/java</source>
-                  </sources>
-                </configuration>
-              </execution>
-              <execution>
-                <id>add-integration-test-resources</id>
-                <phase>generate-test-resources</phase>
-                <goals>
-                  <goal>add-test-resource</goal>
-                </goals>
-                <configuration>
-                  <resources>
-                    <resource>
-                      <filtering>true</filtering>
-                      <directory>src/itest/resources</directory>
-                    </resource>
-                  </resources>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles> -->
 
   <properties>
 		<license.header.location>../../../licensing-header.txt</license.header.location>

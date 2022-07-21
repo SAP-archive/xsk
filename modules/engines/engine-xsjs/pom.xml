@@ -7,25 +7,25 @@
   <parent>
     <groupId>com.sap.xsk</groupId>
     <artifactId>xsk-modules-engines-parent</artifactId>
-    <version>0.17.0-SNAPSHOT</version>
+    <version>0.19.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <name>XSK - Modules - Engines - XS JS</name>
   <artifactId>xsk-modules-engines-xsjs</artifactId>
-  <version>0.17.0-SNAPSHOT</version>
+  <version>0.19.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <dependencies>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-all</artifactId>
-      <version>0.17.0-SNAPSHOT</version>
+      <version>0.19.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-api-all</artifactId>
-      <version>0.17.0-SNAPSHOT</version>
+      <version>0.19.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
@@ -117,7 +117,7 @@
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
+      <artifactId>mockito-inline</artifactId>
       <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
@@ -136,19 +136,19 @@
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-hdbti</artifactId>
-      <version>0.17.0-SNAPSHOT</version>
+      <version>0.19.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-hdbsequence</artifactId>
-      <version>0.17.0-SNAPSHOT</version>
+      <version>0.19.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.sap.xsk</groupId>
       <artifactId>xsk-modules-parsers-hdbtable</artifactId>
-      <version>0.17.0-SNAPSHOT</version>
+      <version>0.19.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -166,6 +166,7 @@
   </dependencies>
 
   <properties>
+    <maven.clean.plugin.directory>target</maven.clean.plugin.directory>
     <license.header.location>../../../licensing-header.txt</license.header.location>
   </properties>
 

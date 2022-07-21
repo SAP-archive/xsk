@@ -1,0 +1,11 @@
+import = [
+	{
+		table = "xsodata-with-calc-view::Customers";
+		file = "xsodata-with-calc-view:Customers.csv";
+		header = false;
+		useHeaderNames = false;
+		delimField = ",";
+		distinguishEmptyFromNull = true;
+	  schema = "TEST_SCHEMA";
+	}
+];

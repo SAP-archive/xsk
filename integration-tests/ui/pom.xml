@@ -6,13 +6,13 @@
   <parent>
     <groupId>com.sap.xsk</groupId>
     <artifactId>xsk-integration-tests-parent</artifactId>
-    <version>0.17.0-SNAPSHOT</version>
+    <version>0.19.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <name>XSK - Integration Tests - UI</name>
   <artifactId>xsk-integration-tests-ui</artifactId>
-  <version>0.17.0-SNAPSHOT</version>
+  <version>0.19.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <dependencies>
@@ -55,6 +55,12 @@
           <artifactId>gson</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.sap.xsk</groupId>
+      <artifactId>integration-tests-core</artifactId>
+      <version>0.19.0-SNAPSHOT</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

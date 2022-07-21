@@ -17,10 +17,8 @@ deployment:
   LivenessProbeInitialDelaySeconds: 60
   LivenessProbeHttpGetPort: 8080
   # Volume mounts for the deployment
-  volumeMountsName: xsk-volume
-  volumeMountsMountPath: /usr/local/tomcat/target/dirigible/repository
+  volumeMountPath: /usr/local/tomcat/target/dirigible/repository
   volumesName: xsk-volume
-  volumespersistentVolumeClaimClaimName: xsk-claim
   # Resource limits
   resourcesEnabled: 
   resourcesRequestsMemory: "2Gi"
@@ -30,7 +28,7 @@ deployment:
 
 persistentVolumeClaim:
   enabled: true
-  name: xsk-claim
+  name: 
   accessModes: ReadWriteOnce
   resourcesStorage: 1Gi
 

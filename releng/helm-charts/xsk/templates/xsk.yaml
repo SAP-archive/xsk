@@ -90,8 +90,8 @@ spec:
           imagePullPolicy: {{ required "Missing application image pull policy" .Values.application.imagePullPolicy }}
           {{- if .Values.persistentVolumeClaim.enabled }}
           volumeMounts:
-          - name: {{ required "Missing volume mounts name" .Values.deployment.volumeMountsName }}
-            mountPath: {{ required "Missing volume mounts path" .Values.deployment.volumeMountsMountPath }}
+          - name: {{ required "Missing volume mounts name" .Values.deployment.volumesName }}
+            mountPath: {{ required "Missing volume mounts path" .Values.deployment.volumeMountPath }}
           {{- end }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
@@ -126,14 +126,14 @@ spec:
       volumes:
       - name: {{ required "Missing volume mounts name" .Values.deployment.volumesName }}
         persistentVolumeClaim:
-          claimName: {{ required "Missing volume mounts name" .Values.deployment.volumespersistentVolumeClaimClaimName }}
+          claimName: {{ default .Release.Name .Values.persistentVolumeClaim.name }}-claim
       {{- end }}
 ---
 {{- if .Values.persistentVolumeClaim.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ required "Missing persistent volume claim name" .Values.persistentVolumeClaim.name }}
+  name: {{ default .Release.Name .Values.persistentVolumeClaim.name }}-claim
 spec:
   accessModes:
   - {{ required "Missing persistent volume claim access mode" .Values.persistentVolumeClaim.accessModes }}

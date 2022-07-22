@@ -40,11 +40,11 @@ jobs:
       run: echo "::set-output name=XSK_VERSION_OUTPUT::$XSK_VERSION"
       id: XSK_VERSION_PRINT
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v1
+      uses: docker/setup-qemu-action@v2
       with:
         platforms: all
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      uses: docker/setup-buildx-action@v2
       with:
         install: true
     - name: Set Multi-Builder Docker Buildx

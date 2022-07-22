@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="my_orders" applyPrivilegeType="SQL_ANALYTIC_PRIVILEGE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="2.3" defaultClient="$$client$$" visibility="internal" outputViewType="Projection" calculationScenarioType="TREE_BASED" enforceSqlExecution="false">
+<descriptions defaultDescription="my_orders"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="products.db::Products.Orders">
+    <viewAttributes allViewAttributes="true"/>
+    <resourceUri>products.db::Products.Orders</resourceUri>
+  </DataSource>
+</dataSources>
+<calculationViews/>
+<logicalModel id="products.db::Products.Orders">
+  <attributes>
+    <attribute id="CreatedAt" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CreatedAt"/>
+      <keyMapping schemaName="XSK_SAMPLES_PRODUCTS" columnObjectName="products.db::Products.Orders" columnName="CreatedAt"/>
+    </attribute>
+    <attribute id="Customer_Id" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="Customer_Id"/>
+      <keyMapping schemaName="XSK_SAMPLES_PRODUCTS" columnObjectName="products.db::Products.Orders" columnName="Customer.Id"/>
+    </attribute>
+    <attribute id="DeliveryDate" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DeliveryDate"/>
+      <keyMapping schemaName="XSK_SAMPLES_PRODUCTS" columnObjectName="products.db::Products.Orders" columnName="DeliveryDate"/>
+    </attribute>
+    <attribute id="Description" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="Description"/>
+      <keyMapping schemaName="XSK_SAMPLES_PRODUCTS" columnObjectName="products.db::Products.Orders" columnName="Description"/>
+    </attribute>
+    <attribute id="Id" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="Id"/>
+      <keyMapping schemaName="XSK_SAMPLES_PRODUCTS" columnObjectName="products.db::Products.Orders" columnName="Id"/>
+    </attribute>
+    <attribute id="Status" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="Status"/>
+      <keyMapping schemaName="XSK_SAMPLES_PRODUCTS" columnObjectName="products.db::Products.Orders" columnName="Status"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures/>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

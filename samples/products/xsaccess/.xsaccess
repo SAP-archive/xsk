@@ -1,9 +1,0 @@
-{
-  "exposed" : true,               // Expose data via http
-  "authentication" :
-         {
-            "method": "Form"
-         },
-  "authorization":                // Privileges for application access
-       ["products.xsaccess::Developer", "products.xsaccess::Administrator"]
-}

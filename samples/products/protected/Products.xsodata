@@ -1,0 +1,17 @@
+ service namespace "products.odata"  {
+ 
+  "products.db::Products.Item" as "Items"
+    create forbidden
+    update forbidden
+    delete forbidden;
+    
+    association "TotalToItemType" principal "TotalPurchasedType"
+        multiplicity "1" dependent "Items"("Type") multiplicity "*";
+       
+    "products.views::items_ordered_of_type" as "TotalPurchasedType" keys ("Type")
+        navigates("TotalToItemType" as "Item");
+ }
+
+ annotations {
+   enable OData4SAP;
+}

@@ -34,6 +34,7 @@ import org.eclipse.dirigible.engine.odata2.definition.ODataHandlerDefinition;
 import org.eclipse.dirigible.engine.odata2.sql.builder.SQLContext;
 import org.eclipse.dirigible.engine.odata2.sql.builder.SQLDeleteBuilder;
 import org.eclipse.dirigible.engine.odata2.sql.builder.SQLInsertBuilder;
+import org.eclipse.dirigible.engine.odata2.sql.builder.SQLQueryBuilder;
 import org.eclipse.dirigible.engine.odata2.sql.builder.SQLSelectBuilder;
 import org.eclipse.dirigible.engine.odata2.sql.builder.SQLUpdateBuilder;
 import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
@@ -43,8 +44,8 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
   @Override
   public ODataResponse beforeCreateEntity(PostUriInfo uriInfo, String requestContentType, String contentType, ODataEntry entry,
       Map<Object, Object> context) {
-    SQLInsertBuilder dummyBuilder = (SQLInsertBuilder) context.get(DUMMY_BUILDER);
-    SQLInsertBuilder insertBuilder = (SQLInsertBuilder) context.get(INSERT_BUILDER);
+    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER);
+    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
     DataSource dataSource = (DataSource) context.get(DATASOURCE);
     ODataHandlerDefinition handler = (ODataHandlerDefinition) context.get(HANDLER);
@@ -52,11 +53,13 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
     String newTableParam = null;
     Connection connection = null;
     try {
-      connection = dataSource.getConnection();
+      SQLInsertBuilder dummyBuilder = queryBuilder.buildInsertEntityQuery((UriInfo) uriInfo, entry, oDataContext);
+      SQLInsertBuilder insertBuilder = queryBuilder.buildInsertEntityQuery((UriInfo) uriInfo, entry, oDataContext);
 
       String targetTableName = getSQLInsertBuilderTargetTable(dummyBuilder, sqlContext);
       newTableParam = generateTemporaryTableName(uriInfo.getTargetType().getName());
 
+      connection = dataSource.getConnection();
       createTemporaryTableLikeTable(connection, newTableParam, targetTableName);
       insertIntoTemporaryTable(connection, insertBuilder, newTableParam, sqlContext);
 
@@ -74,8 +77,8 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
   @Override
   public ODataResponse afterCreateEntity(PostUriInfo uriInfo, String requestContentType, String contentType, ODataEntry entry,
       Map<Object, Object> context) {
-    SQLInsertBuilder dummyBuilder = (SQLInsertBuilder) context.get(DUMMY_BUILDER);
-    SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
+    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER);
+    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
     DataSource dataSource = (DataSource) context.get(DATASOURCE);
     ODataHandlerDefinition handler = (ODataHandlerDefinition) context.get(HANDLER);
@@ -83,9 +86,12 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
     Connection connection = null;
     String newTableParam = null;
     try {
-      connection = dataSource.getConnection();
+      SQLInsertBuilder dummyBuilder = queryBuilder.buildInsertEntityQuery((UriInfo) uriInfo, entry, oDataContext);
+      SQLSelectBuilder selectBuilder = queryBuilder.buildSelectEntityQuery((UriInfo) uriInfo, oDataContext);
 
       newTableParam = generateTemporaryTableName(uriInfo.getTargetType().getName());
+
+      connection = dataSource.getConnection();
       createTemporaryTableAsSelect(connection, newTableParam, selectBuilder, sqlContext);
 
       String targetTableName = getSQLInsertBuilderTargetTable(dummyBuilder, sqlContext);
@@ -103,16 +109,18 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
   @Override
   public ODataResponse onCreateEntity(PostUriInfo uriInfo, InputStream content, String requestContentType, String contentType,
       Map<Object, Object> context) {
-    SQLInsertBuilder dummyBuilder = (SQLInsertBuilder) context.get(DUMMY_BUILDER);
-    SQLInsertBuilder insertBuilder = (SQLInsertBuilder) context.get(INSERT_BUILDER);
+    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER);
+    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
     DataSource dataSource = (DataSource) context.get(DATASOURCE);
+    ODataEntry entry = (ODataEntry) context.get(ENTRY);
     ODataHandlerDefinition handler = (ODataHandlerDefinition) context.get(HANDLER);
-    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT);
 
     Connection connection = null;
     String newTableParam = null;
     try {
+      SQLInsertBuilder dummyBuilder = queryBuilder.buildInsertEntityQuery((UriInfo) uriInfo, entry, oDataContext);
+      SQLInsertBuilder insertBuilder = queryBuilder.buildInsertEntityQuery((UriInfo) uriInfo, entry, oDataContext);
       connection = dataSource.getConnection();
 
       String targetTableName = getSQLInsertBuilderTargetTable(dummyBuilder, sqlContext);
@@ -138,30 +146,33 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
   @Override
   public ODataResponse beforeUpdateEntity(PutMergePatchUriInfo uriInfo, String requestContentType, boolean merge, String contentType,
       ODataEntry entry, Map<Object, Object> context) {
-    SQLUpdateBuilder dummyBuilder = (SQLUpdateBuilder) context.get(DUMMY_BUILDER);
-    SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
-    SQLUpdateBuilder updateBuilder = (SQLUpdateBuilder) context.get(UPDATE_BUILDER);
+    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER);
+    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
     DataSource dataSource = (DataSource) context.get(DATASOURCE);
+    Map<String, Object> mappedKeys = (Map<String, Object>) context.get(MAPPED_KEYS);
     ODataHandlerDefinition handler = (ODataHandlerDefinition) context.get(HANDLER);
 
     Connection connection = null;
     String oldTableParam = null;
     String newTableParam = null;
     try {
-      connection = dataSource.getConnection();
+      SQLUpdateBuilder dummyBuilder = queryBuilder.buildUpdateEntityQuery((UriInfo) uriInfo, entry, mappedKeys, oDataContext);
+      SQLSelectBuilder selectBuilder = queryBuilder.buildSelectEntityQuery((UriInfo) uriInfo, oDataContext);
+      SQLUpdateBuilder updateBuilder = queryBuilder.buildUpdateEntityQuery((UriInfo) uriInfo, entry, mappedKeys, oDataContext);
 
       oldTableParam = generateTemporaryTableName(uriInfo.getTargetType().getName());
       newTableParam = generateTemporaryTableName(uriInfo.getTargetType().getName());
       String beforeUpdateOldTableParam = generateTemporaryTableName(uriInfo.getTargetType().getName());
 
+      connection = dataSource.getConnection();
       createTemporaryTableAsSelect(connection, oldTableParam, selectBuilder, sqlContext);
       createTemporaryTableAsSelect(connection, newTableParam, selectBuilder, sqlContext);
       updateTemporaryTable(connection, updateBuilder, newTableParam, sqlContext);
       createTemporaryTableAsSelect(connection, beforeUpdateOldTableParam, selectBuilder, sqlContext);
 
       String beforeUpdateEntryJSON = GsonHelper.GSON.toJson(readEntryMap(connection, oldTableParam));
-      context.put(BEFORE_UPDATE_ENTRY_JSON, beforeUpdateEntryJSON);
+      context.put(ENTRY_JSON, beforeUpdateEntryJSON);
 
       String targetTableName = getSQLUpdateBuilderTargetTable(dummyBuilder, sqlContext);
       String schema = getODataArtifactTypeSchema(targetTableName);
@@ -178,27 +189,33 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
   @Override
   public ODataResponse afterUpdateEntity(PutMergePatchUriInfo uriInfo, String requestContentType, boolean merge, String contentType,
       ODataEntry entry, Map<Object, Object> context) {
-    SQLUpdateBuilder dummyBuilder = (SQLUpdateBuilder) context.get(DUMMY_BUILDER);
-    SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
-    SQLInsertBuilder insertBuilder = (SQLInsertBuilder) context.get(INSERT_BUILDER);
-
+    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER);
+    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
     DataSource dataSource = (DataSource) context.get(DATASOURCE);
+    Map<String, Object> mappedKeys = (Map<String, Object>) context.get(MAPPED_KEYS);
+    ODataEntry entryBeforeUpdate = (ODataEntry) context.get(ENTRY);
     ODataHandlerDefinition handler = (ODataHandlerDefinition) context.get(HANDLER);
 
     Connection connection = null;
     String oldTableParam = null;
     String newTableParam = null;
     try {
-      connection = dataSource.getConnection();
+      SQLUpdateBuilder dummyBuilder = queryBuilder.buildUpdateEntityQuery((UriInfo) uriInfo, entry, mappedKeys, oDataContext);
+      SQLInsertBuilder insertBuilder = queryBuilder.buildInsertEntityQuery((UriInfo) uriInfo, entryBeforeUpdate, oDataContext);
+      SQLSelectBuilder selectBuilder = queryBuilder.buildSelectEntityQuery((UriInfo) uriInfo, oDataContext);
 
       oldTableParam = generateTemporaryTableName(uriInfo.getTargetType().getName());
       newTableParam = generateTemporaryTableName(uriInfo.getTargetType().getName());
 
+      connection = dataSource.getConnection();
       String targetTableName = getSQLUpdateBuilderTargetTable(dummyBuilder, sqlContext);
       createTemporaryTableLikeTable(connection, oldTableParam, targetTableName);
       insertIntoTemporaryTable(connection, insertBuilder, oldTableParam, sqlContext);
       createTemporaryTableAsSelect(connection, newTableParam, selectBuilder, sqlContext);
+
+      String beforeUpdateEntryJSON = GsonHelper.GSON.toJson(readEntryMap(connection, oldTableParam));
+      context.put(ENTRY_JSON, beforeUpdateEntryJSON);
 
       String schema = getODataArtifactTypeSchema(targetTableName);
       ResultSet procedureCallResultSet = callProcedure(connection, schema, handler.getHandler(), oldTableParam, newTableParam);
@@ -214,22 +231,26 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
   @Override
   public ODataResponse onUpdateEntity(PutMergePatchUriInfo uriInfo, InputStream content, String requestContentType, boolean merge,
       String contentType, Map<Object, Object> context) {
-    SQLUpdateBuilder dummyBuilder = (SQLUpdateBuilder) context.get(DUMMY_BUILDER);
-    SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
-    SQLUpdateBuilder updateBuilder = (SQLUpdateBuilder) context.get(UPDATE_BUILDER);
+    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER);
+    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
     DataSource dataSource = (DataSource) context.get(DATASOURCE);
+    Map<String, Object> mappedKeys = (Map<String, Object>) context.get(MAPPED_KEYS);
+    ODataEntry entry = (ODataEntry) context.get(ENTRY);
     ODataHandlerDefinition handler = (ODataHandlerDefinition) context.get(HANDLER);
 
     Connection connection = null;
     String oldTableParam = null;
     String newTableParam = null;
     try {
-      connection = dataSource.getConnection();
+      SQLUpdateBuilder dummyBuilder = queryBuilder.buildUpdateEntityQuery((UriInfo) uriInfo, entry, mappedKeys, oDataContext);
+      SQLSelectBuilder selectBuilder = queryBuilder.buildSelectEntityQuery((UriInfo) uriInfo, oDataContext);
+      SQLUpdateBuilder updateBuilder = queryBuilder.buildUpdateEntityQuery((UriInfo) uriInfo, entry, mappedKeys, oDataContext);
 
       oldTableParam = generateTemporaryTableName(uriInfo.getTargetType().getName());
       newTableParam = generateTemporaryTableName(uriInfo.getTargetType().getName());
 
+      connection = dataSource.getConnection();
       createTemporaryTableAsSelect(connection, oldTableParam, selectBuilder, sqlContext);
       createTemporaryTableAsSelect(connection, newTableParam, selectBuilder, sqlContext);
       updateTemporaryTable(connection, updateBuilder, newTableParam, sqlContext);
@@ -248,23 +269,26 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
 
   @Override
   public ODataResponse beforeDeleteEntity(DeleteUriInfo uriInfo, String contentType, Map<Object, Object> context) {
-    SQLDeleteBuilder dummyBuilder = (SQLDeleteBuilder) context.get(DUMMY_BUILDER);
-    SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
+    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER);
+    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
     DataSource dataSource = (DataSource) context.get(DATASOURCE);
+    Map<String, Object> mappedKeys = (Map<String, Object>) context.get(MAPPED_KEYS);
     ODataHandlerDefinition handler = (ODataHandlerDefinition) context.get(HANDLER);
 
     Connection connection = null;
     String oldTableParam = null;
     try {
-      connection = dataSource.getConnection();
+      SQLDeleteBuilder dummyBuilder = queryBuilder.buildDeleteEntityQuery((UriInfo) uriInfo, mappedKeys, oDataContext);
+      SQLSelectBuilder selectBuilder = queryBuilder.buildSelectEntityQuery((UriInfo) uriInfo, oDataContext);
 
       oldTableParam = generateTemporaryTableName(uriInfo.getTargetType().getName());
 
+      connection = dataSource.getConnection();
       createTemporaryTableAsSelect(connection, oldTableParam, selectBuilder, sqlContext);
 
       String beforeDeleteEntryJSON = GsonHelper.GSON.toJson(readEntryMap(connection, oldTableParam));
-      context.put(BEFORE_DELETE_ENTRY_JSON, beforeDeleteEntryJSON);
+      context.put(ENTRY_JSON, beforeDeleteEntryJSON);
 
       String targetTableName = getSQLDeleteBuilderTargetTable(dummyBuilder, sqlContext);
       String schema = getODataArtifactTypeSchema(targetTableName);
@@ -280,20 +304,24 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
 
   @Override
   public ODataResponse afterDeleteEntity(DeleteUriInfo uriInfo, String contentType, Map<Object, Object> context) {
-    SQLDeleteBuilder dummyBuilder = (SQLDeleteBuilder) context.get(DUMMY_BUILDER);
-    SQLInsertBuilder insertBuilder = (SQLInsertBuilder) context.get(INSERT_BUILDER);
+    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER);
+    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
     DataSource dataSource = (DataSource) context.get(DATASOURCE);
+    Map<String, Object> mappedKeys = (Map<String, Object>) context.get(MAPPED_KEYS);
+    ODataEntry entryBeforeDelete = (ODataEntry) context.get(ENTRY);
     ODataHandlerDefinition handler = (ODataHandlerDefinition) context.get(HANDLER);
 
     Connection connection = null;
     String oldTableParam = null;
     try {
-      connection = dataSource.getConnection();
-      oldTableParam = generateTemporaryTableName(uriInfo.getTargetType().getName());
+      SQLDeleteBuilder dummyBuilder = queryBuilder.buildDeleteEntityQuery((UriInfo) uriInfo, mappedKeys, oDataContext);
+      SQLInsertBuilder insertBuilder = queryBuilder.buildInsertEntityQuery((UriInfo) uriInfo, entryBeforeDelete, oDataContext);
 
+      oldTableParam = generateTemporaryTableName(uriInfo.getTargetType().getName());
       String targetTableName = getSQLDeleteBuilderTargetTable(dummyBuilder, sqlContext);
 
+      connection = dataSource.getConnection();
       createTemporaryTableLikeTable(connection, oldTableParam, targetTableName);
       insertIntoTemporaryTable(connection, insertBuilder, oldTableParam, sqlContext);
 
@@ -310,18 +338,22 @@ public class XSKProcedureOData2EventHandler extends AbstractXSKOData2EventHandle
 
   @Override
   public ODataResponse onDeleteEntity(DeleteUriInfo uriInfo, String contentType, Map<Object, Object> context) {
-    SQLDeleteBuilder dummyBuilder = (SQLDeleteBuilder) context.get(DUMMY_BUILDER);
-    SQLSelectBuilder selectBuilder = (SQLSelectBuilder) context.get(SELECT_BUILDER);
+    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER);
+    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT);
     SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
     DataSource dataSource = (DataSource) context.get(DATASOURCE);
+    Map<String, Object> mappedKeys = (Map<String, Object>) context.get(MAPPED_KEYS);
     ODataHandlerDefinition handler = (ODataHandlerDefinition) context.get(HANDLER);
 
     Connection connection = null;
     String oldTableParam = null;
     try {
-      connection = dataSource.getConnection();
+      SQLDeleteBuilder dummyBuilder = queryBuilder.buildDeleteEntityQuery((UriInfo) uriInfo, mappedKeys, oDataContext);
+      SQLSelectBuilder selectBuilder = queryBuilder.buildSelectEntityQuery((UriInfo) uriInfo, oDataContext);
 
       oldTableParam = generateTemporaryTableName(uriInfo.getTargetType().getName());
+
+      connection = dataSource.getConnection();
       createTemporaryTableAsSelect(connection, oldTableParam, selectBuilder, sqlContext);
 
       String targetTableName = getSQLDeleteBuilderTargetTable(dummyBuilder, sqlContext);

@@ -22,7 +22,6 @@ import org.apache.olingo.odata2.api.processor.ODataResponse;
 import org.apache.olingo.odata2.api.uri.UriInfo;
 import org.apache.olingo.odata2.core.commons.ContentType;
 import org.eclipse.dirigible.commons.api.helpers.GsonHelper;
-import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.database.persistence.model.PersistenceTableModel;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.database.sql.SqlFactory;
@@ -67,10 +66,10 @@ public abstract class AbstractXSKOData2EventHandler extends ScriptingOData2Event
   protected static final String UNABLE_TO_CLOSE_CONNECTION = "Unable to close connection";
 
   protected static final String SQL_BUILDER = "sqlBuilder";
-  protected static final String ENTITY_SET = "entitySet";
   protected static final String SQL_CONTEXT = "sqlContext";
-  protected static final String DATASOURCE = "DATASOURCE";
+  protected static final String DATASOURCE = "datasource";
   protected static final String ODATA_CONTEXT = "oDataContext";
+  protected static final String MAPPED_KEYS = "mappedKeys";
 
   protected static final String CONNECTION = "connection";
   protected static final String BEFORE_TABLE_NAME = "beforeTableName";
@@ -79,15 +78,13 @@ public abstract class AbstractXSKOData2EventHandler extends ScriptingOData2Event
   protected static final String BEFORE_UPDATE_ENTITY_TABLE_NAME = "beforeUpdateEntityTableName";
   protected static final String BEFORE_DELETE_ENTITY_TABLE_NAME = "beforeDeleteEntityTableName";
   protected static final String ENTRY_MAP = "entryMap";
-  protected static final String BEFORE_UPDATE_ENTRY_JSON = "beforeUpdateEntryJSON";
-  protected static final String BEFORE_DELETE_ENTRY_JSON = "beforeDeleteEntryJSON";
+  protected static final String ENTRY = "entry";
+  protected static final String ENTRY_JSON = "entryJSON";
   protected static final String HANDLER = "handler";
 
   private static final String HTTP_STATUS_CODE = "HTTP_STATUS_CODE";
   private static final String ERROR_MESSAGE = "ERROR_MESSAGE";
   private static final String ERROR_DETAIL = "errordetail";
-
-  private static DataSource dataSource = (DataSource) StaticObjects.get(StaticObjects.DATASOURCE);
 
   protected String getSQLInsertBuilderTargetTable(SQLInsertBuilder insertBuilder, SQLContext sqlContext) throws ODataException {
     SQLStatement sqlStatement = insertBuilder.build(sqlContext);

@@ -1,0 +1,15 @@
+FUNCTION "products.views::ordered_items_type" (itemType NVARCHAR(100))
+RETURNS TABLE ("Name" NVARCHAR(500), "Price" NVARCHAR(100))
+LANGUAGE SQLSCRIPT
+SQL SECURITY DEFINER
+  AS 
+
+/********* Begin Procedure Script ************/ 
+BEGIN 
+    var_out = SELECT "Name", "Price" FROM "products.db::Products.Item" WHERE "Id" IN 
+                (SELECT "Item.Id" FROM "products.db::Products.OrderLine" WHERE "OrderId" IN 
+                    (SELECT o."Id" FROM "products.db::Products.Orders" o JOIN "products.db::Products.Customers" c
+                        ON o."Customer.Id" = c."Id" WHERE c."Username" = UPPER(SESSION_CONTEXT('APPLICATIONUSER'))))
+                 AND "Type" = :itemType;
+return :var_out;
+END;

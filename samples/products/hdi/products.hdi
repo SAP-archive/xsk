@@ -1,0 +1,19 @@
+{
+    "configuration": "/products/products.hdiconfig",
+    "users": [
+        "XSK"
+    ],
+    "group": "PRODUCTS",
+    "container": "PRODUCTS",
+    "deploy": [
+        "/products/views/items_ordered_of_type.calculationview",
+        "/products/views/items_ordered_total.calculationview",
+        "/products/views/items_ordered_total_ap.analyticprivilege",
+        "/products/views/order_items_type_fn_view.calculationview",
+        "/products/hdi-synonyms.hdbsynonym",
+        "/products/hdi-public-synonyms.hdbpublicsynonym",
+        "/products/views/ordered_items_type.hdbtablefunction",
+        "/products/db/ProductsOrdersCustomerNames.hdbtablefunction"
+    ],
+    "undeploy": []
+}

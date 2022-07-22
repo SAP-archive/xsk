@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="line_item" applyPrivilegeType="SQL_ANALYTIC_PRIVILEGE"
+  dataCategory="DIMENSION" schemaVersion="2.3" defaultClient="$$client$$" visibility="internal"
+  outputViewType="Aggregation" calculationScenarioType="TREE_BASED" enforceSqlExecution="false">
+  <descriptions defaultDescription="line_item" />
+  <localVariables />
+  <variableMappings />
+  <dataSources>
+    <DataSource id="products.db::Products.Item">
+      <viewAttributes allViewAttributes="true" />
+      <resourceUri>products.db::Products.Item</resourceUri>
+    </DataSource>
+    <DataSource id="products.db::Products.OrderLine">
+      <viewAttributes allViewAttributes="true" />
+      <resourceUri>products.db::Products.OrderLine</resourceUri>
+    </DataSource>
+  </dataSources>
+  <calculationViews>
+    <calculationView xsi:type="Calculation:JoinView" id="Join_1" joinType="inner">
+      <viewAttributes>
+        <viewAttribute id="LineId" />
+        <viewAttribute id="Quantity" />
+        <viewAttribute id="Name" />
+        <viewAttribute id="Type" />
+        <viewAttribute id="Price" />
+        <viewAttribute id="Comment" />
+        <viewAttribute id="Currency" />
+        <viewAttribute id="OrderId" />
+        <viewAttribute id="JOIN$Id$Item.Id" hidden="true" />
+      </viewAttributes>
+      <calculatedViewAttributes />
+      <input node="#products.db::Products.Item">
+      <mapping xsi:type="Calculation:AttributeMapping" target="Name" source="Name" />
+      <mapping xsi:type="Calculation:AttributeMapping" target="Type" source="Type" />
+      <mapping xsi:type="Calculation:AttributeMapping" target="Price" source="Price" />
+      <mapping xsi:type="Calculation:AttributeMapping" target="Comment" source="Comment" />
+      <mapping xsi:type="Calculation:AttributeMapping" target="Currency" source="Currency" />
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$Id$Item.Id" source="Id" />
+      </input>
+      <input node="#products.db::Products.OrderLine">
+      <mapping xsi:type="Calculation:AttributeMapping" target="LineId" source="Id" />
+      <mapping xsi:type="Calculation:AttributeMapping" target="Quantity" source="Quantity" />
+      <mapping xsi:type="Calculation:AttributeMapping" target="OrderId" source="OrderId" />
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$Id$Item.Id" source="Item.Id" />
+      </input>
+      <joinAttribute name="JOIN$Id$Item.Id" />
+    </calculationView>
+  </calculationViews>
+  <logicalModel id="Join_1">
+    <attributes>
+      <attribute id="Price" order="1" displayAttribute="false" attributeHierarchyActive="false">
+        <descriptions defaultDescription="Price" />
+        <keyMapping columnObjectName="Join_1" columnName="Price" />
+      </attribute>
+      <attribute id="LineId" order="2" displayAttribute="false" attributeHierarchyActive="false">
+        <descriptions defaultDescription="LineId" />
+        <keyMapping columnObjectName="Join_1" columnName="LineId" />
+      </attribute>
+      <attribute id="Quantity" order="3" semanticType="empty" displayAttribute="false" attributeHierarchyActive="false">
+        <descriptions defaultDescription="Quantity" />
+        <keyMapping columnObjectName="Join_1" columnName="Quantity" />
+      </attribute>
+      <attribute id="Name" order="4" displayAttribute="false" attributeHierarchyActive="false">
+        <descriptions defaultDescription="Name" />
+        <keyMapping columnObjectName="Join_1" columnName="Name" />
+      </attribute>
+      <attribute id="Type" order="5" displayAttribute="false" attributeHierarchyActive="false">
+        <descriptions defaultDescription="Type" />
+        <keyMapping columnObjectName="Join_1" columnName="Type" />
+      </attribute>
+      <attribute id="Comment" order="6" displayAttribute="false" attributeHierarchyActive="false">
+        <descriptions defaultDescription="Comment" />
+        <keyMapping columnObjectName="Join_1" columnName="Comment" />
+      </attribute>
+      <attribute id="Currency" order="7" displayAttribute="false" attributeHierarchyActive="false">
+        <descriptions defaultDescription="Currency" />
+        <keyMapping columnObjectName="Join_1" columnName="Currency" />
+      </attribute>
+      <attribute id="OrderId" order="8" displayAttribute="false" attributeHierarchyActive="false">
+        <descriptions defaultDescription="OrderId" />
+        <keyMapping columnObjectName="Join_1" columnName="OrderId" />
+      </attribute>
+    </attributes>
+    <calculatedAttributes />
+    <baseMeasures />
+    <calculatedMeasures />
+    <restrictedMeasures />
+  </logicalModel>
+  <layout>
+    <shapes>
+      <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+        <upperLeftCorner x="40" y="85" />
+      </shape>
+
+      <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+        <upperLeftCorner x="36" y="230" />
+        <rectangleSize height="30" width="140" />
+      </shape>
+    </shapes>
+  </layout>
+</Calculation:scenario>

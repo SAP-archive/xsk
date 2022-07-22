@@ -141,7 +141,11 @@
 				<exclusion>
 					<groupId>org.eclipse.dirigible</groupId>
 					<artifactId>dirigible-templates</artifactId>
-				</exclusion>				
+				</exclusion> 
+				<exclusion>
+					<groupId>org.eclipse.dirigible</groupId>
+					<artifactId>dirigible-templating-all</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 	</dependencies>

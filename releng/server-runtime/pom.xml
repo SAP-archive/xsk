@@ -179,6 +179,10 @@
 					<groupId>org.eclipse.dirigible</groupId>
 					<artifactId>dirigible-services</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.eclipse.dirigible</groupId>
+					<artifactId>dirigible-resources-theme-fiori</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 	</dependencies>

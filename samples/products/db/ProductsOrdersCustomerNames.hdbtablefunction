@@ -1,16 +1,16 @@
-FUNCTION "XSK_SAMPLES_PRODUCTS"."ProductsOrdersCustomerNames" ( )
+FUNCTION "products.db::ProductsOrdersCustomerNames" ()
    RETURNS Table (
        "Id" NVARCHAR(50),
-       "CustomerName" NVARCHAR(500)
+       "FirstName" NVARCHAR(500),
+       "LastName" NVARCHAR(500)
    )
    LANGUAGE SQLSCRIPT
    SQL SECURITY INVOKER AS
 BEGIN
- 
     RETURN
    
-        SELECT      "Id",
-                    "CustomerName"
-        FROM "products.db::Products.Orders";
- 
+        SELECT      po."Id",
+                    pc."FirstName",
+                    pc."LastName"
+        FROM "products.db::Products.Orders" po LEFT JOIN "products.db::Products.Customers" pc ON po."Customer.Id" = pc."Id";
 END;

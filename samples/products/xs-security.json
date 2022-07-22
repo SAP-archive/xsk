@@ -1,0 +1,77 @@
+{
+    "xsappname": "",
+    "scopes": [
+        {
+            "name": "$XSAPPNAME.Developer",
+            "description": "Developer scope"
+        },
+        {
+            "name": "$XSAPPNAME.Operator",
+            "description": "Operator scope"
+        },
+        {
+            "name": "$XSAPPNAME.products.protected::Developer",
+            "description": "Developer tasks execution privilege"
+        },
+        {
+            "name": "$XSAPPNAME.products.protected::Administrator",
+            "description": "Administration privilege"
+        }
+    ],
+    "role-templates": [
+        {
+            "description": "Developer related roles",
+            "name": "Developer",
+            "scope-references": [
+                "$XSAPPNAME.Developer"
+            ]
+        },
+        {
+            "description": "Operator related roles",
+            "name": "Operator",
+            "scope-references": [
+                "$XSAPPNAME.Operator"
+            ]
+        },
+        {
+            "name": "RoleTemplateDeveloper",
+            "description": "XSK role template for products.protected::Developer",
+            "scope-references": [
+                "$XSAPPNAME.products.protected::Developer"
+            ]
+        },
+        {
+            "name": "RoleTemplateAdministrator",
+            "description": "XSK role template for products.protected::Administrator",
+            "scope-references": [
+                "$XSAPPNAME.products.protected::Administrator"
+            ]
+        }
+    ],
+    "role-collections": [
+        {
+            "description": " XSK Developer",
+            "name": "XSK Developer",
+            "role-template-references": [
+                "$XSAPPNAME.Developer"
+            ]
+        },
+        {
+            "description": "XSK Operator",
+            "name": "XSK Operator",
+            "role-template-references": [
+                "$XSAPPNAME.Operator"
+            ]
+        },
+        {
+            "name": "RoleDeveloper",
+            "description": "XSK role for products.protected::Developer",
+            "role-template-references": "$XSAPPNAME.RoleTemplateDeveloper"
+        },
+        {
+            "name": "RoleAdministrator",
+            "description": "XSK role for products.protected::Administrator",
+            "role-template-references": "$XSAPPNAME.RoleTemplateAdministrator"
+        }
+    ]
+}

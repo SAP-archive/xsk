@@ -25,7 +25,6 @@ function positiveResult(oResponse) {
  * See above for the expected format of a request-entity
  */
 function doPost() {
-    
 	var request = JSON.parse($.request.body.asString());
 	var productsService = new ProductsService(connection, "XSK_SAMPLES_PRODUCTS");
 	var response = productsService.handlePostRequest(request);
@@ -34,11 +33,14 @@ function doPost() {
 }
 
 function doGet() {
-    
 	var response;
 	var productsService = new ProductsService(connection, "XSK_SAMPLES_PRODUCTS");
-	response = productsService.handleGetRequest();
-	connection.close();
+
+	try {
+		response = productsService.handleGetRequest();
+	} finally {
+		connection.close();
+	}
 	positiveResult(response);
 }
 

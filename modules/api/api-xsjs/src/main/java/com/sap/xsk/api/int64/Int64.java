@@ -11,39 +11,48 @@
  */
 package com.sap.xsk.api.int64;
 
-import static java.lang.Long.parseLong;
-
 public class Int64 {
-    private long value;
+    private final long value;
 
-    public Int64(String value){
-      this.value = getValue(value);
-    }
-    public Int64(int value){
-       this.value = getValue(String.valueOf(value));
-    }
-    public Int64(Int64 int64){
-      this.value = int64.value;
+    public Int64(long aLong) {
+        this.value = aLong;
     }
 
-    public long getValue(String valueAsString) {
-        return parseLong(valueAsString);
+    public Int64(String value) {
+        this.value = Long.parseLong(value);
     }
 
 
-    public int getLow(Int64 number) {
-        return (int) (number.value & 0xFFFFFFFFL);
+    public Int64(String hex, int radix) {
+        this.value = Long.parseLong(hex, radix);
     }
 
-    public int getHi(Int64 number) {
+    public Int64(Int64 int64) {
+        this.value = int64.value;
+    }
+
+    public long getValue() {
+        return value;
+    }
+
+    public static long getLow(Int64 number) {
+        return (number.getValue() & 0xFFFFFFFFL);
+    }
+
+    public static int getHi(Int64 number) {
         return (int) (number.value >> 32);
     }
 
-    public long join(int high, int low) {
+    public static long join(long high, long low) {;
         return ((long) high << 32) + low;
     }
 
-    public long compare(Int64 a, Int64 b) {
+    public static int compare(Int64 a, Int64 b) {
         return Long.compare(a.value, b.value);
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(this.value);
     }
 }

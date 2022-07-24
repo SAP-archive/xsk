@@ -276,7 +276,3 @@ function getColumnMetadataArray(dResultSetMetaData) {
 	return columnMetadataArray;
 }
 
-
-globalThis.ctypes = {
-	Int64:HDB_UTILS.Int64
-}

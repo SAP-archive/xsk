@@ -148,35 +148,30 @@ function tryConvertNumberToBigDecimal(maybeNumber) {
 }
 
 class Int64 {
-
-	constructor(number) {
-        const JavaInt64 = Java.type('com.sap.xsk.api.int64.Int64');
-		this.internalInt64Value = new JavaInt64(number);
+	constructor(value) {
+		var JavaInt64 = Java.type('com.sap.xsk.api.int64.Int64');
+		this.internalInt64Value = new JavaInt64(value);
 	}
 
-    //Int 64 number
 	static lo(number) {
-        // should return low 32 bits
-		return number.internalInt64Value.getLow(number);
+		return Java.type('com.sap.xsk.api.int64.Int64').getLow(number.internalInt64Value);
 	}
-    //Int 64 number
-	static hi(number) {
-		return number.internalInt64Value.getHi(number);
-	}
-    //Int 64 number
-	static compare(a, b) {
-		return number.internalInt64Value.compare(a, b)
-	}
-    //Int 64 number
-	static join(high, low) {
 
-		return number.internalInt64Value.join(high, low);
+	static hi(number) {
+		return Java.type('com.sap.xsk.api.int64.Int64').getHi(number.internalInt64Value);
+	}
+
+	static compare(a, b) {
+		return Java.type('com.sap.xsk.api.int64.Int64').compare(a.internalInt64Value, b.internalInt64Value)
+	}
+
+	static join(high, low) {
+		return this.internalInt64Value.join(high, low);
+	}
+
+	toString() {
+		return this.internalInt64Value.toString();
 	}
 
 }
 
-exports.Int64 = new Int64();
-
-// globalThis.ctypes = {
-//     Int64:Int64
-// }

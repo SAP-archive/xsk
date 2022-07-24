@@ -1,0 +1,44 @@
+{
+    "products.db::ProductsOrdersCustomerNames": {
+        "target": {
+            "object": "products.db::ProductsOrdersCustomerNames",
+            "schema": "HDI_PRODUCTS_PRODUCTS"
+        }
+    },
+    "products.views::items_ordered_of_type": {
+        "target": {
+            "object": "items_ordered_of_type",
+            "schema": "HDI_PRODUCTS_PRODUCTS"
+        }
+    },
+    "products.views::items_ordered_total": {
+        "target": {
+            "object": "items_ordered_total",
+            "schema": "HDI_PRODUCTS_PRODUCTS"
+        }
+    },
+    "products.views::line_item": {
+        "target": {
+            "object": "line_item",
+            "schema": "HDI_PRODUCTS_PRODUCTS"
+        }
+    },
+    "products.views::my_orders": {
+        "target": {
+            "object": "my_orders",
+            "schema": "HDI_PRODUCTS_PRODUCTS"
+        }
+    },
+    "products.views::order_items_type_fn_view": {
+        "target": {
+            "object": "order_items_type_fn_view",
+            "schema": "HDI_PRODUCTS_PRODUCTS"
+        }
+    },
+    "products.views::ordered_items_type": {
+        "target": {
+            "object": "products.views::ordered_items_type",
+            "schema": "HDI_PRODUCTS_PRODUCTS"
+        }
+    }
+}

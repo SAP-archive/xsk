@@ -61,5 +61,11 @@ public class Int64Test {
         long join = Int64.join(numHi, numLow);
         assertEquals(int64.getValue(), join);
     }
+    @Test
+    public void getValueFromInstance(){
+      Int64 int64 = new Int64(valueAsString);
+      Int64 newInstance = new Int64(int64);
+      assertEquals(int64.getValue(),newInstance.getValue());
+    }
 }
 

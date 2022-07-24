@@ -149,7 +149,7 @@ function tryConvertNumberToBigDecimal(maybeNumber) {
 
 class Int64 {
 	constructor(value) {
-		var JavaInt64 = Java.type('com.sap.xsk.api.int64.Int64');
+		let JavaInt64 = Java.type('com.sap.xsk.api.int64.Int64');
 		this.internalInt64Value = new JavaInt64(value);
 	}
 

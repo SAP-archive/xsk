@@ -43,8 +43,8 @@ public class Int64 {
         return (int) (number.value >> 32);
     }
 
-    public static long join(long high, long low) {;
-        return ((long) high << 32) + low;
+    public static long join(long high, long low) {
+        return (high << 32) + low;
     }
 
     public static int compare(Int64 a, Int64 b) {

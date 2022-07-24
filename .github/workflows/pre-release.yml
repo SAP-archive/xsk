@@ -56,7 +56,7 @@ jobs:
         cd releng/sap-kyma-runtime
          docker build . \
         --no-cache \
-        --platform  linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v8 \
+        --platform  linux/amd64 \
         -t dirigiblelabs/xsk-kyma-runtime-base -f Dockerfile-base \
         --push
         cd ../../
@@ -86,7 +86,7 @@ jobs:
         cp -r "${JAVA_HOME}" jdk
         docker build .
         --no-cache \
-        --platform  linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v8 \
+        --platform  linux/amd64 \
         -t dirigiblelabs/xsk-cf:${{ env.XSK_VERSION }}
         --push
         cd ../../
@@ -95,7 +95,7 @@ jobs:
         cd releng/sap-kyma
         docker build . \
         --no-cache \
-        --platform  linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v8 \
+        --platform  linux/amd64 \
         -t dirigiblelabs/xsk-kyma:${{ env.XSK_VERSION }}
         --push
         cd ../../
@@ -104,13 +104,13 @@ jobs:
         cd releng/sap-kyma-runtime
         docker build . \
         --no-cache \
-        --platform  linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v8 \
+        --platform  linux/amd64 \
         -t dirigiblelabs/xsk-kyma-runtime
         --push
         
         docker build . \
         --no-cache \
-        --platform  linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v8 \ 
+        --platform  linux/amd64 \ 
         -t dirigiblelabs/xsk-kyma-runtime-distro -f Dockerfile-distro
         --push
         cd ../../

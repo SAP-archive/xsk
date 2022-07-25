@@ -25,6 +25,7 @@ import org.eclipse.dirigible.commons.config.StaticObjects;
 import org.eclipse.dirigible.engine.odata2.api.ODataException;
 import org.eclipse.dirigible.engine.odata2.definition.ODataHandlerDefinition;
 import org.eclipse.dirigible.engine.odata2.service.ODataCoreService;
+import org.eclipse.dirigible.engine.odata2.sql.builder.SQLQueryBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,12 +46,10 @@ import java.util.Map;
 
 import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.CONNECTION;
 import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.AFTER_TABLE_NAME;
-import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.BEFORE_DELETE_ENTITY_TABLE_NAME;
 import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.BEFORE_TABLE_NAME;
-import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.BEFORE_UPDATE_ENTITY_TABLE_NAME;
 import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.DATASOURCE;
-import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.ENTRY_MAP;
-import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.ON_CREATE_ENTITY_TABLE_NAME;
+import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.ENTRY_JSON;
+import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.SQL_BUILDER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -80,6 +79,9 @@ public class XSKOData2EventHandlerTest {
   @Mock
   private InputStream inputStream;
 
+  @Mock
+  private SQLQueryBuilder queryBuilder;
+
   private static MockedStatic<StaticObjects> staticObjects;
 
   private XSKScriptingOData2EventHandler spyScriptingHandler;
@@ -97,6 +99,9 @@ public class XSKOData2EventHandlerTest {
     xskoData2EventHandler = new XSKOData2EventHandler(odataCoreService, spyProcedureHandler, spyScriptingHandler);
     scriptingHandlerContext = new HashMap();
     procedureHandlerContext = new HashMap();
+    scriptingHandlerContext.put(SQL_BUILDER,  queryBuilder);
+    procedureHandlerContext.put(SQL_BUILDER,  queryBuilder);
+    scriptingHandlerContext.put(DATASOURCE, dataSource);
     procedureHandlerContext.put(DATASOURCE, dataSource);
   }
 
@@ -157,8 +162,6 @@ public class XSKOData2EventHandlerTest {
     xskoData2EventHandler.onCreateEntity(uriInfo, inputStream, "application/json", "application/json", scriptingHandlerContext);
     assertTrue(scriptingHandlerContext.containsKey(CONNECTION));
     assertTrue(scriptingHandlerContext.containsKey(AFTER_TABLE_NAME));
-    assertTrue(scriptingHandlerContext.containsKey(ON_CREATE_ENTITY_TABLE_NAME));
-    assertTrue(scriptingHandlerContext.containsKey(ENTRY_MAP));
   }
 
   @Test
@@ -169,6 +172,7 @@ public class XSKOData2EventHandlerTest {
     mockCallProcedure(spyProcedureHandler, true);
     ODataResponse response = xskoData2EventHandler.beforeUpdateEntity(uriInfo, "application/json", true, "application/json", entry,
         procedureHandlerContext);
+    assertTrue(procedureHandlerContext.containsKey(ENTRY_JSON));
     assertResponse(response);
 
     // .xsjslib
@@ -178,7 +182,7 @@ public class XSKOData2EventHandlerTest {
     assertTrue(scriptingHandlerContext.containsKey(CONNECTION));
     assertTrue(scriptingHandlerContext.containsKey(BEFORE_TABLE_NAME));
     assertTrue(scriptingHandlerContext.containsKey(AFTER_TABLE_NAME));
-    assertTrue(scriptingHandlerContext.containsKey(BEFORE_UPDATE_ENTITY_TABLE_NAME));
+    assertTrue(scriptingHandlerContext.containsKey(ENTRY_JSON));
   }
 
   @Test
@@ -226,6 +230,7 @@ public class XSKOData2EventHandlerTest {
     mockTemporaryTables(spyProcedureHandler);
     mockCallProcedure(spyProcedureHandler, false);
     ODataResponse response = xskoData2EventHandler.beforeDeleteEntity(uriInfo, "application/json", procedureHandlerContext);
+    assertTrue(procedureHandlerContext.containsKey(ENTRY_JSON));
     assertResponse(response);
 
     // .xsjslib
@@ -234,7 +239,7 @@ public class XSKOData2EventHandlerTest {
     xskoData2EventHandler.beforeDeleteEntity(uriInfo, "application/json", scriptingHandlerContext);
     assertTrue(scriptingHandlerContext.containsKey(CONNECTION));
     assertTrue(scriptingHandlerContext.containsKey(BEFORE_TABLE_NAME));
-    assertTrue(scriptingHandlerContext.containsKey(BEFORE_DELETE_ENTITY_TABLE_NAME));
+    assertTrue(scriptingHandlerContext.containsKey(ENTRY_JSON));
   }
 
   @Test
@@ -303,10 +308,6 @@ public class XSKOData2EventHandlerTest {
     Mockito.doNothing().when(handler).updateTemporaryTable(any(), any(), any(), any());
 
     Mockito.doReturn(new HashMap<>()).when(handler).readEntryMap(any(), any());
-
-    Mockito.doNothing().when(handler).closeConnection(any());
-
-    Mockito.doNothing().when(handler).batchDropTemporaryTables(any());
 
     if (handler instanceof XSKProcedureOData2EventHandler) {
       Mockito.doReturn("TEST_SCHEMA").when((XSKProcedureOData2EventHandler) handler).getODataArtifactTypeSchema("test-table");

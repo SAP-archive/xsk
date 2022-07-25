@@ -38,7 +38,6 @@ import org.eclipse.dirigible.engine.odata2.sql.processor.ExpandCallBack;
 import org.eclipse.dirigible.engine.odata2.transformers.DBMetadataUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -74,10 +73,6 @@ public abstract class AbstractXSKOData2EventHandler extends ScriptingOData2Event
   protected static final String CONNECTION = "connection";
   protected static final String BEFORE_TABLE_NAME = "beforeTableName";
   protected static final String AFTER_TABLE_NAME = "afterTableName";
-  protected static final String ON_CREATE_ENTITY_TABLE_NAME = "onCreateEntityTableName";
-  protected static final String BEFORE_UPDATE_ENTITY_TABLE_NAME = "beforeUpdateEntityTableName";
-  protected static final String BEFORE_DELETE_ENTITY_TABLE_NAME = "beforeDeleteEntityTableName";
-  protected static final String ENTRY_MAP = "entryMap";
   protected static final String ENTRY = "entry";
   protected static final String ENTRY_JSON = "entryJSON";
   protected static final String HANDLER = "handler";

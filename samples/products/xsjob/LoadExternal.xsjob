@@ -1,0 +1,13 @@
+{
+    "description": "Load external data",
+    "action": "products.xsjob:sync.xsjs::loadExternalData",
+    "schedules": [
+       {
+          "description": "Load data from external source",
+          "xscron": "* * * * * * */10",
+          "parameter": {
+            "skiptoken": 0
+          }
+       }
+    ]
+}

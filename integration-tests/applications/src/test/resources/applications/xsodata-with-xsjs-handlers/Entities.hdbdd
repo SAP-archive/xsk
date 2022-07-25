@@ -1,0 +1,24 @@
+namespace xsodata-with-xsjs-handlers;
+
+@Schema: 'TEST_SCHEMA'
+
+context Entities {
+    
+    entity  Employee {
+        key Id               : Integer;
+        Name                 : String(500);
+        Age                  : Integer;
+        Country              : String(100);
+     };
+
+     entity Status {
+         key Id             : Integer;
+         Active             : Boolean;
+     }
+
+     entity Salary {
+         key Id             : Integer;
+         Amount             : Integer;
+     }
+     
+};

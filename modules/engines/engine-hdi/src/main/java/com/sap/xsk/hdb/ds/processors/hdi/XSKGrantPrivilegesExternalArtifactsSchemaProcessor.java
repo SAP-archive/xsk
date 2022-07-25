@@ -34,7 +34,7 @@ public class XSKGrantPrivilegesExternalArtifactsSchemaProcessor extends XSKHDIAb
 
   private static final String HDBSYNONYM_FILE_EXTENSION = "hdbsynonym";
 
-  public final void execute(Connection connection, String container, String[] deploys)
+  public void execute(Connection connection, String container, String[] deploys)
       throws SQLException, IOException, XSKDataStructuresException {
     Set<String> externalArtifactsSchemas = collectExternalArtifactsSchemas(deploys);
 

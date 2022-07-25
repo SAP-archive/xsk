@@ -1,49 +1,56 @@
 var db = $.db;
 var assertTrue = require('utils/assert').assertTrue;
 
-var connection = db.getConnection();
+var connection;
+try{
+  connection = db.getConnection();
 
-try {
-  connection.prepareStatement("DROP TABLE TEST_USERS").execute();
-} catch {}
+  try {
+    connection.prepareStatement("DROP TABLE TEST_USERS").execute();
+  } catch {}
 
-createTable();
+  createTable();
 
-var insert = "INSERT INTO TEST_USERS (BLOB_, BIGINT_, DATE_, CLOB_, DEC_, DOUBLE_, FLOAT_, INT_, REAL_, SMALLINT_, STRING_, TIME_, TIMESTAMP_, TINYINT_) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-var statement = connection.prepareStatement(insert);
+  var insert = "INSERT INTO TEST_USERS (BLOB_, BIGINT_, DATE_, CLOB_, DEC_, DOUBLE_, FLOAT_, INT_, REAL_, SMALLINT_, STRING_, TIME_, TIMESTAMP_, TINYINT_) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  var statement = connection.prepareStatement(insert);
 
-setStatementFields();
+  setStatementFields();
 
-statement.execute();
+  statement.execute();
 
-var resultSet = connection.prepareStatement("SELECT * FROM TEST_USERS").executeQuery();
+  var resultSet = connection.prepareStatement("SELECT * FROM TEST_USERS").executeQuery();
 
-resultSet.next();
+  resultSet.next();
 
-resultSet.getBlob(1); // not sure how to assert a value on this
-var bigIntAssertion = resultSet.getBigInt(2) == 1000000000000000;
-var dateAssertion = resultSet.getDate(3).toString().contains("Fri Jan 01 2021");
-resultSet.getClob(4); // same as blob, just a smoke test
-var decAssertion = resultSet.getDecimal(5).intValue() == 10;
-var doubleAssertion = resultSet.getDouble(6) == 10.11;
-resultSet.getFloat(7); // creating a new java float with 10.11 produces 10.109999656677246
-var intAssertion = resultSet.getInteger(8) == 10;
-resultSet.getReal(9);
-var stringAssertion = resultSet.getString(11) == "test";
-var timeAssertion = resultSet.getTime(12).toString().contains("23:59:59");
-var timestampAssertion = resultSet.getTimestamp(13).toString().contains("Wed Jul 21 2021");
+  resultSet.getBlob(1); // not sure how to assert a value on this
+  var bigIntAssertion = resultSet.getBigInt(2) == 1000000000000000;
+  var dateAssertion = resultSet.getDate(3).toString().contains("Fri Jan 01 2021");
+  resultSet.getClob(4); // same as blob, just a smoke test
+  var decAssertion = resultSet.getDecimal(5).intValue() == 10;
+  var doubleAssertion = resultSet.getDouble(6) == 10.11;
+  resultSet.getFloat(7); // creating a new java float with 10.11 produces 10.109999656677246
+  var intAssertion = resultSet.getInteger(8) == 10;
+  resultSet.getReal(9);
+  var stringAssertion = resultSet.getString(11) == "test";
+  var timeAssertion = resultSet.getTime(12).toString().contains("23:59:59");
+  var timestampAssertion = resultSet.getTimestamp(13).toString().contains("Wed Jul 21 2021");
 
-resultSet.close();
-var isClosedAssertion = resultSet.isClosed() == true;
+  resultSet.close();
+  var isClosedAssertion = resultSet.isClosed() == true;
 
-var closeAssertion = true;
-try {
-  resultSet.next(); // Expect this to fail since the statement is closed
-  closeAssertion = false;
-} catch {}
+  var closeAssertion = true;
+  try {
+    resultSet.next(); // Expect this to fail since the statement is closed
+    closeAssertion = false;
+  } catch {}
 
-assertTrue(bigIntAssertion && dateAssertion && decAssertion && doubleAssertion && intAssertion && stringAssertion && timeAssertion && timestampAssertion && closeAssertion && isClosedAssertion);
-
+  assertTrue(bigIntAssertion && dateAssertion && decAssertion && doubleAssertion && intAssertion && stringAssertion && timeAssertion && timestampAssertion && closeAssertion && isClosedAssertion);
+} finally {
+  if(connection){
+    connection.commit();
+    connection.close();
+  }
+}
 function setStatementFields() {
   var blob = [123];
   statement.setBlob(1, blob);

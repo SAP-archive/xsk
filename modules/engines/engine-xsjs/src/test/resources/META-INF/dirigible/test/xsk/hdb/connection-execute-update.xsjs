@@ -1,24 +1,16 @@
-var db = $.hdb;
- var response = require('http/v4/response');
- var assertTrue = require('utils/assert').assertTrue;
-   var connection = db.getConnection();
-   var insertStatement = "INSERT INTO EXAMPLE.TEST_USERS (ID, FIRSTNAME, LASTNAME, AGE, WEIGHT) VALUES (?,?,?,?,?)";
- 	var insertResult = connection.executeUpdate(insertStatement, 4, 'PETKO', 'MOMCHEV', 24 ,89);
- 	response.println("Insert Result: Query OK, " + insertResult + " row affected");
+ let assertTrue = require('utils/assert').assertTrue;
+ let connection;
+ try{
+  connection = $.hdb.getConnection();
+  let insertStatement = "INSERT INTO EXAMPLE.TEST_USERS (ID, FIRSTNAME, LASTNAME, AGE, WEIGHT) VALUES (?,?,?,?,?)";
+  let insertResult = connection.executeUpdate(insertStatement, 4, 'PETKO', 'MOMCHEV', 24 ,89);
 
- 	var updateStatement = "UPDATE EXAMPLE.TEST_USERS SET WEIGHT=? WHERE ID = 4";
- 	var updateResult = connection.executeUpdate(updateStatement, 75);
- 	response.println("Update Result: Query OK, " + updateResult + " row affected");
-
- 	response.println("is auto commit enabled: " + connection.getAutoCommit());
- 	connection.setAutoCommit(false);
- 	response.println("is auto commit enabled: " + connection.getAutoCommit());
-
- 	response.println("is auto commit enabled: " + connection.getAutoCommit());
-
-
- 	response.println("is connection closed: " + connection.isClosed());
- 	response.println("Warnings: " + connection.getLastWarning());
- 	response.println("is connection closed: " + connection.isClosed());
+  let updateStatement = "UPDATE EXAMPLE.TEST_USERS SET WEIGHT=? WHERE ID = 4";
+  let updateResult = connection.executeUpdate(updateStatement, 75);
 
   assertTrue(insertResult ===1 && updateResult > 0);
+ } finally {
+  if(connection){
+    connection.close();
+  }
+ }

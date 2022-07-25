@@ -1,18 +1,39 @@
  service namespace "products.odata"  {
  
    "products.db::Products.Orders" as "Orders"
-   		navigates("Items4Orders" as "Items")
-
+   		navigates("Lines4Orders" as "Lines", "User4Order" as "Buyer")
     create events(before "products.xsjs:ProductsLib.xsjslib::beforeCreateOrder")
     delete using "products.xsjs:ProductsLib.xsjslib::deleteOrder";
+
+    "products.db::Products.ShippingAddresses" as "ShippingAddress"
+      delete forbidden;
+      
+    "products.db::Products.Customers" as "Buyers" navigates ("Addresses" as "Address")
+        create forbidden
+        delete forbidden;
 
   "products.db::Products.Item" as "Items"
     create events(before "products.xsjs:ProductsLib.xsjslib::beforeCreateItem") 
     update forbidden;
 
-    association "Items4Orders" principal "Orders"("Id")
-       multiplicity "1" dependent "Items"("OrderId") multiplicity "*";
-      
+    association "Lines4Orders" principal "Orders"("Id")
+       multiplicity "1" dependent "LineItems"("OrderId") multiplicity "*";
+ 
+    association "User4Order" principal "Orders"("Customer.Id")
+       multiplicity "1" dependent "Buyers"("Id") multiplicity "1";
+    
+    association "TotalToItem" principal "TotalPurchased"("ItemName")
+        multiplicity "1" dependent "Items"("Name") multiplicity "1";
+       
+    "products.views::items_ordered_total" as "TotalPurchased" keys ("ItemName");
+
+    "products.views::line_item" as "LineItems" keys ("LineId")
+      create using "products.xsjs:ProductsLib.xsjslib::createLineItem"
+      delete using "products.xsjs:ProductsLib.xsjslib::deleteLineItem"
+      update forbidden;
+
+    association "Addresses" principal "Buyers"("ShippingAddress.Id")
+      multiplicity "1" dependent "ShippingAddress"("Id") multiplicity "1";
  }
 
  annotations {

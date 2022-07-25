@@ -1,0 +1,10 @@
+{
+       "exposed": true,
+       "authentication": {
+              "method": "Form"
+       },
+       "authorization":
+       [
+              "products.protected::Administrator"
+       ]
+}

@@ -1,0 +1,3 @@
+Id,Username,FirstName,LastName,Phone,Email,ShippingAddress.Id
+customerId1,DBADMIN,John,Smith,123456789,john.smith@example.com,address1
+customerId2,SYSTEM,Claudia,Davis,987654321,claudia.davis@example.com,address2 

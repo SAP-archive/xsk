@@ -13,7 +13,9 @@ while(iterator.next()) {
   var currentRow = iterator.value();
   for(const index in metadata){
     const date = currentRow[metadata[index].name];
-    assertTrue(typeof date.getMonth === 'function');
+    assertTrue(Java.isJavaObject(date) === false);
+    assertTrue(Java.isScriptObject(date));
+    assertTrue(typeof date.getUTCMonth === 'function');
   }
 
 }

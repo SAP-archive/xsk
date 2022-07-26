@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?><Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="items_ordered_total" applyPrivilegeType="SQL_ANALYTIC_PRIVILEGE" dataCategory="CUBE" schemaVersion="2.3" defaultClient="$$client$$" visibility="reportingEnabled" outputViewType="Aggregation" calculationScenarioType="TREE_BASED" enforceSqlExecution="false">
+<descriptions defaultDescription="items_ordered"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="products.db::Products.OrderLine">
+    <viewAttributes allViewAttributes="true"/>
+    <resourceUri>products.db::Products.OrderLine</resourceUri>
+  </DataSource>
+  <DataSource id="products.db::Products.Item">
+    <viewAttributes allViewAttributes="true"/>
+    <resourceUri>products.db::Products.Item</resourceUri>
+  </DataSource>
+  <DataSource id="products.db::Products.Orders">
+    <viewAttributes allViewAttributes="true"/>
+    <resourceUri>products.db::Products.Orders</resourceUri>
+  </DataSource>
+  <DataSource id="products.db::Products.Customers">
+    <viewAttributes allViewAttributes="true"/>
+    <resourceUri>products.db::Products.Customers</resourceUri>
+  </DataSource>
+</dataSources>
+<calculationViews>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" joinType="inner">
+    <viewAttributes>
+      <viewAttribute id="Quantity"/>
+      <viewAttribute id="ItemName"/>
+      <viewAttribute id="OrderId"/>
+      <viewAttribute id="JOIN$Item.Id$Id" hidden="true"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="#products.db::Products.OrderLine">
+      <mapping xsi:type="Calculation:AttributeMapping" target="Quantity" source="Quantity"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="OrderId" source="OrderId"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$Item.Id$Id" source="Item.Id"/>
+    </input>
+    <input node="#products.db::Products.Item">
+      <mapping xsi:type="Calculation:AttributeMapping" target="ItemName" source="Name"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$Item.Id$Id" source="Id"/>
+    </input>
+    <joinAttribute name="JOIN$Item.Id$Id"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_2" joinType="inner">
+    <viewAttributes>
+      <viewAttribute id="OrderId"/>
+      <viewAttribute id="Username"/>
+      <viewAttribute id="JOIN$Customer.Id$Id" hidden="true"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="#products.db::Products.Orders">
+      <mapping xsi:type="Calculation:AttributeMapping" target="OrderId" source="Id"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$Customer.Id$Id" source="Customer.Id"/>
+    </input>
+    <input node="#products.db::Products.Customers">
+      <mapping xsi:type="Calculation:AttributeMapping" target="Username" source="Username"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$Customer.Id$Id" source="Id"/>
+    </input>
+    <joinAttribute name="JOIN$Customer.Id$Id"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_3" joinType="inner">
+    <viewAttributes>
+      <viewAttribute id="Quantity"/>
+      <viewAttribute id="ItemName"/>
+      <viewAttribute id="Username"/>
+      <viewAttribute id="JOIN$OrderId$OrderId" hidden="true"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="#Join_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="Quantity" source="Quantity"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ItemName" source="ItemName"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$OrderId$OrderId" source="OrderId"/>
+    </input>
+    <input node="#Join_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="Username" source="Username"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$OrderId$OrderId" source="OrderId"/>
+    </input>
+    <joinAttribute name="JOIN$OrderId$OrderId"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Join_3">
+  <attributes>
+    <attribute id="ItemName" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="Name"/>
+      <keyMapping columnObjectName="Join_3" columnName="ItemName"/>
+    </attribute>
+    <attribute id="Username" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="Username"/>
+      <keyMapping columnObjectName="Join_3" columnName="Username"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="Quantity" order="3" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="Quantity"/>
+      <measureMapping columnObjectName="Join_3" columnName="Quantity"/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="35" y="268"/>
+      <rectangleSize height="30" width="140"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Join_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="58" y="346"/>
+      <rectangleSize height="30" width="140"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_3" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="161" y="234"/>
+      <rectangleSize height="30" width="140"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

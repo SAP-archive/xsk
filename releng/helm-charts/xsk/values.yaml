@@ -17,14 +17,18 @@ deployment:
   LivenessProbeInitialDelaySeconds: 60
   LivenessProbeHttpGetPort: 8080
   # Volume mounts for the deployment
-  volumeMountsName: xsk-volume
-  volumeMountsMountPath: /usr/local/tomcat/target/dirigible/repository
+  volumeMountPath: /usr/local/tomcat/target/dirigible/repository
   volumesName: xsk-volume
-  volumespersistentVolumeClaimClaimName: xsk-claim
+  # Resource limits
+  resourcesEnabled: 
+  resourcesRequestsMemory: "2Gi"
+  resourcesRequestsCpu: "3000m"
+  resourcesLimitsMemory: "3Gi"
+  resourcesLimitsCpu: "4000m"
 
 persistentVolumeClaim:
   enabled: true
-  name: xsk-claim
+  name: 
   accessModes: ReadWriteOnce
   resourcesStorage: 1Gi
 
@@ -76,7 +80,18 @@ kyma:
   roleCollectionsNameDeveloper: 
   # Name for role collections for operator 
   # We add prefix "XSK-" suffix "-Operator" for default roles and using Helm release name
-  roleCollectionsNameOperator: 
+  roleCollectionsNameOperator:
+  # Destination service
+  destinationServiceEnabled:
+  destinationServiceInstanceName: 
+  destinationServiceInstanceOfferingName: destination
+  destinationServiceInstancePlanName: lite
+  destinationServiceInstanceExternalName: 
+  destinationServiceInstanceParameters: '{}'
+  destinationServiceBindingName: 
+  destinationServiceBindingExternalName: 
+  destinationServiceBindingSecretName: 
+  destinationServiceBindingParameters: '{}'
 
 application:
   # Image application image

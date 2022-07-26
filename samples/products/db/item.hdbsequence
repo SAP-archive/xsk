@@ -1,0 +1,9 @@
+schema= "XSK_SAMPLES_PRODUCTS";
+maxvalue = 10000000;
+nomaxvalue = false;
+minvalue= 1;
+start_with = 1;
+nominvalue = true;
+cycles= false;
+reset_by= "SELECT IFNULL(MAX(\"Id\"), 0) + 1 FROM \"products.db::Products.Item\"";
+depends_on_table = "products.db::Products.Item";

@@ -64,6 +64,11 @@ spec:
             - secretRef:
                 name: xsuaa-{{ include "xsk.fullname" . }}-binding
           {{- end }}
+          {{- if .Values.kyma.destinationServiceEnabled }}
+            - secretRef:
+                name: destination-{{ default  .Release.Name  .Values.kyma.destinationServiceBindingSecretName }}-binding
+              prefix: destination_
+          {{- end }}
           env:
             {{- if .Values.kyma.enabled }}
             - name: DIRIGIBLE_HOST
@@ -85,8 +90,8 @@ spec:
           imagePullPolicy: {{ required "Missing application image pull policy" .Values.application.imagePullPolicy }}
           {{- if .Values.persistentVolumeClaim.enabled }}
           volumeMounts:
-          - name: {{ required "Missing volume mounts name" .Values.deployment.volumeMountsName }}
-            mountPath: {{ required "Missing volume mounts path" .Values.deployment.volumeMountsMountPath }}
+          - name: {{ required "Missing volume mounts name" .Values.deployment.volumesName }}
+            mountPath: {{ required "Missing volume mounts path" .Values.deployment.volumeMountPath }}
           {{- end }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
@@ -94,6 +99,15 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          {{- if .Values.deployment.resourcesEnabled }}
+          resources:
+            requests:
+              memory: {{ .Values.deployment.resourcesRequestsMemory }}
+              cpu: {{ .Values.deployment.resourcesRequestsCpu }}
+            limits:
+              memory: {{ .Values.deployment.resourcesLimitsMemory }}
+              cpu: {{ .Values.deployment.resourcesLimitsCpu }}
+          {{- end }}
           readinessProbe:  
             tcpSocket:
               port: {{ required "Missing deployment readiness probe http get port" .Values.deployment.readinessProbeHttpGetPort }}
@@ -112,14 +126,14 @@ spec:
       volumes:
       - name: {{ required "Missing volume mounts name" .Values.deployment.volumesName }}
         persistentVolumeClaim:
-          claimName: {{ required "Missing volume mounts name" .Values.deployment.volumespersistentVolumeClaimClaimName }}
+          claimName: {{ default .Release.Name .Values.persistentVolumeClaim.name }}-claim
       {{- end }}
 ---
 {{- if .Values.persistentVolumeClaim.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ required "Missing persistent volume claim name" .Values.persistentVolumeClaim.name }}
+  name: {{ default .Release.Name .Values.persistentVolumeClaim.name }}-claim
 spec:
   accessModes:
   - {{ required "Missing persistent volume claim access mode" .Values.persistentVolumeClaim.accessModes }}
@@ -210,7 +224,6 @@ spec:
       name: $XSAPPNAME.{{ . }}
     {{- end }}
     {{- end }}
-      
 ---
 apiVersion: services.cloud.sap.com/v1
 kind: ServiceBinding
@@ -221,6 +234,28 @@ spec:
   externalName: {{ include "xsk.fullname" . }}-binding-external
   secretName: xsuaa-{{ include "xsk.fullname" . }}-binding
   parameters: {}
+---
+{{- if .Values.kyma.destinationServiceEnabled }}
+apiVersion: services.cloud.sap.com/v1
+kind: ServiceInstance
+metadata:
+  name: destination-{{ default .Release.Name .Values.kyma.destinationServiceInstanceName }}
+spec:
+  serviceOfferingName: {{ required "Missing destination service instance offering name" .Values.kyma.destinationServiceInstanceOfferingName }}
+  servicePlanName: {{ required "Missing destination service instance plan name" .Values.kyma.destinationServiceInstancePlanName }}
+  externalName: destination-{{ default .Release.Name .Values.kyma.destinationServiceInstanceExternalName }}
+  parameters: {{ required "Missing destination service instance parameters" .Values.kyma.destinationServiceInstanceParameters }}
+---
+apiVersion: services.cloud.sap.com/v1
+kind: ServiceBinding
+metadata:
+  name: destination-{{ default .Release.Name .Values.kyma.destinationServiceBindingName }}-binding
+spec:
+  serviceInstanceName: destination-{{ default .Release.Name .Values.kyma.destinationServiceInstanceName }}
+  externalName: destination-{{ default  .Release.Name .Values.kyma.destinationServiceBindingExternalName }}-binding
+  secretName: destination-{{ default  .Release.Name  .Values.kyma.destinationServiceBindingSecretName }}-binding
+  parameters: {{ required "Missing destination service binding parameters" .Values.kyma.destinationServiceBindingParameters }}
+{{- end }}
 {{- else }}
 {{- if or .Values.kyma.host }}
 {{ required "Missing Kyma set configuration 'kyma.enabled=true' " .Values.kyma.enabled }}

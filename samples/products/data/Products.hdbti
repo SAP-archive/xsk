@@ -1,30 +1,47 @@
 import = [
-	{
-		table = "products.db::Products.Country";
-		file = "products.data:Country.csv";
-		header = false;
-		useHeaderNames = false;
-		delimField = ",";
-		distinguishEmptyFromNull = true;
-		schema = "XSK_SAMPLES_PRODUCTS";
-	},
-	{
-		table = "products.db::Products.Orders";
-		file = "products.data:Products_Orders.csv";
-		header = false;
-		useHeaderNames = false;
-		delimField = ",";
-		distinguishEmptyFromNull = true;
-		schema = "XSK_SAMPLES_PRODUCTS";
-	},
-	{
-		table = "products.db::Products.Item";
-		file = "products.data:Products_Item.csv";
-		header = false;
-		useHeaderNames = false;
-		delimField = ",";
-		distinguishEmptyFromNull = true;
-		schema = "XSK_SAMPLES_PRODUCTS";
-	}
+{
+	schema = "XSK_SAMPLES_PRODUCTS";
+	distinguishEmptyFromNull = true;
+	header = true;
+	table = "products.db::Products.Orders";
+	useHeaderNames = true;
+	delimField = ",";
+	file = "products.data:Products_Orders.csv";
+}, 
+{
+	schema = "XSK_SAMPLES_PRODUCTS";
+	distinguishEmptyFromNull = true;
+	header = true;
+	table = "products.db::Products.Item";
+	useHeaderNames = false;
+	delimField = ",";
+	file = "products.data:Products_Item.csv";
+}, 
+{
+	schema = "XSK_SAMPLES_PRODUCTS";
+	distinguishEmptyFromNull = true;
+	header = true;
+	table = "products.db::Products.Customers";
+	useHeaderNames = true;
+	delimField = ",";
+	file = "products.data:Products_Customers.csv";
+}, 
+{
+	schema = "XSK_SAMPLES_PRODUCTS";
+	distinguishEmptyFromNull = true;
+	header = true;
+	table = "products.db::Products.ShippingAddresses";
+	useHeaderNames = false;
+	delimField = ",";
+	file = "products.data:Products_ShippingAddresses.csv";
+},
+{
+	schema = "XSK_SAMPLES_PRODUCTS";
+	distinguishEmptyFromNull = true;
+	header = true;
+	table = "products.db::Products.OrderLine";
+	useHeaderNames = false;
+	delimField = ",";
+	file = "products.data:Products_OrderLine.csv";
+}
 ];
-

@@ -1,0 +1,17 @@
+{
+  "d": {
+    "results": [
+      {
+        "__metadata": {
+          "id": "http://localhost:8080/odata/v2/Employee(1)",
+          "uri": "http://localhost:8080/odata/v2/Employee(1)",
+          "type": "xsodata-with-xsjs-handlers.EmployeeType"
+        },
+        "Id": 1,
+        "Name": "John",
+        "Country": "USA",
+        "Age": 30
+      }
+    ]
+  }
+}

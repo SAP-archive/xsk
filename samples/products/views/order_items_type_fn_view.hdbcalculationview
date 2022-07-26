@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="order_items_type_fn_view"
+  applyPrivilegeType="SQL_ANALYTIC_PRIVILEGE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="2.3"
+  defaultClient="$$client$$" visibility="internal" outputViewType="Projection" calculationScenarioType="TREE_BASED"
+  enforceSqlExecution="false">
+  <descriptions defaultDescription="order_items_type_fn_view" />
+  <localVariables>
+    <variable id="itemType" parameter="true">
+      <descriptions defaultDescription="itemType" />
+      <variableProperties datatype="NVARCHAR" length="100" mandatory="false">
+        <valueDomain type="empty" />
+        <selection multiLine="false" />
+        <defaultRange />
+      </variableProperties>
+    </variable>
+  </localVariables>
+  <variableMappings>
+    <mapping xsi:type="Variable:VariableMapping" dataSource="#order_items_type">
+      <targetVariable name="itemType" resourceUri="products.views::order_items_type" />
+      <localVariable>#itemType</localVariable>
+    </mapping>
+  </variableMappings>
+  <dataSources>
+    <DataSource id="ordered_items_type">
+      <viewAttributes allViewAttributes="true" />
+      <resourceUri>products.views::ordered_items_type</resourceUri>
+    </DataSource>
+  </dataSources>
+  <calculationViews />
+  <logicalModel id="ordered_items_type">
+    <attributes>
+      <attribute id="Name" order="1" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="Name" />
+        <keyMapping columnObjectName="ordered_items_type" columnName="Name" />
+      </attribute>
+      <attribute id="Price" order="2" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="Price" />
+        <keyMapping columnObjectName="ordered_items_type" columnName="Price" />
+      </attribute>
+    </attributes>
+    <calculatedAttributes />
+    <baseMeasures />
+    <calculatedMeasures />
+    <restrictedMeasures />
+  </logicalModel>
+  <layout>
+    <shapes>
+      <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+        <upperLeftCorner x="40" y="85" />
+      </shape>
+    </shapes>
+  </layout>
+</Calculation:scenario>

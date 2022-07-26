@@ -245,7 +245,7 @@
             ${project.basedir}/../../../coverage-aggregate/target/site/jacoco-aggregate/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
 
-        <maven.resource.plugin.version>3.2.0</maven.resource.plugin.version>
+        <maven.resource.plugin.version>3.3.0</maven.resource.plugin.version>
         <maven.clean.plugin.version>3.2.0</maven.clean.plugin.version>
         <maven.clean.plugin.directory>src/main/resources/META-INF/dirigible</maven.clean.plugin.directory>
         <maven.compiler.plugin.version>3.10.1</maven.compiler.plugin.version>

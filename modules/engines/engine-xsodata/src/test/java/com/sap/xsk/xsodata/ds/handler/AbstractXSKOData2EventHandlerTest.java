@@ -12,7 +12,6 @@
 package com.sap.xsk.xsodata.ds.handler;
 
 import org.apache.olingo.odata2.api.edm.EdmType;
-import org.apache.olingo.odata2.api.uri.UriInfo;
 import org.eclipse.dirigible.database.sql.ISqlKeywords;
 import org.eclipse.dirigible.database.sql.SqlFactory;
 import org.eclipse.dirigible.database.sql.dialects.hana.HanaSqlDialect;
@@ -25,7 +24,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;

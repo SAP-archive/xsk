@@ -27,7 +27,6 @@ import org.eclipse.dirigible.engine.odata2.sql.builder.SQLInsertBuilder;
 import org.eclipse.dirigible.engine.odata2.sql.builder.SQLQueryBuilder;
 import org.eclipse.dirigible.engine.odata2.sql.builder.SQLSelectBuilder;
 import org.eclipse.dirigible.engine.odata2.sql.builder.SQLUpdateBuilder;
-import org.eclipse.dirigible.engine.odata2.sql.processor.AbstractSQLProcessor;
 import javax.sql.DataSource;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -39,10 +38,10 @@ public class XSKScriptingOData2EventHandler extends AbstractXSKOData2EventHandle
   @Override
   public ODataResponse beforeCreateEntity(PostUriInfo uriInfo, String requestContentType, String contentType, ODataEntry entry,
       Map<Object, Object> context) {
-    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER);
-    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT);
-    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
-    DataSource dataSource = (DataSource) context.get(DATASOURCE);
+    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER_CONTEXT_KEY);
+    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT_CONTEXT_KEY);
+    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT_CONTEXT_KEY);
+    DataSource dataSource = (DataSource) context.get(DATASOURCE_CONTEXT_KEY);
 
     Connection connectionParam = null;
     try {
@@ -56,14 +55,14 @@ public class XSKScriptingOData2EventHandler extends AbstractXSKOData2EventHandle
       createTemporaryTableLikeTable(connectionParam, afterTableName, targetTableName);
       insertIntoTemporaryTable(connectionParam, insertBuilder, afterTableName, sqlContext);
 
-      context.put(CONNECTION, connectionParam);
-      context.put(AFTER_TABLE_NAME, afterTableName);
+      context.put(CONNECTION_CONTEXT_KEY, connectionParam);
+      context.put(AFTER_TABLE_NAME_CONTEXT_KEY, afterTableName);
 
       callSuperBeforeCreateEntity(uriInfo, requestContentType, contentType, entry, context);
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
-      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_BEFORE_CREATE_ENTITY_EVENT, e);
+      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_BEFORE_CREATE_ENTITY_EVENT_ERROR, e);
     } finally {
-      batchDropTemporaryTables(connectionParam, (String) context.get(AFTER_TABLE_NAME));
+      batchDropTemporaryTables(connectionParam, (String) context.get(AFTER_TABLE_NAME_CONTEXT_KEY));
       closeConnection(connectionParam);
     }
 
@@ -73,10 +72,10 @@ public class XSKScriptingOData2EventHandler extends AbstractXSKOData2EventHandle
   @Override
   public ODataResponse afterCreateEntity(PostUriInfo uriInfo, String requestContentType, String contentType, ODataEntry entry,
       Map<Object, Object> context) {
-    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER);
-    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT);
-    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
-    DataSource dataSource = (DataSource) context.get(DATASOURCE);
+    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER_CONTEXT_KEY);
+    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT_CONTEXT_KEY);
+    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT_CONTEXT_KEY);
+    DataSource dataSource = (DataSource) context.get(DATASOURCE_CONTEXT_KEY);
 
     Connection connectionParam = null;
     try {
@@ -87,14 +86,14 @@ public class XSKScriptingOData2EventHandler extends AbstractXSKOData2EventHandle
       connectionParam = dataSource.getConnection();
       createTemporaryTableAsSelect(connectionParam, afterTableName, selectBuilder, sqlContext);
 
-      context.put(CONNECTION, connectionParam);
-      context.put(AFTER_TABLE_NAME, afterTableName);
+      context.put(CONNECTION_CONTEXT_KEY, connectionParam);
+      context.put(AFTER_TABLE_NAME_CONTEXT_KEY, afterTableName);
 
       callSuperAfterCreateEntity(uriInfo, requestContentType, contentType, entry, context);
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
-      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_AFTER_CREATE_ENTITY_EVENT, e);
+      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_AFTER_CREATE_ENTITY_EVENT_ERROR, e);
     } finally {
-      batchDropTemporaryTables(connectionParam, (String) context.get(AFTER_TABLE_NAME));
+      batchDropTemporaryTables(connectionParam, (String) context.get(AFTER_TABLE_NAME_CONTEXT_KEY));
       closeConnection(connectionParam);
     }
     return null;
@@ -103,11 +102,11 @@ public class XSKScriptingOData2EventHandler extends AbstractXSKOData2EventHandle
   @Override
   public ODataResponse onCreateEntity(PostUriInfo uriInfo, InputStream content, String requestContentType, String contentType,
       Map<Object, Object> context) {
-    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER);
-    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT);
-    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
-    DataSource dataSource = (DataSource) context.get(DATASOURCE);
-    ODataEntry entry = (ODataEntry) context.get(ENTRY);
+    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER_CONTEXT_KEY);
+    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT_CONTEXT_KEY);
+    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT_CONTEXT_KEY);
+    DataSource dataSource = (DataSource) context.get(DATASOURCE_CONTEXT_KEY);
+    ODataEntry entry = (ODataEntry) context.get(ENTRY_CONTEXT_KEY);
 
     Connection connectionParam = null;
     try {
@@ -121,17 +120,17 @@ public class XSKScriptingOData2EventHandler extends AbstractXSKOData2EventHandle
       createTemporaryTableLikeTable(connectionParam, afterTableName, targetTableName);
       insertIntoTemporaryTable(connectionParam, insertBuilder, afterTableName, sqlContext);
 
-      context.put(CONNECTION, connectionParam);
-      context.put(AFTER_TABLE_NAME, afterTableName);
+      context.put(CONNECTION_CONTEXT_KEY, connectionParam);
+      context.put(AFTER_TABLE_NAME_CONTEXT_KEY, afterTableName);
 
       callSuperOnCreateEntity(uriInfo, content, requestContentType, contentType, context);
 
       Map<String, Object> entryMap = readEntryMap(connectionParam, afterTableName);
       return buildResponse((UriInfo) uriInfo, oDataContext, entryMap, contentType, HttpStatusCodes.CREATED);
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
-      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_ON_CREATE_ENTITY_EVENT, e);
+      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_ON_CREATE_ENTITY_EVENT_ERROR, e);
     } finally {
-      batchDropTemporaryTables(connectionParam, (String) context.get(AFTER_TABLE_NAME));
+      batchDropTemporaryTables(connectionParam, (String) context.get(AFTER_TABLE_NAME_CONTEXT_KEY));
       closeConnection(connectionParam);
     }
   }
@@ -139,11 +138,11 @@ public class XSKScriptingOData2EventHandler extends AbstractXSKOData2EventHandle
   @Override
   public ODataResponse beforeUpdateEntity(PutMergePatchUriInfo uriInfo, String requestContentType, boolean merge, String contentType,
       ODataEntry entry, Map<Object, Object> context) {
-    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER);
-    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT);
-    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
-    DataSource dataSource = (DataSource) context.get(DATASOURCE);
-    Map<String, Object> mappedKeys = (Map<String, Object>) context.get(MAPPED_KEYS);
+    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER_CONTEXT_KEY);
+    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT_CONTEXT_KEY);
+    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT_CONTEXT_KEY);
+    DataSource dataSource = (DataSource) context.get(DATASOURCE_CONTEXT_KEY);
+    Map<String, Object> mappedKeys = (Map<String, Object>) context.get(MAPPED_KEYS_CONTEXT_KEY);
 
     Connection connectionParam = null;
     try {
@@ -158,17 +157,18 @@ public class XSKScriptingOData2EventHandler extends AbstractXSKOData2EventHandle
       createTemporaryTableAsSelect(connectionParam, afterTableName, selectBuilder, sqlContext);
       updateTemporaryTable(connectionParam, updateBuilder, afterTableName, sqlContext);
 
-      context.put(CONNECTION, connectionParam);
-      context.put(BEFORE_TABLE_NAME, beforeTableName);
-      context.put(AFTER_TABLE_NAME, afterTableName);
+      context.put(CONNECTION_CONTEXT_KEY, connectionParam);
+      context.put(BEFORE_TABLE_NAME_CONTEXT_KEY, beforeTableName);
+      context.put(AFTER_TABLE_NAME_CONTEXT_KEY, afterTableName);
       String beforeUpdateEntryJSON = GsonHelper.GSON.toJson(readEntryMap(connectionParam, beforeTableName));
-      context.put(ENTRY_JSON, beforeUpdateEntryJSON);
+      context.put(ENTRY_JSON_CONTEXT_KEY, beforeUpdateEntryJSON);
 
       callSuperBeforeUpdateEntity(uriInfo, requestContentType, merge, contentType, entry, context);
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
-      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_BEFORE_UPDATE_ENTITY_EVENT, e);
+      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_BEFORE_UPDATE_ENTITY_EVENT_ERROR, e);
     } finally {
-      batchDropTemporaryTables(connectionParam, (String) context.get(BEFORE_TABLE_NAME), (String) context.get(AFTER_TABLE_NAME));
+      batchDropTemporaryTables(connectionParam, (String) context.get(BEFORE_TABLE_NAME_CONTEXT_KEY), (String) context.get(
+          AFTER_TABLE_NAME_CONTEXT_KEY));
       closeConnection(connectionParam);
     }
     return null;
@@ -177,16 +177,17 @@ public class XSKScriptingOData2EventHandler extends AbstractXSKOData2EventHandle
   @Override
   public ODataResponse afterUpdateEntity(PutMergePatchUriInfo uriInfo, String requestContentType, boolean merge, String contentType,
       ODataEntry entry, Map<Object, Object> context) {
-    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER);
-    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT);
-    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
-    DataSource dataSource = (DataSource) context.get(DATASOURCE);
-    ODataEntry entryBeforeUpdate = (ODataEntry) context.get(ENTRY);
+    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER_CONTEXT_KEY);
+    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT_CONTEXT_KEY);
+    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT_CONTEXT_KEY);
+    DataSource dataSource = (DataSource) context.get(DATASOURCE_CONTEXT_KEY);
+    ODataEntry entryBeforeUpdate = (ODataEntry) context.get(ENTRY_CONTEXT_KEY);
+    Map<String, Object> mappedKeys = (Map<String, Object>) context.get(MAPPED_KEYS_CONTEXT_KEY);
 
     Connection connectionParam = null;
     try {
       SQLUpdateBuilder dummyBuilder = queryBuilder.buildUpdateEntityQuery((UriInfo) uriInfo, entry,
-          AbstractSQLProcessor.mapKeys(uriInfo.getKeyPredicates()), oDataContext);
+          mappedKeys, oDataContext);
       SQLInsertBuilder insertBuilder = queryBuilder.buildInsertEntityQuery((UriInfo) uriInfo, entryBeforeUpdate, oDataContext);
       SQLSelectBuilder selectBuilder = queryBuilder.buildSelectEntityQuery((UriInfo) uriInfo, oDataContext);
 
@@ -199,15 +200,16 @@ public class XSKScriptingOData2EventHandler extends AbstractXSKOData2EventHandle
       insertIntoTemporaryTable(connectionParam, insertBuilder, beforeTableName, sqlContext);
       createTemporaryTableAsSelect(connectionParam, afterTableName, selectBuilder, sqlContext);
 
-      context.put(CONNECTION, connectionParam);
-      context.put(BEFORE_TABLE_NAME, beforeTableName);
-      context.put(AFTER_TABLE_NAME, afterTableName);
+      context.put(CONNECTION_CONTEXT_KEY, connectionParam);
+      context.put(BEFORE_TABLE_NAME_CONTEXT_KEY, beforeTableName);
+      context.put(AFTER_TABLE_NAME_CONTEXT_KEY, afterTableName);
 
       callSuperAfterUpdateEntity(uriInfo, requestContentType, merge, contentType, entry, context);
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
-      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_AFTER_UPDATE_ENTITY_EVENT, e);
+      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_AFTER_UPDATE_ENTITY_EVENT_ERROR, e);
     } finally {
-      batchDropTemporaryTables(connectionParam, (String) context.get(BEFORE_TABLE_NAME), (String) context.get(AFTER_TABLE_NAME));
+      batchDropTemporaryTables(connectionParam, (String) context.get(BEFORE_TABLE_NAME_CONTEXT_KEY), (String) context.get(
+          AFTER_TABLE_NAME_CONTEXT_KEY));
       closeConnection(connectionParam);
     }
     return null;
@@ -216,12 +218,12 @@ public class XSKScriptingOData2EventHandler extends AbstractXSKOData2EventHandle
   @Override
   public ODataResponse onUpdateEntity(PutMergePatchUriInfo uriInfo, InputStream content, String requestContentType, boolean merge,
       String contentType, Map<Object, Object> context) {
-    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER);
-    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT);
-    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
-    DataSource dataSource = (DataSource) context.get(DATASOURCE);
-    Map<String, Object> mappedKeys = (Map<String, Object>) context.get(MAPPED_KEYS);
-    ODataEntry entry = (ODataEntry) context.get(ENTRY);
+    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER_CONTEXT_KEY);
+    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT_CONTEXT_KEY);
+    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT_CONTEXT_KEY);
+    DataSource dataSource = (DataSource) context.get(DATASOURCE_CONTEXT_KEY);
+    Map<String, Object> mappedKeys = (Map<String, Object>) context.get(MAPPED_KEYS_CONTEXT_KEY);
+    ODataEntry entry = (ODataEntry) context.get(ENTRY_CONTEXT_KEY);
 
     Connection connectionParam = null;
     try {
@@ -236,15 +238,16 @@ public class XSKScriptingOData2EventHandler extends AbstractXSKOData2EventHandle
       createTemporaryTableAsSelect(connectionParam, afterTableName, selectBuilder, sqlContext);
       updateTemporaryTable(connectionParam, updateBuilder, afterTableName, sqlContext);
 
-      context.put(CONNECTION, connectionParam);
-      context.put(BEFORE_TABLE_NAME, beforeTableName);
-      context.put(AFTER_TABLE_NAME, afterTableName);
+      context.put(CONNECTION_CONTEXT_KEY, connectionParam);
+      context.put(BEFORE_TABLE_NAME_CONTEXT_KEY, beforeTableName);
+      context.put(AFTER_TABLE_NAME_CONTEXT_KEY, afterTableName);
 
       callSuperOnUpdateEntity(uriInfo, content, requestContentType, merge, contentType, context);
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
-      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_ON_UPDATE_ENTITY_EVENT, e);
+      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_ON_UPDATE_ENTITY_EVENT_ERROR, e);
     } finally {
-      batchDropTemporaryTables(connectionParam, (String) context.get(BEFORE_TABLE_NAME), (String) context.get(AFTER_TABLE_NAME));
+      batchDropTemporaryTables(connectionParam, (String) context.get(BEFORE_TABLE_NAME_CONTEXT_KEY), (String) context.get(
+          AFTER_TABLE_NAME_CONTEXT_KEY));
       closeConnection(connectionParam);
     }
     return null;
@@ -252,10 +255,10 @@ public class XSKScriptingOData2EventHandler extends AbstractXSKOData2EventHandle
 
   @Override
   public ODataResponse beforeDeleteEntity(DeleteUriInfo uriInfo, String contentType, Map<Object, Object> context) {
-    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER);
-    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT);
-    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
-    DataSource dataSource = (DataSource) context.get(DATASOURCE);
+    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER_CONTEXT_KEY);
+    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT_CONTEXT_KEY);
+    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT_CONTEXT_KEY);
+    DataSource dataSource = (DataSource) context.get(DATASOURCE_CONTEXT_KEY);
 
     Connection connectionParam = null;
     try {
@@ -266,16 +269,16 @@ public class XSKScriptingOData2EventHandler extends AbstractXSKOData2EventHandle
       connectionParam = dataSource.getConnection();
       createTemporaryTableAsSelect(connectionParam, beforeTableName, selectBuilder, sqlContext);
 
-      context.put(CONNECTION, connectionParam);
-      context.put(BEFORE_TABLE_NAME, beforeTableName);
+      context.put(CONNECTION_CONTEXT_KEY, connectionParam);
+      context.put(BEFORE_TABLE_NAME_CONTEXT_KEY, beforeTableName);
       String beforeDeleteEntryJSON = GsonHelper.GSON.toJson(readEntryMap(connectionParam, beforeTableName));
-      context.put(ENTRY_JSON, beforeDeleteEntryJSON);
+      context.put(ENTRY_JSON_CONTEXT_KEY, beforeDeleteEntryJSON);
 
       callSuperBeforeDeleteEntity(uriInfo, contentType, context);
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
-      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_BEFORE_DELETE_ENTITY_EVENT, e);
+      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_BEFORE_DELETE_ENTITY_EVENT_ERROR, e);
     } finally {
-      batchDropTemporaryTables(connectionParam, (String) context.get(BEFORE_TABLE_NAME));
+      batchDropTemporaryTables(connectionParam, (String) context.get(BEFORE_TABLE_NAME_CONTEXT_KEY));
       closeConnection(connectionParam);
     }
     return null;
@@ -283,12 +286,12 @@ public class XSKScriptingOData2EventHandler extends AbstractXSKOData2EventHandle
 
   @Override
   public ODataResponse afterDeleteEntity(DeleteUriInfo uriInfo, String contentType, Map<Object, Object> context) {
-    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER);
-    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT);
-    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
-    DataSource dataSource = (DataSource) context.get(DATASOURCE);
-    Map<String, Object> mappedKeys = (Map<String, Object>) context.get(MAPPED_KEYS);
-    ODataEntry entryBeforeDelete = (ODataEntry) context.get(ENTRY);
+    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER_CONTEXT_KEY);
+    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT_CONTEXT_KEY);
+    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT_CONTEXT_KEY);
+    DataSource dataSource = (DataSource) context.get(DATASOURCE_CONTEXT_KEY);
+    Map<String, Object> mappedKeys = (Map<String, Object>) context.get(MAPPED_KEYS_CONTEXT_KEY);
+    ODataEntry entryBeforeDelete = (ODataEntry) context.get(ENTRY_CONTEXT_KEY);
 
     Connection connectionParam = null;
     try {
@@ -302,14 +305,14 @@ public class XSKScriptingOData2EventHandler extends AbstractXSKOData2EventHandle
       createTemporaryTableLikeTable(connectionParam, beforeTableName, targetTableName);
       insertIntoTemporaryTable(connectionParam, insertBuilder, beforeTableName, sqlContext);
 
-      context.put(CONNECTION, connectionParam);
-      context.put(BEFORE_TABLE_NAME, beforeTableName);
+      context.put(CONNECTION_CONTEXT_KEY, connectionParam);
+      context.put(BEFORE_TABLE_NAME_CONTEXT_KEY, beforeTableName);
 
       callSuperAfterDeleteEntity(uriInfo, contentType, context);
     } catch (org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException | ODataException e) {
-      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_AFTER_DELETE_ENTITY_EVENT, e);
+      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_AFTER_DELETE_ENTITY_EVENT_ERROR, e);
     } finally {
-      batchDropTemporaryTables(connectionParam, (String) context.get(BEFORE_TABLE_NAME));
+      batchDropTemporaryTables(connectionParam, (String) context.get(BEFORE_TABLE_NAME_CONTEXT_KEY));
       closeConnection(connectionParam);
     }
     return null;
@@ -317,10 +320,10 @@ public class XSKScriptingOData2EventHandler extends AbstractXSKOData2EventHandle
 
   @Override
   public ODataResponse onDeleteEntity(DeleteUriInfo uriInfo, String contentType, Map<Object, Object> context) {
-    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER);
-    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT);
-    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT);
-    DataSource dataSource = (DataSource) context.get(DATASOURCE);
+    SQLQueryBuilder queryBuilder = (SQLQueryBuilder) context.get(SQL_BUILDER_CONTEXT_KEY);
+    ODataContext oDataContext = (ODataContext) context.get(ODATA_CONTEXT_CONTEXT_KEY);
+    SQLContext sqlContext = (SQLContext) context.get(SQL_CONTEXT_CONTEXT_KEY);
+    DataSource dataSource = (DataSource) context.get(DATASOURCE_CONTEXT_KEY);
 
     Connection connectionParam = null;
     try {
@@ -331,14 +334,14 @@ public class XSKScriptingOData2EventHandler extends AbstractXSKOData2EventHandle
       connectionParam = dataSource.getConnection();
       createTemporaryTableAsSelect(connectionParam, beforeTableName, selectBuilder, sqlContext);
 
-      context.put(CONNECTION, connectionParam);
-      context.put(BEFORE_TABLE_NAME, beforeTableName);
+      context.put(CONNECTION_CONTEXT_KEY, connectionParam);
+      context.put(BEFORE_TABLE_NAME_CONTEXT_KEY, beforeTableName);
 
       callSuperOnDeleteEntity(uriInfo, contentType, context);
     } catch (ODataException | org.eclipse.dirigible.engine.odata2.api.ODataException | SQLException e) {
-      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_ON_DELETE_ENTITY_EVENT, e);
+      throw new XSKScriptingOData2EventHandlerException(UNABLE_TO_HANDLE_ON_DELETE_ENTITY_EVENT_ERROR, e);
     } finally {
-      batchDropTemporaryTables(connectionParam, (String) context.get(BEFORE_TABLE_NAME));
+      batchDropTemporaryTables(connectionParam, (String) context.get(BEFORE_TABLE_NAME_CONTEXT_KEY));
       closeConnection(connectionParam);
     }
     return null;

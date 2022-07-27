@@ -37,15 +37,15 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
 
   private static final String HANDLER = "handler";
 
-  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_BEFORE_CREATE_ENTITY_EVENT = "More than one handler present for before create entity event";
-  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_AFTER_CREATE_ENTITY_EVENT = "More than one handler present for after create entity event";
-  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_ON_CREATE_ENTITY_EVENT = "More than one handler present for on create entity event";
-  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_BEFORE_UPDATE_ENTITY_EVENT = "More than one handler present for before update entity event";
-  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_AFTER_UPDATE_ENTITY_EVENT = "More than one handler present for after update entity event";
-  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_ON_UPDATE_ENTITY_EVENT = "More than one handler present for on update entity event";
-  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_BEFORE_DELETE_ENTITY_EVENT = "More than one handler present for before delete entity event";
-  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_AFTER_DELETE_ENTITY_EVENT = "More than one handler present for after delete entity event";
-  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_ON_DELETE_ENTITY_EVENT = "More than one handler present for on delete entity event";
+  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_BEFORE_CREATE_ENTITY_EVENT_ERROR = "More than one handler present for before create entity event";
+  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_AFTER_CREATE_ENTITY_EVENT_ERROR = "More than one handler present for after create entity event";
+  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_ON_CREATE_ENTITY_EVENT_ERROR = "More than one handler present for on create entity event";
+  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_BEFORE_UPDATE_ENTITY_EVENT_ERROR = "More than one handler present for before update entity event";
+  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_AFTER_UPDATE_ENTITY_EVENT_ERROR = "More than one handler present for after update entity event";
+  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_ON_UPDATE_ENTITY_EVENT_ERROR = "More than one handler present for on update entity event";
+  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_BEFORE_DELETE_ENTITY_EVENT_ERROR = "More than one handler present for before delete entity event";
+  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_AFTER_DELETE_ENTITY_EVENT_ERROR = "More than one handler present for after delete entity event";
+  private static final String MORE_THAN_ONE_HANDLER_PRESENT_FOR_ON_DELETE_ENTITY_EVENT_ERROR = "More than one handler present for on delete entity event";
 
   private ODataCoreService odataCoreService;
   private XSKProcedureOData2EventHandler procedureHandler;
@@ -77,12 +77,11 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
         context.put(HANDLER, handlers.get(0));
         return eventHandler.beforeCreateEntity(uriInfo, requestContentType, contentType, entry, context);
       } else {
-        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_BEFORE_CREATE_ENTITY_EVENT);
+        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_BEFORE_CREATE_ENTITY_EVENT_ERROR);
       }
     } catch (EdmException e) {
-      LOGGER.error(e.getMessage(), e);
+      throw new ODataException(e);
     }
-    return null;
   }
 
   @Override
@@ -100,12 +99,11 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
         context.put(HANDLER, handlers.get(0));
         return eventHandler.afterCreateEntity(uriInfo, requestContentType, contentType, entry, context);
       } else {
-        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_AFTER_CREATE_ENTITY_EVENT);
+        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_AFTER_CREATE_ENTITY_EVENT_ERROR);
       }
     } catch (EdmException e) {
-      LOGGER.error(e.getMessage(), e);
+      throw new ODataException(e);
     }
-    return null;
   }
 
   @Override
@@ -123,12 +121,11 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
         context.put(HANDLER, handlers.get(0));
         return eventHandler.onCreateEntity(uriInfo, content, requestContentType, contentType, context);
       } else {
-        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_ON_CREATE_ENTITY_EVENT);
+        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_ON_CREATE_ENTITY_EVENT_ERROR);
       }
     } catch (EdmException e) {
-      LOGGER.error(e.getMessage(), e);
+      throw new ODataException(e);
     }
-    return null;
   }
 
   @Override
@@ -145,12 +142,11 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
         context.put(HANDLER, handlers.get(0));
         return eventHandler.beforeUpdateEntity(uriInfo, requestContentType, merge, contentType, entry, context);
       } else {
-        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_BEFORE_UPDATE_ENTITY_EVENT);
+        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_BEFORE_UPDATE_ENTITY_EVENT_ERROR);
       }
     } catch (EdmException e) {
-      LOGGER.error(e.getMessage(), e);
+      throw new ODataException(e);
     }
-    return null;
   }
 
   @Override
@@ -167,12 +163,11 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
         context.put(HANDLER, handlers.get(0));
         return eventHandler.afterUpdateEntity(uriInfo, requestContentType, merge, contentType, entry, context);
       } else {
-        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_AFTER_UPDATE_ENTITY_EVENT);
+        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_AFTER_UPDATE_ENTITY_EVENT_ERROR);
       }
     } catch (EdmException e) {
-      LOGGER.error(e.getMessage(), e);
+      throw new ODataException(e);
     }
-    return null;
   }
 
   @Override
@@ -189,12 +184,11 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
         context.put(HANDLER, handlers.get(0));
         return eventHandler.onUpdateEntity(uriInfo, content, requestContentType, merge, contentType, context);
       } else {
-        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_ON_UPDATE_ENTITY_EVENT);
+        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_ON_UPDATE_ENTITY_EVENT_ERROR);
       }
     } catch (EdmException e) {
-      LOGGER.error(e.getMessage(), e);
+      throw new ODataException(e);
     }
-    return null;
   }
 
   @Override
@@ -210,12 +204,11 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
         context.put(HANDLER, handlers.get(0));
         return eventHandler.beforeDeleteEntity(uriInfo, contentType, context);
       } else {
-        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_BEFORE_DELETE_ENTITY_EVENT);
+        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_BEFORE_DELETE_ENTITY_EVENT_ERROR);
       }
     } catch (EdmException e) {
-      LOGGER.error(e.getMessage(), e);
+      throw new ODataException(e);
     }
-    return null;
   }
 
   @Override
@@ -231,12 +224,11 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
         context.put(HANDLER, handlers.get(0));
         return eventHandler.afterDeleteEntity(uriInfo, contentType, context);
       } else {
-        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_AFTER_DELETE_ENTITY_EVENT);
+        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_AFTER_DELETE_ENTITY_EVENT_ERROR);
       }
     } catch (EdmException e) {
-      LOGGER.error(e.getMessage(), e);
+      throw new ODataException(e);
     }
-    return null;
   }
 
   @Override
@@ -252,12 +244,11 @@ public class XSKOData2EventHandler extends ScriptingOData2EventHandler {
         context.put(HANDLER, handlers.get(0));
         return eventHandler.onDeleteEntity(uriInfo, contentType, context);
       } else {
-        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_ON_DELETE_ENTITY_EVENT);
+        throw new IllegalStateException(MORE_THAN_ONE_HANDLER_PRESENT_FOR_ON_DELETE_ENTITY_EVENT_ERROR);
       }
     } catch (EdmException e) {
-      LOGGER.error(e.getMessage(), e);
+      throw new ODataException(e);
     }
-    return null;
   }
 
   @Override

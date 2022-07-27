@@ -44,12 +44,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.CONNECTION;
-import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.AFTER_TABLE_NAME;
-import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.BEFORE_TABLE_NAME;
-import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.DATASOURCE;
-import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.ENTRY_JSON;
-import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.SQL_BUILDER;
+import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.CONNECTION_CONTEXT_KEY;
+import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.AFTER_TABLE_NAME_CONTEXT_KEY;
+import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.BEFORE_TABLE_NAME_CONTEXT_KEY;
+import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.DATASOURCE_CONTEXT_KEY;
+import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.ENTRY_JSON_CONTEXT_KEY;
+import static com.sap.xsk.xsodata.ds.handler.AbstractXSKOData2EventHandler.SQL_BUILDER_CONTEXT_KEY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -99,10 +99,10 @@ public class XSKOData2EventHandlerTest {
     xskoData2EventHandler = new XSKOData2EventHandler(odataCoreService, spyProcedureHandler, spyScriptingHandler);
     scriptingHandlerContext = new HashMap();
     procedureHandlerContext = new HashMap();
-    scriptingHandlerContext.put(SQL_BUILDER,  queryBuilder);
-    procedureHandlerContext.put(SQL_BUILDER,  queryBuilder);
-    scriptingHandlerContext.put(DATASOURCE, dataSource);
-    procedureHandlerContext.put(DATASOURCE, dataSource);
+    scriptingHandlerContext.put(SQL_BUILDER_CONTEXT_KEY,  queryBuilder);
+    procedureHandlerContext.put(SQL_BUILDER_CONTEXT_KEY,  queryBuilder);
+    scriptingHandlerContext.put(DATASOURCE_CONTEXT_KEY, dataSource);
+    procedureHandlerContext.put(DATASOURCE_CONTEXT_KEY, dataSource);
   }
 
   @After
@@ -142,8 +142,8 @@ public class XSKOData2EventHandlerTest {
     mockTemporaryTables(spyScriptingHandler);
     Mockito.doNothing().when(spyScriptingHandler).callSuperAfterCreateEntity(any(), any(), any(), any(), any());
     xskoData2EventHandler.afterCreateEntity(uriInfo, "application/json", "application/json", entry, scriptingHandlerContext);
-    assertTrue(scriptingHandlerContext.containsKey(CONNECTION));
-    assertTrue(scriptingHandlerContext.containsKey(AFTER_TABLE_NAME));
+    assertTrue(scriptingHandlerContext.containsKey(CONNECTION_CONTEXT_KEY));
+    assertTrue(scriptingHandlerContext.containsKey(AFTER_TABLE_NAME_CONTEXT_KEY));
   }
 
   @Test
@@ -160,8 +160,8 @@ public class XSKOData2EventHandlerTest {
     mockTemporaryTables(spyScriptingHandler);
     Mockito.doNothing().when(spyScriptingHandler).callSuperOnCreateEntity(any(), any(), any(), any(), any());
     xskoData2EventHandler.onCreateEntity(uriInfo, inputStream, "application/json", "application/json", scriptingHandlerContext);
-    assertTrue(scriptingHandlerContext.containsKey(CONNECTION));
-    assertTrue(scriptingHandlerContext.containsKey(AFTER_TABLE_NAME));
+    assertTrue(scriptingHandlerContext.containsKey(CONNECTION_CONTEXT_KEY));
+    assertTrue(scriptingHandlerContext.containsKey(AFTER_TABLE_NAME_CONTEXT_KEY));
   }
 
   @Test
@@ -172,17 +172,17 @@ public class XSKOData2EventHandlerTest {
     mockCallProcedure(spyProcedureHandler, true);
     ODataResponse response = xskoData2EventHandler.beforeUpdateEntity(uriInfo, "application/json", true, "application/json", entry,
         procedureHandlerContext);
-    assertTrue(procedureHandlerContext.containsKey(ENTRY_JSON));
+    assertTrue(procedureHandlerContext.containsKey(ENTRY_JSON_CONTEXT_KEY));
     assertResponse(response);
 
     // .xsjslib
     mockTemporaryTables(spyScriptingHandler);
     Mockito.doNothing().when(spyScriptingHandler).callSuperBeforeUpdateEntity(any(), any(), anyBoolean(), any(), any(), any());
     xskoData2EventHandler.beforeUpdateEntity(uriInfo, "application/json", true, "application/json", entry, scriptingHandlerContext);
-    assertTrue(scriptingHandlerContext.containsKey(CONNECTION));
-    assertTrue(scriptingHandlerContext.containsKey(BEFORE_TABLE_NAME));
-    assertTrue(scriptingHandlerContext.containsKey(AFTER_TABLE_NAME));
-    assertTrue(scriptingHandlerContext.containsKey(ENTRY_JSON));
+    assertTrue(scriptingHandlerContext.containsKey(CONNECTION_CONTEXT_KEY));
+    assertTrue(scriptingHandlerContext.containsKey(BEFORE_TABLE_NAME_CONTEXT_KEY));
+    assertTrue(scriptingHandlerContext.containsKey(AFTER_TABLE_NAME_CONTEXT_KEY));
+    assertTrue(scriptingHandlerContext.containsKey(ENTRY_JSON_CONTEXT_KEY));
   }
 
   @Test
@@ -199,9 +199,9 @@ public class XSKOData2EventHandlerTest {
     mockTemporaryTables(spyScriptingHandler);
     Mockito.doNothing().when(spyScriptingHandler).callSuperAfterUpdateEntity(any(), any(), anyBoolean(), any(), any(), any());
     xskoData2EventHandler.afterUpdateEntity(uriInfo, "application/json", true, "application/json", entry, scriptingHandlerContext);
-    assertTrue(scriptingHandlerContext.containsKey(CONNECTION));
-    assertTrue(scriptingHandlerContext.containsKey(BEFORE_TABLE_NAME));
-    assertTrue(scriptingHandlerContext.containsKey(AFTER_TABLE_NAME));
+    assertTrue(scriptingHandlerContext.containsKey(CONNECTION_CONTEXT_KEY));
+    assertTrue(scriptingHandlerContext.containsKey(BEFORE_TABLE_NAME_CONTEXT_KEY));
+    assertTrue(scriptingHandlerContext.containsKey(AFTER_TABLE_NAME_CONTEXT_KEY));
   }
 
   @Test
@@ -218,9 +218,9 @@ public class XSKOData2EventHandlerTest {
     mockTemporaryTables(spyScriptingHandler);
     Mockito.doNothing().when(spyScriptingHandler).callSuperOnUpdateEntity(any(), any(), any(), anyBoolean(), any(), any());
     xskoData2EventHandler.onUpdateEntity(uriInfo, inputStream, "application/json", true, "application/json", scriptingHandlerContext);
-    assertTrue(scriptingHandlerContext.containsKey(CONNECTION));
-    assertTrue(scriptingHandlerContext.containsKey(BEFORE_TABLE_NAME));
-    assertTrue(scriptingHandlerContext.containsKey(AFTER_TABLE_NAME));
+    assertTrue(scriptingHandlerContext.containsKey(CONNECTION_CONTEXT_KEY));
+    assertTrue(scriptingHandlerContext.containsKey(BEFORE_TABLE_NAME_CONTEXT_KEY));
+    assertTrue(scriptingHandlerContext.containsKey(AFTER_TABLE_NAME_CONTEXT_KEY));
   }
 
   @Test
@@ -230,16 +230,16 @@ public class XSKOData2EventHandlerTest {
     mockTemporaryTables(spyProcedureHandler);
     mockCallProcedure(spyProcedureHandler, false);
     ODataResponse response = xskoData2EventHandler.beforeDeleteEntity(uriInfo, "application/json", procedureHandlerContext);
-    assertTrue(procedureHandlerContext.containsKey(ENTRY_JSON));
+    assertTrue(procedureHandlerContext.containsKey(ENTRY_JSON_CONTEXT_KEY));
     assertResponse(response);
 
     // .xsjslib
     mockTemporaryTables(spyScriptingHandler);
     Mockito.doNothing().when(spyScriptingHandler).callSuperBeforeDeleteEntity(any(), any(), any());
     xskoData2EventHandler.beforeDeleteEntity(uriInfo, "application/json", scriptingHandlerContext);
-    assertTrue(scriptingHandlerContext.containsKey(CONNECTION));
-    assertTrue(scriptingHandlerContext.containsKey(BEFORE_TABLE_NAME));
-    assertTrue(scriptingHandlerContext.containsKey(ENTRY_JSON));
+    assertTrue(scriptingHandlerContext.containsKey(CONNECTION_CONTEXT_KEY));
+    assertTrue(scriptingHandlerContext.containsKey(BEFORE_TABLE_NAME_CONTEXT_KEY));
+    assertTrue(scriptingHandlerContext.containsKey(ENTRY_JSON_CONTEXT_KEY));
   }
 
   @Test
@@ -255,8 +255,8 @@ public class XSKOData2EventHandlerTest {
     mockTemporaryTables(spyScriptingHandler);
     Mockito.doNothing().when(spyScriptingHandler).callSuperAfterDeleteEntity(any(), any(), any());
     xskoData2EventHandler.afterDeleteEntity(uriInfo, "application/json", scriptingHandlerContext);
-    assertTrue(scriptingHandlerContext.containsKey(CONNECTION));
-    assertTrue(scriptingHandlerContext.containsKey(BEFORE_TABLE_NAME));
+    assertTrue(scriptingHandlerContext.containsKey(CONNECTION_CONTEXT_KEY));
+    assertTrue(scriptingHandlerContext.containsKey(BEFORE_TABLE_NAME_CONTEXT_KEY));
   }
 
   @Test
@@ -272,8 +272,8 @@ public class XSKOData2EventHandlerTest {
     mockTemporaryTables(spyScriptingHandler);
     Mockito.doNothing().when(spyScriptingHandler).callSuperOnDeleteEntity(any(), any(), any());
     xskoData2EventHandler.onDeleteEntity(uriInfo, "application/json", scriptingHandlerContext);
-    assertTrue(scriptingHandlerContext.containsKey(CONNECTION));
-    assertTrue(scriptingHandlerContext.containsKey(BEFORE_TABLE_NAME));
+    assertTrue(scriptingHandlerContext.containsKey(CONNECTION_CONTEXT_KEY));
+    assertTrue(scriptingHandlerContext.containsKey(BEFORE_TABLE_NAME_CONTEXT_KEY));
   }
 
   private void mockGetHandlers() throws EdmException, ODataException {

@@ -52,34 +52,34 @@ import java.util.UUID;
 public abstract class AbstractXSKOData2EventHandler extends ScriptingOData2EventHandler {
 
   protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractXSKOData2EventHandler.class);
-  protected static final String UNABLE_TO_HANDLE_BEFORE_CREATE_ENTITY_EVENT = "Unable to handle beforeCreateEntity event";
-  protected static final String UNABLE_TO_HANDLE_AFTER_CREATE_ENTITY_EVENT = "Unable to handle afterCreateEntity event";
-  protected static final String UNABLE_TO_HANDLE_ON_CREATE_ENTITY_EVENT = "Unable to handle onCreateEntity event";
-  protected static final String UNABLE_TO_HANDLE_BEFORE_UPDATE_ENTITY_EVENT = "Unable to handle beforeUpdateEntity event";
-  protected static final String UNABLE_TO_HANDLE_AFTER_UPDATE_ENTITY_EVENT = "Unable to handle afterUpdateEntity event";
-  protected static final String UNABLE_TO_HANDLE_ON_UPDATE_ENTITY_EVENT = "Unable to handle onUpdateEntity event";
-  protected static final String UNABLE_TO_HANDLE_BEFORE_DELETE_ENTITY_EVENT = "Unable to handle beforeDeleteEntity event";
-  protected static final String UNABLE_TO_HANDLE_AFTER_DELETE_ENTITY_EVENT = "Unable to handle afterDeleteEntity event";
-  protected static final String UNABLE_TO_HANDLE_ON_DELETE_ENTITY_EVENT = "Unable to handle onDeleteEntity event";
-  protected static final String UNABLE_TO_DROP_TEMPORARY_TABLES = "Unable to drop temporary tables";
-  protected static final String UNABLE_TO_CLOSE_CONNECTION = "Unable to close connection";
+  protected static final String UNABLE_TO_HANDLE_BEFORE_CREATE_ENTITY_EVENT_ERROR = "Unable to handle beforeCreateEntity event";
+  protected static final String UNABLE_TO_HANDLE_AFTER_CREATE_ENTITY_EVENT_ERROR = "Unable to handle afterCreateEntity event";
+  protected static final String UNABLE_TO_HANDLE_ON_CREATE_ENTITY_EVENT_ERROR = "Unable to handle onCreateEntity event";
+  protected static final String UNABLE_TO_HANDLE_BEFORE_UPDATE_ENTITY_EVENT_ERROR = "Unable to handle beforeUpdateEntity event";
+  protected static final String UNABLE_TO_HANDLE_AFTER_UPDATE_ENTITY_EVENT_ERROR = "Unable to handle afterUpdateEntity event";
+  protected static final String UNABLE_TO_HANDLE_ON_UPDATE_ENTITY_EVENT_ERROR = "Unable to handle onUpdateEntity event";
+  protected static final String UNABLE_TO_HANDLE_BEFORE_DELETE_ENTITY_EVENT_ERROR = "Unable to handle beforeDeleteEntity event";
+  protected static final String UNABLE_TO_HANDLE_AFTER_DELETE_ENTITY_EVENT_ERROR = "Unable to handle afterDeleteEntity event";
+  protected static final String UNABLE_TO_HANDLE_ON_DELETE_ENTITY_EVENT_ERROR = "Unable to handle onDeleteEntity event";
+  protected static final String UNABLE_TO_DROP_TEMPORARY_TABLES_ERROR = "Unable to drop temporary tables";
+  protected static final String UNABLE_TO_CLOSE_CONNECTION_ERROR = "Unable to close connection";
 
-  protected static final String SQL_BUILDER = "sqlBuilder";
-  protected static final String SQL_CONTEXT = "sqlContext";
-  protected static final String DATASOURCE = "datasource";
-  protected static final String ODATA_CONTEXT = "oDataContext";
-  protected static final String MAPPED_KEYS = "mappedKeys";
+  protected static final String SQL_BUILDER_CONTEXT_KEY = "sqlBuilder";
+  protected static final String SQL_CONTEXT_CONTEXT_KEY = "sqlContext";
+  protected static final String DATASOURCE_CONTEXT_KEY = "datasource";
+  protected static final String ODATA_CONTEXT_CONTEXT_KEY = "oDataContext";
+  protected static final String MAPPED_KEYS_CONTEXT_KEY = "mappedKeys";
 
-  protected static final String CONNECTION = "connection";
-  protected static final String BEFORE_TABLE_NAME = "beforeTableName";
-  protected static final String AFTER_TABLE_NAME = "afterTableName";
-  protected static final String ENTRY = "entry";
-  protected static final String ENTRY_JSON = "entryJSON";
-  protected static final String HANDLER = "handler";
+  protected static final String CONNECTION_CONTEXT_KEY = "connection";
+  protected static final String BEFORE_TABLE_NAME_CONTEXT_KEY = "beforeTableName";
+  protected static final String AFTER_TABLE_NAME_CONTEXT_KEY = "afterTableName";
+  protected static final String ENTRY_CONTEXT_KEY = "entry";
+  protected static final String ENTRY_JSON_CONTEXT_KEY = "entryJSON";
+  protected static final String HANDLER_CONTEXT_KEY = "handler";
 
-  private static final String HTTP_STATUS_CODE = "HTTP_STATUS_CODE";
-  private static final String ERROR_MESSAGE = "ERROR_MESSAGE";
-  private static final String ERROR_DETAIL = "errordetail";
+  private static final String HTTP_STATUS_CODE_PROCEDURE_RESULT_SET = "HTTP_STATUS_CODE";
+  private static final String ERROR_MESSAGE_PROCEDURE_RESULT_SET = "ERROR_MESSAGE";
+  private static final String ERROR_RESPONSE_ERROR_DETAIL = "errordetail";
 
   protected String getSQLInsertBuilderTargetTable(SQLInsertBuilder insertBuilder, SQLContext sqlContext) throws ODataException {
     SQLStatement sqlStatement = insertBuilder.build(sqlContext);
@@ -109,7 +109,7 @@ public abstract class AbstractXSKOData2EventHandler extends ScriptingOData2Event
     String sql = buildCreateTemporaryTableLikeTableSql(connection, artifactType, odataArtifactTypeSchema, temporaryTableName,
         likeTableName);
 
-    try (PreparedStatement preparedStatement = prepareStatement(connection, sql)) {
+    try (PreparedStatement preparedStatement = createPreparedStatement(connection, sql)) {
       preparedStatement.execute();
     }
   }
@@ -118,7 +118,7 @@ public abstract class AbstractXSKOData2EventHandler extends ScriptingOData2Event
       SQLContext sqlContext) throws SQLException, ODataException {
     String sql = buildCreateTemporaryTableAsSelect(connection, temporaryTableName, selectBuilder.buildSelect(sqlContext),
         selectBuilder.getStatementParams());
-    try (PreparedStatement preparedStatement = prepareStatement(connection, sql)) {
+    try (PreparedStatement preparedStatement = createPreparedStatement(connection, sql)) {
       preparedStatement.execute();
     }
   }
@@ -181,7 +181,7 @@ public abstract class AbstractXSKOData2EventHandler extends ScriptingOData2Event
         }
         statement.executeBatch();
       } catch (SQLException e) {
-        LOGGER.error(UNABLE_TO_DROP_TEMPORARY_TABLES, e);
+        LOGGER.error(UNABLE_TO_DROP_TEMPORARY_TABLES_ERROR, e);
       }
     } else {
       LOGGER.error("Unable to drop temporary tables - connection is null");
@@ -189,13 +189,13 @@ public abstract class AbstractXSKOData2EventHandler extends ScriptingOData2Event
   }
 
   protected void executeSQLStatement(Connection connection, SQLStatement statement) throws SQLException, ODataException {
-    try (PreparedStatement preparedStatement = prepareStatement(connection, statement.sql())) {
+    try (PreparedStatement preparedStatement = createPreparedStatement(connection, statement.sql())) {
       SQLUtils.setParamsOnStatement(preparedStatement, statement.getStatementParams());
       preparedStatement.executeUpdate();
     }
   }
 
-  protected PreparedStatement prepareStatement(Connection connection, String sql) throws SQLException {
+  protected PreparedStatement createPreparedStatement(Connection connection, String sql) throws SQLException {
     LOGGER.debug("Preparing temporary table statement: {}", sql);
     return connection.prepareStatement(sql);
   }
@@ -206,13 +206,13 @@ public abstract class AbstractXSKOData2EventHandler extends ScriptingOData2Event
         ResultSet resultSet = statement.executeQuery()) {
       Map<String, Object> currentTargetEntity = new HashMap<>();
       while (resultSet.next()) {
-        currentTargetEntity = resultSetToEntryMap(resultSet);
+        currentTargetEntity = convertResultSetMap(resultSet);
       }
       return currentTargetEntity;
     }
   }
 
-  protected Map<String, Object> resultSetToEntryMap(ResultSet resultSet) throws SQLException {
+  protected Map<String, Object> convertResultSetMap(ResultSet resultSet) throws SQLException {
     ResultSetMetaData resultSetMetadata = resultSet.getMetaData();
     int columnCount = resultSetMetadata.getColumnCount();
     HashMap<String, Object> entry = new HashMap<>(columnCount);
@@ -229,7 +229,7 @@ public abstract class AbstractXSKOData2EventHandler extends ScriptingOData2Event
         connection.close();
       }
     } catch (SQLException e) {
-      LOGGER.error(UNABLE_TO_CLOSE_CONNECTION, e);
+      LOGGER.error(UNABLE_TO_CLOSE_CONNECTION_ERROR, e);
     }
   }
 
@@ -237,17 +237,17 @@ public abstract class AbstractXSKOData2EventHandler extends ScriptingOData2Event
     return "#" + targetTypeName + UUID.randomUUID().toString().replace("-", "");
   }
 
-  protected ODataResponse createProcedureResponse(ResultSet resultSet) throws SQLException {
+  protected ODataResponse createODataErrorResponse(ResultSet resultSet) throws SQLException {
     if (resultSet.next()) {
-      String errorCode = resultSet.getString(HTTP_STATUS_CODE);
-      String message = resultSet.getString(ERROR_MESSAGE);
+      String errorCode = resultSet.getString(HTTP_STATUS_CODE_PROCEDURE_RESULT_SET);
+      String message = resultSet.getString(ERROR_MESSAGE_PROCEDURE_RESULT_SET);
       ResultSetMetaData metaData = resultSet.getMetaData();
       Map<String, Map<String, String>> innerError = new HashMap<>();
-      innerError.put(ERROR_DETAIL, new HashMap<>());
+      innerError.put(ERROR_RESPONSE_ERROR_DETAIL, new HashMap<>());
       for (int i = 1; i <= metaData.getColumnCount(); i++) {
         String columnName = metaData.getColumnName(i);
-        if (!columnName.equals(HTTP_STATUS_CODE) && !columnName.equals(ERROR_MESSAGE)) {
-          innerError.get(ERROR_DETAIL).put(columnName, resultSet.getString(i));
+        if (!columnName.equals(HTTP_STATUS_CODE_PROCEDURE_RESULT_SET) && !columnName.equals(ERROR_MESSAGE_PROCEDURE_RESULT_SET)) {
+          innerError.get(ERROR_RESPONSE_ERROR_DETAIL).put(columnName, resultSet.getString(i));
         }
       }
 
@@ -268,9 +268,9 @@ public abstract class AbstractXSKOData2EventHandler extends ScriptingOData2Event
     return null;
   }
 
-  protected ODataResponse createProcedureResponse(ResultSet resultSet, UriInfo uriInfo, ODataContext oDataContext,
+  protected ODataResponse createODataResponse(ResultSet resultSet, UriInfo uriInfo, ODataContext oDataContext,
       Map<String, Object> entryMap, String contentType, HttpStatusCodes httpStatusCode) throws SQLException, ODataException {
-    ODataResponse response = createProcedureResponse(resultSet);
+    ODataResponse response = createODataErrorResponse(resultSet);
     if (response != null) {
       return response;
     } else {

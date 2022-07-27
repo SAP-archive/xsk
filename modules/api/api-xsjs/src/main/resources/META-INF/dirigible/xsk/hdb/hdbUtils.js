@@ -28,6 +28,7 @@ exports.getResultSetValueByDataTypeAndRowNumber = function (resultSet, dataType,
         case "DOUBLE PRECISION":
         case "DOUBLE":
             return resultSet.getDouble(colNumber);
+        case "CHARACTER VARYING":
         case "VARCHAR":
         case "ALPHANUM":
             return resultSet.getString(colNumber);

@@ -1,0 +1,15 @@
+{
+  "d": {
+    "results": [
+      {
+        "__metadata": {
+          "id": "http://localhost:8080/odata/v2/Salary(1)",
+          "uri": "http://localhost:8080/odata/v2/Salary(1)",
+          "type": "xsodata-with-xsjs-handlers.SalaryType"
+        },
+        "Id": 1,
+        "Amount": 1500
+      }
+    ]
+  }
+}

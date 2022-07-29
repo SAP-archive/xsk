@@ -1,0 +1,19 @@
+service namespace "xsodata-with-xsjs-handlers" {
+    "TEST_SCHEMA"."xsodata-with-xsjs-handlers::Entities.Employee" as "Employee" with ("Id", "Name", "Country", "Age")
+        create using "xsodata-with-xsjs-handlers.lib:Events.xsjslib::onCreate" create events (before "xsodata-with-xsjs-handlers.lib:Events.xsjslib::beforeCreate", after "xsodata-with-xsjs-handlers.lib:Events.xsjslib::afterCreate")
+        update using "xsodata-with-xsjs-handlers.lib:Events.xsjslib::onUpdate" update events (before "xsodata-with-xsjs-handlers.lib:Events.xsjslib::beforeUpdate", after "xsodata-with-xsjs-handlers.lib:Events.xsjslib::afterUpdate")
+        delete using "xsodata-with-xsjs-handlers.lib:Events.xsjslib::onDelete" delete events (before "xsodata-with-xsjs-handlers.lib:Events.xsjslib::beforeDelete", after "xsodata-with-xsjs-handlers.lib:Events.xsjslib::afterDelete");
+
+    "TEST_SCHEMA"."xsodata-with-xsjs-handlers::Entities.Status" as "Status";
+    "TEST_SCHEMA"."xsodata-with-xsjs-handlers::Entities.Salary" as "Salary";
+
+}
+
+
+annotations {
+   enable OData4SAP;
+}
+
+settings {
+    support null;
+} 

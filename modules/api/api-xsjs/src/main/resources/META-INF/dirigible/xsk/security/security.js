@@ -48,13 +48,12 @@ exports.Store = function (filePath) {
 
 
 class XSCrypto {
-	CryptoFacade = Java.type("com.sap.xsk.xssecurestore.ds.facade.XSKSecureCryptoFacade");
 
 	md5(data, key) {
 		if (data instanceof ArrayBuffer) {
 			data = fromBufferToArray(data);
 		}
-		const javaBytes = this.CryptoFacade.md5(data, key);
+		const javaBytes = Java.type("com.sap.xsk.xssecurestore.ds.facade.XSKSecureCryptoFacade").md5(data, key);
 		return fromArrayToBuffer(javaBytes);
 	}
 
@@ -62,7 +61,7 @@ class XSCrypto {
 		if (data instanceof ArrayBuffer) {
 			data = fromBufferToArray(data);
 		}
-		const javaBytes = this.CryptoFacade.sha1(data, key);
+		const javaBytes = Java.type("com.sap.xsk.xssecurestore.ds.facade.XSKSecureCryptoFacade").sha1(data, key);
 		return fromArrayToBuffer(javaBytes);
 	}
 
@@ -70,7 +69,7 @@ class XSCrypto {
 		if (data instanceof ArrayBuffer) {
 			data = fromBufferToArray(data);
 		}
-		const javaBytes = this.CryptoFacade.sha256(data, key);
+		const javaBytes = Java.type("com.sap.xsk.xssecurestore.ds.facade.XSKSecureCryptoFacade").sha256(data, key);
 		return fromArrayToBuffer(javaBytes);
 	}
 }

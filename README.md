@@ -15,15 +15,7 @@ Compatible environment for [SAP HANA Extended Application Services](https://help
 > _**Note:** the project is not yet ready to be used productively_
 
 
-## Try it Out
-
-`Try it Out` version is available [here](https://trial.apps.xsk.io).
-
-> _**Note**: the `Try it Out` instance is a shared one and it is intended for test & demo purposes only_
-
 ## Overview
-
-_Project documentation is available at: https://www.xsk.io_
 
 - [Project XSK](#background)
   - [Setup](#setup)
@@ -46,7 +38,6 @@ XSK stack is based on Java (JVM), so all the available plugins and/or new framew
 
 XSK stack can run within the HANA box, also in the virtual HANA system or outside in e.g. Kubernetes cluster, Kyma, Cloud Foundry, Open Stack.
 
-_**To learn more go to: https://www.xsk.io**_
 
 ## Requirements
 
@@ -62,13 +53,6 @@ cd xsk
 mvn clean install
 ```
 
-## Setup
-
-- [Local](https://www.xsk.io/setup/)
-- [Cloud Foundry](https://www.xsk.io/setup/cloud-foundry/)
-- [Kyma](https://www.xsk.io/setup/kyma/)
-- [Helm](https://www.xsk.io/setup/helm/)
-- [Environment Variables](https://www.xsk.io/setup/environment-variables/)
 
 ## FAQ
 
